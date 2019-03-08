@@ -1,0 +1,14 @@
+DESIGN 9x6x5 ROOF ANY 7
+LAYER MASK_BELOW
+M       M,M       M,M       M,M       M,         
+LAYER STANDARD
+ MRRRRRM , MRRRRRM , MEEHEEM ,PM     MP,         
+LAYER STANDARD
+ PMRRRMP , PMRRRMP , OFEHEFO , MI   IM ,         
+LAYER STANDARD
+  MRRRM  ,  MRRRM  ,  MFEFM  , PM   MP ,  O   O  
+LAYER STANDARD
+   MRM   ,   MRM   ,   MFM   ,   MIM   ,   O O   
+LAYER STANDARD
+    P    ,    P    ,    M    ,   PMP   ,    O    
+THATS IT

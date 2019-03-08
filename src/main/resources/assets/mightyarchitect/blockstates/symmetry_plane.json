@@ -1,0 +1,9 @@
+{
+    "variants": {
+        "align=xy": { "model": "mightyarchitect:symmetry_plane" },
+        "align=yz": { "model": "mightyarchitect:symmetry_plane", "y": 90 },
+        "align=xz": { "model": "mightyarchitect:symmetry_plane", "x": 90 },
+        "align=d1": { "model": "mightyarchitect:symmetry_plane_diagonal"},
+        "align=d2": { "model": "mightyarchitect:symmetry_plane_diagonal", "y": 90 }
+    }
+}

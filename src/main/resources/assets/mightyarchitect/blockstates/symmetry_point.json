@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "align=point": { "model": "mightyarchitect:symmetry_point" }
+    }
+}

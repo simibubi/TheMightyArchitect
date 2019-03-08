@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "align=x": { "model": "mightyarchitect:symmetry_crossplane", "x": 90, "y": 90 },
+        "align=y": { "model": "mightyarchitect:symmetry_crossplane"},
+        "align=z": { "model": "mightyarchitect:symmetry_crossplane", "x": 90 },
+        "align=d": { "model": "mightyarchitect:symmetry_crossplane_diagonal"}
+    }
+}

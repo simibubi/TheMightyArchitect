@@ -1,0 +1,126 @@
+{
+  "Palette": {
+    "OUTER_THICK": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "variant": "mossy_cobblestone",
+        "west": "false",
+        "up": "false"
+      },
+      "Name": "minecraft:cobblestone_wall"
+    },
+    "OUTER_FLAT": {
+      "Properties": {
+        "half": "bottom",
+        "facing": "east",
+        "open": "false"
+      },
+      "Name": "minecraft:iron_trapdoor"
+    },
+    "INNER_PRIMARY": {
+      "Name": "minecraft:obsidian"
+    },
+    "HEAVY_POST": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:iron_bars"
+    },
+    "ROOF_PRIMARY": {
+      "Properties": {
+        "color": "cyan"
+      },
+      "Name": "minecraft:stained_hardened_clay"
+    },
+    "INNER_DETAIL": {
+      "Properties": {
+        "color": "gray"
+      },
+      "Name": "minecraft:wool"
+    },
+    "ROOF_SLAB": {
+      "Properties": {
+        "half": "bottom",
+        "variant": "cobblestone"
+      },
+      "Name": "minecraft:stone_slab"
+    },
+    "WINDOW": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:glass_pane"
+    },
+    "Name": "dark",
+    "HEAVY_PRIMARY": {
+      "Properties": {
+        "variant": "smooth_granite"
+      },
+      "Name": "minecraft:stone"
+    },
+    "HEAVY_SECONDARY": {
+      "Properties": {
+        "variant": "granite"
+      },
+      "Name": "minecraft:stone"
+    },
+    "ROOF_DETAIL": {
+      "Properties": {
+        "variant": "smooth_andesite"
+      },
+      "Name": "minecraft:stone"
+    },
+    "ROOF_SLAB_TOP": {
+      "Properties": {
+        "half": "top",
+        "variant": "cobblestone"
+      },
+      "Name": "minecraft:stone_slab"
+    },
+    "ROOF_SECONDARY": {
+      "Properties": {
+        "variant": "andesite"
+      },
+      "Name": "minecraft:stone"
+    },
+    "INNER_SECONDARY": {
+      "Name": "minecraft:nether_brick"
+    },
+    "OUTER_SLAB": {
+      "Properties": {
+        "half": "bottom",
+        "variant": "quartz"
+      },
+      "Name": "minecraft:stone_slab"
+    },
+    "HEAVY_WINDOW": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:iron_bars"
+    },
+    "CLEAR": {
+      "Name": "minecraft:glass"
+    },
+    "OUTER_THIN": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:dark_oak_fence"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+[
+{
+  "modid": "mightyarchitect",
+  "name": "The Mighty Architect",
+  "description": "Powerful tools for lazy people.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["simibubi"],
+  "credits": "",
+  "logoFile": "assets/mightyarchitect/textures/logo.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]

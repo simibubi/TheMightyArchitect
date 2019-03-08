@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "align=x": { "model": "mightyarchitect:symmetry_axis", "x": 90, "y": 90 },
+        "align=y": { "model": "mightyarchitect:symmetry_axis"},
+        "align=z": { "model": "mightyarchitect:symmetry_axis", "x": 90 }
+    }
+}
