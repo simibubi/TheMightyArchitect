@@ -1,0 +1,132 @@
+{
+  "Palette": {
+    "OUTER_THICK": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "variant": "cobblestone",
+        "west": "false",
+        "up": "false"
+      },
+      "Name": "minecraft:cobblestone_wall"
+    },
+    "OUTER_FLAT": {
+      "Properties": {
+        "half": "bottom",
+        "facing": "north",
+        "open": "true"
+      },
+      "Name": "minecraft:trapdoor"
+    },
+    "INNER_PRIMARY": {
+      "Properties": {
+        "variant": "smooth_diorite"
+      },
+      "Name": "minecraft:stone"
+    },
+    "HEAVY_POST": {
+      "Properties": {
+        "check_decay": "false",
+        "decayable": "false",
+        "variant": "jungle"
+      },
+      "Name": "minecraft:leaves"
+    },
+    "ROOF_PRIMARY": {
+      "Properties": {
+        "color": "blue"
+      },
+      "Name": "minecraft:stained_hardened_clay"
+    },
+    "INNER_DETAIL": {
+      "Properties": {
+        "variant": "stonebrick"
+      },
+      "Name": "minecraft:stonebrick"
+    },
+    "ROOF_SLAB": {
+      "Properties": {
+        "half": "bottom",
+        "variant": "stone"
+      },
+      "Name": "minecraft:stone_slab"
+    },
+    "WINDOW": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:glass_pane"
+    },
+    "Name": "Diorite Mansion",
+    "HEAVY_PRIMARY": {
+      "Properties": {
+        "variant": "dark_oak",
+        "axis": "y"
+      },
+      "Name": "minecraft:log2"
+    },
+    "HEAVY_SECONDARY": {
+      "Properties": {
+        "variant": "spruce"
+      },
+      "Name": "minecraft:planks"
+    },
+    "ROOF_DETAIL": {
+      "Properties": {
+        "variant": "smooth_andesite"
+      },
+      "Name": "minecraft:stone"
+    },
+    "ROOF_SLAB_TOP": {
+      "Properties": {
+        "half": "top",
+        "variant": "stone"
+      },
+      "Name": "minecraft:stone_slab"
+    },
+    "ROOF_SECONDARY": {
+      "Properties": {
+        "color": "purple"
+      },
+      "Name": "minecraft:stained_hardened_clay"
+    },
+    "INNER_SECONDARY": {
+      "Properties": {
+        "variant": "diorite"
+      },
+      "Name": "minecraft:stone"
+    },
+    "OUTER_SLAB": {
+      "Properties": {
+        "half": "bottom",
+        "variant": "quartz"
+      },
+      "Name": "minecraft:stone_slab"
+    },
+    "HEAVY_WINDOW": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:glass_pane"
+    },
+    "CLEAR": {
+      "Name": "minecraft:glass"
+    },
+    "OUTER_THIN": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:birch_fence"
+    }
+  }
+}

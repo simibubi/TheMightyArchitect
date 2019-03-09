@@ -25,7 +25,11 @@ public class CommandSaveSchematic extends CommandBase implements IClientCommand 
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (sender instanceof EntityPlayer) {
 			if (args.length > 0) {
-				BuildingProcessClient.writeToFile(args[0]);
+				String name = "";
+				for (int i = 0; i < args.length; i++) {
+					name += args[i] + ((i == args.length - 1)? "" : " ");
+				}
+				BuildingProcessClient.writeToFile(name);
 			} else {
 				throw new CommandException("Please specify a name: " + getUsage(sender));
 			}

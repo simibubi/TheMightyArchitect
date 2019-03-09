@@ -30,7 +30,7 @@ public class PaletteDefinition {
 
 	public static PaletteDefinition defaultPalette() {
 		if (defaultPalette == null) {
-			defaultPalette = new PaletteDefinition("Default Palette");
+			defaultPalette = new PaletteDefinition("Standard Palette");
 			defaultPalette
 					.put(Palette.HEAVY_PRIMARY,
 							Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT,

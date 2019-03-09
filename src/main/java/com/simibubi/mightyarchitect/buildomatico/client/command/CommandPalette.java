@@ -31,7 +31,11 @@ public class CommandPalette extends CommandBase implements IClientCommand {
 					break;
 				case "save":
 					if (args.length > 1) {
-						BuildingProcessClient.finishPalette(args[1]);
+						String name = "";
+						for (int i = 1; i < args.length; i++) {
+							name += args[i] + ((i == args.length - 1)? "" : " ");
+						}
+						BuildingProcessClient.finishPalette(name);
 					} else {
 						throw new CommandException("No palette name given: /palette save <name>");						
 					}

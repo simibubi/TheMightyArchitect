@@ -21,7 +21,7 @@ public class Schematic {
 	private IBlockAccess schematicBlockAccess;
 
 	private Cuboid bounds;
-	
+
 	private PaletteDefinition primary;
 	private PaletteDefinition secondary;
 
@@ -32,17 +32,23 @@ public class Schematic {
 		assembleSketch();
 		materializeSketch();
 	}
-	
+
 	public void swapPrimaryPalette(PaletteDefinition newPalette) {
 		this.primary = newPalette;
 		materializeSketch();
 	}
-	
+
 	public void swapSecondaryPalette(PaletteDefinition newPalette) {
 		this.secondary = newPalette;
 		materializeSketch();
 	}
-	
+
+	public void swapPalettes(PaletteDefinition primary, PaletteDefinition secondary) {
+		this.primary = primary;
+		this.secondary = secondary;
+		materializeSketch();
+	}
+
 	public void swapSketch(Sketch newSketch) {
 		this.sketch = newSketch;
 		assembleSketch();
@@ -60,7 +66,7 @@ public class Schematic {
 	public PaletteDefinition getSecondary() {
 		return secondary;
 	}
-	
+
 	public IBlockAccess getSchematicBlockAccess() {
 		return schematicBlockAccess;
 	}
@@ -80,21 +86,21 @@ public class Schematic {
 	private void assembleSketch() {
 		assembledSketch = sketch.assemble();
 	}
-	
+
 	public Cuboid getBounds() {
 		return bounds;
 	}
-	
+
 	public Cuboid getActualBounds() {
 		BlockPos anchor = getBuildingPosition();
 		Cuboid clone = bounds.clone();
 		clone.move(anchor.getX(), anchor.getY(), anchor.getZ());
 		return clone;
 	}
-	
-	private void materializeSketch() {	
+
+	private void materializeSketch() {
 		bounds = null;
-		
+
 		materializedSketch = new HashMap<>();
 		assembledSketch.get(0).forEach((pos, paletteInfo) -> {
 			IBlockState state = primary.get(paletteInfo.palette, paletteInfo.facing);
@@ -105,18 +111,18 @@ public class Schematic {
 			if (!assembledSketch.get(0).containsKey(pos)
 					|| !assembledSketch.get(0).get(pos).palette.isPrefferedOver(paletteInfo.palette)) {
 				IBlockState state = secondary.get(paletteInfo.palette, paletteInfo.facing);
-				materializedSketch.put(pos, state);				
+				materializedSketch.put(pos, state);
 				checkBounds(pos);
 			}
 		});
-		
+
 		schematicBlockAccess = new SchematicBlockAccess(materializedSketch, bounds, getBuildingPosition());
 	}
-	
+
 	private void checkBounds(BlockPos pos) {
-		if (bounds == null) 
+		if (bounds == null)
 			bounds = new Cuboid(pos, BlockPos.ORIGIN);
-		
+
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
@@ -133,25 +139,25 @@ public class Schematic {
 			bounds.length += bounds.z - z;
 			bounds.z = z;
 		}
-		
+
 		BlockPos maxPos = bounds.getOrigin().add(bounds.getSize());
-		if (x >= maxPos.getX()) 
+		if (x >= maxPos.getX())
 			bounds.width = x - bounds.x + 1;
-		if (y >= maxPos.getY()) 
+		if (y >= maxPos.getY())
 			bounds.height = y - bounds.y + 1;
-		if (z >= maxPos.getZ()) 
+		if (z >= maxPos.getZ())
 			bounds.length = z - bounds.z + 1;
 	}
-	
+
 	public Template writeToTemplate() {
 		final Template template = new Template();
-		
+
 		template.setAuthor(sketch.getContext().getOwner().getName());
 		template.setSize(bounds.getSize());
 		materializedSketch.forEach((pos, state) -> {
 			template.putBlock(pos.subtract(bounds.getOrigin()), state);
 		});
-		
+
 		return template;
 	}
 

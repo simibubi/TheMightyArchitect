@@ -65,7 +65,7 @@
       },
       "Name": "minecraft:glass_pane"
     },
-    "Name": "Default Palette",
+    "Name": "Standard Palette",
     "HEAVY_PRIMARY": {
       "Properties": {
         "variant": "smooth_andesite"

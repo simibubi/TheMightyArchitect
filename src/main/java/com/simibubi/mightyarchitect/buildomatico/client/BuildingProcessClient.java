@@ -10,6 +10,7 @@ import org.apache.commons.io.IOUtils;
 
 import com.simibubi.mightyarchitect.TheMightyArchitect;
 import com.simibubi.mightyarchitect.buildomatico.DesignPicker;
+import com.simibubi.mightyarchitect.buildomatico.FilesHelper;
 import com.simibubi.mightyarchitect.buildomatico.PaletteDefinition;
 import com.simibubi.mightyarchitect.buildomatico.PaletteStorage;
 import com.simibubi.mightyarchitect.buildomatico.model.context.Context;
@@ -120,16 +121,28 @@ public class BuildingProcessClient {
 	
 	public static void finishPalette(String name) {
 		if (PaletteCreatorClient.isPresent()) {
+			boolean primary = PaletteCreatorClient.getInstance().isPrimary();
 			PaletteDefinition palette = PaletteCreatorClient.finish();
 			palette.setName(name);
 			PaletteStorage.exportPalette(palette);
 			PaletteStorage.loadAllPalettes();
+			
+			if (primary) {
+				PalettePickerClient.getInstance().setPrimary(palette);
+			} else {
+				PalettePickerClient.getInstance().setSecondary(palette);
+			}
+			
 			status("Your new palette has been saved.");
 		}
 	}
 	
 	public static void print() {
 		if (PalettePickerClient.isPresent()) {
+			if (!Minecraft.getMinecraft().isSingleplayer() || !Minecraft.getMinecraft().player.isCreative()) {
+				status("Print is only available in creative singleplayer.");
+				return;
+			}
 			Schematic schematic = PalettePickerClient.getInstance().getSchematic();
 			for (PacketInstantPrint packet : PacketInstantPrint.splitSchematic(schematic)) {
 				PacketSender.INSTANCE.sendToServer(packet);				
@@ -141,13 +154,12 @@ public class BuildingProcessClient {
 
 	public static void writeToFile(String name) {
 		if (PalettePickerClient.isPresent()) {
-			int index = 0;
-			String filename;
-			String filepath;
-			do {
-				filename = name.toLowerCase().replace(' ', '_') + ((index == 0)? "" : "_" + index++) + ".nbt";
-				filepath = "schematics/" + filename;
-			} while (Files.exists(Paths.get(filepath)));
+			String folderPath = "schematics";
+			
+			FilesHelper.createFolderIfMissing(folderPath);
+			String filename = FilesHelper.findFirstValidFilename(name, folderPath, "nbt");
+			String filepath = folderPath + "/" + filename;
+			
 			OutputStream outputStream = null;
 			try
             {
@@ -163,7 +175,7 @@ public class BuildingProcessClient {
             	if (outputStream != null)
             		IOUtils.closeQuietly(outputStream);
             }
-			status("Saved as " + filename);
+			status("Saved as " + filepath);
 		}
 	}
 
@@ -211,8 +223,7 @@ public class BuildingProcessClient {
 			// reset palette creator progress
 			PaletteCreatorClient.reset();
 			PalettePickerClient picker = PalettePickerClient.getInstance();
-			picker.setPrimary(PaletteStorage.getPalette(picker.getPrimary().getName()));
-			picker.setSecondary(PaletteStorage.getPalette(picker.getSecondary().getName()));
+			picker.reapplyCurrentPalettes();
 			SchematicHologram.getInstance().schematicChanged();
 		}
 		if (PalettePickerClient.isPresent()) {

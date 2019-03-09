@@ -58,13 +58,12 @@ public class PaletteStorage {
 	}
 
 	public static void exportPalette(PaletteDefinition palette) {
-		int index = 0;
-		String filename;
-		String filepath;
-		do {
-			filename = palette.getName().toLowerCase().replace(' ', '_') + "_" + index++ + ".json";
-			filepath = "palettes/" + filename;
-		} while (Files.exists(Paths.get(filepath)));
+		String folderPath = "palettes";
+		
+		FilesHelper.createFolderIfMissing(folderPath);
+		String filename = FilesHelper.findFirstValidFilename(palette.getName(), folderPath, "json");
+		String filepath = folderPath + "/" + filename;
+		
 		try {
 			JsonWriter writer = new JsonWriter(Files.newBufferedWriter(Paths.get(filepath), StandardOpenOption.CREATE));
 			writer.setIndent("  ");

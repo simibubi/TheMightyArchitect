@@ -1,6 +1,7 @@
 package com.simibubi.mightyarchitect.buildomatico.client;
 
 import com.simibubi.mightyarchitect.buildomatico.PaletteDefinition;
+import com.simibubi.mightyarchitect.buildomatico.PaletteStorage;
 import com.simibubi.mightyarchitect.buildomatico.model.schematic.Schematic;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.Sketch;
 
@@ -22,8 +23,8 @@ public class PalettePickerClient {
 
 	public static void initWithDefault() {
 		instance = new PalettePickerClient();
-		instance.primary = PaletteDefinition.defaultPalette();
-		instance.secondary = PaletteDefinition.defaultPalette();
+		instance.primary = PaletteDefinition.defaultPalette().clone();
+		instance.secondary = PaletteDefinition.defaultPalette().clone();
 	}
 
 	@SubscribeEvent
@@ -83,6 +84,14 @@ public class PalettePickerClient {
 	
 	public Schematic getSchematic() {
 		return schematic;
+	}
+	
+	public void reapplyCurrentPalettes() {
+		PaletteDefinition primary = PaletteStorage.getPalette(getPrimary().getName());
+		PaletteDefinition secondary = PaletteStorage.getPalette(getSecondary().getName());
+		this.primary = primary;
+		this.secondary = secondary;
+		schematic.swapPalettes(primary, secondary);
 	}
 
 }

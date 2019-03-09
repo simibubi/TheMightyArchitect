@@ -39,7 +39,7 @@ public class PaletteCreatorClient {
 
 	public static void startCreating(BlockPos center, Schematic target, boolean primary) {
 		instance = new PaletteCreatorClient();
-		instance.palette = PaletteDefinition.defaultPalette();
+		instance.palette = PaletteDefinition.defaultPalette().clone();
 		instance.center = center;
 		instance.target = target;
 		instance.primary = primary;
@@ -58,6 +58,10 @@ public class PaletteCreatorClient {
 
 	public static void reset() {
 		instance = null;
+	}
+	
+	public boolean isPrimary() {
+		return primary;
 	}
 
 	public static PaletteDefinition finish() {

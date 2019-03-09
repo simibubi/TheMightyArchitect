@@ -15,14 +15,14 @@ public class AllItems {
 	public static final ItemForMightyArchitects blueprint_filled = new ItemBlueprintFilled("blueprint_filled");
 
 	public static void registerAll(IForgeRegistry<Item> registry) {
-		registry.registerAll(wand_architect, wand_symmetry, blueprint_empty, blueprint_filled);
+		registry.registerAll(wand_architect, blueprint_empty, wand_symmetry, blueprint_filled);
 	}
 	
 	public static void initModels() {
-		wand_symmetry.initModel();
 		wand_architect.initModel();
 		blueprint_empty.initModel();
 		blueprint_filled.initModel();
+		wand_symmetry.initModel();
 	}
 	
 	public static void initColorHandlers() {
