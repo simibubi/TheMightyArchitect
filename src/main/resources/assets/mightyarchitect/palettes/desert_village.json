@@ -1,0 +1,126 @@
+{
+  "Palette": {
+    "OUTER_THICK": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:fence"
+    },
+    "OUTER_FLAT": {
+      "Properties": {
+        "half": "bottom",
+        "facing": "north",
+        "open": "true"
+      },
+      "Name": "minecraft:trapdoor"
+    },
+    "INNER_PRIMARY": {
+      "Properties": {
+        "type": "sandstone"
+      },
+      "Name": "minecraft:sandstone"
+    },
+    "HEAVY_POST": {
+      "Properties": {
+        "type": "smooth_sandstone"
+      },
+      "Name": "minecraft:sandstone"
+    },
+    "ROOF_PRIMARY": {
+      "Properties": {
+        "variant": "birch"
+      },
+      "Name": "minecraft:planks"
+    },
+    "INNER_DETAIL": {
+      "Properties": {
+        "type": "smooth_sandstone"
+      },
+      "Name": "minecraft:sandstone"
+    },
+    "ROOF_SLAB": {
+      "Properties": {
+        "half": "bottom",
+        "variant": "sandstone"
+      },
+      "Name": "minecraft:stone_slab"
+    },
+    "WINDOW": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:glass_pane"
+    },
+    "Name": "Desert Village",
+    "HEAVY_PRIMARY": {
+      "Properties": {
+        "type": "smooth_sandstone"
+      },
+      "Name": "minecraft:sandstone"
+    },
+    "HEAVY_SECONDARY": {
+      "Properties": {
+        "type": "chiseled_sandstone"
+      },
+      "Name": "minecraft:sandstone"
+    },
+    "ROOF_DETAIL": {
+      "Properties": {
+        "type": "sandstone"
+      },
+      "Name": "minecraft:sandstone"
+    },
+    "ROOF_SLAB_TOP": {
+      "Properties": {
+        "half": "top",
+        "variant": "sandstone"
+      },
+      "Name": "minecraft:stone_slab"
+    },
+    "ROOF_SECONDARY": {
+      "Properties": {
+        "variant": "birch"
+      },
+      "Name": "minecraft:planks"
+    },
+    "INNER_SECONDARY": {
+      "Properties": {
+        "variant": "birch"
+      },
+      "Name": "minecraft:planks"
+    },
+    "OUTER_SLAB": {
+      "Properties": {
+        "half": "bottom",
+        "variant": "sandstone"
+      },
+      "Name": "minecraft:stone_slab"
+    },
+    "HEAVY_WINDOW": {
+      "Properties": {
+        "half": "bottom",
+        "shape": "straight",
+        "facing": "north"
+      },
+      "Name": "minecraft:sandstone_stairs"
+    },
+    "CLEAR": {
+      "Name": "minecraft:glass"
+    },
+    "OUTER_THIN": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:birch_fence"
+    }
+  }
+}

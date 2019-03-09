@@ -1,0 +1,117 @@
+{
+  "Palette": {
+    "OUTER_THICK": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "variant": "cobblestone",
+        "west": "false",
+        "up": "false"
+      },
+      "Name": "minecraft:cobblestone_wall"
+    },
+    "OUTER_FLAT": {
+      "Properties": {
+        "half": "bottom",
+        "facing": "north",
+        "open": "true"
+      },
+      "Name": "minecraft:trapdoor"
+    },
+    "INNER_PRIMARY": {
+      "Name": "minecraft:nether_brick"
+    },
+    "HEAVY_POST": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "variant": "cobblestone",
+        "west": "false",
+        "up": "false"
+      },
+      "Name": "minecraft:cobblestone_wall"
+    },
+    "ROOF_PRIMARY": {
+      "Name": "minecraft:netherrack"
+    },
+    "INNER_DETAIL": {
+      "Properties": {
+        "facing": "north"
+      },
+      "Name": "minecraft:lit_pumpkin"
+    },
+    "ROOF_SLAB": {
+      "Properties": {
+        "half": "bottom",
+        "variant": "nether_brick"
+      },
+      "Name": "minecraft:stone_slab"
+    },
+    "WINDOW": {
+      "Properties": {
+        "east": "false",
+        "color": "black",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:stained_glass_pane"
+    },
+    "Name": "Hotel in Hell",
+    "HEAVY_PRIMARY": {
+      "Name": "minecraft:cobblestone"
+    },
+    "HEAVY_SECONDARY": {
+      "Properties": {
+        "variant": "smooth_andesite"
+      },
+      "Name": "minecraft:stone"
+    },
+    "ROOF_DETAIL": {
+      "Properties": {
+        "variant": "smooth_granite"
+      },
+      "Name": "minecraft:stone"
+    },
+    "ROOF_SLAB_TOP": {
+      "Properties": {
+        "half": "top",
+        "variant": "nether_brick"
+      },
+      "Name": "minecraft:stone_slab"
+    },
+    "ROOF_SECONDARY": {
+      "Properties": {
+        "variant": "diorite"
+      },
+      "Name": "minecraft:stone"
+    },
+    "INNER_SECONDARY": {
+      "Name": "minecraft:nether_brick"
+    },
+    "OUTER_SLAB": {
+      "Properties": {
+        "half": "bottom",
+        "variant": "stone"
+      },
+      "Name": "minecraft:stone_slab"
+    },
+    "HEAVY_WINDOW": {
+      "Name": "minecraft:gravel"
+    },
+    "CLEAR": {
+      "Name": "minecraft:glass"
+    },
+    "OUTER_THIN": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:dark_oak_fence"
+    }
+  }
+}

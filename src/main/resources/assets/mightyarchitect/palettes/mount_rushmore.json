@@ -1,0 +1,134 @@
+{
+  "Palette": {
+    "OUTER_THICK": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "variant": "cobblestone",
+        "west": "false",
+        "up": "false"
+      },
+      "Name": "minecraft:cobblestone_wall"
+    },
+    "OUTER_FLAT": {
+      "Properties": {
+        "half": "bottom",
+        "facing": "north",
+        "open": "true"
+      },
+      "Name": "minecraft:trapdoor"
+    },
+    "INNER_PRIMARY": {
+      "Properties": {
+        "variant": "stone"
+      },
+      "Name": "minecraft:stone"
+    },
+    "HEAVY_POST": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "variant": "cobblestone",
+        "west": "false",
+        "up": "false"
+      },
+      "Name": "minecraft:cobblestone_wall"
+    },
+    "ROOF_PRIMARY": {
+      "Properties": {
+        "color": "cyan"
+      },
+      "Name": "minecraft:stained_hardened_clay"
+    },
+    "INNER_DETAIL": {
+      "Properties": {
+        "variant": "smooth_andesite"
+      },
+      "Name": "minecraft:stone"
+    },
+    "ROOF_SLAB": {
+      "Properties": {
+        "half": "bottom",
+        "variant": "stone_brick"
+      },
+      "Name": "minecraft:stone_slab"
+    },
+    "WINDOW": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:glass_pane"
+    },
+    "Name": "Mount Rushmore",
+    "HEAVY_PRIMARY": {
+      "Properties": {
+        "variant": "stonebrick"
+      },
+      "Name": "minecraft:stonebrick"
+    },
+    "HEAVY_SECONDARY": {
+      "Properties": {
+        "seamless": "false",
+        "variant": "stone"
+      },
+      "Name": "minecraft:double_stone_slab"
+    },
+    "ROOF_DETAIL": {
+      "Properties": {
+        "variant": "stonebrick"
+      },
+      "Name": "minecraft:stonebrick"
+    },
+    "ROOF_SLAB_TOP": {
+      "Properties": {
+        "half": "top",
+        "variant": "stone_brick"
+      },
+      "Name": "minecraft:stone_slab"
+    },
+    "ROOF_SECONDARY": {
+      "Properties": {
+        "color": "cyan"
+      },
+      "Name": "minecraft:stained_hardened_clay"
+    },
+    "INNER_SECONDARY": {
+      "Properties": {
+        "variant": "andesite"
+      },
+      "Name": "minecraft:stone"
+    },
+    "OUTER_SLAB": {
+      "Properties": {
+        "half": "bottom",
+        "variant": "stone"
+      },
+      "Name": "minecraft:stone_slab"
+    },
+    "HEAVY_WINDOW": {
+      "Properties": {
+        "half": "bottom",
+        "shape": "straight",
+        "facing": "north"
+      },
+      "Name": "minecraft:stone_brick_stairs"
+    },
+    "CLEAR": {
+      "Name": "minecraft:glass"
+    },
+    "OUTER_THIN": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:iron_bars"
+    }
+  }
+}

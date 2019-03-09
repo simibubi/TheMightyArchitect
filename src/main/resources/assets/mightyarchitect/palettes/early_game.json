@@ -5,7 +5,7 @@
         "east": "false",
         "south": "false",
         "north": "false",
-        "variant": "mossy_cobblestone",
+        "variant": "cobblestone",
         "west": "false",
         "up": "false"
       },
@@ -14,39 +14,45 @@
     "OUTER_FLAT": {
       "Properties": {
         "half": "bottom",
-        "facing": "east",
-        "open": "false"
+        "facing": "north",
+        "open": "true"
       },
-      "Name": "minecraft:iron_trapdoor"
+      "Name": "minecraft:trapdoor"
     },
     "INNER_PRIMARY": {
-      "Name": "minecraft:obsidian"
+      "Properties": {
+        "variant": "oak"
+      },
+      "Name": "minecraft:planks"
     },
     "HEAVY_POST": {
       "Properties": {
         "east": "false",
         "south": "false",
         "north": "false",
-        "west": "false"
+        "variant": "cobblestone",
+        "west": "false",
+        "up": "false"
       },
-      "Name": "minecraft:iron_bars"
+      "Name": "minecraft:cobblestone_wall"
     },
     "ROOF_PRIMARY": {
       "Properties": {
-        "color": "cyan"
+        "variant": "granite"
       },
-      "Name": "minecraft:stained_hardened_clay"
+      "Name": "minecraft:stone"
     },
     "INNER_DETAIL": {
       "Properties": {
-        "color": "gray"
+        "variant": "oak",
+        "axis": "y"
       },
-      "Name": "minecraft:wool"
+      "Name": "minecraft:log"
     },
     "ROOF_SLAB": {
       "Properties": {
         "half": "bottom",
-        "variant": "cobblestone"
+        "variant": "brick"
       },
       "Name": "minecraft:stone_slab"
     },
@@ -59,56 +65,55 @@
       },
       "Name": "minecraft:glass_pane"
     },
-    "Name": "dark",
+    "Name": "Early Game",
     "HEAVY_PRIMARY": {
-      "Properties": {
-        "variant": "smooth_granite"
-      },
-      "Name": "minecraft:stone"
+      "Name": "minecraft:cobblestone"
     },
     "HEAVY_SECONDARY": {
       "Properties": {
-        "variant": "granite"
+        "variant": "smooth_andesite"
       },
       "Name": "minecraft:stone"
     },
     "ROOF_DETAIL": {
       "Properties": {
-        "variant": "smooth_andesite"
+        "variant": "smooth_granite"
       },
       "Name": "minecraft:stone"
     },
     "ROOF_SLAB_TOP": {
       "Properties": {
         "half": "top",
-        "variant": "cobblestone"
+        "variant": "brick"
       },
       "Name": "minecraft:stone_slab"
     },
     "ROOF_SECONDARY": {
       "Properties": {
-        "variant": "andesite"
+        "variant": "granite"
       },
       "Name": "minecraft:stone"
     },
     "INNER_SECONDARY": {
-      "Name": "minecraft:nether_brick"
+      "Properties": {
+        "variant": "oak"
+      },
+      "Name": "minecraft:planks"
     },
     "OUTER_SLAB": {
       "Properties": {
         "half": "bottom",
-        "variant": "quartz"
+        "variant": "stone_brick"
       },
       "Name": "minecraft:stone_slab"
     },
     "HEAVY_WINDOW": {
       "Properties": {
-        "east": "false",
-        "south": "false",
-        "north": "false",
-        "west": "false"
+        "half": "bottom",
+        "shape": "straight",
+        "facing": "north"
       },
-      "Name": "minecraft:iron_bars"
+      "Name": "minecraft:stone_stairs"
     },
     "CLEAR": {
       "Name": "minecraft:glass"
@@ -120,7 +125,7 @@
         "north": "false",
         "west": "false"
       },
-      "Name": "minecraft:dark_oak_fence"
+      "Name": "minecraft:fence"
     }
   }
 }

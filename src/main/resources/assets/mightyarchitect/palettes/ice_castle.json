@@ -1,0 +1,107 @@
+{
+  "Palette": {
+    "OUTER_THICK": {
+      "Properties": {
+        "east": "false",
+        "color": "white",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:stained_glass_pane"
+    },
+    "OUTER_FLAT": {
+      "Name": "minecraft:air"
+    },
+    "INNER_PRIMARY": {
+      "Name": "minecraft:packed_ice"
+    },
+    "HEAVY_POST": {
+      "Properties": {
+        "east": "false",
+        "color": "white",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:stained_glass_pane"
+    },
+    "ROOF_PRIMARY": {
+      "Name": "minecraft:snow"
+    },
+    "INNER_DETAIL": {
+      "Name": "minecraft:ice"
+    },
+    "ROOF_SLAB": {
+      "Properties": {
+        "layers": "4"
+      },
+      "Name": "minecraft:snow_layer"
+    },
+    "WINDOW": {
+      "Properties": {
+        "east": "false",
+        "color": "light_blue",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:stained_glass_pane"
+    },
+    "Name": "Ice Castle",
+    "HEAVY_PRIMARY": {
+      "Name": "minecraft:snow"
+    },
+    "HEAVY_SECONDARY": {
+      "Name": "minecraft:snow"
+    },
+    "ROOF_DETAIL": {
+      "Properties": {
+        "color": "white"
+      },
+      "Name": "minecraft:wool"
+    },
+    "ROOF_SLAB_TOP": {
+      "Properties": {
+        "layers": "4"
+      },
+      "Name": "minecraft:snow_layer"
+    },
+    "ROOF_SECONDARY": {
+      "Name": "minecraft:snow"
+    },
+    "INNER_SECONDARY": {
+      "Name": "minecraft:packed_ice"
+    },
+    "OUTER_SLAB": {
+      "Properties": {
+        "half": "bottom",
+        "variant": "quartz"
+      },
+      "Name": "minecraft:stone_slab"
+    },
+    "HEAVY_WINDOW": {
+      "Properties": {
+        "east": "false",
+        "color": "silver",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:stained_glass_pane"
+    },
+    "CLEAR": {
+      "Name": "minecraft:glass"
+    },
+    "OUTER_THIN": {
+      "Properties": {
+        "east": "false",
+        "color": "light_blue",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:stained_glass_pane"
+    }
+  }
+}
