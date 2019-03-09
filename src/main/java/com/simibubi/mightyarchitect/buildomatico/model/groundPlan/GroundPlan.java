@@ -60,6 +60,7 @@ public class GroundPlan {
 	}
 
 	public void clearInsides() {
+		clearing.clear();
 		for (int i = 0; i < layerCount; i++) {
 			for (Cuboid cuboid : layers.get(i)) {
 				addClearing(cuboid.getClearing());

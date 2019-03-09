@@ -1,10 +1,10 @@
 DESIGN 9x6x5 ROOF ANY 7
 LAYER MASK_BELOW
-M       M,M       M,M       M,M       M,         
+O       O,O       O,O       O,O       O,         
 LAYER STANDARD
- MRRRRRM , MRRRRRM , MEEHEEM ,PM     MP,         
+ MRRRRRM , MRRRRRM , MEEHEEM ,PO     OP,         
 LAYER STANDARD
- PMRRRMP , PMRRRMP , OFEHEFO , MI   IM ,         
+  MRRRM  , PMRRRMP , OFEHEFO , OI   IO ,         
 LAYER STANDARD
   MRRRM  ,  MRRRM  ,  MFEFM  , PM   MP ,  O   O  
 LAYER STANDARD

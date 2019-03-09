@@ -262,6 +262,10 @@ public abstract class Design {
 		public void getBlocks(Map<BlockPos, PaletteBlockInfo> blocks) {
 			template.getBlocks(this, blocks);
 		}
+		
+		public Design getTemplate() {
+			return template;
+		}
 
 
 	}
