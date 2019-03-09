@@ -15,7 +15,6 @@ import com.simibubi.mightyarchitect.buildomatico.PaletteDefinition;
 import com.simibubi.mightyarchitect.buildomatico.PaletteStorage;
 import com.simibubi.mightyarchitect.buildomatico.model.context.Context;
 import com.simibubi.mightyarchitect.buildomatico.model.schematic.Schematic;
-import com.simibubi.mightyarchitect.buildomatico.model.sketch.Design.DesignInstance;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.Sketch;
 import com.simibubi.mightyarchitect.networking.PacketInstantPrint;
 import com.simibubi.mightyarchitect.networking.PacketSender;
@@ -80,11 +79,6 @@ public class BuildingProcessClient {
 			Sketch sketch = new DesignPicker().pickDesigns(GroundPlannerClient.getInstance().getGroundPlan());
 			sketch.setContext(
 					new Context(GroundPlannerClient.getInstance().getAnchor(), Minecraft.getMinecraft().player));
-
-			// DEBUG
-			for (DesignInstance d : sketch.primary) {
-				System.out.println(d.getTemplate().toString());
-			}
 			
 			Schematic schematic;
 			if (PalettePickerClient.isPresent()) {
