@@ -2,7 +2,6 @@ package com.simibubi.mightyarchitect.buildomatico;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -121,17 +120,14 @@ public class PaletteStorage {
 	}
 
 	public static void loadResourcePalettes() {
-		InputStream stream = TheMightyArchitect.class.getClassLoader()
-				.getResourceAsStream("assets/mightyarchitect/palettes");
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-		try {
-			while (reader.ready()) {
-				String name = reader.readLine();
-				PaletteDefinition paletteDefinition = fromResources("assets/mightyarchitect/palettes/" + name);
-				resourcePalettes.put(paletteDefinition.getName(), paletteDefinition);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		int index = 0;
+		while (index < 10000) {
+			String path = "palettes/p" + index + ".json";
+			if (TheMightyArchitect.class.getClassLoader().getResource(path) == null)
+				break;
+			PaletteDefinition paletteDefinition = fromResources(path);
+			resourcePalettes.put(paletteDefinition.getName(), paletteDefinition);			
+			index++;
 		}
 	}
 

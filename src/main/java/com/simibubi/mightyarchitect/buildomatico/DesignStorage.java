@@ -3,7 +3,6 @@ package com.simibubi.mightyarchitect.buildomatico;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -84,7 +83,7 @@ public class DesignStorage {
 			String filename;
 			String filepath;
 			do {
-				filename = type.name().toLowerCase() + "_" + index++ + ".design";
+				filename = "d" + index++ + ".design";
 				filepath = "designs/" + filename;
 			} while (Files.exists(Paths.get(filepath)));
 			try {
@@ -163,16 +162,14 @@ public class DesignStorage {
 		for (Style weight : Style.values())
 			designMatrix.put(weight, new HashMap<>());
 		
-		InputStream stream = TheMightyArchitect.class.getClassLoader().getResourceAsStream("assets/mightyarchitect/designs");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-        try {
-            while( reader.ready() ) {
-               String name = reader.readLine();
-               loadDesign("assets/mightyarchitect/designs/" + name);
-            }
-        } catch( IOException e ) {
-            e.printStackTrace();
-        }
+        int index = 0;
+		while (index < 10000) {
+			String path = "designs/d" + index + ".design";
+			if (TheMightyArchitect.class.getClassLoader().getResource(path) == null)
+				break;
+			loadDesign(path);
+			index++;
+		}
 	}
 	
 	private static void loadDesign(String path) {
