@@ -1,61 +1,53 @@
 package com.simibubi.mightyarchitect.buildomatico.model.sketch;
 
-import java.util.List;
 import java.util.Map;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
 public class Wall extends Design {
 
-	public boolean repeatable;
-	public boolean override;
-	public int zShift;
-
-	public Wall(List<String> definition) {
-		super(definition);
-		String[] keyWords = definition.get(0).split(" ");
-		zShift = (keyWords.length >= 5) ? Integer.parseInt(keyWords[4]) : 0;
-		Type type = Type.valueOf(keyWords[2]);
-		if (type == Type.WALL_REPEAT) {
-			repeatable = true;
-		} else if (type == Type.WALL_REPEAT_OVERRIDE) {
-			repeatable = true;
-			override = true;
-		}
+	public enum ExpandBehaviour {
+		None, Repeat, MergedRepeat
 	}
 
-	@Override
-	public Type getType() {
-		return Type.WALL;
-	}
+	public ExpandBehaviour expandBehaviour;
 
 	@Override
-	public String toString() {
-		return super.toString() + "\nZSHIFT " + zShift;
+	public Design fromNBT(NBTTagCompound compound) {
+		Wall wall = new Wall();
+		wall.applyNBT(compound);
+		wall.expandBehaviour = ExpandBehaviour.valueOf(compound.getString("ExpandBehaviour"));
+		return wall;
 	}
 
 	@Override
 	public boolean fitsHorizontally(int width) {
-		if (repeatable) {
-			if (override) {
-				return (width % (this.defaultWidth - 1)) == 1;
-			}
+		switch (expandBehaviour) {
+		case MergedRepeat:
+			return (width % (this.defaultWidth - 1)) == 1;
+		case Repeat:
 			return (width % this.defaultWidth) == 0;
+		case None:
+		default:
+			return super.fitsHorizontally(width);
 		}
-		return super.fitsHorizontally(width);
 	}
 
 	@Override
 	public void getBlocks(DesignInstance instance, Map<BlockPos, PaletteBlockInfo> blocks) {
-		if (repeatable) {
-			int instances = override ? (instance.width - 1) / (defaultWidth - 1) : instance.width / defaultWidth;
-			int multiplierWidth = (override? defaultWidth - 1 : defaultWidth);
-			for (int i = 0; i < instances; i++) {
-				BlockPos shift = new BlockPos(i * multiplierWidth, 0, -zShift);
-				super.getBlocksShifted(instance, blocks, shift);			
-			}
+		if (expandBehaviour == ExpandBehaviour.None) {
+			super.getBlocks(instance, blocks);
+			
 		} else {
-			super.getBlocksShifted(instance, blocks, new BlockPos(0, 0, -zShift));			
+			boolean merge = expandBehaviour == ExpandBehaviour.MergedRepeat;
+			int instances = merge ? (instance.width - 1) / (defaultWidth - 1) : instance.width / defaultWidth;
+			int multiplierWidth = (merge ? defaultWidth - 1 : defaultWidth);
+			for (int i = 0; i < instances; i++) {
+				BlockPos shift = new BlockPos(i * multiplierWidth, 0, 0);
+				super.getBlocksShifted(instance, blocks, shift);
+			}
+
 		}
 	}
 

@@ -1,0 +1,26 @@
+{
+  "Size": {
+    "X": 13,
+    "Y": 4,
+    "Z": 4
+  },
+  "Layers": [
+    {
+      "Blocks": " FRRRRRRRRRF , FRRRRRRRRRF ,IFEEEEHEEEEFI, I J J J J I ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "PPPFRRRRRFPPP,PPPFRRRRRFPPP,PPPFFEHEFFPPP,PPPI J J IPPP",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "  PMMMRMMMP  ,  PMMMRMMMP  ,  POOFFFOOP  ,  POOIIIOOP  ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "      P      ,     PPP     ,     POP     ,    PPOPP    ",
+      "Trait": "Standard"
+    }
+  ],
+  "Roofspan": 11
+}

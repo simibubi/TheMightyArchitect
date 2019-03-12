@@ -1,0 +1,30 @@
+{
+  "Size": {
+    "X": 3,
+    "Y": 5,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Blocks": "EFE,I I",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "EHE,J J",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "EHE,J J",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "EFE,I I",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "   ,KBK",
+      "Trait": "MaskAbove"
+    }
+  ]
+}

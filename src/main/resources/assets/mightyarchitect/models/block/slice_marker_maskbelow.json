@@ -1,0 +1,6 @@
+{
+	"textures": {
+		"icon" : "mightyarchitect:blocks/slice_marker_maskbelow"
+	},
+	"parent": "mightyarchitect:block/slice_marker"
+}

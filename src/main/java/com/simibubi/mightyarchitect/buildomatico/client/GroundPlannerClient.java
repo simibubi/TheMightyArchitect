@@ -1,13 +1,13 @@
 package com.simibubi.mightyarchitect.buildomatico.client;
 
-import com.simibubi.mightyarchitect.buildomatico.RaycastHelper;
-import com.simibubi.mightyarchitect.buildomatico.TessellatorHelper;
+import com.simibubi.mightyarchitect.buildomatico.helpful.RaycastHelper;
+import com.simibubi.mightyarchitect.buildomatico.helpful.TessellatorHelper;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Cuboid;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.GroundPlan;
+import com.simibubi.mightyarchitect.gui.GuiOpener;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -22,7 +22,6 @@ public class GroundPlannerClient {
 	private boolean active;
 	private BlockPos anchor;
 	private GroundPlan groundPlan;
-	private GuiScreen openedGuiNextTick;
 	private GroundPlanRenderer renderer;
 
 	private BlockPos firstPosition;
@@ -70,7 +69,7 @@ public class GroundPlannerClient {
 		if (firstPosition == null) {
 			for (Cuboid c : groundPlan.getAll()) {
 				if (c.contains(actualPos)) {
-					setOpenedGuiNextTick(new GuiComposer(c));
+					GuiOpener.open(new GuiComposer(c));
 					return;
 				}
 			}
@@ -118,11 +117,6 @@ public class GroundPlannerClient {
 	public void update() {
 		EntityPlayerSP player = mc.player;
 
-		if (openedGuiNextTick != null) {
-			mc.displayGuiScreen(instance.openedGuiNextTick);
-			openedGuiNextTick = null;
-		}
-
 		RayTraceResult trace = RaycastHelper.rayTraceRange(player.world, player, 75);
 		if (trace != null && trace.typeOfHit == Type.BLOCK) {
 
@@ -153,8 +147,5 @@ public class GroundPlannerClient {
 		TessellatorHelper.cleanUpAfterDrawing();
 	}
 	
-	public void setOpenedGuiNextTick(GuiScreen openedGuiNextTick) {
-		this.openedGuiNextTick = openedGuiNextTick;
-	}
 
 }

@@ -26,15 +26,15 @@ public class ScrollArea extends Gui {
 	private IScrollAction action;
 	public boolean enabled;
 	private int currentState;
-	private Optional<String[]> tooltipContent;
+	private Optional<List<String>> tooltipContent;
 	private List<String> tooltip;
 	private String title = "Choose an option";
 	private int min, max;
 	private boolean limitless;
 	private boolean numeric;
 
-	public ScrollArea(String[] options, IScrollAction action) {
-		this(0, options.length, action);
+	public ScrollArea(List<String> options, IScrollAction action) {
+		this(0, options.size(), action);
 		this.tooltipContent = Optional.of(options);
 		updateTooltip();
 	}
@@ -136,9 +136,9 @@ public class ScrollArea extends Gui {
 			for (int i = min; i < max; i++) {
 				StringBuilder result = new StringBuilder();
 				if (i == currentState)
-					result.append(ChatFormatting.WHITE).append("-> ").append(tooltipContent.get()[i]);
+					result.append(ChatFormatting.WHITE).append("-> ").append(tooltipContent.get().get(i));
 				else
-					result.append(ChatFormatting.GRAY).append("> ").append(tooltipContent.get()[i]);
+					result.append(ChatFormatting.GRAY).append("> ").append(tooltipContent.get().get(i));
 				tooltip.add(result.toString());
 			}
 

@@ -5,7 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.simibubi.mightyarchitect.buildomatico.model.context.Context;
-import com.simibubi.mightyarchitect.buildomatico.model.sketch.Design.Style;
+import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignLayer;
+import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignTheme;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,6 +21,7 @@ public class GroundPlan {
 	private List<Cuboid> all;
 	private List<Cuboid> clearing;
 	private Context context;
+	private DesignTheme theme;
 
 	public GroundPlan() {
 		layers = new ArrayList<>();
@@ -28,6 +30,8 @@ public class GroundPlan {
 		layerCount = 5;
 		for (int i = 0; i < layerCount; i++)
 			layers.add(new LinkedList<>());
+		
+		theme = DesignTheme.Medieval; // TODO: make dynamic
 	}
 
 	public List<Cuboid> getCuboidsOnLayer(int layer) {
@@ -37,35 +41,28 @@ public class GroundPlan {
 		return new LinkedList<>();
 	}
 
-	public List<Cuboid> getClearing() {
+	public List<Cuboid> getRoomSpaceCuboids() {
+		clearing.clear();
+		for (int i = 0; i < layerCount; i++) {
+			for (Cuboid cuboid : layers.get(i)) {
+				clearing.add(cuboid.getClearing());
+			}
+		}
 		return clearing;
-	}
-
-	public void addClearing(Cuboid cuboid) {
-		clearing.add(cuboid);
 	}
 
 	public void add(Cuboid cuboid, int layer) {
 		if (layer < layers.size()) {
 			layers.get(layer).add(cuboid);
 			cuboid.layer = layer;
-			if (cuboid.style == Style.ANY)
-				cuboid.style = (layer == 0)? Style.HEAVY : Style.LIGHT;
+			if (cuboid.designLayer == DesignLayer.None)
+				cuboid.designLayer = (layer == 0) ? DesignLayer.Foundation : DesignLayer.Regular;
 		}
 		all.add(cuboid);
 	}
 
 	public List<Cuboid> getAll() {
 		return all;
-	}
-
-	public void clearInsides() {
-		clearing.clear();
-		for (int i = 0; i < layerCount; i++) {
-			for (Cuboid cuboid : layers.get(i)) {
-				addClearing(cuboid.getClearing());
-			}
-		}
 	}
 
 	public boolean canCuboidAttachTo(Cuboid attach, Cuboid attachTo, EnumFacing side, int shift) {
@@ -82,16 +79,14 @@ public class GroundPlan {
 		GroundPlan compound = new GroundPlan();
 		if (tagCompoundIn != null && tagCompoundIn.hasKey("CuboidCompound")) {
 			NBTTagCompound tagCompound = tagCompoundIn.getCompoundTag("CuboidCompound");
-			
-			// Cuboid
+
 			NBTTagList cuboids = tagCompound.getTagList("Cuboids", 10);
 			cuboids.forEach(nbtCuboid -> {
 				Cuboid cuboid = Cuboid.readFromNBT((NBTTagCompound) nbtCuboid);
 				int layer = ((NBTTagCompound) nbtCuboid).getInteger("Layer");
 				compound.add(cuboid, layer);
 			});
-			
-			// Attached
+
 			NBTTagCompound attachedIndices = tagCompound.getCompoundTag("AttachedIndices");
 			for (int index = 0; index < compound.all.size(); index++) {
 				if (attachedIndices.hasKey("" + index)) {
@@ -99,15 +94,13 @@ public class GroundPlan {
 					for (EnumFacing facing : EnumFacing.VALUES) {
 						if (attached.hasKey(facing.name())) {
 							for (NBTBase attachedIndex : attached.getTagList(facing.name(), 3)) {
-								compound.all.get(index).putAttached(facing, compound.all.get(((NBTTagInt) attachedIndex).getInt()));
+								compound.all.get(index).putAttached(facing,
+										compound.all.get(((NBTTagInt) attachedIndex).getInt()));
 							}
 						}
 					}
 				}
 			}
-			
-			compound.clearInsides();
-
 		}
 		return compound;
 	}
@@ -153,6 +146,10 @@ public class GroundPlan {
 
 	public void setContext(Context context) {
 		this.context = context;
+	}
+	
+	public DesignTheme getTheme() {
+		return theme;
 	}
 
 }

@@ -1,0 +1,18 @@
+{
+  "Size": {
+    "X": 4,
+    "Y": 2,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Blocks": "AAAA,A  A",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "ADDA,    ",
+      "Trait": "CloneOnce"
+    }
+  ]
+}

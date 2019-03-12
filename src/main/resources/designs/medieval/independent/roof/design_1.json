@@ -1,0 +1,34 @@
+{
+  "Size": {
+    "X": 9,
+    "Y": 6,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Blocks": "O       O,O       O,O       O,O       O,         ",
+      "Trait": "MaskBelow"
+    },
+    {
+      "Blocks": " MRRRRRM , MRRRRRM , MEEHEEM ,PO     OP,         ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "  MRRRM  , PMRRRMP , OFEHEFO , OI   IO ,         ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "  MRRRM  ,  MRRRM  ,  MFEFM  , PM   MP ,  O   O  ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "   MRM   ,   MRM   ,   MFM   ,   MIM   ,   O O   ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "    P    ,    P    ,    M    ,   PMP   ,    O    ",
+      "Trait": "Standard"
+    }
+  ],
+  "Roofspan": 7
+}

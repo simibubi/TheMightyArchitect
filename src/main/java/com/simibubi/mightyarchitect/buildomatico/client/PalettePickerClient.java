@@ -5,17 +5,9 @@ import com.simibubi.mightyarchitect.buildomatico.PaletteStorage;
 import com.simibubi.mightyarchitect.buildomatico.model.schematic.Schematic;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.Sketch;
 
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
-
-@EventBusSubscriber
 public class PalettePickerClient {
 
 	private static PalettePickerClient instance;
-	private static boolean guiNextTick;
-	
 	private PaletteDefinition primary;
 	private PaletteDefinition secondary;
 	private Schematic schematic;
@@ -27,18 +19,6 @@ public class PalettePickerClient {
 		instance.secondary = PaletteDefinition.defaultPalette().clone();
 	}
 
-	@SubscribeEvent
-	public static void onClientTick(ClientTickEvent event) {
-		if (guiNextTick) {
-			Minecraft.getMinecraft().displayGuiScreen(new GuiPalettePicker());
-			guiNextTick = false;
-		}
-	}
-	
-	public static void openGui() {
-		guiNextTick = true;
-	}
-	
 	public static boolean isPresent() {
 		return instance != null;
 	}

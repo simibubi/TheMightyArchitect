@@ -8,8 +8,10 @@ import java.util.Vector;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import com.google.common.collect.Lists;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Cuboid;
-import com.simibubi.mightyarchitect.buildomatico.model.sketch.Design.Style;
+import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignLayer;
+import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignTheme;
 import com.simibubi.mightyarchitect.gui.GuiResources;
 import com.simibubi.mightyarchitect.gui.widgets.DynamicLabel;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollArea;
@@ -123,26 +125,28 @@ public class GuiComposer extends GuiScreen {
 			initPosAndSizeFields(x, y);
 			
 			initStyleAndStyleGroupFields(x, y);
-			
-			
 		}
 
 		private void initStyleAndStyleGroupFields(int x, int y) {
-			String[] styleOptions = new String[] {"Foundation", "Regular", "Open"};
+			DesignTheme theme = GroundPlannerClient.getInstance().getGroundPlan().getTheme();
+			List<DesignLayer> layers = theme.getLayers(); 
+			List<String> styleOptions = new ArrayList<>();
+			layers.forEach(layer -> { styleOptions.add(layer.getDisplayName()); });
+			
 			ScrollArea styleScrollArea = new ScrollArea(styleOptions, new IScrollAction() {
 				@Override
 				public void onScroll(int position) {
-					cuboid.style = Style.values()[position];
-					style.text = styleOptions[position];
+					cuboid.designLayer = theme.getLayers().get(position);
+					style.text = styleOptions.get(position);
 				}
 			});
 			styleScrollArea.setBounds(x + 75, y + 12, 70, 14);
 			styleScrollArea.setTitle("Build style");
-			styleScrollArea.setState(cuboid.style.ordinal());
-			style.text = styleOptions[cuboid.style.ordinal()];
+			styleScrollArea.setState(layers.indexOf(cuboid.designLayer));
+			style.text = cuboid.designLayer.getDisplayName();
 			scrollAreas.add(styleScrollArea);
 			
-			String[] paletteOptions = new String[] {"Primary", "Secondary"};
+			List<String> paletteOptions = Lists.newArrayList("Primary", "Secondary");
 			ScrollArea palleteScrollArea = new ScrollArea(paletteOptions, new IScrollAction() {
 				@Override
 				public void onScroll(int position) {

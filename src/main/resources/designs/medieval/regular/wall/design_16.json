@@ -1,0 +1,42 @@
+{
+  "Size": {
+    "X": 5,
+    "Y": 8,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Blocks": "EEEEE,     ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "EEHEE,     ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "EEHEE, J J ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "EEHEE, I I ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "EEEEE, J J ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "EEHEE,JI IJ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "EEEEE,JKBKJ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "GFFFG,I   I",
+      "Trait": "Standard"
+    }
+  ]
+}

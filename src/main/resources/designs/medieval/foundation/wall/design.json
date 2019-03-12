@@ -1,0 +1,26 @@
+{
+  "Size": {
+    "X": 3,
+    "Y": 4,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Blocks": "AAA,D D",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "ACA,J J",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "ACA,J J",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "AAA,DBD",
+      "Trait": "Standard"
+    }
+  ]
+}

@@ -75,6 +75,7 @@ public class PaletteDefinition {
 		PaletteDefinition clone = new PaletteDefinition(name);
 		clone.clear = defaultPalette().clear();
 		clone.definition = new HashMap<>(defaultPalette().getDefinition());
+		definition.forEach((key, value) -> clone.definition.put(key, value));
 		return clone;
 	}
 	
@@ -97,21 +98,10 @@ public class PaletteDefinition {
 	
 	public IBlockState clear() {
 		if (clear == null)
-			clear = get(Palette.CLEAR);
+			clear = get(Palette.CLEAR, EnumFacing.UP);
 		return clear;
 	}
 
-	@Deprecated
-	public IBlockState get(Palette key) {
-		if (key == Palette.ROOF_SLAB_TOP) {
-			IBlockState roofSlab = get(Palette.ROOF_SLAB);
-			if (roofSlab.getPropertyKeys().contains(BlockSlab.HALF))
-				return roofSlab.withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP);
-			return roofSlab;
-		}
-		return definition.get(key);
-	}
-	
 	public IBlockState get(Palette key, EnumFacing facing) {
 		IBlockState iBlockState = definition.get(key);		
 		if (key == Palette.ROOF_SLAB_TOP) {
@@ -136,7 +126,31 @@ public class PaletteDefinition {
 			return Rotation.NONE;
 		}
 	}
-
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		compound = (compound == null)? new NBTTagCompound() : compound;
+		NBTTagCompound palette = new NBTTagCompound();
+		palette.setString("Name", getName());
+		Palette[] values = Palette.values();
+		
+		for (int i = 0; i < values.length; i++) {
+			NBTTagCompound state = new NBTTagCompound();
+			NBTUtil.writeBlockState(state, get(values[i], EnumFacing.UP));
+			palette.setTag(values[i].name(), state);
+		}
+		
+		compound.setTag("Palette", palette);
+		return compound;
+	}
+	
 	public static PaletteDefinition fromNBT(NBTTagCompound compound) {
 		PaletteDefinition palette = defaultPalette().clone();
 		
@@ -152,30 +166,6 @@ public class PaletteDefinition {
 			}
 		}
 		return palette;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound = (compound == null)? new NBTTagCompound() : compound;
-		NBTTagCompound palette = new NBTTagCompound();
-		palette.setString("Name", getName());
-		Palette[] values = Palette.values();
-		
-		for (int i = 0; i < values.length; i++) {
-			NBTTagCompound state = new NBTTagCompound();
-			NBTUtil.writeBlockState(state, get(values[i]));
-			palette.setTag(values[i].name(), state);
-		}
-		
-		compound.setTag("Palette", palette);
-		return compound;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
 	}
 	
 

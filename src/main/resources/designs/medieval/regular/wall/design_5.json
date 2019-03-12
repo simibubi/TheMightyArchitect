@@ -1,0 +1,26 @@
+{
+  "Size": {
+    "X": 4,
+    "Y": 4,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Blocks": "FEEF,    ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "EEEE,    ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "FEEF,    ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "GGGG,JJJJ",
+      "Trait": "Standard"
+    }
+  ]
+}

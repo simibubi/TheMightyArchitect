@@ -1,0 +1,26 @@
+{
+  "Size": {
+    "X": 7,
+    "Y": 4,
+    "Z": 3
+  },
+  "ExpandBehaviour": "None",
+  "Layers": [
+    {
+      "Blocks": "EEEEEEE, GFFFG , GGGGG ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "EEE EEE, JL  J , JJJJJ ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "EEE EEE,  L    ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "EEEEEEE,       ,       ",
+      "Trait": "CloneOnce"
+    }
+  ]
+}

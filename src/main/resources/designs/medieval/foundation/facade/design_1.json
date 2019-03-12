@@ -1,0 +1,29 @@
+{
+  "Size": {
+    "X": 9,
+    "Y": 5,
+    "Z": 2
+  },
+  "Layers": [
+    {
+      "Blocks": "AAAAAAAAA, D D D D ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "AACACACAA, J J J J ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "AACACACAA, J J J J ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "BBBBBBBBB, D D D D ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "         , K BKB K ",
+      "Trait": "MaskAbove"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "Size": {
+    "X": 1,
+    "Y": 3,
+    "Z": 1
+  },
+  "Layers": [
+    {
+      "Blocks": "E",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "E",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "E",
+      "Trait": "Standard"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "Size": {
+    "X": 5,
+    "Y": 6,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Blocks": "BAAAB,AD DA",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "BAAAB,IJ JI",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "BACAB,I   I",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "BACAB,AD DA",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "BAAAB, ADA ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "     ,  K  ",
+      "Trait": "MaskAbove"
+    }
+  ]
+}

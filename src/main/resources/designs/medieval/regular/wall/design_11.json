@@ -1,0 +1,38 @@
+{
+  "Size": {
+    "X": 3,
+    "Y": 7,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Blocks": "EEE,   ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "EEE,   ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "EHE,   ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "EHE,   ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "EHE,   ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "EEE,J J",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "FFF,IJI",
+      "Trait": "Standard"
+    }
+  ]
+}

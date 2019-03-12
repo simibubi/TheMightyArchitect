@@ -7,8 +7,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
-import com.simibubi.mightyarchitect.buildomatico.model.sketch.Design;
-import com.simibubi.mightyarchitect.buildomatico.model.sketch.Design.Style;
+import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignLayer;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
@@ -20,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 public class Cuboid {
 
 	public int x, y, z, width, height, length;
-	public Design.Style style;
+	public DesignLayer designLayer;
 	public char styleGroup;
 	public int layer;
 	private boolean isSecondary;
@@ -40,7 +39,7 @@ public class Cuboid {
 		this.height = Math.abs(height);
 		this.length = Math.abs(length);
 		styleGroup = 'A';
-		style = Style.ANY;
+		designLayer = DesignLayer.None;
 	}
 
 	public BlockPos getOrigin() {
@@ -200,7 +199,7 @@ public class Cuboid {
 		NBTTagCompound compound = new NBTTagCompound();
 		compound.setTag("Origin", NBTUtil.createPosTag(getOrigin()));
 		compound.setTag("Size", NBTUtil.createPosTag(getSize()));
-		compound.setInteger("Style", style.ordinal());
+		compound.setString("DesignLayer", designLayer.name());
 		compound.setInteger("StyleGroup", styleGroup);
 		return compound;
 	}
@@ -209,7 +208,7 @@ public class Cuboid {
 		BlockPos origin = NBTUtil.getPosFromTag(compound.getCompoundTag("Origin"));
 		BlockPos size = NBTUtil.getPosFromTag(compound.getCompoundTag("Size"));
 		Cuboid cuboid = new Cuboid(origin, size);
-		cuboid.style = Design.Style.values()[compound.getInteger("Style")];
+		cuboid.designLayer = DesignLayer.valueOf(compound.getString("DesignLayer"));
 		cuboid.styleGroup = (char) compound.getInteger("StyleGroup");
 		return cuboid;
 	}

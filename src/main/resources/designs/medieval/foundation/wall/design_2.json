@@ -1,0 +1,26 @@
+{
+  "Size": {
+    "X": 4,
+    "Y": 4,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Blocks": "ABBA,D  D",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "ABBA,D  D",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "ABBA,K  K",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "ADDA,    ",
+      "Trait": "Standard"
+    }
+  ]
+}

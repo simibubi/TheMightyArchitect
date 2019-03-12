@@ -1,0 +1,26 @@
+{
+  "Size": {
+    "X": 7,
+    "Y": 4,
+    "Z": 4
+  },
+  "Layers": [
+    {
+      "Blocks": "ORRRRRO,ORRRRRO,OGEEEGO,O     O",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": " MRRRM , MRRRM , MFEFM ,PO   OP",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "  MRM  , KMRMK , IMGMI , IO OI ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "   M   ,   M   ,   M   , KPOPK ",
+      "Trait": "Standard"
+    }
+  ],
+  "Roofspan": 5
+}

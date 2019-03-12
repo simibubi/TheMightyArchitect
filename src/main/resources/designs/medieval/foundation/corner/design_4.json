@@ -1,0 +1,25 @@
+{
+  "Size": {
+    "X": 2,
+    "Y": 4,
+    "Z": 2
+  },
+  "Layers": [
+    {
+      "Blocks": "GJ,JA",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "AD,DA",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "GJ,JA",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "AD,DK",
+      "Trait": "Standard"
+    }
+  ]
+}

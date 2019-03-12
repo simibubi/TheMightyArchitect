@@ -1,0 +1,22 @@
+{
+  "Size": {
+    "X": 5,
+    "Y": 3,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Blocks": "GEGEG,     ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "GFGFG,J J J",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "GFGFG,I I I",
+      "Trait": "Standard"
+    }
+  ]
+}

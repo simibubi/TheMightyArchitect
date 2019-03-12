@@ -1,16 +1,14 @@
 package com.simibubi.mightyarchitect.buildomatico.model.sketch;
 
-import java.util.List;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class Corner extends Design {
-
-	public Corner(List<String> definition) {
-		super(definition);
-	}
 	
 	@Override
-	public Type getType() {
-		return Type.CORNER;
+	public Design fromNBT(NBTTagCompound compound) {
+		Corner corner = new Corner();
+		corner.applyNBT(compound);
+		return corner;
 	}
 
 }

@@ -3,7 +3,7 @@ package com.simibubi.mightyarchitect.buildomatico.client;
 import org.lwjgl.opengl.GL11;
 
 import com.simibubi.mightyarchitect.TheMightyArchitect;
-import com.simibubi.mightyarchitect.buildomatico.TessellatorHelper;
+import com.simibubi.mightyarchitect.buildomatico.helpful.TessellatorHelper;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Cuboid;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.GroundPlan;
 

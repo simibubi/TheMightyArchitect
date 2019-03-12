@@ -1,6 +1,10 @@
 package com.simibubi.mightyarchitect.item;
 
-import com.simibubi.mightyarchitect.buildomatico.DesignStorage;
+import com.simibubi.mightyarchitect.block.AllBlocks;
+import com.simibubi.mightyarchitect.buildomatico.DesignExporter;
+import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignTheme;
+import com.simibubi.mightyarchitect.gui.GuiDesignExporter;
+import com.simibubi.mightyarchitect.gui.GuiOpener;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,24 +26,27 @@ public class ItemWandArchitect extends ItemForMightyArchitects {
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos anchor, EnumHand hand,
 			EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (!worldIn.isRemote) {
+		if (worldIn.isRemote) {
 			IBlockState blockState = worldIn.getBlockState(anchor);
 
-			if (blockState.getBlock() == Blocks.WOOL) {
-				String name = DesignStorage.exportDesign(worldIn, player, anchor, blockState);
-				if (!name.isEmpty()) {
-					player.sendMessage(new TextComponentString("Exported new Design: " + name));
+			if (blockState.getBlock() == AllBlocks.slice_marker) {
+				ItemStack heldItem = player.getHeldItem(hand);
+				if (heldItem.hasTagCompound()) {
+					String name = DesignExporter.exportDesign(worldIn, anchor, heldItem);
+					if (!name.isEmpty()) {
+						player.sendMessage(new TextComponentString("Exported new Design: " + name));
+					}					
 				}
 			} else if (blockState.getBlock() == Blocks.DIAMOND_BLOCK) {
-				DesignStorage.designMatrix = null;
+				for (DesignTheme theme : DesignTheme.values()) {
+					theme.clearDesigns();
+				}
 				player.sendMessage(new TextComponentString("Reloading desings..."));
+			} else {
+				GuiOpener.open(new GuiDesignExporter());
 			}
-
-			if (player.isSneaking()) {
-				player.getHeldItem(hand).setStackDisplayName("Building Placer");
-			}
-
 		}
+		
 		player.getCooldownTracker().setCooldown(this, 10);
 		return EnumActionResult.SUCCESS;
 	}

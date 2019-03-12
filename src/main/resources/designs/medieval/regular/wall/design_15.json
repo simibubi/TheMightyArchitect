@@ -1,0 +1,34 @@
+{
+  "Size": {
+    "X": 9,
+    "Y": 6,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Blocks": "EEEEEEEEE,         ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "EEEEHEEEE,   J J   ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "EEEEHEEEE,J  I I  J",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "EEEEEEEEE,J  KBK  J",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "EEEEEEEEE,J       J",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "GFFFGFFFG,I       I",
+      "Trait": "Standard"
+    }
+  ]
+}

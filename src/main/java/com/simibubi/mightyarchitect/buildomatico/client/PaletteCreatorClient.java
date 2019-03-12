@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.simibubi.mightyarchitect.buildomatico.Palette;
 import com.simibubi.mightyarchitect.buildomatico.PaletteDefinition;
-import com.simibubi.mightyarchitect.buildomatico.TessellatorHelper;
+import com.simibubi.mightyarchitect.buildomatico.helpful.TessellatorHelper;
 import com.simibubi.mightyarchitect.buildomatico.model.schematic.Schematic;
 
 import net.minecraft.client.Minecraft;

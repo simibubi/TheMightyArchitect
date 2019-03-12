@@ -1,0 +1,37 @@
+{
+  "Size": {
+    "X": 2,
+    "Y": 7,
+    "Z": 2
+  },
+  "Layers": [
+    {
+      "Blocks": "AA,AD",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "AD,D ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "AB,B ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "AD,D ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "AB,B ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "AD,DJ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "AA,AK",
+      "Trait": "Standard"
+    }
+  ]
+}

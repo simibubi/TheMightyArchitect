@@ -1,16 +1,15 @@
 package com.simibubi.mightyarchitect.buildomatico.model.sketch;
 
-import java.util.List;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class Trim extends Design {
 
-	public Trim(List<String> definition) {
-		super(definition);
+	@Override
+	public Design fromNBT(NBTTagCompound compound) {
+		Trim trim = new Trim();
+		trim.applyNBT(compound);
+		return trim;
 	}
 
-	@Override
-	public Type getType() {
-		return Type.TRIM;
-	}
 	
 }

@@ -1,22 +1,18 @@
 package com.simibubi.mightyarchitect.buildomatico.model.sketch;
 
-import java.util.List;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class Tower extends Design {
 
 	public int radius;
 	
-	public Tower(List<String> definition) {
-		super(definition);
-		String[] keyWords = definition.get(0).split(" ");
-		radius = Integer.parseInt(keyWords[4]);
-	}
-
 	@Override
-	public Type getType() {
-		return Type.TOWER;
+	public Design fromNBT(NBTTagCompound compound) {
+		Tower tower = new Tower();
+		tower.applyNBT(compound);
+		tower.radius = compound.getInteger("Radius");
+		return tower;
 	}
-	
 
 	@Override
 	public String toString() {
@@ -27,5 +23,6 @@ public class Tower extends Design {
 	public boolean fitsHorizontally(int width) {
 		return width == radius * 2 - 1;
 	}
+
 
 }

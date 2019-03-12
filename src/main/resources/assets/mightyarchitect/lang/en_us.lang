@@ -1,6 +1,7 @@
 item.mightyarchitect.blueprint_empty.name=Empty Blueprint
 item.mightyarchitect.blueprint_filled.name=Blueprint
 item.mightyarchitect.wand_symmetry.name=Staff of Symmetry
-item.mightyarchitect.wand_architect.name=Staff of the Uninspired
+item.mightyarchitect.wand_architect.name=Design Exporter
+tile.mightyarchitect.slice_marker.name=Design Marker
 itemGroup.mightyArchitectTab=The Mighty Architect
 

@@ -1,0 +1,30 @@
+{
+  "Size": {
+    "X": 5,
+    "Y": 5,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Blocks": "AAAAA,BDBDB",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "ACACA,D D D",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "ACACA,J J J",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "AAAAA,J J J",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "GGGGG,K K K",
+      "Trait": "Standard"
+    }
+  ]
+}

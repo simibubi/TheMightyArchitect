@@ -1,0 +1,42 @@
+{
+  "Size": {
+    "X": 3,
+    "Y": 8,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Blocks": "AAA,A A",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "AAA,I I",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "BBB,D D",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "ACA,I I",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "ACA,D D",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "BBB,K K",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "ACA,I I",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "AAA,KKK",
+      "Trait": "Standard"
+    }
+  ]
+}

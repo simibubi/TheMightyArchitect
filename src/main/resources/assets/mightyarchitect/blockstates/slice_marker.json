@@ -1,0 +1,13 @@
+{
+	"forgemarker": 1,
+    "variants": {
+		"normal": { "model": "mightyarchitect:slice_marker_standard" },
+		"inventory": { "model": "mightyarchitect:slice_marker_standard" },
+		"variant=standard": { "model": "mightyarchitect:slice_marker_standard" },
+		"variant=cloneonce": { "model": "mightyarchitect:slice_marker_clone1" },
+		"variant=clonethrice": { "model": "mightyarchitect:slice_marker_clone3" },
+		"variant=optional": { "model": "mightyarchitect:slice_marker_optional" },
+		"variant=maskabove": { "model": "mightyarchitect:slice_marker_maskabove" },
+		"variant=maskbelow": { "model": "mightyarchitect:slice_marker_maskbelow" }
+    }
+}

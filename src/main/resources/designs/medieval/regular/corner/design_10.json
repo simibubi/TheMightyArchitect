@@ -1,0 +1,25 @@
+{
+  "Size": {
+    "X": 1,
+    "Y": 4,
+    "Z": 1
+  },
+  "Layers": [
+    {
+      "Blocks": "G",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "E",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "G",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "E",
+      "Trait": "Standard"
+    }
+  ]
+}

@@ -1,7 +1,10 @@
 package com.simibubi.mightyarchitect.symmetry;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.BlockSlab.EnumBlockHalf;
 import net.minecraft.block.BlockStairs.EnumHalf;
@@ -26,9 +29,9 @@ public abstract class SymmetryElement {
 	public static final String CROSS_PLANE = "cross_plane";
 	public static final String TRIPLE_PLANE = "triple_plane";
 	
-	public static final String[] TOOLTIP_ELEMENTS = {
+	public static final List<String> TOOLTIP_ELEMENTS = ImmutableList.of(
 			"Plane", "Axis", "Crossplane", "Tripleplane", "Point"
-	};
+	);
 	
 	protected Vec3d position;
 	protected IStringSerializable orientation;

@@ -1,24 +1,21 @@
 package com.simibubi.mightyarchitect.buildomatico;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 import com.simibubi.mightyarchitect.TheMightyArchitect;
+import com.simibubi.mightyarchitect.buildomatico.helpful.FilesHelper;
 
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
@@ -32,7 +29,10 @@ public class PaletteStorage {
 	public static PaletteDefinition getRandomPalette() {
 		if (palettes == null)
 			loadAllPalettes();
-		return null;
+		Random random = new Random();
+		List<String> names = new ArrayList<>(palettes.keySet());
+		PaletteDefinition palette = palettes.get(names.get(random.nextInt(names.size())));
+		return palette;
 	}
 
 	public static PaletteDefinition getPalette(String name) {
@@ -58,21 +58,10 @@ public class PaletteStorage {
 
 	public static void exportPalette(PaletteDefinition palette) {
 		String folderPath = "palettes";
-		
 		FilesHelper.createFolderIfMissing(folderPath);
 		String filename = FilesHelper.findFirstValidFilename(palette.getName(), folderPath, "json");
 		String filepath = folderPath + "/" + filename;
-		
-		try {
-			JsonWriter writer = new JsonWriter(Files.newBufferedWriter(Paths.get(filepath), StandardOpenOption.CREATE));
-			writer.setIndent("  ");
-			String string = palette.writeToNBT(new NBTTagCompound()).toString();
-			Streams.write(new JsonParser().parse(string), writer);
-			writer.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		FilesHelper.saveTagCompoundAsJson(palette.writeToNBT(new NBTTagCompound()), filepath);
 	}
 
 	public static PaletteDefinition importPalette(Path path) {
@@ -87,20 +76,6 @@ public class PaletteStorage {
 		return null;
 	}
 
-	public static PaletteDefinition fromResources(String file) {
-		try {
-			JsonReader reader = new JsonReader(new BufferedReader(
-					new InputStreamReader(TheMightyArchitect.class.getClassLoader().getResourceAsStream(file))));
-			reader.setLenient(true);
-			JsonElement element = Streams.parse(reader);
-			return PaletteDefinition.fromNBT(JsonToNBT.getTagFromJson(element.toString()));
-		} catch (NBTException e) {
-			e.printStackTrace();
-		}
-		return null;
-
-	}
-
 	public static void loadAllPalettes() {
 		palettes = new HashMap<>();
 		resourcePalettes = new HashMap<>();
@@ -108,7 +83,7 @@ public class PaletteStorage {
 		try {
 			Files.list(Paths.get("palettes/")).forEach(path -> loadPalette(path));
 		} catch (NoSuchFileException e) {
-			// no palettes created yet
+			// No palettes created yet
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -121,11 +96,12 @@ public class PaletteStorage {
 
 	public static void loadResourcePalettes() {
 		int index = 0;
-		while (index < 10000) {
+		while (index < 2048) {
 			String path = "palettes/p" + index + ".json";
 			if (TheMightyArchitect.class.getClassLoader().getResource(path) == null)
 				break;
-			PaletteDefinition paletteDefinition = fromResources(path);
+			NBTTagCompound tag = FilesHelper.loadJsonResourceAsNBT(path);
+			PaletteDefinition paletteDefinition = PaletteDefinition.fromNBT(tag);
 			resourcePalettes.put(paletteDefinition.getName(), paletteDefinition);			
 			index++;
 		}

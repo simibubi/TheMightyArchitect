@@ -1,16 +1,15 @@
 package com.simibubi.mightyarchitect.buildomatico.model.sketch;
 
-import java.util.List;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class Facade extends Wall {
 
-	public Facade(List<String> definition) {
-		super(definition);
-	}
-
 	@Override
-	public Type getType() {
-		return Type.FACADE;
+	public Design fromNBT(NBTTagCompound compound) {
+		Facade facade = new Facade();
+		facade.expandBehaviour = ExpandBehaviour.None;
+		facade.applyNBT(compound);
+		return facade;
 	}
 	
 }

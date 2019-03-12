@@ -22,8 +22,11 @@ public class AllBlocks {
 	public static final BlockSymmetry symmetry_axis = new BlockSymmetryAxis("symmetry_axis");
 	public static final BlockSymmetry symmetry_cross_plane = new BlockSymmetryCrossPlane("symmetry_cross_plane");
 	public static final BlockSymmetry symmetry_triple_plane = new BlockSymmetryTriplePlane("symmetry_triple_plane");
+
+	public static final BlockForMightyArchitects slice_marker = new BlockSliceMarker("slice_marker");
 	
 	private static BlockForMightyArchitects[] placeables = {
+			slice_marker
 	};
 	
 	private static BlockForMightyArchitects[] renderOnly = {

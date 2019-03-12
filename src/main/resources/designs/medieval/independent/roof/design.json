@@ -1,0 +1,30 @@
+{
+  "Size": {
+    "X": 9,
+    "Y": 5,
+    "Z": 3
+  },
+  "Layers": [
+    {
+      "Blocks": "PMRRRRRMP,PMRRRRRMP, GEEEEEG ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "  MRRRM  ,  MRRRM  ,  GEHEG  ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "   MRM   ,   MRM   ,  IEEEI  ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "    M    ,   PMP   ,  KGEGK  ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "         ,         ,    K    ",
+      "Trait": "Standard"
+    }
+  ],
+  "Roofspan": 7
+}

@@ -12,6 +12,7 @@ public enum GuiResources {
 	SYMMETRY_WAND("wand_symmetry.png", 256, 175),
 	COMPOSER("composer.png", 256, 58),
 	PALETTES("palette_picker.png", 256, 236),
+	EXPORTER("design_exporter.png", 173, 111),
 
 	// Widgets
 	PALETTE_BUTTON("palette_picker.png", 0, 236, 20, 20),

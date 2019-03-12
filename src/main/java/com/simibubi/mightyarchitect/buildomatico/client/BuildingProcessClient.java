@@ -9,13 +9,14 @@ import java.nio.file.StandardOpenOption;
 import org.apache.commons.io.IOUtils;
 
 import com.simibubi.mightyarchitect.TheMightyArchitect;
-import com.simibubi.mightyarchitect.buildomatico.DesignPicker;
-import com.simibubi.mightyarchitect.buildomatico.FilesHelper;
 import com.simibubi.mightyarchitect.buildomatico.PaletteDefinition;
 import com.simibubi.mightyarchitect.buildomatico.PaletteStorage;
+import com.simibubi.mightyarchitect.buildomatico.StandardDesignPicker;
+import com.simibubi.mightyarchitect.buildomatico.helpful.FilesHelper;
 import com.simibubi.mightyarchitect.buildomatico.model.context.Context;
 import com.simibubi.mightyarchitect.buildomatico.model.schematic.Schematic;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.Sketch;
+import com.simibubi.mightyarchitect.gui.GuiOpener;
 import com.simibubi.mightyarchitect.networking.PacketInstantPrint;
 import com.simibubi.mightyarchitect.networking.PacketSender;
 
@@ -76,7 +77,7 @@ public class BuildingProcessClient {
 	public static void design() {
 		if (GroundPlannerClient.isPresent()) {
 			GroundPlannerClient.getInstance().setActive(false);
-			Sketch sketch = new DesignPicker().pickDesigns(GroundPlannerClient.getInstance().getGroundPlan());
+			Sketch sketch = new StandardDesignPicker().assembleSketch(GroundPlannerClient.getInstance().getGroundPlan());
 			sketch.setContext(
 					new Context(GroundPlannerClient.getInstance().getAnchor(), Minecraft.getMinecraft().player));
 			
@@ -227,8 +228,7 @@ public class BuildingProcessClient {
 			SchematicHologram.getInstance().schematicChanged();
 		}
 		if (PalettePickerClient.isPresent()) {
-			// open gui
-			PalettePickerClient.openGui();				
+			GuiOpener.open(new GuiPalettePicker());			
 		}		
 	}
 

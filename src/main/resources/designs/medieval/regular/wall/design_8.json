@@ -1,0 +1,26 @@
+{
+  "Size": {
+    "X": 3,
+    "Y": 4,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Blocks": "GEG,I I",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "GHG,J J",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "GHG,J J",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "GFG,I I",
+      "Trait": "Standard"
+    }
+  ]
+}

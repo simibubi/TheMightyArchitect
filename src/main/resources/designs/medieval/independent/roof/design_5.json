@@ -1,0 +1,38 @@
+{
+  "Size": {
+    "X": 15,
+    "Y": 7,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Blocks": " ERRRRRRRRRRRE , ERRRRRRRRRRRE ,IEEEEEEEEEEEEEI, I   J   J   I ,     I   I     ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "OMRRRRRRRRRRRMO,OMRRRRRRRRRRRMO,OMMMMMEEEMMMMMO,POOOOGEEEGOOOOP,     GGGGG     ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": " MRRRRRRRRRRRM , MRRRRRRRRRRRM , IMMMOEHEOMMMI ,     J   J     ,     JJJJJ     ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": " MRRRRRRRRRRRM , MMRRRRRRRRRMM , IMMMOEHEOMMMI ,      J J      ,               ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "  MRRRRRRRRRM  ,  IMMMMMMMMMI  , P   OEEEO   P ,      I I      ,               ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "  MRRRRRRRRRM  ,  IMMMMMMMMMI  ,     POOOP     ,     POPOP     ,               ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "   MMMMMMMMM   ,  P    P    P  ,       P       ,       P       ,               ",
+      "Trait": "Standard"
+    }
+  ],
+  "Roofspan": 13
+}

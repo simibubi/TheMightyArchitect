@@ -1,0 +1,30 @@
+{
+  "Size": {
+    "X": 5,
+    "Y": 5,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Blocks": "EEEEE, EEE ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "EEHEE, J J ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "EEHEE, J J ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "EEHEE, J J ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "EEEEE, KBK ",
+      "Trait": "Standard"
+    }
+  ]
+}
