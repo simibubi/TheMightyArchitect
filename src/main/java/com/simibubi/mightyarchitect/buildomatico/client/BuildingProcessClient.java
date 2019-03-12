@@ -38,6 +38,9 @@ public class BuildingProcessClient {
 	public static void compose() {
 		if (!GroundPlannerClient.isActive()) {
 			if (GroundPlannerClient.isPresent()) {
+				PaletteCreatorClient.reset();
+				PalettePickerClient.reset();
+				SchematicHologram.reset();
 				GroundPlannerClient.getInstance().setActive(true);
 			} else {
 				chatMarkerTop();
