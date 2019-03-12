@@ -1,6 +1,8 @@
 package com.simibubi.mightyarchitect.buildomatico.client.command;
 
 import com.simibubi.mightyarchitect.buildomatico.client.BuildingProcessClient;
+import com.simibubi.mightyarchitect.gui.GuiOpener;
+import com.simibubi.mightyarchitect.gui.GuiTextPrompt;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -37,7 +39,11 @@ public class CommandPalette extends CommandBase implements IClientCommand {
 						}
 						BuildingProcessClient.finishPalette(name);
 					} else {
-						throw new CommandException("No palette name given: /palette save <name>");						
+						GuiTextPrompt gui = new GuiTextPrompt(result -> BuildingProcessClient.finishPalette(result), result -> BuildingProcessClient.pickPalette());
+						gui.setButtonTextConfirm("Save and Apply");
+						gui.setButtonTextAbort("Cancel");
+						gui.setTitle("Enter a name for your Palette:");
+						GuiOpener.open(gui);
 					}
 				break;
 				default:

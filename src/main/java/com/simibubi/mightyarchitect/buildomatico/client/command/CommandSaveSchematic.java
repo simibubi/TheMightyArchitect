@@ -1,6 +1,8 @@
 package com.simibubi.mightyarchitect.buildomatico.client.command;
 
 import com.simibubi.mightyarchitect.buildomatico.client.BuildingProcessClient;
+import com.simibubi.mightyarchitect.gui.GuiOpener;
+import com.simibubi.mightyarchitect.gui.GuiTextPrompt;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -27,13 +29,18 @@ public class CommandSaveSchematic extends CommandBase implements IClientCommand 
 			if (args.length > 0) {
 				String name = "";
 				for (int i = 0; i < args.length; i++) {
-					name += args[i] + ((i == args.length - 1)? "" : " ");
+					name += args[i] + ((i == args.length - 1) ? "" : " ");
 				}
 				BuildingProcessClient.writeToFile(name);
 			} else {
-				throw new CommandException("Please specify a name: " + getUsage(sender));
+				GuiTextPrompt gui = new GuiTextPrompt(result -> BuildingProcessClient.writeToFile(result), result -> {});
+				gui.setButtonTextConfirm("Save Schematic");
+				gui.setButtonTextAbort("Cancel");
+				gui.setTitle("Enter a name for your Build:");
+				
+				GuiOpener.open(gui);
 			}
-			
+
 		}
 	}
 
@@ -41,7 +48,7 @@ public class CommandSaveSchematic extends CommandBase implements IClientCommand 
 	public int getRequiredPermissionLevel() {
 		return 0;
 	}
-	
+
 	@Override
 	public boolean allowUsageWithoutPrefix(ICommandSender sender, String message) {
 		return false;

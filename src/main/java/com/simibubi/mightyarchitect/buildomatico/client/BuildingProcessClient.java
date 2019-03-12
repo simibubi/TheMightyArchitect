@@ -115,7 +115,7 @@ public class BuildingProcessClient {
 				tellrawpacked("Not a fan? You can always re-roll with:   ", clickable("/design", "/design"));
 				tellrawpacked("For further tweaking on your Ground plan: ", clickable("/compose", "/compose"));
 				tellrawpacked("");
-				tellrawpacked("Save your Build to a file:                /saveSchematic <name>");
+				tellrawpacked("Save your Build to a file:                ", clickable("/saveSchematic", "/saveSchematic"));
 				if (Minecraft.getMinecraft().isSingleplayer()) 
 				tellrawpacked("Materialize your Build into the World:    ", clickable("/print", "/print"));
 				chatMarkerBottom();
@@ -134,7 +134,7 @@ public class BuildingProcessClient {
 			
 			chatMarkerTop();
 			tellrawpacked("Creating a new custom palette! Fill the marked positions with your block choices.");
-			tellrawpacked("Once finished, type in:              /palette save <name>");
+			tellrawpacked("Once finished, click here or type:   ", clickable("/palette save", "/palette save"));
 			tellrawpacked("Return to the palette picker with:   ", clickable("/palette", "/palette"), " (Palette will be discarded)");
 			chatMarkerBottom();
 		}
@@ -142,6 +142,9 @@ public class BuildingProcessClient {
 	
 	public static void finishPalette(String name) {
 		if (PaletteCreatorClient.isPresent()) {
+			if (name.isEmpty())
+				name = "My Palette";
+			
 			boolean primary = PaletteCreatorClient.getInstance().isPrimary();
 			PaletteDefinition palette = PaletteCreatorClient.finish();
 			palette.setName(name);
@@ -175,6 +178,9 @@ public class BuildingProcessClient {
 
 	public static void writeToFile(String name) {
 		if (PalettePickerClient.isPresent()) {
+			if (name.isEmpty())
+				name = "My Build";
+			
 			String folderPath = "schematics";
 			
 			FilesHelper.createFolderIfMissing(folderPath);

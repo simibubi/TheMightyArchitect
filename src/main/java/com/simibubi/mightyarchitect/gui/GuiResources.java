@@ -16,6 +16,7 @@ public enum GuiResources {
 
 	// Widgets
 	PALETTE_BUTTON("palette_picker.png", 0, 236, 20, 20),
+	TEXT_INPUT("widgets.png", 0, 28, 194, 47),
 	BUTTON("widgets.png", 18, 18),
 	BUTTON_HOVER("widgets.png", 18, 0, 18, 18),
 	BUTTON_DOWN("widgets.png", 36, 0, 18, 18),
