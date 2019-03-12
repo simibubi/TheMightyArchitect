@@ -15,6 +15,8 @@ import net.minecraft.util.math.BlockPos;
 
 public class StandardDesignPicker implements IPickDesigns {
 
+	private DesignTheme theme;
+	
 	public Sketch assembleSketch(GroundPlan groundPlan) {
 		Sketch sketch = pickDesigns(groundPlan);
 		sketch.setContext(groundPlan.getContext());
@@ -25,8 +27,6 @@ public class StandardDesignPicker implements IPickDesigns {
 		Sketch sketch = new Sketch();
 		StyleGroupManager styleGroupManager = new StyleGroupManager();
 		
-		DesignTheme theme = DesignTheme.Medieval; //TODO make dynamic
-
 		for (int layer = 0; layer < groundPlan.layerCount; layer++) {
 			for (Cuboid c : groundPlan.getCuboidsOnLayer(layer)) {
 				
@@ -43,6 +43,11 @@ public class StandardDesignPicker implements IPickDesigns {
 
 		sketch.interior = groundPlan.getRoomSpaceCuboids();
 		return sketch;
+	}
+
+	@Override
+	public void setTheme(DesignTheme theme) {
+		this.theme = theme;
 	}
 
 }

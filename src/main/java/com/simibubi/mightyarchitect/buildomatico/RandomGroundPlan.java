@@ -8,6 +8,7 @@ import java.util.Random;
 import com.simibubi.mightyarchitect.buildomatico.model.context.Context;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Cuboid;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.GroundPlan;
+import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignTheme;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
@@ -29,9 +30,9 @@ public class RandomGroundPlan {
 
 	private final static BlockPos origin = new BlockPos(0, 0, 0);
 
-	private static GroundPlan generate() {
+	private static GroundPlan generate(DesignTheme theme) {
 		final int crossed = 0, attached = 1, stacked = 2;
-		GroundPlan compound = new GroundPlan();
+		GroundPlan compound = new GroundPlan(theme);
 		Random dice = new Random();
 
 		// Ground Plan
@@ -269,8 +270,8 @@ public class RandomGroundPlan {
 		return new Random().nextBoolean();
 	}
 
-	public GroundPlan planCuboids(Context context) {
-		GroundPlan randomGroundPlan = generate();
+	public GroundPlan planCuboids(DesignTheme theme, Context context) {
+		GroundPlan randomGroundPlan = generate(theme);
 		randomGroundPlan.setContext(context);
 		return randomGroundPlan;
 	}

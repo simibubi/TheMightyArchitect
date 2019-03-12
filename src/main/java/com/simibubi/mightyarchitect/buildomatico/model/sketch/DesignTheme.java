@@ -58,6 +58,7 @@ public enum DesignTheme {
 		this.designPicker = designPicker;
 		this.layers = layers;
 		this.types = types;
+		this.designPicker.setTheme(this);
 	}
 
 	private static List<DesignLayer> withLayers(DesignLayer... designLayers) {

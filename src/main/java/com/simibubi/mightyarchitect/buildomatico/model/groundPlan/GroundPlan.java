@@ -23,15 +23,14 @@ public class GroundPlan {
 	private Context context;
 	private DesignTheme theme;
 
-	public GroundPlan() {
+	public GroundPlan(DesignTheme theme) {
 		layers = new ArrayList<>();
 		clearing = new LinkedList<>();
 		all = new LinkedList<>();
 		layerCount = 5;
 		for (int i = 0; i < layerCount; i++)
 			layers.add(new LinkedList<>());
-		
-		theme = DesignTheme.Medieval; // TODO: make dynamic
+		this.theme = theme;
 	}
 
 	public List<Cuboid> getCuboidsOnLayer(int layer) {
@@ -75,8 +74,9 @@ public class GroundPlan {
 		return true;
 	}
 
+	// unused
 	public static GroundPlan readFromNBT(NBTTagCompound tagCompoundIn) {
-		GroundPlan compound = new GroundPlan();
+		GroundPlan compound = new GroundPlan(DesignTheme.Medieval);
 		if (tagCompoundIn != null && tagCompoundIn.hasKey("CuboidCompound")) {
 			NBTTagCompound tagCompound = tagCompoundIn.getCompoundTag("CuboidCompound");
 
@@ -146,6 +146,10 @@ public class GroundPlan {
 
 	public void setContext(Context context) {
 		this.context = context;
+	}
+	
+	public void setTheme(DesignTheme theme) {
+		this.theme = theme;
 	}
 	
 	public DesignTheme getTheme() {

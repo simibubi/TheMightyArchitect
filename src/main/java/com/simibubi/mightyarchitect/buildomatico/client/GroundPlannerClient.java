@@ -4,6 +4,7 @@ import com.simibubi.mightyarchitect.buildomatico.helpful.RaycastHelper;
 import com.simibubi.mightyarchitect.buildomatico.helpful.TessellatorHelper;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Cuboid;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.GroundPlan;
+import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignTheme;
 import com.simibubi.mightyarchitect.gui.GuiOpener;
 
 import net.minecraft.client.Minecraft;
@@ -27,8 +28,8 @@ public class GroundPlannerClient {
 	private BlockPos firstPosition;
 	private BlockPos selectedPosition;
 
-	public GroundPlannerClient() {
-		groundPlan = new GroundPlan();
+	public GroundPlannerClient(DesignTheme theme) {
+		groundPlan = new GroundPlan(theme);
 		renderer = new GroundPlanRenderer(mc);
 	}
 
@@ -44,9 +45,9 @@ public class GroundPlannerClient {
 		return instance;
 	}
 
-	public static void startComposing() {
+	public static void startComposing(DesignTheme theme) {
 		mc = Minecraft.getMinecraft();
-		instance = new GroundPlannerClient();
+		instance = new GroundPlannerClient(theme);
 		instance.active = true;
 	}
 	

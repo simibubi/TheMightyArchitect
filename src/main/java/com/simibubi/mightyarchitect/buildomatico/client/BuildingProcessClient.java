@@ -9,12 +9,14 @@ import java.nio.file.StandardOpenOption;
 import org.apache.commons.io.IOUtils;
 
 import com.simibubi.mightyarchitect.TheMightyArchitect;
+import com.simibubi.mightyarchitect.buildomatico.IPickDesigns;
 import com.simibubi.mightyarchitect.buildomatico.PaletteDefinition;
 import com.simibubi.mightyarchitect.buildomatico.PaletteStorage;
-import com.simibubi.mightyarchitect.buildomatico.StandardDesignPicker;
 import com.simibubi.mightyarchitect.buildomatico.helpful.FilesHelper;
 import com.simibubi.mightyarchitect.buildomatico.model.context.Context;
+import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.GroundPlan;
 import com.simibubi.mightyarchitect.buildomatico.model.schematic.Schematic;
+import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignTheme;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.Sketch;
 import com.simibubi.mightyarchitect.gui.GuiOpener;
 import com.simibubi.mightyarchitect.networking.PacketInstantPrint;
@@ -35,6 +37,19 @@ public class BuildingProcessClient {
 
 	public static void compose() {
 		if (!GroundPlannerClient.isActive()) {
+			chatMarkerTop();
+			tellrawpacked("Choose the Theme for your Build:");
+			for (DesignTheme theme : DesignTheme.values()) {
+				tellrawpacked("[", clickable(theme.getDisplayName(), "/compose " + theme.name()), "]");
+			}
+			chatMarkerBottom();
+		} else {
+			status("Already composing, use /unload to reset progress.");
+		}
+	}
+	
+	public static void compose(DesignTheme theme) {
+		if (!GroundPlannerClient.isActive()) {
 			PaletteCreatorClient.reset();
 			PalettePickerClient.reset();
 			SchematicHologram.reset();
@@ -42,7 +57,7 @@ public class BuildingProcessClient {
 			if (GroundPlannerClient.isPresent()) {
 				GroundPlannerClient.getInstance().setActive(true);
 			} else {
-				GroundPlannerClient.startComposing();
+				GroundPlannerClient.startComposing(theme);
 				status("Compose your ground plan.");
 				
 				chatMarkerTop();
@@ -73,13 +88,18 @@ public class BuildingProcessClient {
 		tellrawpacked("Start a new Build: ", clickable("/compose", "/compose"));
 		chatMarkerBottom();
 	}
-
+	
 	public static void design() {
 		if (GroundPlannerClient.isPresent()) {
 			GroundPlannerClient.getInstance().setActive(false);
-			Sketch sketch = new StandardDesignPicker().assembleSketch(GroundPlannerClient.getInstance().getGroundPlan());
-			sketch.setContext(
-					new Context(GroundPlannerClient.getInstance().getAnchor(), Minecraft.getMinecraft().player));
+			
+			GroundPlan groundPlan = GroundPlannerClient.getInstance().getGroundPlan();
+			IPickDesigns designPicker = groundPlan.getTheme().getDesignPicker();
+			Sketch sketch = designPicker.assembleSketch(groundPlan);
+			BlockPos anchor = GroundPlannerClient.getInstance().getAnchor();
+			EntityPlayerSP player = Minecraft.getMinecraft().player;
+			
+			sketch.setContext(new Context(anchor, player));
 			
 			Schematic schematic;
 			if (PalettePickerClient.isPresent()) {
