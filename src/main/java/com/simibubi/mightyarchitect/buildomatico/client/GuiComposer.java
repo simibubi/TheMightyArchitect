@@ -296,7 +296,7 @@ public class GuiComposer extends GuiScreen {
 			for (int i = 0; i < 3; i++) {
 				final int coordinate = i;
 				final boolean vertical = coordinate == 1;
-				ScrollArea scrollArea = new ScrollArea(vertical ? 3 : 2, vertical ? 11 : 20,
+				ScrollArea scrollArea = new ScrollArea(vertical ? 1 : 2, vertical ? 11 : 20,
 						new ICancelableScrollAction() {
 							@Override
 							public void onScroll(int position) {

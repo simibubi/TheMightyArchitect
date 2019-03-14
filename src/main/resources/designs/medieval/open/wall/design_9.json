@@ -1,0 +1,18 @@
+{
+  "Size": {
+    "X": 3,
+    "Y": 2,
+    "Z": 1
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Blocks": "J J",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "JJJ",
+      "Trait": "Standard"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "Size": {
+    "X": 5,
+    "Y": 1,
+    "Z": 1
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Blocks": "I J I",
+      "Trait": "CloneThrice"
+    }
+  ]
+}
