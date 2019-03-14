@@ -42,6 +42,7 @@ public class BuildingProcessClient {
 				PalettePickerClient.reset();
 				SchematicHologram.reset();
 				GroundPlannerClient.getInstance().setActive(true);
+				
 			} else {
 				chatMarkerTop();
 				tellrawpacked("Choose the Theme for your Build:");
@@ -101,7 +102,7 @@ public class BuildingProcessClient {
 			GroundPlannerClient.getInstance().setActive(false);
 
 			GroundPlan groundPlan = GroundPlannerClient.getInstance().getGroundPlan();
-			IPickDesigns designPicker = groundPlan.getTheme().getDesignPicker();
+			IPickDesigns designPicker = groundPlan.theme.getDesignPicker();
 			Sketch sketch = designPicker.assembleSketch(groundPlan);
 			BlockPos anchor = GroundPlannerClient.getInstance().getAnchor();
 			EntityPlayerSP player = Minecraft.getMinecraft().player;

@@ -8,7 +8,7 @@ import java.util.Vector;
 
 import com.simibubi.mightyarchitect.buildomatico.Palette;
 import com.simibubi.mightyarchitect.buildomatico.model.context.Context;
-import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Cuboid;
+import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Room;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.Design.DesignInstance;
 
 import net.minecraft.util.EnumFacing;
@@ -18,7 +18,7 @@ public class Sketch {
 
 	public List<DesignInstance> primary;
 	public List<DesignInstance> secondary;
-	public List<Cuboid> interior;
+	public List<Room> interior;
 
 	private Context context;
 
@@ -54,8 +54,8 @@ public class Sketch {
 			if (blocks.get(pos).palette == Palette.CLEAR) {
 				toRemove.add(pos);
 			} else {
-				for (Cuboid c : interior) {
-					if (c.contains(pos))
+				for (Room room : interior) {
+					if (room.contains(pos))
 						toRemove.add(pos);
 				}
 			}
@@ -66,8 +66,8 @@ public class Sketch {
 	}
 
 	private void addFloors(Map<BlockPos, PaletteBlockInfo> primary, Map<BlockPos, PaletteBlockInfo> secondary) {
-		for (Cuboid cuboid : interior) {
-			List<Cuboid> checked = new LinkedList<>();
+		for (Room cuboid : interior) {
+			List<Room> checked = new LinkedList<>();
 			
 			interior.forEach(other -> {
 				if (other == cuboid)
@@ -81,14 +81,14 @@ public class Sketch {
 
 			int y = cuboid.height - 1;
 			PaletteBlockInfo paletteBlockInfo = new PaletteBlockInfo(Palette.FLOOR, EnumFacing.UP);
-			Map<BlockPos, PaletteBlockInfo> blocks = cuboid.isSecondary()? secondary : primary;
+			Map<BlockPos, PaletteBlockInfo> blocks = cuboid.secondaryPalette ? secondary : primary;
 			
 			for (int x = 0; x < cuboid.width; x++) {
 				for (int z = 0; z < cuboid.length; z++) {
 					boolean contained = false;
 					BlockPos pos = cuboid.getOrigin().add(x, y, z);
 					
-					for (Cuboid other : checked) {
+					for (Room other : checked) {
 						if (other.contains(pos)) {
 							contained = true;
 							break;

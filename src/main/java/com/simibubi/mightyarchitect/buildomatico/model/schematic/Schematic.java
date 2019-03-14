@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import com.simibubi.mightyarchitect.buildomatico.PaletteDefinition;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Cuboid;
+import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Room;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.PaletteBlockInfo;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.Sketch;
 
@@ -87,11 +88,11 @@ public class Schematic {
 		assembledSketch = sketch.assemble();
 	}
 
-	public Cuboid getBounds() {
+	public Cuboid getLocalBounds() {
 		return bounds;
 	}
 
-	public Cuboid getActualBounds() {
+	public Cuboid getGlobalBounds() {
 		BlockPos anchor = getBuildingPosition();
 		Cuboid clone = bounds.clone();
 		clone.move(anchor.getX(), anchor.getY(), anchor.getZ());
@@ -121,7 +122,7 @@ public class Schematic {
 
 	private void checkBounds(BlockPos pos) {
 		if (bounds == null)
-			bounds = new Cuboid(pos, BlockPos.ORIGIN);
+			bounds = new Room(pos, BlockPos.ORIGIN);
 
 		int x = pos.getX();
 		int y = pos.getY();

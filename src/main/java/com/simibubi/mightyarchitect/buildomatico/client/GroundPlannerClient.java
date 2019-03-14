@@ -2,7 +2,7 @@ package com.simibubi.mightyarchitect.buildomatico.client;
 
 import com.simibubi.mightyarchitect.buildomatico.helpful.RaycastHelper;
 import com.simibubi.mightyarchitect.buildomatico.helpful.TessellatorHelper;
-import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Cuboid;
+import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Room;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.GroundPlan;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignTheme;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignType;
@@ -69,7 +69,7 @@ public class GroundPlannerClient {
 		BlockPos actualPos = selectedPosition.subtract(anchor);
 
 		if (firstPosition == null) {
-			for (Cuboid c : groundPlan.getAll()) {
+			for (Room c : groundPlan.getAll()) {
 				if (c.contains(actualPos)) {
 					GuiOpener.open(new GuiComposer(c));
 					return;
@@ -81,7 +81,7 @@ public class GroundPlannerClient {
 			return;
 
 		} else {
-			Cuboid c = new Cuboid(firstPosition, actualPos.subtract(firstPosition));
+			Room c = new Room(firstPosition, actualPos.subtract(firstPosition));
 			c.width++; c.length++;
 			c.height = 4;
 			int facadeWidth = Math.min(c.width, c.length);

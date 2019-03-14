@@ -4,8 +4,8 @@ import org.lwjgl.opengl.GL11;
 
 import com.simibubi.mightyarchitect.TheMightyArchitect;
 import com.simibubi.mightyarchitect.buildomatico.helpful.TessellatorHelper;
-import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Cuboid;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.GroundPlan;
+import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Room;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -57,7 +57,7 @@ public class GroundPlanRenderer {
 			if (firstPos != null) {
 				BlockPos actualFirstPos = anchor.add(firstPos);
 				BlockPos size = selectedPos.subtract(actualFirstPos);
-				Cuboid selection = new Cuboid(actualFirstPos, size.getX(), 1, size.getZ());
+				Room selection = new Room(actualFirstPos, size.getX(), 1, size.getZ());
 				selection.width += 1;
 				selection.length += 1;
 				TessellatorHelper.walls(bufferBuilder, selection.getOrigin(),
@@ -91,7 +91,7 @@ public class GroundPlanRenderer {
 			ResourceLocation currentTexture = null;
 			mc.getTextureManager().bindTexture(innerTexture);
 
-			for (Cuboid c : groundPlan.getAll()) {
+			for (Room c : groundPlan.getAll()) {
 
 				ResourceLocation newTexture = (c.layer == 0) ? heavyTexture : lightTexture;
 				if (newTexture != currentTexture) {
@@ -106,7 +106,7 @@ public class GroundPlanRenderer {
 			mc.getTextureManager().bindTexture(trimTexture);
 			bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
-			for (Cuboid c : groundPlan.getAll()) {
+			for (Room c : groundPlan.getAll()) {
 				BlockPos pos = c.getOrigin().add(anchor);
 				TessellatorHelper.walls(bufferBuilder, pos, new BlockPos(c.width, 1, c.length), 0.125, false, true);
 				if (c.isTop())
@@ -118,9 +118,9 @@ public class GroundPlanRenderer {
 			mc.getTextureManager().bindTexture(innerTexture);
 			bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
-			for (Cuboid c : groundPlan.getAll()) {
-				BlockPos pos = c.getOrigin().add(anchor);
-				TessellatorHelper.walls(bufferBuilder, pos, c.getSize(), -0.250, true, false);
+			for (Room room : groundPlan.getAll()) {
+				BlockPos pos = room.getOrigin().add(anchor);
+				TessellatorHelper.walls(bufferBuilder, pos, room.getSize(), -0.250, true, false);
 			}
 
 			Tessellator.getInstance().draw();

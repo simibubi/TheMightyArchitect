@@ -9,7 +9,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import com.google.common.collect.Lists;
-import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Cuboid;
+import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Room;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignLayer;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignTheme;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignType;
@@ -37,8 +37,8 @@ public class GuiComposer extends GuiScreen {
 	private int xSize, ySize;
 	private int xTopLeft, yTopLeft;
 	private int topLayer;
-	private Cuboid anchor;
-	private Cuboid topMost;
+	private Room anchor;
+	private Room topMost;
 
 	private SimiButton buttonNormalRoof;
 	private SimiButton buttonFlatRoof;
@@ -47,13 +47,13 @@ public class GuiComposer extends GuiScreen {
 	private GuiIndicator indicatorFlatRoof;
 	private GuiIndicator indicatorNoRoof;
 
-	public GuiComposer(Cuboid anchor) {
+	public GuiComposer(Room anchor) {
 		mc = Minecraft.getMinecraft();
 		this.anchor = anchor;
 	}
 
-	private void init(Cuboid anchor) {
-		Cuboid c = anchor;
+	private void init(Room anchor) {
+		Room c = anchor;
 		partials = new ArrayList<>();
 		buttonList.clear();
 		topLayer = 0;
@@ -142,7 +142,6 @@ public class GuiComposer extends GuiScreen {
 				area.draw(this, mouseX, mouseY);
 			}
 		}
-
 	}
 
 	public void updateAllPositioningLabels() {
@@ -152,7 +151,7 @@ public class GuiComposer extends GuiScreen {
 
 	class GuiComposerPartial {
 		private List<ScrollArea> scrollAreas;
-		private Cuboid cuboid;
+		private Room cuboid;
 		private GuiComposer parent;
 		private int layer;
 
@@ -162,7 +161,7 @@ public class GuiComposer extends GuiScreen {
 		private DynamicLabel styleGroup;
 		private DynamicLabel paletteGroup;
 
-		public GuiComposerPartial(GuiComposer parent, Cuboid cuboid, int layer) {
+		public GuiComposerPartial(GuiComposer parent, Room cuboid, int layer) {
 			scrollAreas = new ArrayList<>();
 			this.cuboid = cuboid;
 			this.layer = layer;
@@ -186,7 +185,7 @@ public class GuiComposer extends GuiScreen {
 		}
 
 		private void initStyleAndStyleGroupFields(int x, int y) {
-			DesignTheme theme = GroundPlannerClient.getInstance().getGroundPlan().getTheme();
+			DesignTheme theme = GroundPlannerClient.getInstance().getGroundPlan().theme;
 			List<DesignLayer> layers = theme.getLayers();
 			List<String> styleOptions = new ArrayList<>();
 			layers.forEach(layer -> {
@@ -210,14 +209,14 @@ public class GuiComposer extends GuiScreen {
 			ScrollArea palleteScrollArea = new ScrollArea(paletteOptions, new IScrollAction() {
 				@Override
 				public void onScroll(int position) {
-					cuboid.setSecondary(position == 1);
-					paletteGroup.text = cuboid.isSecondary() ? "2nd" : "1st";
+					cuboid.secondaryPalette = position == 1;
+					paletteGroup.text = cuboid.secondaryPalette ? "2nd" : "1st";
 				}
 			});
 			palleteScrollArea.setBounds(x + 87, y + 32, 30, 14);
 			palleteScrollArea.setTitle("Palette used");
-			palleteScrollArea.setState(cuboid.isSecondary() ? 1 : 0);
-			paletteGroup.text = cuboid.isSecondary() ? "2nd" : "1st";
+			palleteScrollArea.setState(cuboid.secondaryPalette ? 1 : 0);
+			paletteGroup.text = cuboid.secondaryPalette ? "2nd" : "1st";
 			scrollAreas.add(palleteScrollArea);
 
 			ScrollArea styleGroupScrollArea = new ScrollArea(0, 5, new IScrollAction() {
@@ -267,19 +266,19 @@ public class GuiComposer extends GuiScreen {
 								case 0:
 									diff = position - cuboid.x;
 									cuboid.x = position;
-									for (Cuboid c = cuboid.getCuboidAbove(); c != null; c = c.getCuboidAbove())
+									for (Room c = cuboid.getCuboidAbove(); c != null; c = c.getCuboidAbove())
 										c.x += diff;
 									break;
 								case 1:
 									diff = position - cuboid.y;
 									cuboid.y = position;
-									for (Cuboid c = cuboid.getCuboidAbove(); c != null; c = c.getCuboidAbove())
+									for (Room c = cuboid.getCuboidAbove(); c != null; c = c.getCuboidAbove())
 										c.y += diff;
 									break;
 								case 2:
 									diff = position - cuboid.z;
 									cuboid.z = position;
-									for (Cuboid c = cuboid.getCuboidAbove(); c != null; c = c.getCuboidAbove())
+									for (Room c = cuboid.getCuboidAbove(); c != null; c = c.getCuboidAbove())
 										c.z += diff;
 									break;
 								}
@@ -307,7 +306,7 @@ public class GuiComposer extends GuiScreen {
 									diff = (position * 2 + 1) - cuboid.width;
 									cuboid.width = position * 2 + 1;
 									cuboid.x += diff / -2;
-									for (Cuboid c = cuboid.getCuboidAbove(); c != null; c = c.getCuboidAbove()) {
+									for (Room c = cuboid.getCuboidAbove(); c != null; c = c.getCuboidAbove()) {
 										c.width += diff;
 										c.x += diff / -2;
 									}
@@ -316,7 +315,7 @@ public class GuiComposer extends GuiScreen {
 								case 1:
 									diff = position - cuboid.height;
 									cuboid.height = position;
-									for (Cuboid c = cuboid.getCuboidAbove(); c != null; c = c.getCuboidAbove()) {
+									for (Room c = cuboid.getCuboidAbove(); c != null; c = c.getCuboidAbove()) {
 										c.y += diff;
 									}
 									break;
@@ -324,7 +323,7 @@ public class GuiComposer extends GuiScreen {
 									diff = (position * 2 + 1) - cuboid.length;
 									cuboid.length = position * 2 + 1;
 									cuboid.z += diff / -2;
-									for (Cuboid c = cuboid.getCuboidAbove(); c != null; c = c.getCuboidAbove()) {
+									for (Room c = cuboid.getCuboidAbove(); c != null; c = c.getCuboidAbove()) {
 										c.length += diff;
 										c.z += diff / -2;
 									}
@@ -403,7 +402,7 @@ public class GuiComposer extends GuiScreen {
 
 		switch (button.id) {
 		case BUTTON_ADD_LAYER:
-			Cuboid c = anchor;
+			Room c = anchor;
 			while (c.getCuboidAbove() != null)
 				c = c.getCuboidAbove();
 			GroundPlannerClient.getInstance().getGroundPlan().add(c.stack(), topLayer + 1);

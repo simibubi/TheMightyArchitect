@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.simibubi.mightyarchitect.buildomatico.StyleGroupManager.StyleGroupDesignProvider;
 import com.simibubi.mightyarchitect.buildomatico.helpful.DesignHelper;
-import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Cuboid;
+import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Room;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.GroundPlan;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.Design.DesignInstance;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignLayer;
@@ -19,7 +19,7 @@ public class StandardDesignPicker implements IPickDesigns {
 	
 	public Sketch assembleSketch(GroundPlan groundPlan) {
 		Sketch sketch = pickDesigns(groundPlan);
-		sketch.setContext(groundPlan.getContext());
+		sketch.setContext(groundPlan.context);
 		return sketch;
 	}
 
@@ -27,11 +27,11 @@ public class StandardDesignPicker implements IPickDesigns {
 		Sketch sketch = new Sketch();
 		StyleGroupManager styleGroupManager = new StyleGroupManager();
 		
-		for (int layer = 0; layer < groundPlan.layerCount; layer++) {
-			for (Cuboid c : groundPlan.getCuboidsOnLayer(layer)) {
+		for (int layer = 0; layer < GroundPlan.MAX_LAYERS; layer++) {
+			for (Room c : groundPlan.getRoomsOnLayer(layer)) {
 				
 				BlockPos origin = c.getOrigin();
-				List<DesignInstance> designList = c.isSecondary() ? sketch.secondary : sketch.primary;
+				List<DesignInstance> designList = c.secondaryPalette ? sketch.secondary : sketch.primary;
 				StyleGroupDesignProvider styleGroup = styleGroupManager.getStyleGroup(c.styleGroup);
 
 				BlockPos size = c.getSize();
@@ -59,7 +59,7 @@ public class StandardDesignPicker implements IPickDesigns {
 			}
 		}
 
-		sketch.interior = groundPlan.getRoomSpaceCuboids();
+		sketch.interior = groundPlan.getInterior();
 		return sketch;
 	}
 
