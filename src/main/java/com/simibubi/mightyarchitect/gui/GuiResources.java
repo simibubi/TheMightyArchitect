@@ -35,7 +35,11 @@ public enum GuiResources {
 	ICON_TRASH("icons.png", 16, 0, 16, 16),
 	ICON_3x3("icons.png", 32, 0, 16, 16),
 	ICON_TARGET("icons.png", 48, 0, 16, 16),
-	ICON_SPREAD("icons.png", 0, 16, 16, 16);
+	ICON_SPREAD("icons.png", 0, 16, 16, 16),
+	
+	ICON_NORMAL_ROOF("icons.png", 32, 16, 16, 16),
+	ICON_FLAT_ROOF("icons.png", 48, 16, 16, 16),
+	ICON_NO_ROOF("icons.png", 0, 32, 16, 16);
 	
 	public final ResourceLocation location;
 	public int width, height;

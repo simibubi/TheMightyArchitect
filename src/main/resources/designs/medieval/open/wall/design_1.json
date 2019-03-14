@@ -1,0 +1,30 @@
+{
+  "Size": {
+    "X": 4,
+    "Y": 5,
+    "Z": 1
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Blocks": "G  G",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "G  G",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "I  I",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "I  I",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "EJJE",
+      "Trait": "Standard"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "Size": {
+    "X": 5,
+    "Y": 6,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Blocks": "G   G,     ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "EJ JE,     ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "EJ JE,     ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "AEJEA,I   I",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "GGGGG,KAIAK",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "     ,  K  ",
+      "Trait": "MaskAbove"
+    }
+  ]
+}

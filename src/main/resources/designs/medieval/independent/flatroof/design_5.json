@@ -1,0 +1,18 @@
+{
+  "Size": {
+    "X": 3,
+    "Y": 2,
+    "Z": 3
+  },
+  "Layers": [
+    {
+      "Blocks": "   ,IO , I ",
+      "Trait": "MaskBelow"
+    },
+    {
+      "Blocks": "QMM,POM, PQ",
+      "Trait": "Standard"
+    }
+  ],
+  "Margin": 1
+}

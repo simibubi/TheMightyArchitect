@@ -11,6 +11,7 @@ import com.simibubi.mightyarchitect.buildomatico.model.sketch.Design.DesignInsta
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignLayer;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignTheme;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignType;
+import com.simibubi.mightyarchitect.buildomatico.model.sketch.FlatRoof;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.Roof;
 
 import net.minecraft.util.math.BlockPos;
@@ -18,8 +19,8 @@ import net.minecraft.util.math.BlockPos;
 public class DesignHelper {
 
 	/**
-	 * Finds a random design that fulfils the provided requirements. 
-	 * Returns null if no fitting design was found. 
+	 * Finds a random design that fulfils the provided requirements. Returns null if
+	 * no fitting design was found.
 	 */
 	public static Design pickRandom(DesignQuery query) {
 		List<Design> remainingDesigns = new ArrayList<>(query.theme.getDesigns(query.layer, query.type));
@@ -33,7 +34,7 @@ public class DesignHelper {
 					return chosen;
 				}
 			}
-			
+
 			remainingDesigns.remove(index);
 		}
 		return null;
@@ -42,24 +43,26 @@ public class DesignHelper {
 	/**
 	 * Creates a closed room around the specified cuboid using 4 walls and 4 corners
 	 */
-	public static void addCuboid(StyleGroupDesignProvider designProvider, List<DesignInstance> designList, DesignTheme theme, DesignLayer layer,
-			BlockPos start, BlockPos size) {
+	public static void addCuboid(StyleGroupDesignProvider designProvider, List<DesignInstance> designList,
+			DesignTheme theme, DesignLayer layer, BlockPos start, BlockPos size) {
 
 		Design facadeA = null;
 		Design facadeB = null;
 		int width = size.getX();
 		int height = size.getY();
 		int length = size.getZ();
-		
+
 		DesignQuery facadeQuery = new DesignQuery(theme, layer, DesignType.FACADE).withHeight(height);
 		DesignQuery wallQuery = new DesignQuery(theme, layer, DesignType.WALL).withHeight(height);
-		DesignQuery cornerQuery = new DesignQuery(theme, layer, DesignType.CORNER).withHeight(height);
+
+		DesignLayer cornerLayer = (layer != DesignLayer.Open) ? layer : DesignLayer.Regular;
+		DesignQuery cornerQuery = new DesignQuery(theme, cornerLayer, DesignType.CORNER).withHeight(height);
 
 		if (width <= length)
 			facadeA = designProvider.find(facadeQuery.withWidth(width - 2));
 		if (length <= width)
 			facadeB = designProvider.find(facadeQuery.withWidth(length - 2));
-		
+
 		Design wallA = (facadeA != null) ? facadeA : designProvider.find(wallQuery.withWidth(width - 2));
 		Design wallB = (facadeB != null) ? facadeB : designProvider.find(wallQuery.withWidth(length - 2));
 		Design corner = designProvider.find(cornerQuery);
@@ -84,7 +87,7 @@ public class DesignHelper {
 	/**
 	 * Creates a roof with two facades sitting on the shorter sides of the cuboid
 	 */
-	public static void addDoubleRoof(StyleGroupDesignProvider designProvider, List<DesignInstance> designList,
+	public static void addNormalRoof(StyleGroupDesignProvider designProvider, List<DesignInstance> designList,
 			DesignTheme theme, DesignLayer layer, BlockPos start, BlockPos size) {
 		boolean south = size.getZ() < size.getX();
 		int depth = south ? size.getX() : size.getZ();
@@ -95,10 +98,59 @@ public class DesignHelper {
 		BlockPos cornerX = start.add(size.getX() - 1, 0, 0);
 
 		Design roof = designProvider.find(new DesignQuery(theme, layer, DesignType.ROOF).withWidth(width));
-		if (roof != null) {
-			designList.add(roof(roof, south ? start : cornerX, south ? 90 : 180, depth - 4));
-			designList.add(roof(roof, south ? cornerXZ : cornerZ, south ? -90 : 0, depth - 4));
-		}
+
+		if (roof == null)
+			return;
+
+		designList.add(roof(roof, south ? start : cornerX, south ? 90 : 180, depth - 4));
+		designList.add(roof(roof, south ? cornerXZ : cornerZ, south ? -90 : 0, depth - 4));
+	}
+
+	/**
+	 * Creates a roof with facades on all sides of the cuboid 
+	 */
+	public static void addNormalCrossRoof(StyleGroupDesignProvider designProvider, List<DesignInstance> designList,
+			DesignTheme theme, DesignLayer layer, BlockPos start, BlockPos size) {
+		boolean south = size.getZ() < size.getX();
+		int depth = south ? size.getX() : size.getZ();
+		int width = south ? size.getZ() : size.getX();
+
+		BlockPos cornerZ = start.add(0, 0, size.getZ() - 1);
+		BlockPos cornerXZ = start.add(size.getX() - 1, 0, size.getZ() - 1);
+		BlockPos cornerX = start.add(size.getX() - 1, 0, 0);
+
+		Design roof = designProvider.find(new DesignQuery(theme, layer, DesignType.ROOF).withWidth(width));
+
+		if (roof == null)
+			return;
+
+		designList.add(quadRoof(roof, start, 90, depth - 4));
+		designList.add(quadRoof(roof, cornerXZ, -90, depth - 4));
+		designList.add(quadRoof(roof, cornerX, 180, depth - 4));
+		designList.add(quadRoof(roof, cornerZ, 0, depth - 4));
+	}
+
+	/**
+	 * Creates a flat roof on top of the cuboid
+	 */
+	public static void addFlatRoof(StyleGroupDesignProvider designProvider, List<DesignInstance> designList,
+			DesignTheme theme, DesignLayer layer, BlockPos start, BlockPos size) {
+		boolean south = size.getZ() < size.getX();
+		int depth = south ? size.getX() : size.getZ();
+		int width = south ? size.getZ() : size.getX();
+
+		BlockPos cornerZ = start.add(0, 0, size.getZ() - 1);
+		BlockPos cornerXZ = start.add(size.getX() - 1, 0, size.getZ() - 1);
+		BlockPos cornerX = start.add(size.getX() - 1, 0, 0);
+
+		Design flatroof = designProvider.find(new DesignQuery(theme, layer, DesignType.FLAT_ROOF).withWidth(width));
+		
+		if (flatroof == null) 
+			return;
+			
+		designList.add(flatroof(flatroof, south ? start : cornerX, south ? 90 : 180, width, depth));
+		designList.add(flatroof(flatroof, south ? cornerXZ : cornerZ, south ? -90 : 0, width, depth));
+
 	}
 
 	/**
@@ -135,5 +187,19 @@ public class DesignHelper {
 	 */
 	public static DesignInstance roof(Design design, BlockPos pos, int angle, int depth) {
 		return ((Roof) design).create(pos, angle, depth);
+	}
+	
+	/**
+	 * Creates a quadroof part of the specified design. Valid angles: 0, 90, 180, -90
+	 */
+	public static DesignInstance quadRoof(Design design, BlockPos pos, int angle, int depth) {
+		return ((Roof) design).createAsCross(pos, angle, depth);
+	}
+
+	/**
+	 * Creates a faltroof of the specified design. Valid angles: 0, 90, 180, -90
+	 */
+	public static DesignInstance flatroof(Design design, BlockPos pos, int angle, int width, int depth) {
+		return ((FlatRoof) design).create(pos, angle, width, depth);
 	}
 }

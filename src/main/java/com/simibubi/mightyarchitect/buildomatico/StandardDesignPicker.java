@@ -34,9 +34,27 @@ public class StandardDesignPicker implements IPickDesigns {
 				List<DesignInstance> designList = c.isSecondary() ? sketch.secondary : sketch.primary;
 				StyleGroupDesignProvider styleGroup = styleGroupManager.getStyleGroup(c.styleGroup);
 
-				DesignHelper.addCuboid(styleGroup, designList, theme, c.designLayer, origin, c.getSize());
-				if (c.isTop()) {
-					DesignHelper.addDoubleRoof(styleGroup, designList, theme, DesignLayer.Independent, origin.up(c.height), c.getSize());
+				BlockPos size = c.getSize();
+				DesignHelper.addCuboid(styleGroup, designList, theme, c.designLayer, origin, size);
+				
+				if (!c.isTop())
+					continue;
+				
+				switch (c.roofType) {
+				case ROOF:
+					if (c.width == c.length) {
+						DesignHelper.addNormalCrossRoof(styleGroup, designList, theme, DesignLayer.Independent, origin.up(c.height), size);
+					} else {
+						DesignHelper.addNormalRoof(styleGroup, designList, theme, DesignLayer.Independent, origin.up(c.height), size);
+					}
+					break;
+					
+				case FLAT_ROOF:
+					DesignHelper.addFlatRoof(styleGroup, designList, theme, DesignLayer.Independent, origin.up(c.height), size);
+					break;
+					
+				default:
+					break;
 				}
 			}
 		}

@@ -16,6 +16,7 @@ public enum DesignTheme {
 			withLayers(
 					DesignLayer.Foundation, 
 					DesignLayer.Regular, 
+					DesignLayer.Open, 
 					DesignLayer.Independent
 					),
 			withTypes(
@@ -23,7 +24,8 @@ public enum DesignTheme {
 					DesignType.CORNER,
 					DesignType.ROOF,
 					DesignType.TOWER,
-					DesignType.FACADE
+					DesignType.FACADE,
+					DesignType.FLAT_ROOF
 					), 
 			new StandardDesignPicker()
 			),

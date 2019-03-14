@@ -1,0 +1,18 @@
+{
+  "Size": {
+    "X": 4,
+    "Y": 2,
+    "Z": 4
+  },
+  "Layers": [
+    {
+      "Blocks": "PMMM,PMMM,GMMM, GOP",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "  PM,  PP,P   ,OP  ",
+      "Trait": "Standard"
+    }
+  ],
+  "Margin": 1
+}

@@ -7,7 +7,6 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 import com.simibubi.mightyarchitect.buildomatico.Palette;
-import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Cuboid;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignSlice.DesignSliceTrait;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -78,10 +77,6 @@ public abstract class Design {
 		for (DesignSlice slice : slices)
 			currentHeight = slice.addToPrintedLayers(toPrint, currentHeight, targetHeight);
 		return toPrint;
-	}
-
-	protected Cuboid getBounds(DesignInstance instance) {
-		return new Cuboid(instance.localAnchor, rotateAroundZero(new BlockPos(instance.width, instance.height, instance.depth), instance.rotationY));
 	}
 
 	protected void putBlock(Map<BlockPos, PaletteBlockInfo> blocks, BlockPos pos, Palette palette, EnumFacing facing) {

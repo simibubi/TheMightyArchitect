@@ -5,6 +5,7 @@ import com.simibubi.mightyarchitect.buildomatico.helpful.TessellatorHelper;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Cuboid;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.GroundPlan;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignTheme;
+import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignType;
 import com.simibubi.mightyarchitect.gui.GuiOpener;
 
 import net.minecraft.client.Minecraft;
@@ -95,13 +96,14 @@ public class GroundPlannerClient {
 						true);
 				return;
 			}
-			if (facadeWidth > 15) {
-				mc.player.sendStatusMessage(new TextComponentString("§cFacade is too wide (>15): " + facadeWidth),
+			if (facadeWidth > 25) {
+				mc.player.sendStatusMessage(new TextComponentString("§cFacade is too wide (>25): " + facadeWidth),
 						true);
 				return;
 			}
 
 			mc.player.sendStatusMessage(new TextComponentString("§aNew Cuboid was added"), true);
+			c.roofType = facadeWidth > 15 ? DesignType.FLAT_ROOF : DesignType.ROOF;
 			groundPlan.add(c, 0);
 			firstPosition = null;
 		}

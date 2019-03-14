@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignLayer;
+import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignType;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
@@ -20,6 +21,7 @@ public class Cuboid {
 
 	public int x, y, z, width, height, length;
 	public DesignLayer designLayer;
+	public DesignType roofType;
 	public char styleGroup;
 	public int layer;
 	private boolean isSecondary;
@@ -40,6 +42,7 @@ public class Cuboid {
 		this.length = Math.abs(length);
 		styleGroup = 'A';
 		designLayer = DesignLayer.None;
+		roofType = DesignType.ROOF;
 	}
 
 	public BlockPos getOrigin() {
@@ -161,6 +164,9 @@ public class Cuboid {
 		clone.styleGroup = styleGroup;
 		clone.isSecondary = isSecondary;
 		clone.attachTo(this, EnumFacing.UP, 0);
+		
+		clone.roofType = roofType;
+		this.roofType = DesignType.NONE;
 
 		for (EnumFacing side : EnumFacing.HORIZONTALS) {
 			for (Cuboid attached : getAttached(side)) {

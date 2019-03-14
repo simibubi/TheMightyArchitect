@@ -131,7 +131,7 @@ public class DesignSlice {
 		case CloneThrice:
 			toPrint.add(this);
 			int i = 0;
-			for (; i < 3 && currentHeight < targetHeight; i++) {
+			for (; i < 3 && currentHeight + i < targetHeight; i++) {
 				toPrint.add(this);
 			}
 			return currentHeight + i;

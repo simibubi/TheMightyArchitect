@@ -25,5 +25,9 @@ public enum DesignLayer {
 		return displayName;
 	}
 	
+	public boolean isExterior() {
+		return this == Open;
+	}
+	
 	
 }

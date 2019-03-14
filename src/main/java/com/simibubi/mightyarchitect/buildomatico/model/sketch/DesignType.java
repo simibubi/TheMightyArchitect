@@ -10,7 +10,9 @@ public enum DesignType {
 
 	WALL("wall", "Wall", new Wall()), FACADE("facade", "Facade", new Facade()),
 	CORNER("corner", "Corner", new Corner()), TOWER("tower", "Tower", new Tower()), TRIM("trim", "Trim", new Trim()),
-	ROOF("roof", "Roof", new Roof());
+	ROOF("roof", "Roof", new Roof()),
+	FLAT_ROOF("flatroof", "Flat Roof", new FlatRoof()),
+	NONE("none", "Don't use", null);
 
 	private String filePath;
 	private String displayName;
@@ -42,6 +44,8 @@ public enum DesignType {
 		switch (this) {
 		case ROOF:
 			return "Roof Span";
+		case FLAT_ROOF:
+			return "Margin";
 		case TOWER:
 			return "Tower Radius";
 		case WALL:
@@ -52,7 +56,7 @@ public enum DesignType {
 	}
 
 	public boolean hasSizeData() {
-		return this == TOWER || this == ROOF;
+		return this == TOWER || this == ROOF || this == FLAT_ROOF;
 	}
 
 	public boolean hasSubtypes() {

@@ -90,6 +90,9 @@ public class DesignExporter {
 				case ROOF:
 					compound.setInteger("Roofspan", data);
 					break;
+				case FLAT_ROOF:
+					compound.setInteger("Margin", data);
+					break;
 				case WALL:
 					compound.setString("ExpandBehaviour", Wall.ExpandBehaviour.values()[data].name());
 					break;

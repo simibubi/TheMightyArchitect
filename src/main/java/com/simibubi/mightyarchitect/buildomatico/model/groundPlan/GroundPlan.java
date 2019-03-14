@@ -44,6 +44,8 @@ public class GroundPlan {
 		clearing.clear();
 		for (int i = 0; i < layerCount; i++) {
 			for (Cuboid cuboid : layers.get(i)) {
+				if (cuboid.designLayer.isExterior())
+					continue;
 				clearing.add(cuboid.getClearing());
 			}
 		}
