@@ -125,6 +125,7 @@ public class Cuboid {
 		clone.z += 1;
 		clone.width -= 2;
 		clone.length -= 2;
+		clone.isSecondary = isSecondary;
 
 		for (EnumFacing side : EnumFacing.HORIZONTALS) {
 			for (Cuboid attached : getAttached(side)) {

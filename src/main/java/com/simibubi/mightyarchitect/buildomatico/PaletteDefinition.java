@@ -57,9 +57,8 @@ public class PaletteDefinition {
 					.put(Palette.ROOF_PRIMARY,
 							Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT,
 									BlockStone.EnumType.GRANITE))
-					.put(Palette.ROOF_SECONDARY,
-							Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT,
-									BlockStone.EnumType.GRANITE_SMOOTH))
+					.put(Palette.FLOOR,
+							Blocks.PLANKS.getDefaultState())
 					.put(Palette.ROOF_DETAIL, Blocks.BRICK_BLOCK.getDefaultState())
 					.put(Palette.CLEAR, Blocks.GLASS.getDefaultState())
 					.put(Palette.ROOF_SLAB, Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT,

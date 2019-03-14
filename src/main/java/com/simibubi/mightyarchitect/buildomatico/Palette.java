@@ -19,13 +19,14 @@ public enum Palette {
 	OUTER_FLAT("Detailing Panels", 2),
 	
 	ROOF_PRIMARY("Main Roofing", 4),
-	ROOF_SECONDARY("Alt. Roofing", 4),
+	FLOOR("Flooring Material", 4),
 	ROOF_DETAIL("Detailed Roof Edges", 5),
 	ROOF_SLAB("Main Roofing Slabs", 3),
 	
 	// dynamic
 	ROOF_SLAB_TOP("", 3),
-	CLEAR("", 10);
+	CLEAR("", 10),
+	ROOF_SECONDARY("", 4); // old palettes dont crash
 	
 	private int priority;
 	private String displayName;
