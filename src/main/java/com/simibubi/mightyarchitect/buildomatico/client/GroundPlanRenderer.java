@@ -16,15 +16,15 @@ import net.minecraft.util.math.BlockPos;
 
 public class GroundPlanRenderer {
 
-	private static final ResourceLocation blueprintShaderLocation = new ResourceLocation(TheMightyArchitect.ID,
+	public static final ResourceLocation blueprintShaderLocation = new ResourceLocation(TheMightyArchitect.ID,
 			"shaders/post/blueprint.json");
-	private static final ResourceLocation heavyTexture = new ResourceLocation(TheMightyArchitect.ID,
+	public static final ResourceLocation heavyTexture = new ResourceLocation(TheMightyArchitect.ID,
 			"textures/blocks/markers/heavy.png");
-	private static final ResourceLocation lightTexture = new ResourceLocation(TheMightyArchitect.ID,
+	public static final ResourceLocation lightTexture = new ResourceLocation(TheMightyArchitect.ID,
 			"textures/blocks/markers/light.png");
-	private static final ResourceLocation innerTexture = new ResourceLocation(TheMightyArchitect.ID,
+	public static final ResourceLocation innerTexture = new ResourceLocation(TheMightyArchitect.ID,
 			"textures/blocks/markers/inner.png");
-	static final ResourceLocation trimTexture = new ResourceLocation(TheMightyArchitect.ID,
+	public static final ResourceLocation trimTexture = new ResourceLocation(TheMightyArchitect.ID,
 			"textures/blocks/markers/trim.png");
 	
 	public static void updateShader(boolean active) {
@@ -46,43 +46,6 @@ public class GroundPlanRenderer {
 		this.mc = mc;
 	}
 		
-	public void renderSelection(BlockPos selectedPos, BlockPos firstPos, BlockPos anchor) {
-		if (selectedPos != null) {
-			mc.getTextureManager().bindTexture(trimTexture);
-			BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-			bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-
-			TessellatorHelper.walls(bufferBuilder, selectedPos, new BlockPos(1, 1, 1), 0.125, false, true);
-
-			if (firstPos != null) {
-				BlockPos actualFirstPos = anchor.add(firstPos);
-				BlockPos size = selectedPos.subtract(actualFirstPos);
-				Room selection = new Room(actualFirstPos, size.getX(), 1, size.getZ());
-				selection.width += 1;
-				selection.length += 1;
-				TessellatorHelper.walls(bufferBuilder, selection.getOrigin(),
-						selection.getSize(), -0.125, false, true);
-				Tessellator.getInstance().draw();
-
-				TessellatorHelper.drawString("" + selection.width, selection.x + selection.width / 2f,
-						selection.y + .5f, selection.z - 1, true, false);
-
-				TessellatorHelper.drawString("" + selection.width, selection.x + selection.width / 2f,
-						selection.y + .5f, selection.z + selection.length + 1, true, false);
-
-				TessellatorHelper.drawString("" + selection.length, selection.x + selection.width + 1,
-						selection.y + .5f, selection.z + selection.length / 2f, true, false);
-
-				TessellatorHelper.drawString("" + selection.length, selection.x - 1, selection.y + .5f,
-						selection.z + selection.length / 2f, true, false);
-
-			} else {
-				Tessellator.getInstance().draw();
-			}
-
-		}
-	}
-
 	public void renderGroundPlan(GroundPlan groundPlan, BlockPos anchor) {
 		if (groundPlan != null && anchor != null) {
 			BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();

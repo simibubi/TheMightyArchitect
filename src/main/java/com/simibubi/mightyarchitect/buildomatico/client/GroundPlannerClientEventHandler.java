@@ -58,7 +58,7 @@ public class GroundPlannerClientEventHandler {
 	public static void onRightClick(MouseEvent event) {
 		if (event.isButtonstate() && event.getButton() == 1 && Mouse.isButtonDown(1)) {
 			if (isActive()) {
-				getPlanner().handleSelect();
+				getPlanner().handleRightClick();
 			}
 		}
 	}

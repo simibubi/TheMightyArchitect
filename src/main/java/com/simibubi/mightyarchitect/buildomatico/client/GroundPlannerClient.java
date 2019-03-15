@@ -1,12 +1,11 @@
 package com.simibubi.mightyarchitect.buildomatico.client;
 
+import com.simibubi.mightyarchitect.buildomatico.client.tools.ImAToolForGroundPlanning;
+import com.simibubi.mightyarchitect.buildomatico.client.tools.RoomTool;
 import com.simibubi.mightyarchitect.buildomatico.helpful.RaycastHelper;
 import com.simibubi.mightyarchitect.buildomatico.helpful.TessellatorHelper;
-import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Room;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.GroundPlan;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignTheme;
-import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignType;
-import com.simibubi.mightyarchitect.gui.GuiOpener;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -26,18 +25,18 @@ public class GroundPlannerClient {
 	private GroundPlan groundPlan;
 	private GroundPlanRenderer renderer;
 
-	private BlockPos firstPosition;
-	private BlockPos selectedPosition;
+	private ImAToolForGroundPlanning activeTool;
 
 	public GroundPlannerClient(DesignTheme theme) {
 		groundPlan = new GroundPlan(theme);
 		renderer = new GroundPlanRenderer(mc);
+		activeTool = new RoomTool(this);
 	}
 
 	public static boolean isActive() {
 		return instance != null && instance.active;
 	}
-	
+
 	public static boolean isPresent() {
 		return instance != null;
 	}
@@ -51,7 +50,7 @@ public class GroundPlannerClient {
 		instance = new GroundPlannerClient(theme);
 		instance.active = true;
 	}
-	
+
 	public static void reset() {
 		instance = null;
 	}
@@ -60,53 +59,11 @@ public class GroundPlannerClient {
 		this.active = active;
 	}
 
-	public void handleSelect() {
-		if (selectedPosition == null)
-			return;
-		
-		if (anchor == null)
-			anchor = selectedPosition;
-		BlockPos actualPos = selectedPosition.subtract(anchor);
+	public void handleRightClick() {
+		String message = activeTool.handleRightClick();
 
-		if (firstPosition == null) {
-			for (Room c : groundPlan.getAll()) {
-				if (c.contains(actualPos)) {
-					GuiOpener.open(new GuiComposer(c));
-					return;
-				}
-			}
-
-			firstPosition = actualPos;
-			mc.player.sendStatusMessage(new TextComponentString("First position marked"), true);
-			return;
-
-		} else {
-			Room c = new Room(firstPosition, actualPos.subtract(firstPosition));
-			c.width++; c.length++;
-			c.height = 4;
-			int facadeWidth = Math.min(c.width, c.length);
-
-			if (facadeWidth % 2 == 0) {
-				mc.player.sendStatusMessage(new TextComponentString("§cFacade cannot have even width: " + facadeWidth),
-						true);
-				return;
-			}
-			if (facadeWidth < 5) {
-				mc.player.sendStatusMessage(new TextComponentString("§cFacade is too narrow (<5): " + facadeWidth),
-						true);
-				return;
-			}
-			if (facadeWidth > 25) {
-				mc.player.sendStatusMessage(new TextComponentString("§cFacade is too wide (>25): " + facadeWidth),
-						true);
-				return;
-			}
-
-			mc.player.sendStatusMessage(new TextComponentString("§aNew Cuboid was added"), true);
-			c.roofType = facadeWidth > 15 ? DesignType.FLAT_ROOF : DesignType.ROOF;
-			groundPlan.add(c, 0);
-			firstPosition = null;
-		}
+		if (message != null)
+			mc.player.sendStatusMessage(new TextComponentString(message), true);
 	}
 
 	public GroundPlan getGroundPlan() {
@@ -115,6 +72,10 @@ public class GroundPlannerClient {
 
 	public BlockPos getAnchor() {
 		return anchor;
+	}
+
+	public void setAnchor(BlockPos anchor) {
+		this.anchor = anchor;
 	}
 
 	public void update() {
@@ -126,29 +87,22 @@ public class GroundPlannerClient {
 			BlockPos hit = trace.getBlockPos();
 			if (trace.sideHit.getAxis() == Axis.Y)
 				hit = hit.offset(trace.sideHit);
-			selectedPosition = hit;
 
-			if (firstPosition != null) {
-				BlockPos size = selectedPosition.subtract(anchor.add(firstPosition));
-				if (size.getX() % 2 != 0) {
-					selectedPosition = selectedPosition.east(size.getX() > 0 ? 1 : -1);
-				}
-				if (size.getZ() % 2 != 0) {
-					selectedPosition = selectedPosition.south(size.getZ() > 0 ? 1 : -1);
-				}
-			}
+			if (anchor == null)
+				activeTool.updateSelection(hit);
+			else
+				activeTool.updateSelection(hit.subtract(anchor));
 
 		} else {
-			selectedPosition = null;
+			activeTool.updateSelection(null);
 		}
 	}
-	
+
 	public void render() {
 		TessellatorHelper.prepareForDrawing();
-		renderer.renderSelection(selectedPosition, firstPosition, anchor);
+		activeTool.render();
 		renderer.renderGroundPlan(groundPlan, anchor);
 		TessellatorHelper.cleanUpAfterDrawing();
 	}
-	
 
 }
