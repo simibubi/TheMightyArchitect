@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.simibubi.mightyarchitect.buildomatico.Palette;
 import com.simibubi.mightyarchitect.buildomatico.PaletteDefinition;
+import com.simibubi.mightyarchitect.buildomatico.helpful.TesselatorTextures;
 import com.simibubi.mightyarchitect.buildomatico.helpful.TessellatorHelper;
 import com.simibubi.mightyarchitect.buildomatico.model.schematic.Schematic;
 
@@ -78,7 +79,7 @@ public class PaletteCreatorClient {
 	public static void render(RenderWorldLastEvent event) {
 		if (isPresent()) {
 			TessellatorHelper.prepareForDrawing();
-			Minecraft.getMinecraft().getTextureManager().bindTexture(GroundPlanRenderer.trimTexture);
+			TesselatorTextures.Trim.bind();
 			BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 			bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 

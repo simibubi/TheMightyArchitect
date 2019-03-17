@@ -85,6 +85,7 @@ public class TessellatorHelper {
 	
 		GlStateManager.enableLighting();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.DST_ALPHA);
 		GlStateManager.popMatrix();
 		GlStateManager.popAttrib();
 	}

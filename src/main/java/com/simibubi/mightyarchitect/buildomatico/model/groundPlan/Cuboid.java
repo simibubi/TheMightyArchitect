@@ -1,5 +1,6 @@
 package com.simibubi.mightyarchitect.buildomatico.model.groundPlan;
 
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 public class Cuboid {
@@ -60,6 +61,44 @@ public class Cuboid {
 
 	public BlockPos getCenter() {
 		return getOrigin().add(width / 2, height / 2, length / 2);
+	}
+	
+	public void moveToAttach(Room other, EnumFacing side, int shift) {
+		if (side != EnumFacing.EAST && side != EnumFacing.WEST)
+			centerOnOthersX(other, shift);
+
+		if (side != EnumFacing.NORTH && side != EnumFacing.SOUTH)
+			centerOnOthersZ(other, shift);
+
+		switch (side) {
+		case WEST:
+			this.x = other.x + other.width;
+			break;
+		case EAST:
+			this.x = other.x - this.width;
+			break;
+		case SOUTH:
+			this.z = other.z + other.length;
+			break;
+		case NORTH:
+			this.z = other.z - this.length;
+			break;
+		case UP:
+			this.y = other.y + other.height;
+			break;
+		case DOWN:
+			this.y = other.y - this.height;
+			break;
+		default:
+		}
+	}
+
+	private void centerOnOthersZ(Cuboid other, int shift) {
+		this.z = other.z + shift + (other.length - this.length) / 2;
+	}
+
+	private void centerOnOthersX(Cuboid other, int shift) {
+		this.x = other.x + shift + (other.width - this.width) / 2;
 	}
 
 }

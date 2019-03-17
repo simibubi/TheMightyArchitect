@@ -1,12 +1,13 @@
 package com.simibubi.mightyarchitect.buildomatico.client.tools;
 
-import net.minecraft.util.math.BlockPos;
+import com.simibubi.mightyarchitect.buildomatico.client.GroundPlannerClient;
 
 public interface ImAToolForGroundPlanning {
 
 	public String handleRightClick();
 	
-	public void updateSelection(BlockPos selectedPos);
+	public void handleKey(int key);
+	public void updateSelection();
 	public void render();
-	
+	public void init(GroundPlannerClient planner);
 }

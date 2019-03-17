@@ -1,6 +1,9 @@
 package com.simibubi.mightyarchitect.buildomatico.client;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+
+import com.simibubi.mightyarchitect.buildomatico.helpful.AllShaders;
 
 import net.minecraft.client.gui.GuiChat;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -9,6 +12,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -44,7 +48,7 @@ public class GroundPlannerClientEventHandler {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void preRender(RenderTickEvent event) {
-		GroundPlanRenderer.updateShader(isActive());
+		AllShaders.Blueprint.setActive(isActive());
 	}
 
 	@SubscribeEvent
@@ -61,6 +65,29 @@ public class GroundPlannerClientEventHandler {
 				getPlanner().handleRightClick();
 			}
 		}
+	}
+	
+	@SubscribeEvent
+	public static void onKeyTyped(KeyInputEvent event) {
+		if (!Keyboard.getEventKeyState())
+			return;
+		
+		if (!GroundPlannerClient.isActive()) 
+			return;
+		
+		switch (Keyboard.getEventKey()) {
+		case Keyboard.KEY_UP:
+		case Keyboard.KEY_DOWN:
+			getPlanner().getActiveTool().getTool().handleKey(Keyboard.getEventKey());
+			break;
+		case Keyboard.KEY_RIGHT:
+			getPlanner().cycleTool(true);
+			break;
+		case Keyboard.KEY_LEFT:
+			getPlanner().cycleTool(false);
+			break;
+		}
+		
 	}
 
 }

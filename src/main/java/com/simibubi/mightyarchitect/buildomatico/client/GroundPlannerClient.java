@@ -1,18 +1,12 @@
 package com.simibubi.mightyarchitect.buildomatico.client;
 
-import com.simibubi.mightyarchitect.buildomatico.client.tools.ImAToolForGroundPlanning;
-import com.simibubi.mightyarchitect.buildomatico.client.tools.RoomTool;
-import com.simibubi.mightyarchitect.buildomatico.helpful.RaycastHelper;
+import com.simibubi.mightyarchitect.buildomatico.client.tools.AllTools;
 import com.simibubi.mightyarchitect.buildomatico.helpful.TessellatorHelper;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.GroundPlan;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignTheme;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.text.TextComponentString;
 
 public class GroundPlannerClient {
@@ -25,12 +19,13 @@ public class GroundPlannerClient {
 	private GroundPlan groundPlan;
 	private GroundPlanRenderer renderer;
 
-	private ImAToolForGroundPlanning activeTool;
+	private AllTools activeTool;
 
 	public GroundPlannerClient(DesignTheme theme) {
 		groundPlan = new GroundPlan(theme);
-		renderer = new GroundPlanRenderer(mc);
-		activeTool = new RoomTool(this);
+		renderer = new GroundPlanRenderer();
+		setActiveTool(AllTools.Room);
+		activeTool.getTool().init(this);
 	}
 
 	public static boolean isActive() {
@@ -60,7 +55,7 @@ public class GroundPlannerClient {
 	}
 
 	public void handleRightClick() {
-		String message = activeTool.handleRightClick();
+		String message = getActiveTool().getTool().handleRightClick();
 
 		if (message != null)
 			mc.player.sendStatusMessage(new TextComponentString(message), true);
@@ -79,30 +74,27 @@ public class GroundPlannerClient {
 	}
 
 	public void update() {
-		EntityPlayerSP player = mc.player;
-
-		RayTraceResult trace = RaycastHelper.rayTraceRange(player.world, player, 75);
-		if (trace != null && trace.typeOfHit == Type.BLOCK) {
-
-			BlockPos hit = trace.getBlockPos();
-			if (trace.sideHit.getAxis() == Axis.Y)
-				hit = hit.offset(trace.sideHit);
-
-			if (anchor == null)
-				activeTool.updateSelection(hit);
-			else
-				activeTool.updateSelection(hit.subtract(anchor));
-
-		} else {
-			activeTool.updateSelection(null);
-		}
+		activeTool.getTool().updateSelection();
 	}
 
 	public void render() {
 		TessellatorHelper.prepareForDrawing();
-		activeTool.render();
 		renderer.renderGroundPlan(groundPlan, anchor);
+		getActiveTool().getTool().render();
 		TessellatorHelper.cleanUpAfterDrawing();
+	}
+
+	public AllTools getActiveTool() {
+		return activeTool;
+	}
+
+	public void setActiveTool(AllTools activeTool) {
+		this.activeTool = activeTool;
+	}
+	
+	public void cycleTool(boolean forward) {
+		setActiveTool(forward ? activeTool.next() : activeTool.previous());
+		activeTool.getTool().init(this);
 	}
 
 }

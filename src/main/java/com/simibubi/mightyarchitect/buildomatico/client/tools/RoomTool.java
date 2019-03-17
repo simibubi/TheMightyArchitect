@@ -1,18 +1,18 @@
 package com.simibubi.mightyarchitect.buildomatico.client.tools;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import com.simibubi.mightyarchitect.buildomatico.client.GroundPlanRenderer;
 import com.simibubi.mightyarchitect.buildomatico.client.GroundPlannerClient;
-import com.simibubi.mightyarchitect.buildomatico.client.GuiComposer;
+import com.simibubi.mightyarchitect.buildomatico.helpful.TesselatorTextures;
 import com.simibubi.mightyarchitect.buildomatico.helpful.TessellatorHelper;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Cuboid;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.GroundPlan;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Room;
+import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Stack;
+import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignLayer;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignType;
-import com.simibubi.mightyarchitect.gui.GuiOpener;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -20,12 +20,15 @@ import net.minecraft.util.math.BlockPos;
 
 public class RoomTool extends GroundPlanningToolBase {
 
-	private BlockPos firstPosition;
+	protected BlockPos firstPosition;
+	protected Stack lastAddedStack;
 
-	public RoomTool(GroundPlannerClient planner) {
-		super(planner);
+	@Override
+	public void init(GroundPlannerClient planner) {
+		super.init(planner);
+		firstPosition = null;
 	}
-
+	
 	@Override
 	public String handleRightClick() {
 		super.handleRightClick();
@@ -36,13 +39,6 @@ public class RoomTool extends GroundPlanningToolBase {
 		GroundPlan groundPlan = planner.getGroundPlan();
 
 		if (firstPosition == null) {
-			for (Room c : groundPlan.getAll()) {
-				if (c.contains(selectedPosition)) {
-					GuiOpener.open(new GuiComposer(c));
-					return null;
-				}
-			}
-
 			firstPosition = selectedPosition;
 			return "First position marked";
 
@@ -50,7 +46,8 @@ public class RoomTool extends GroundPlanningToolBase {
 			Room room = new Room(firstPosition, selectedPosition.subtract(firstPosition));
 			room.width++;
 			room.length++;
-			room.height = 4;
+			room.height = 2;
+			room.designLayer = DesignLayer.Foundation;
 			int facadeWidth = Math.min(room.width, room.length);
 
 			if (facadeWidth % 2 == 0) {
@@ -64,15 +61,34 @@ public class RoomTool extends GroundPlanningToolBase {
 			}
 
 			room.roofType = facadeWidth > 15 ? DesignType.FLAT_ROOF : DesignType.ROOF;
-			groundPlan.add(room, 0);
+			lastAddedStack = groundPlan.startStack(room);
 			firstPosition = null;
-			return "§aNew Cuboid has been added";
+			return "§aNew Room has been added";
+		}
+	}
+	
+	@Override
+	public void handleKey(int key) {
+		if (lastAddedStack == null)
+			return;
+		
+		switch(key) {
+		case Keyboard.KEY_UP:
+			lastAddedStack.increase();
+			break;
+		case Keyboard.KEY_DOWN:
+			lastAddedStack.decrease();
+			if (lastAddedStack.floors() == 0) {
+				planner.getGroundPlan().remove(lastAddedStack);
+				lastAddedStack = null;
+			}
+			break;
 		}
 	}
 
 	@Override
-	public void updateSelection(BlockPos selectedPos) {
-		super.updateSelection(selectedPos);
+	public void updateSelection() {
+		super.updateSelection();
 
 		if (firstPosition == null)
 			return;
@@ -99,7 +115,7 @@ public class RoomTool extends GroundPlanningToolBase {
 		BlockPos selectedPos = (anchor != null)? selectedPosition.add(anchor) : selectedPosition;
 		BlockPos firstPos = (firstPosition != null)? firstPosition.add(anchor) : null;
 
-		Minecraft.getMinecraft().getTextureManager().bindTexture(GroundPlanRenderer.trimTexture);
+		TesselatorTextures.Selection.bind();
 		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 

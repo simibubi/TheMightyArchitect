@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.simibubi.mightyarchitect.buildomatico.StyleGroupManager.StyleGroupDesignProvider;
 import com.simibubi.mightyarchitect.buildomatico.helpful.DesignHelper;
-import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Room;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.GroundPlan;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.Design.DesignInstance;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignLayer;
@@ -27,38 +26,39 @@ public class StandardDesignPicker implements IPickDesigns {
 		Sketch sketch = new Sketch();
 		StyleGroupManager styleGroupManager = new StyleGroupManager();
 		
-		for (int layer = 0; layer < GroundPlan.MAX_LAYERS; layer++) {
-			for (Room c : groundPlan.getRoomsOnLayer(layer)) {
+		groundPlan.forEachStack(stack -> {
+			stack.forEach(room -> {
 				
-				BlockPos origin = c.getOrigin();
-				List<DesignInstance> designList = c.secondaryPalette ? sketch.secondary : sketch.primary;
-				StyleGroupDesignProvider styleGroup = styleGroupManager.getStyleGroup(c.styleGroup);
+				BlockPos origin = room.getOrigin();
+				List<DesignInstance> designList = room.secondaryPalette ? sketch.secondary : sketch.primary;
+				StyleGroupDesignProvider styleGroup = styleGroupManager.getStyleGroup(room.styleGroup);
 
-				BlockPos size = c.getSize();
-				DesignHelper.addCuboid(styleGroup, designList, theme, c.designLayer, origin, size);
+				BlockPos size = room.getSize();
+				DesignHelper.addCuboid(styleGroup, designList, theme, room.designLayer, origin, size);
 				
-				if (!c.isTop())
-					continue;
+				if (room != stack.highest())
+					return;
 				
-				switch (c.roofType) {
+				switch (room.roofType) {
 				case ROOF:
-					if (c.width == c.length) {
-						DesignHelper.addNormalCrossRoof(styleGroup, designList, theme, DesignLayer.Independent, origin.up(c.height), size);
+					if (room.width == room.length) {
+						DesignHelper.addNormalCrossRoof(styleGroup, designList, theme, DesignLayer.Independent, origin.up(room.height), size);
 					} else {
-						DesignHelper.addNormalRoof(styleGroup, designList, theme, DesignLayer.Independent, origin.up(c.height), size);
+						DesignHelper.addNormalRoof(styleGroup, designList, theme, DesignLayer.Independent, origin.up(room.height), size);
 					}
 					break;
 					
 				case FLAT_ROOF:
-					DesignHelper.addFlatRoof(styleGroup, designList, theme, DesignLayer.Independent, origin.up(c.height), size);
+					DesignHelper.addFlatRoof(styleGroup, designList, theme, DesignLayer.Independent, origin.up(room.height), size);
 					break;
 					
 				default:
 					break;
 				}
-			}
-		}
-
+				
+			});
+		});
+		
 		sketch.interior = groundPlan.getInterior();
 		return sketch;
 	}

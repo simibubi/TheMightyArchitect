@@ -9,7 +9,9 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import com.google.common.collect.Lists;
+import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.CylinderStack;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Room;
+import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Stack;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignLayer;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignTheme;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignType;
@@ -22,7 +24,6 @@ import com.simibubi.mightyarchitect.gui.widgets.ScrollArea.ICancelableScrollActi
 import com.simibubi.mightyarchitect.gui.widgets.ScrollArea.IScrollAction;
 import com.simibubi.mightyarchitect.gui.widgets.SimiButton;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
@@ -36,9 +37,7 @@ public class GuiComposer extends GuiScreen {
 	private List<GuiComposerPartial> partials;
 	private int xSize, ySize;
 	private int xTopLeft, yTopLeft;
-	private int topLayer;
-	private Room anchor;
-	private Room topMost;
+	private Stack stack;
 
 	private SimiButton buttonNormalRoof;
 	private SimiButton buttonFlatRoof;
@@ -47,25 +46,21 @@ public class GuiComposer extends GuiScreen {
 	private GuiIndicator indicatorFlatRoof;
 	private GuiIndicator indicatorNoRoof;
 
-	public GuiComposer(Room anchor) {
-		mc = Minecraft.getMinecraft();
-		this.anchor = anchor;
+	public GuiComposer(Stack stack) {
+		this.stack = stack;
 	}
 
-	private void init(Room anchor) {
-		Room c = anchor;
+	private void init(Stack stack) {
 		partials = new ArrayList<>();
 		buttonList.clear();
-		topLayer = 0;
-		while (c != null) {
-			partials.add(new GuiComposerPartial(this, c, topLayer));
-			topMost = c;
-			c = c.getCuboidAbove();
-			topLayer++;
-		}
-		topLayer--;
+
+		List<Room> rooms = stack.getRooms();
+		stack.forEach(room -> {
+			partials.add(new GuiComposerPartial(this, room, rooms.indexOf(room)));
+		});
+
 		xSize = 256;
-		ySize = 58 + (topLayer) * 52 + 20;
+		ySize = 58 + (stack.floors() - 1) * 52 + 20;
 		xTopLeft = (this.width - this.xSize) / 2;
 		yTopLeft = (this.height - this.ySize) / 2;
 
@@ -84,13 +79,13 @@ public class GuiComposer extends GuiScreen {
 		buttonList.add(buttonNoRoof);
 
 		swapRoofTypeIfNecessary();
-		indicate(topMost.roofType == DesignType.ROOF ? indicatorNormalRoof
-				: topMost.roofType == DesignType.FLAT_ROOF ? indicatorFlatRoof : indicatorNoRoof);
+		indicate(stack.highest().roofType == DesignType.ROOF ? indicatorNormalRoof
+				: stack.highest().roofType == DesignType.FLAT_ROOF ? indicatorFlatRoof : indicatorNoRoof);
 
 	}
 
 	private boolean normalRoofPossible() {
-		return Math.min(topMost.width, topMost.length) <= 15;
+		return Math.min(stack.highest().width, stack.highest().length) <= 15;
 	}
 
 	private void swapRoofTypeIfNecessary() {
@@ -100,18 +95,18 @@ public class GuiComposer extends GuiScreen {
 			return;
 		}
 
-		if (topMost.roofType != DesignType.ROOF) {
+		if (stack.highest().roofType != DesignType.ROOF) {
 			return;
 		}
 
-		topMost.roofType = DesignType.FLAT_ROOF;
+		stack.highest().roofType = DesignType.FLAT_ROOF;
 		indicate(indicatorFlatRoof);
 	}
 
 	@Override
 	public void initGui() {
-		init(anchor);
-		if (topLayer < 4)
+		init(stack);
+		if (stack.floors() <= 4)
 			addButton(new SimiButton(BUTTON_ADD_LAYER, xTopLeft + 2, yTopLeft, GuiResources.ICON_ADD));
 
 		for (int layer = 0; layer < partials.size(); layer++) {
@@ -255,6 +250,8 @@ public class GuiComposer extends GuiScreen {
 			size.addElement(cuboid.height);
 			size.addElement(cuboid.length);
 
+			final int X = 0, Y = 1, Z = 2;
+
 			for (int i = 0; i < 3; i++) {
 				final int coordinate = i;
 				ScrollArea scrollArea = new ScrollArea(pos.elementAt(i) - 50, pos.elementAt(i) + 50,
@@ -263,24 +260,22 @@ public class GuiComposer extends GuiScreen {
 							public void onScroll(int position) {
 								int diff;
 								switch (coordinate) {
-								case 0:
+
+								case X:
 									diff = position - cuboid.x;
-									cuboid.x = position;
-									for (Room c = cuboid.getCuboidAbove(); c != null; c = c.getCuboidAbove())
-										c.x += diff;
+									stack.forRoomAndEachAbove(cuboid, room -> room.x += diff);
 									break;
-								case 1:
+
+								case Y:
 									diff = position - cuboid.y;
-									cuboid.y = position;
-									for (Room c = cuboid.getCuboidAbove(); c != null; c = c.getCuboidAbove())
-										c.y += diff;
+									stack.forRoomAndEachAbove(cuboid, room -> room.y += diff);
 									break;
-								case 2:
+
+								case Z:
 									diff = position - cuboid.z;
-									cuboid.z = position;
-									for (Room c = cuboid.getCuboidAbove(); c != null; c = c.getCuboidAbove())
-										c.z += diff;
+									stack.forRoomAndEachAbove(cuboid, room -> room.z += diff);
 									break;
+
 								}
 								parent.updateAllPositioningLabels();
 							}
@@ -295,40 +290,50 @@ public class GuiComposer extends GuiScreen {
 
 			for (int i = 0; i < 3; i++) {
 				final int coordinate = i;
-				final boolean vertical = coordinate == 1;
+				final boolean vertical = coordinate == Y;
 				ScrollArea scrollArea = new ScrollArea(vertical ? 1 : 2, vertical ? 11 : 20,
 						new ICancelableScrollAction() {
 							@Override
 							public void onScroll(int position) {
 								int diff;
 								switch (coordinate) {
-								case 0:
+								
+								case X:
 									diff = (position * 2 + 1) - cuboid.width;
-									cuboid.width = position * 2 + 1;
-									cuboid.x += diff / -2;
-									for (Room c = cuboid.getCuboidAbove(); c != null; c = c.getCuboidAbove()) {
-										c.width += diff;
-										c.x += diff / -2;
-									}
+									stack.forRoomAndEachAbove(cuboid, room -> {
+										room.width += diff;
+										room.x += diff / -2;
+										
+										if (stack instanceof CylinderStack) {
+											room.length += diff;
+											room.z += diff / -2;
+										}
+									});
 									swapRoofTypeIfNecessary();
 									break;
-								case 1:
+									
+								case Y:
 									diff = position - cuboid.height;
-									cuboid.height = position;
-									for (Room c = cuboid.getCuboidAbove(); c != null; c = c.getCuboidAbove()) {
-										c.y += diff;
-									}
+									cuboid.height += diff;
+									stack.forEachAbove(cuboid, room -> {
+										room.y += diff;
+									});
 									break;
-								case 2:
+									
+								case Z:
 									diff = (position * 2 + 1) - cuboid.length;
-									cuboid.length = position * 2 + 1;
-									cuboid.z += diff / -2;
-									for (Room c = cuboid.getCuboidAbove(); c != null; c = c.getCuboidAbove()) {
-										c.length += diff;
-										c.z += diff / -2;
-									}
+									stack.forRoomAndEachAbove(cuboid, room -> {
+										room.length += diff;
+										room.z += diff / -2;
+										
+										if (stack instanceof CylinderStack) {
+											room.width += diff;
+											room.x += diff / -2;
+										}
+									});
 									swapRoofTypeIfNecessary();
 									break;
+									
 								}
 								parent.updateAllPositioningLabels();
 							}
@@ -337,11 +342,11 @@ public class GuiComposer extends GuiScreen {
 							public boolean canScroll(int position) {
 								switch (coordinate) {
 								case 0:
-									if (Math.min(position * 2 + 1, cuboid.length) > 25)
+									if (Math.min(position * 2 + 1, cuboid.length) > stack.getMaxFacadeWidth())
 										return false;
 									break;
 								case 2:
-									if (Math.min(cuboid.width, position * 2 + 1) > 25)
+									if (Math.min(cuboid.width, position * 2 + 1) > stack.getMaxFacadeWidth())
 										return false;
 									break;
 								}
@@ -402,25 +407,22 @@ public class GuiComposer extends GuiScreen {
 
 		switch (button.id) {
 		case BUTTON_ADD_LAYER:
-			Room c = anchor;
-			while (c.getCuboidAbove() != null)
-				c = c.getCuboidAbove();
-			GroundPlannerClient.getInstance().getGroundPlan().add(c.stack(), topLayer + 1);
+			stack.increase();
 			initGui();
 			return;
 
 		case BUTTON_NORMAL_ROOF:
-			topMost.roofType = DesignType.ROOF;
+			stack.highest().roofType = DesignType.ROOF;
 			indicate(indicatorNormalRoof);
 			return;
 
 		case BUTTON_FLAT_ROOF:
-			topMost.roofType = DesignType.FLAT_ROOF;
+			stack.highest().roofType = DesignType.FLAT_ROOF;
 			indicate(indicatorFlatRoof);
 			return;
 
 		case BUTTON_NO_ROOF:
-			topMost.roofType = DesignType.NONE;
+			stack.highest().roofType = DesignType.NONE;
 			indicate(indicatorNoRoof);
 			return;
 
