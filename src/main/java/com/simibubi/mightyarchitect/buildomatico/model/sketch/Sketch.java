@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Vector;
 
 import com.simibubi.mightyarchitect.buildomatico.Palette;
-import com.simibubi.mightyarchitect.buildomatico.model.context.Context;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Room;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.Design.DesignInstance;
 
@@ -19,8 +18,6 @@ public class Sketch {
 	public List<DesignInstance> primary;
 	public List<DesignInstance> secondary;
 	public List<Room> interior;
-
-	private Context context;
 
 	public Sketch() {
 		primary = new LinkedList<>();
@@ -104,14 +101,6 @@ public class Sketch {
 			}
 
 		}
-	}
-
-	public Context getContext() {
-		return context;
-	}
-
-	public void setContext(Context context) {
-		this.context = context;
 	}
 
 }

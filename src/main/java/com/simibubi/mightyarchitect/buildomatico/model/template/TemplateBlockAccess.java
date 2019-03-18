@@ -1,6 +1,7 @@
-package com.simibubi.mightyarchitect.buildomatico.model.schematic;
+package com.simibubi.mightyarchitect.buildomatico.model.template;
 
 import java.util.Map;
+import java.util.Set;
 
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Cuboid;
 
@@ -14,16 +15,24 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 
-public class SchematicBlockAccess implements IBlockAccess {
+public class TemplateBlockAccess implements IBlockAccess {
 
 	private Map<BlockPos, IBlockState> blocks;
 	private Cuboid bounds;
 	private BlockPos anchor;
 	
-	public SchematicBlockAccess(Map<BlockPos, IBlockState> blocks, Cuboid bounds, BlockPos anchor) {
+	public TemplateBlockAccess(Map<BlockPos, IBlockState> blocks, Cuboid bounds, BlockPos anchor) {
 		this.blocks = blocks;
 		this.bounds = bounds;
 		this.anchor = anchor;
+	}
+	
+	public void writeToTemplate(Template template) {
+		blocks.forEach((pos, state) -> template.putBlock(pos, state));
+	}
+	
+	public Set<BlockPos> getAllPositions() {
+		return blocks.keySet();
 	}
 	
 	@Override
@@ -72,6 +81,10 @@ public class SchematicBlockAccess implements IBlockAccess {
 			return getBlockState(pos).isSideSolid(this, pos, side);
 		else 
 			return _default;
+	}
+
+	public Map<BlockPos, IBlockState> getBlockMap() {
+		return blocks;
 	}
 
 }

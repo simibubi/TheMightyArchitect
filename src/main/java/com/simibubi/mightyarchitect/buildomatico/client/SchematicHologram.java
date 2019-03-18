@@ -7,7 +7,8 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
-import com.simibubi.mightyarchitect.buildomatico.model.schematic.Schematic;
+import com.simibubi.mightyarchitect.buildomatico.model.Schematic;
+import com.simibubi.mightyarchitect.buildomatico.model.template.TemplateBlockAccess;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -97,13 +98,16 @@ public class SchematicHologram {
 		Arrays.fill(usedBlockRenderLayers, false);
 		Arrays.fill(startedBufferBuilders, false);
 		
-		final IBlockAccess blockAccess = instance.schematic.getSchematicBlockAccess();
+		Schematic schematic = instance.schematic;
+		TemplateBlockAccess materializedSketch = (TemplateBlockAccess) schematic.getMaterializedSketch();
+		
+		final IBlockAccess blockAccess = materializedSketch;
 		final BlockRendererDispatcher blockRendererDispatcher = minecraft.getBlockRendererDispatcher();
 
 		List<IBlockState> blockstates = new LinkedList<>();
 		
-		for (BlockPos localPos : instance.schematic.getMaterializedSketch().keySet()) {
-			BlockPos pos = localPos.add(instance.schematic.getBuildingPosition());
+		for (BlockPos localPos : materializedSketch.getAllPositions()) {
+			BlockPos pos = localPos.add(schematic.getAnchor());
 			final IBlockState state = blockAccess.getBlockState(pos);
 			for (BlockRenderLayer blockRenderLayer : BlockRenderLayer.values()) {
 				if (!state.getBlock().canRenderInLayer(state, blockRenderLayer)) {

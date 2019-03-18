@@ -1,6 +1,5 @@
 package com.simibubi.mightyarchitect.buildomatico.client.tools;
 
-import com.simibubi.mightyarchitect.buildomatico.client.GroundPlannerClient;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Cuboid;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.CylinderStack;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.GroundPlan;
@@ -13,8 +12,8 @@ import net.minecraft.util.math.BlockPos;
 public class CylinderRoomTool extends RoomTool {
 
 	@Override
-	public void init(GroundPlannerClient planner) {
-		super.init(planner);
+	public void init() {
+		super.init();
 	}
 
 	@Override

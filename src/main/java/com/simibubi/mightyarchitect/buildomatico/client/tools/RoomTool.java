@@ -3,7 +3,7 @@ package com.simibubi.mightyarchitect.buildomatico.client.tools;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import com.simibubi.mightyarchitect.buildomatico.client.GroundPlannerClient;
+import com.simibubi.mightyarchitect.buildomatico.ArchitectManager;
 import com.simibubi.mightyarchitect.buildomatico.helpful.TesselatorTextures;
 import com.simibubi.mightyarchitect.buildomatico.helpful.TessellatorHelper;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Cuboid;
@@ -24,8 +24,8 @@ public class RoomTool extends GroundPlanningToolBase {
 	protected Stack lastAddedStack;
 
 	@Override
-	public void init(GroundPlannerClient planner) {
-		super.init(planner);
+	public void init() {
+		super.init();
 		firstPosition = null;
 	}
 	
@@ -36,14 +36,12 @@ public class RoomTool extends GroundPlanningToolBase {
 		if (selectedPosition == null)
 			return null;
 
-		GroundPlan groundPlan = planner.getGroundPlan();
-
 		if (firstPosition == null) {
 			firstPosition = selectedPosition;
 			return "First position marked";
 
 		} else {
-			return createRoom(groundPlan);
+			return createRoom(ArchitectManager.getModel().getGroundPlan());
 		}
 	}
 
@@ -84,7 +82,7 @@ public class RoomTool extends GroundPlanningToolBase {
 		case Keyboard.KEY_DOWN:
 			lastAddedStack.decrease();
 			if (lastAddedStack.floors() == 0) {
-				planner.getGroundPlan().remove(lastAddedStack);
+				ArchitectManager.getModel().getGroundPlan().remove(lastAddedStack);
 				lastAddedStack = null;
 			}
 			break;
@@ -116,7 +114,7 @@ public class RoomTool extends GroundPlanningToolBase {
 			return;
 		}
 		
-		BlockPos anchor = planner.getAnchor();
+		BlockPos anchor = ArchitectManager.getModel().getAnchor();
 		BlockPos selectedPos = (anchor != null)? selectedPosition.add(anchor) : selectedPosition;
 		BlockPos firstPos = (firstPosition != null)? firstPosition.add(anchor) : null;
 

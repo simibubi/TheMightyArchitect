@@ -1,6 +1,6 @@
-package com.simibubi.mightyarchitect.buildomatico.client.command;
+package com.simibubi.mightyarchitect.command;
 
-import com.simibubi.mightyarchitect.buildomatico.client.BuildingProcessClient;
+import com.simibubi.mightyarchitect.buildomatico.client.ArchitectController;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -24,7 +24,7 @@ public class CommandDesign extends CommandBase implements IClientCommand {
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (sender instanceof EntityPlayer) {
-			BuildingProcessClient.design();
+			ArchitectController.design();
 		}
 		
 	}

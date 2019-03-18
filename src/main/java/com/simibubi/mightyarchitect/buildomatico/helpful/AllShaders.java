@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 
 public enum AllShaders {
 
-	Blueprint("blueprint.json");
+	Blueprint("blueprint.json"), None("");
 
 	private ResourceLocation location;
 
@@ -20,15 +20,24 @@ public enum AllShaders {
 		return mc.entityRenderer.isShaderActive()
 				&& mc.entityRenderer.getShaderGroup().getShaderGroupName().equals(location.toString());
 	}
-	
+
 	public void setActive(boolean active) {
 		Minecraft mc = Minecraft.getMinecraft();
-		
-		if (active && !isActive()) 
-			mc.entityRenderer.loadShader(location);
-		
-		if (!active && isActive()) 
+
+		if (this == None) {
 			mc.entityRenderer.stopUseShader();
+			return;
+		}
+
+		if (active && !isActive()) {
+			mc.entityRenderer.loadShader(location);
+			return;
+		}
+
+		if (!active && isActive()) {
+			mc.entityRenderer.stopUseShader();
+			return;
+		}
 	}
 
 }

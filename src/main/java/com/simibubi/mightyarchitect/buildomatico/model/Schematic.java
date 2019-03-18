@@ -1,56 +1,70 @@
-package com.simibubi.mightyarchitect.buildomatico.model.schematic;
+package com.simibubi.mightyarchitect.buildomatico.model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
 import com.simibubi.mightyarchitect.buildomatico.PaletteDefinition;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Cuboid;
+import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.GroundPlan;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Room;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.PaletteBlockInfo;
 import com.simibubi.mightyarchitect.buildomatico.model.sketch.Sketch;
+import com.simibubi.mightyarchitect.buildomatico.model.template.Template;
+import com.simibubi.mightyarchitect.buildomatico.model.template.TemplateBlockAccess;
+import com.simibubi.mightyarchitect.networking.PacketInstantPrint;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 public class Schematic {
 
+	private BlockPos anchor;
+	private GroundPlan groundPlan;
+	private PaletteDefinition primaryPalette;
+	private PaletteDefinition secondaryPalette;
+
 	private Sketch sketch;
 	private Vector<Map<BlockPos, PaletteBlockInfo>> assembledSketch;
-	private Map<BlockPos, IBlockState> materializedSketch;
-	private IBlockAccess schematicBlockAccess;
-
+	private TemplateBlockAccess materializedSketch;
 	private Cuboid bounds;
 
-	private PaletteDefinition primary;
-	private PaletteDefinition secondary;
+	private PaletteDefinition editedPalette;
+	private boolean editingPrimary;
 
-	public Schematic(Sketch sketch, PaletteDefinition primary, PaletteDefinition secondary) {
-		this.sketch = sketch;
-		this.primary = primary;
-		this.secondary = secondary;
-		assembleSketch();
-		materializeSketch();
+	public Schematic() {
+		primaryPalette = PaletteDefinition.defaultPalette().clone();
+		secondaryPalette = PaletteDefinition.defaultPalette().clone();
+	}
+	
+	public void setGroundPlan(GroundPlan groundPlan) {
+		this.groundPlan = groundPlan;
+	}
+	
+	public void setAnchor(BlockPos anchor) {
+		this.anchor = anchor;
 	}
 
 	public void swapPrimaryPalette(PaletteDefinition newPalette) {
-		this.primary = newPalette;
+		this.primaryPalette = newPalette;
 		materializeSketch();
 	}
 
 	public void swapSecondaryPalette(PaletteDefinition newPalette) {
-		this.secondary = newPalette;
+		this.secondaryPalette = newPalette;
 		materializeSketch();
 	}
 
 	public void swapPalettes(PaletteDefinition primary, PaletteDefinition secondary) {
-		this.primary = primary;
-		this.secondary = secondary;
+		this.primaryPalette = primary;
+		this.secondaryPalette = secondary;
 		materializeSketch();
 	}
 
-	public void swapSketch(Sketch newSketch) {
+	public void setSketch(Sketch newSketch) {
 		this.sketch = newSketch;
 		assembleSketch();
 		materializeSketch();
@@ -60,27 +74,23 @@ public class Schematic {
 		return sketch;
 	}
 
+	public GroundPlan getGroundPlan() {
+		return groundPlan;
+	}
+
+	public BlockPos getAnchor() {
+		return anchor;
+	}
+	
 	public PaletteDefinition getPrimary() {
-		return primary;
+		return primaryPalette;
 	}
 
 	public PaletteDefinition getSecondary() {
-		return secondary;
+		return secondaryPalette;
 	}
 
-	public IBlockAccess getSchematicBlockAccess() {
-		return schematicBlockAccess;
-	}
-
-	public BlockPos getBuildingPosition() {
-		return sketch.getContext().getAnchor();
-	}
-
-	public Vector<Map<BlockPos, PaletteBlockInfo>> getAssembledSketch() {
-		return assembledSketch;
-	}
-
-	public Map<BlockPos, IBlockState> getMaterializedSketch() {
+	public IBlockAccess getMaterializedSketch() {
 		return materializedSketch;
 	}
 
@@ -93,31 +103,63 @@ public class Schematic {
 	}
 
 	public Cuboid getGlobalBounds() {
-		BlockPos anchor = getBuildingPosition();
 		Cuboid clone = bounds.clone();
 		clone.move(anchor.getX(), anchor.getY(), anchor.getZ());
 		return clone;
 	}
 
+	public void startCreatingNewPalette(boolean primary) {
+		editedPalette = (primary ? primaryPalette : secondaryPalette).clone();
+		editedPalette.setName("");
+		editingPrimary = primary;
+	}
+
+	public PaletteDefinition getCreatedPalette() {
+		return editedPalette;
+	}
+
+	public void updatePalettePreview() {
+		if (editingPrimary)
+			materializeSketch(editedPalette, secondaryPalette);
+		else
+			materializeSketch(primaryPalette, editedPalette);
+	}
+
+	public void stopPalettePreview() {
+		materializeSketch();
+	}
+
+	public void applyCreatedPalette() {
+		if (editingPrimary)
+			primaryPalette = editedPalette;
+		else 
+			secondaryPalette = editedPalette;
+		materializeSketch();
+	}
+
 	private void materializeSketch() {
+		materializeSketch(primaryPalette, secondaryPalette);
+	}
+
+	private void materializeSketch(PaletteDefinition primary, PaletteDefinition secondary) {
 		bounds = null;
 
-		materializedSketch = new HashMap<>();
+		HashMap<BlockPos, IBlockState> blockMap = new HashMap<>();
 		assembledSketch.get(0).forEach((pos, paletteInfo) -> {
 			IBlockState state = primary.get(paletteInfo.palette, paletteInfo.facing);
-			materializedSketch.put(pos, state);
+			blockMap.put(pos, state);
 			checkBounds(pos);
 		});
 		assembledSketch.get(1).forEach((pos, paletteInfo) -> {
 			if (!assembledSketch.get(0).containsKey(pos)
 					|| !assembledSketch.get(0).get(pos).palette.isPrefferedOver(paletteInfo.palette)) {
 				IBlockState state = secondary.get(paletteInfo.palette, paletteInfo.facing);
-				materializedSketch.put(pos, state);
+				blockMap.put(pos, state);
 				checkBounds(pos);
 			}
 		});
 
-		schematicBlockAccess = new SchematicBlockAccess(materializedSketch, bounds, getBuildingPosition());
+		materializedSketch = new TemplateBlockAccess(blockMap, bounds, anchor);
 	}
 
 	private void checkBounds(BlockPos pos) {
@@ -153,13 +195,15 @@ public class Schematic {
 	public Template writeToTemplate() {
 		final Template template = new Template();
 
-		template.setAuthor(sketch.getContext().getOwner().getName());
+		template.setAuthor(Minecraft.getMinecraft().player.getName());
 		template.setSize(bounds.getSize());
-		materializedSketch.forEach((pos, state) -> {
-			template.putBlock(pos.subtract(bounds.getOrigin()), state);
-		});
+		materializedSketch.writeToTemplate(template);
 
 		return template;
 	}
-
+	
+	public List<PacketInstantPrint> getPackets() {
+		return PacketInstantPrint.sendSchematic(materializedSketch.getBlockMap(), anchor);
+	}
+	
 }

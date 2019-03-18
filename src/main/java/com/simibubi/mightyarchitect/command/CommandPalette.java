@@ -1,6 +1,6 @@
-package com.simibubi.mightyarchitect.buildomatico.client.command;
+package com.simibubi.mightyarchitect.command;
 
-import com.simibubi.mightyarchitect.buildomatico.client.BuildingProcessClient;
+import com.simibubi.mightyarchitect.buildomatico.client.ArchitectController;
 import com.simibubi.mightyarchitect.gui.GuiOpener;
 import com.simibubi.mightyarchitect.gui.GuiTextPrompt;
 
@@ -29,7 +29,7 @@ public class CommandPalette extends CommandBase implements IClientCommand {
 			if (args.length > 0) {
 				switch (args[0].toLowerCase()) {
 				case "create":
-					BuildingProcessClient.createPalette(true);
+					ArchitectController.createPalette(true);
 					break;
 				case "save":
 					if (args.length > 1) {
@@ -37,9 +37,9 @@ public class CommandPalette extends CommandBase implements IClientCommand {
 						for (int i = 1; i < args.length; i++) {
 							name += args[i] + ((i == args.length - 1)? "" : " ");
 						}
-						BuildingProcessClient.finishPalette(name);
+						ArchitectController.finishPalette(name);
 					} else {
-						GuiTextPrompt gui = new GuiTextPrompt(result -> BuildingProcessClient.finishPalette(result), result -> BuildingProcessClient.pickPalette());
+						GuiTextPrompt gui = new GuiTextPrompt(result -> ArchitectController.finishPalette(result), result -> ArchitectController.pickPalette());
 						gui.setButtonTextConfirm("Save and Apply");
 						gui.setButtonTextAbort("Cancel");
 						gui.setTitle("Enter a name for your Palette:");
@@ -50,7 +50,7 @@ public class CommandPalette extends CommandBase implements IClientCommand {
 					throw new CommandException("Subcommands for /palette: create, save");
 				}
 			} else {
-				BuildingProcessClient.pickPalette();
+				ArchitectController.pickPalette();
 			}
 		}
 		

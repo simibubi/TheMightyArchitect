@@ -1,4 +1,4 @@
-package com.simibubi.mightyarchitect.buildomatico.client.command;
+package com.simibubi.mightyarchitect.command;
 
 import net.minecraft.command.CommandBase;
 import net.minecraftforge.client.ClientCommandHandler;

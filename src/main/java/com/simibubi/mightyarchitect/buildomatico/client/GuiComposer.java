@@ -9,6 +9,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import com.google.common.collect.Lists;
+import com.simibubi.mightyarchitect.buildomatico.ArchitectManager;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.CylinderStack;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Room;
 import com.simibubi.mightyarchitect.buildomatico.model.groundPlan.Stack;
@@ -180,7 +181,7 @@ public class GuiComposer extends GuiScreen {
 		}
 
 		private void initStyleAndStyleGroupFields(int x, int y) {
-			DesignTheme theme = GroundPlannerClient.getInstance().getGroundPlan().theme;
+			DesignTheme theme = ArchitectManager.getModel().getGroundPlan().theme;
 			List<DesignLayer> layers = theme.getLayers();
 			List<String> styleOptions = new ArrayList<>();
 			layers.forEach(layer -> {

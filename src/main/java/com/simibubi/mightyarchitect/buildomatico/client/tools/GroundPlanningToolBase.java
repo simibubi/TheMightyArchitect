@@ -1,8 +1,8 @@
 package com.simibubi.mightyarchitect.buildomatico.client.tools;
 
-import com.simibubi.mightyarchitect.buildomatico.client.GroundPlannerClient;
+import com.simibubi.mightyarchitect.buildomatico.ArchitectManager;
 import com.simibubi.mightyarchitect.buildomatico.helpful.RaycastHelper;
-import com.simibubi.mightyarchitect.buildomatico.model.context.Context;
+import com.simibubi.mightyarchitect.buildomatico.model.Schematic;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -13,11 +13,11 @@ import net.minecraft.util.math.RayTraceResult.Type;
 
 public abstract class GroundPlanningToolBase implements ImAToolForGroundPlanning {
 
-	protected GroundPlannerClient planner;
+	protected Schematic model;
 	protected BlockPos selectedPosition;
 	
-	public void init(GroundPlannerClient planner) {
-		this.planner = planner;
+	public void init() {
+		model = ArchitectManager.getModel();
 		this.selectedPosition = BlockPos.ORIGIN;		
 	}
 	
@@ -32,10 +32,10 @@ public abstract class GroundPlanningToolBase implements ImAToolForGroundPlanning
 			if (trace.sideHit.getAxis() == Axis.Y)
 				hit = hit.offset(trace.sideHit);
 
-			if (planner.getAnchor() == null)
+			if (model.getAnchor() == null)
 				selectedPosition = hit;
 			else
-				selectedPosition = hit.subtract(planner.getAnchor());
+				selectedPosition = hit.subtract(model.getAnchor());
 
 		} else {
 			selectedPosition = null;
@@ -48,9 +48,8 @@ public abstract class GroundPlanningToolBase implements ImAToolForGroundPlanning
 		if (selectedPosition == null)
 			return null;
 		
-		if (planner.getAnchor() == null) {
-			planner.setAnchor(selectedPosition);
-			planner.getGroundPlan().context = new Context(selectedPosition, Minecraft.getMinecraft().player);
+		if (model.getAnchor() == null) {
+			model.setAnchor(selectedPosition);
 			selectedPosition = BlockPos.ORIGIN;
 		}
 		

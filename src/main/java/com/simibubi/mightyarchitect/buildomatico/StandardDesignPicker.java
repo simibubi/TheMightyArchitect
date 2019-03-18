@@ -18,7 +18,6 @@ public class StandardDesignPicker implements IPickDesigns {
 	
 	public Sketch assembleSketch(GroundPlan groundPlan) {
 		Sketch sketch = pickDesigns(groundPlan);
-		sketch.setContext(groundPlan.context);
 		return sketch;
 	}
 

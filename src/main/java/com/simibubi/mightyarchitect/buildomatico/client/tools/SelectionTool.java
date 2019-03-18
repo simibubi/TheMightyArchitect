@@ -2,7 +2,7 @@ package com.simibubi.mightyarchitect.buildomatico.client.tools;
 
 import org.lwjgl.opengl.GL11;
 
-import com.simibubi.mightyarchitect.buildomatico.client.GroundPlannerClient;
+import com.simibubi.mightyarchitect.buildomatico.ArchitectManager;
 import com.simibubi.mightyarchitect.buildomatico.client.GuiComposer;
 import com.simibubi.mightyarchitect.buildomatico.helpful.RaycastHelper;
 import com.simibubi.mightyarchitect.buildomatico.helpful.RaycastHelper.PredicateTraceResult;
@@ -24,20 +24,22 @@ public class SelectionTool extends GroundPlanningToolBase {
 	private Stack selectedStack;
 
 	@Override
-	public void init(GroundPlannerClient planner) {
-		super.init(planner);
+	public void init() {
+		super.init();
 	}
 
 	@Override
 	public void updateSelection() {
-		if (planner.getGroundPlan().isEmpty())
+		final GroundPlan groundPlan = ArchitectManager.getModel().getGroundPlan();
+		final BlockPos anchor = ArchitectManager.getModel().getAnchor();
+		
+		if (groundPlan.isEmpty())
 			return;
 
 		EntityPlayerSP player = Minecraft.getMinecraft().player;
-		GroundPlan groundPlan = GroundPlannerClient.getInstance().getGroundPlan();
 
 		PredicateTraceResult result = RaycastHelper.rayTraceUntil(player, 70, position -> {
-			return groundPlan.getRoomAtPos(position) != null;
+			return groundPlan.getRoomAtPos(position.subtract(anchor)) != null;
 		});
 
 		if (result.missed()) {
@@ -45,7 +47,7 @@ public class SelectionTool extends GroundPlanningToolBase {
 			return;
 		}
 
-		selectedStack = groundPlan.getStackAtPos(result.getPos());
+		selectedStack = groundPlan.getStackAtPos(result.getPos().subtract(anchor));
 	}
 
 	@Override
@@ -68,7 +70,7 @@ public class SelectionTool extends GroundPlanningToolBase {
 		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
 		selectedStack.forEach(room -> {
-			BlockPos pos = room.getOrigin().add(planner.getAnchor());
+			BlockPos pos = room.getOrigin().add(ArchitectManager.getModel().getAnchor());
 			TessellatorHelper.cube(bufferBuilder, pos, room.getSize(), 1 / 16d, true, true);
 		});
 

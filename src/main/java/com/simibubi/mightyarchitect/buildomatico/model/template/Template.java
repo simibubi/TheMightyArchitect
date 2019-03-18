@@ -1,4 +1,4 @@
-package com.simibubi.mightyarchitect.buildomatico.model.schematic;
+package com.simibubi.mightyarchitect.buildomatico.model.template;
 
 import java.util.Iterator;
 import java.util.List;

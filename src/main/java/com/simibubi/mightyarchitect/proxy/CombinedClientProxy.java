@@ -1,6 +1,6 @@
 package com.simibubi.mightyarchitect.proxy;
 
-import com.simibubi.mightyarchitect.buildomatico.client.command.BuildomaticoCommands;
+import com.simibubi.mightyarchitect.command.BuildomaticoCommands;
 import com.simibubi.mightyarchitect.item.AllItems;
 
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;

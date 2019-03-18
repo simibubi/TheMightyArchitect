@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.lwjgl.opengl.GL11;
 
+import com.simibubi.mightyarchitect.buildomatico.ArchitectManager;
 import com.simibubi.mightyarchitect.buildomatico.Palette;
 import com.simibubi.mightyarchitect.buildomatico.PaletteDefinition;
 import com.simibubi.mightyarchitect.buildomatico.PaletteStorage;
@@ -74,9 +75,9 @@ public class GuiPalettePicker extends GuiScreen {
 			buttonList.remove(primary);
 		if (buttonList.contains(secondary))
 			buttonList.remove(secondary);
-		primary = new PaletteButton(PalettePickerClient.getInstance().getPrimary(), this, 0, xTopLeft + 134,
+		primary = new PaletteButton(ArchitectManager.getModel().getPrimary(), this, 0, xTopLeft + 134,
 				yTopLeft + 6);
-		secondary = new PaletteButton(PalettePickerClient.getInstance().getSecondary(), this, 1, xTopLeft + 191,
+		secondary = new PaletteButton(ArchitectManager.getModel().getSecondary(), this, 1, xTopLeft + 191,
 				yTopLeft + 6);
 		primary.enabled = false;
 		secondary.enabled = false;
@@ -121,10 +122,10 @@ public class GuiPalettePicker extends GuiScreen {
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
 		if (button instanceof SimiButton) {
-			BuildingProcessClient.createPalette(true);
+			ArchitectController.createPalette(true);
 			mc.displayGuiScreen(null);			
 		} else {
-			PalettePickerClient.getInstance().setPrimary(((PaletteButton) button).palette);
+			ArchitectManager.getModel().swapPrimaryPalette(((PaletteButton) button).palette);
 			updateSelected();
 			SchematicHologram.getInstance().schematicChanged();
 		}
@@ -132,10 +133,10 @@ public class GuiPalettePicker extends GuiScreen {
 
 	private void actionRightClickPerformed(GuiButton button) {
 		if (button instanceof SimiButton) {
-			BuildingProcessClient.createPalette(false);
+			ArchitectController.createPalette(false);
 			mc.displayGuiScreen(null);
 		} else {
-			PalettePickerClient.getInstance().setSecondary(((PaletteButton) button).palette);
+			ArchitectManager.getModel().swapSecondaryPalette(((PaletteButton) button).palette);
 			updateSelected();
 			SchematicHologram.getInstance().schematicChanged();
 		}

@@ -6,8 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.simibubi.mightyarchitect.buildomatico.model.schematic.Schematic;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -51,9 +49,8 @@ public class PacketInstantPrint implements IMessage {
 		});
 	}
 	
-	public static List<PacketInstantPrint> splitSchematic(Schematic schematic) {
+	public static List<PacketInstantPrint> sendSchematic(Map<BlockPos, IBlockState> blockMap, BlockPos anchor) {
 		List<PacketInstantPrint> packets = new LinkedList<>();
-		Map<BlockPos, IBlockState> blockMap = schematic.getMaterializedSketch();
 		
 		Map<BlockPos, IBlockState> currentMap = new HashMap<>(BunchOfBlocks.MAX_SIZE);
 		List<BlockPos> posList = new ArrayList<>(blockMap.keySet());
@@ -63,7 +60,7 @@ public class PacketInstantPrint implements IMessage {
 				packets.add(new PacketInstantPrint(new BunchOfBlocks(currentMap)));
 				currentMap = new HashMap<>(BunchOfBlocks.MAX_SIZE);
 			}
-			currentMap.put(posList.get(i).add(schematic.getBuildingPosition()), blockMap.get(posList.get(i)));
+			currentMap.put(posList.get(i).add(anchor), blockMap.get(posList.get(i)));
 		}
 		packets.add(new PacketInstantPrint(new BunchOfBlocks(currentMap)));
 		
