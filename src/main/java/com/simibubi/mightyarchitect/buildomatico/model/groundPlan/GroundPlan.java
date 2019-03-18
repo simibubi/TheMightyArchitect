@@ -38,10 +38,8 @@ public class GroundPlan {
 		return interior;
 	}
 
-	public Stack startStack(Room room) {
-		Stack stack = new Stack(room);
+	public void addStack(Stack stack) {
 		stacks.add(stack);
-		return stack;
 	}
 	
 	public Stack getStackAtPos(BlockPos globalPos) {		

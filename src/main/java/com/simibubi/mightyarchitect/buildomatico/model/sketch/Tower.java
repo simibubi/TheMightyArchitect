@@ -11,17 +11,18 @@ public class Tower extends Design {
 		Tower tower = new Tower();
 		tower.applyNBT(compound);
 		tower.radius = compound.getInteger("Radius");
+		tower.defaultWidth = radius * 2 - 1;
 		return tower;
 	}
 
 	@Override
 	public String toString() {
-		return super.toString() + "\nRADIUS " + radius;
+		return super.toString() + "\nRadius " + radius;
 	}
 	
 	@Override
 	public boolean fitsHorizontally(int width) {
-		return width == radius * 2 - 1;
+		return width == defaultWidth;
 	}
 
 

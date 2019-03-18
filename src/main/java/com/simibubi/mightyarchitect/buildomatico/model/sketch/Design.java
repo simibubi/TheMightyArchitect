@@ -86,11 +86,11 @@ public abstract class Design {
 	}
 
 	public String toString() {
-		String heights = "HEIGHTS ";
+		String heights = "Heights ";
 		for (Integer integer : this.heights) {
 			heights += integer + " ";
 		}
-		return String.format("DESIGN") + "\n" + heights;
+		return String.format("Design with ") + heights;
 	}
 	
 	public boolean fitsHorizontally(int width) {

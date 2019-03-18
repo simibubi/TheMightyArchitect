@@ -43,28 +43,33 @@ public class RoomTool extends GroundPlanningToolBase {
 			return "First position marked";
 
 		} else {
-			Room room = new Room(firstPosition, selectedPosition.subtract(firstPosition));
-			room.width++;
-			room.length++;
-			room.height = 2;
-			room.designLayer = DesignLayer.Foundation;
-			int facadeWidth = Math.min(room.width, room.length);
-
-			if (facadeWidth % 2 == 0) {
-				return "§cFacade cannot have even width: " + facadeWidth;
-			}
-			if (facadeWidth < 5) {
-				return "§cFacade is too narrow (<5): " + facadeWidth;
-			}
-			if (facadeWidth > 25) {
-				return "§cFacade is too wide (>25): " + facadeWidth;
-			}
-
-			room.roofType = facadeWidth > 15 ? DesignType.FLAT_ROOF : DesignType.ROOF;
-			lastAddedStack = groundPlan.startStack(room);
-			firstPosition = null;
-			return "§aNew Room has been added";
+			return createRoom(groundPlan);
 		}
+	}
+
+	protected String createRoom(GroundPlan groundPlan) {
+		Room room = new Room(firstPosition, selectedPosition.subtract(firstPosition));
+		room.width++;
+		room.length++;
+		room.height = 2;
+		room.designLayer = DesignLayer.Foundation;
+		int facadeWidth = Math.min(room.width, room.length);
+
+		if (facadeWidth % 2 == 0) {
+			return "§cFacade cannot have even width: " + facadeWidth;
+		}
+		if (facadeWidth < 5) {
+			return "§cFacade is too narrow (<5): " + facadeWidth;
+		}
+		if (facadeWidth > 25) {
+			return "§cFacade is too wide (>25): " + facadeWidth;
+		}
+
+		room.roofType = facadeWidth > 15 ? DesignType.FLAT_ROOF : DesignType.ROOF;
+		lastAddedStack = new Stack(room);
+		groundPlan.addStack(lastAddedStack);
+		firstPosition = null;
+		return "§aNew Room has been added";
 	}
 	
 	@Override
