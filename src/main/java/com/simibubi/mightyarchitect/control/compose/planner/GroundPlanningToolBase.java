@@ -1,4 +1,4 @@
-package com.simibubi.mightyarchitect.control.planner;
+package com.simibubi.mightyarchitect.control.compose.planner;
 
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.Schematic;

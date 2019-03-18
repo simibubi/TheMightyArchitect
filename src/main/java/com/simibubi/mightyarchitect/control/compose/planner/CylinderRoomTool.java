@@ -1,4 +1,4 @@
-package com.simibubi.mightyarchitect.control.planner;
+package com.simibubi.mightyarchitect.control.compose.planner;
 
 import com.simibubi.mightyarchitect.control.compose.Cuboid;
 import com.simibubi.mightyarchitect.control.compose.CylinderStack;
@@ -14,6 +14,7 @@ public class CylinderRoomTool extends RoomTool {
 	@Override
 	public void init() {
 		super.init();
+		firstPosition = null;
 	}
 
 	@Override

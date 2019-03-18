@@ -1,4 +1,4 @@
-package com.simibubi.mightyarchitect.control.planner;
+package com.simibubi.mightyarchitect.control.compose.planner;
 
 public enum Tools {
 

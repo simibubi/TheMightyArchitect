@@ -18,6 +18,7 @@ import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 import com.simibubi.mightyarchitect.control.palette.PaletteStorage;
 import com.simibubi.mightyarchitect.control.phase.ArchitectPhases;
 import com.simibubi.mightyarchitect.control.phase.IArchitectPhase;
+import com.simibubi.mightyarchitect.control.phase.IDrawBlockHighlights;
 import com.simibubi.mightyarchitect.control.phase.IListenForBlockEvents;
 import com.simibubi.mightyarchitect.gui.GuiOpener;
 import com.simibubi.mightyarchitect.gui.GuiPalettePicker;
@@ -32,6 +33,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentUtils;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -102,7 +104,6 @@ public class ArchitectManager {
 	}
 
 	public static void design() {
-		Schematic model = getModel();
 		GroundPlan groundPlan = model.getGroundPlan();
 
 		if (groundPlan == null) {
@@ -155,10 +156,10 @@ public class ArchitectManager {
 
 		getModel().applyCreatedPalette();
 		status("Your new palette has been saved.");
+		enterPhase(ArchitectPhases.Previewing);
 	}
 
 	public static void print() {
-
 		if (getModel().getSketch() == null)
 			return;
 
@@ -244,7 +245,6 @@ public class ArchitectManager {
 	}
 
 	public static void pickPalette() {
-		
 		if (getModel().getSketch() == null)
 			return;
 
@@ -312,6 +312,13 @@ public class ArchitectManager {
 		if (phase instanceof IListenForBlockEvents) {
 			((IListenForBlockEvents) phase).onBlockBroken(event);
 		}		
+	}
+	
+	@SubscribeEvent
+	public static void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
+		if (phase instanceof IDrawBlockHighlights) {
+			((IDrawBlockHighlights) phase).onBlockHighlight(event);
+		}
 	}
 	
 	public static void resetSchematic() {

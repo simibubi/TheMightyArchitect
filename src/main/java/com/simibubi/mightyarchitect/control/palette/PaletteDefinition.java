@@ -39,7 +39,9 @@ public class PaletteDefinition {
 					.put(Palette.HEAVY_WINDOW,
 							Blocks.STAINED_GLASS_PANE.getDefaultState().withProperty(BlockStainedGlassPane.COLOR,
 									EnumDyeColor.BLACK))
-					.put(Palette.HEAVY_POST, Blocks.COBBLESTONE_WALL.getDefaultState().withProperty(BlockWall.VARIANT, BlockWall.EnumType.MOSSY))
+					.put(Palette.HEAVY_POST,
+							Blocks.COBBLESTONE_WALL.getDefaultState().withProperty(BlockWall.VARIANT,
+									BlockWall.EnumType.MOSSY))
 					.put(Palette.INNER_DETAIL,
 							Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, EnumType.SPRUCE))
 					.put(Palette.INNER_PRIMARY,
@@ -57,19 +59,21 @@ public class PaletteDefinition {
 					.put(Palette.ROOF_PRIMARY,
 							Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT,
 									BlockStone.EnumType.GRANITE))
-					.put(Palette.FLOOR,
-							Blocks.PLANKS.getDefaultState())
+					.put(Palette.FLOOR, Blocks.PLANKS.getDefaultState())
 					.put(Palette.ROOF_DETAIL, Blocks.BRICK_BLOCK.getDefaultState())
 					.put(Palette.CLEAR, Blocks.GLASS.getDefaultState())
-					.put(Palette.ROOF_SLAB, Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT,
-							BlockStoneSlab.EnumType.BRICK))
-					.put(Palette.ROOF_SLAB_TOP, Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT,
-							BlockStoneSlab.EnumType.BRICK).withProperty(BlockSlab.HALF, EnumBlockHalf.TOP))
+					.put(Palette.ROOF_SLAB,
+							Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT,
+									BlockStoneSlab.EnumType.BRICK))
+					.put(Palette.ROOF_SLAB_TOP,
+							Blocks.STONE_SLAB.getDefaultState()
+									.withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.BRICK)
+									.withProperty(BlockSlab.HALF, EnumBlockHalf.TOP))
 					.put(Palette.WINDOW, Blocks.GLASS_PANE.getDefaultState());
 		}
 		return defaultPalette;
 	}
-	
+
 	public PaletteDefinition clone() {
 		PaletteDefinition clone = new PaletteDefinition(name);
 		clone.clear = defaultPalette().clear();
@@ -77,7 +81,7 @@ public class PaletteDefinition {
 		definition.forEach((key, value) -> clone.definition.put(key, value));
 		return clone;
 	}
-	
+
 	public PaletteDefinition(String name) {
 		definition = new HashMap<>();
 		definition.put(Palette.CLEAR, Blocks.GLASS.getDefaultState());
@@ -90,11 +94,11 @@ public class PaletteDefinition {
 		definition.put(key, block);
 		return this;
 	}
-	
+
 	public Map<Palette, IBlockState> getDefinition() {
 		return definition;
 	}
-	
+
 	public IBlockState clear() {
 		if (clear == null)
 			clear = get(Palette.CLEAR, EnumFacing.UP);
@@ -102,16 +106,17 @@ public class PaletteDefinition {
 	}
 
 	public IBlockState get(Palette key, EnumFacing facing) {
-		IBlockState iBlockState = definition.get(key);		
+		IBlockState iBlockState = definition.get(key);
 		if (key == Palette.ROOF_SLAB_TOP) {
 			IBlockState roofSlab = get(Palette.ROOF_SLAB, facing);
 			if (roofSlab.getPropertyKeys().contains(BlockSlab.HALF))
 				return roofSlab.withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP);
 			return roofSlab;
 		}
-		return iBlockState.withRotation(rotationFromFacing(facing));
+		return iBlockState == null ? Blocks.AIR.getDefaultState()
+				: iBlockState.withRotation(rotationFromFacing(facing));
 	}
-	
+
 	private Rotation rotationFromFacing(EnumFacing facing) {
 		switch (facing) {
 		case EAST:
@@ -125,34 +130,34 @@ public class PaletteDefinition {
 			return Rotation.NONE;
 		}
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound = (compound == null)? new NBTTagCompound() : compound;
+		compound = (compound == null) ? new NBTTagCompound() : compound;
 		NBTTagCompound palette = new NBTTagCompound();
 		palette.setString("Name", getName());
 		Palette[] values = Palette.values();
-		
+
 		for (int i = 0; i < values.length; i++) {
 			NBTTagCompound state = new NBTTagCompound();
 			NBTUtil.writeBlockState(state, get(values[i], EnumFacing.UP));
 			palette.setTag(values[i].name(), state);
 		}
-		
+
 		compound.setTag("Palette", palette);
 		return compound;
 	}
-	
+
 	public static PaletteDefinition fromNBT(NBTTagCompound compound) {
 		PaletteDefinition palette = defaultPalette().clone();
-		
+
 		if (compound != null) {
 			if (compound.hasKey("Palette")) {
 				NBTTagCompound paletteTag = compound.getCompoundTag("Palette");
@@ -166,6 +171,5 @@ public class PaletteDefinition {
 		}
 		return palette;
 	}
-	
 
 }

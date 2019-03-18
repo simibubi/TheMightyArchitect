@@ -1,4 +1,4 @@
-package com.simibubi.mightyarchitect.control.planner;
+package com.simibubi.mightyarchitect.control.compose.planner;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
