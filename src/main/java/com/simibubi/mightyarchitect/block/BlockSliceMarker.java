@@ -1,6 +1,6 @@
 package com.simibubi.mightyarchitect.block;
 
-import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignSlice.DesignSliceTrait;
+import com.simibubi.mightyarchitect.control.design.DesignSlice.DesignSliceTrait;
 import com.simibubi.mightyarchitect.item.AllItems;
 
 import net.minecraft.block.material.Material;

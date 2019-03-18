@@ -1,6 +1,6 @@
 package com.simibubi.mightyarchitect.command;
 
-import com.simibubi.mightyarchitect.buildomatico.client.ArchitectController;
+import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.gui.GuiOpener;
 import com.simibubi.mightyarchitect.gui.GuiTextPrompt;
 
@@ -29,33 +29,34 @@ public class CommandPalette extends CommandBase implements IClientCommand {
 			if (args.length > 0) {
 				switch (args[0].toLowerCase()) {
 				case "create":
-					ArchitectController.createPalette(true);
+					ArchitectManager.createPalette(true);
 					break;
 				case "save":
 					if (args.length > 1) {
 						String name = "";
 						for (int i = 1; i < args.length; i++) {
-							name += args[i] + ((i == args.length - 1)? "" : " ");
+							name += args[i] + ((i == args.length - 1) ? "" : " ");
 						}
-						ArchitectController.finishPalette(name);
+						ArchitectManager.finishPalette(name);
 					} else {
-						GuiTextPrompt gui = new GuiTextPrompt(result -> ArchitectController.finishPalette(result), result -> ArchitectController.pickPalette());
+						GuiTextPrompt gui = new GuiTextPrompt(result -> ArchitectManager.finishPalette(result),
+								result -> ArchitectManager.pickPalette());
 						gui.setButtonTextConfirm("Save and Apply");
 						gui.setButtonTextAbort("Cancel");
 						gui.setTitle("Enter a name for your Palette:");
 						GuiOpener.open(gui);
 					}
-				break;
+					break;
 				default:
 					throw new CommandException("Subcommands for /palette: create, save");
 				}
 			} else {
-				ArchitectController.pickPalette();
+				ArchitectManager.pickPalette();
 			}
 		}
-		
+
 	}
-	
+
 	@Override
 	public int getRequiredPermissionLevel() {
 		return 0;

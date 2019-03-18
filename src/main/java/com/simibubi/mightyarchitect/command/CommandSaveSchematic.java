@@ -1,6 +1,6 @@
 package com.simibubi.mightyarchitect.command;
 
-import com.simibubi.mightyarchitect.buildomatico.client.ArchitectController;
+import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.gui.GuiOpener;
 import com.simibubi.mightyarchitect.gui.GuiTextPrompt;
 
@@ -31,9 +31,9 @@ public class CommandSaveSchematic extends CommandBase implements IClientCommand 
 				for (int i = 0; i < args.length; i++) {
 					name += args[i] + ((i == args.length - 1) ? "" : " ");
 				}
-				ArchitectController.writeToFile(name);
+				ArchitectManager.writeToFile(name);
 			} else {
-				GuiTextPrompt gui = new GuiTextPrompt(result -> ArchitectController.writeToFile(result), result -> {});
+				GuiTextPrompt gui = new GuiTextPrompt(result -> ArchitectManager.writeToFile(result), result -> {});
 				gui.setButtonTextConfirm("Save Schematic");
 				gui.setButtonTextAbort("Cancel");
 				gui.setTitle("Enter a name for your Build:");

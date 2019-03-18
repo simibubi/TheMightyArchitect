@@ -1,6 +1,6 @@
 package com.simibubi.mightyarchitect.command;
 
-import com.simibubi.mightyarchitect.buildomatico.client.ArchitectController;
+import com.simibubi.mightyarchitect.control.ArchitectManager;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -24,7 +24,7 @@ public class CommandUnload extends CommandBase implements IClientCommand {
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (sender instanceof EntityPlayer) {
-			ArchitectController.unload();
+			ArchitectManager.unload();
 		}
 		
 	}

@@ -1,8 +1,8 @@
 package com.simibubi.mightyarchitect.item;
 
 import com.simibubi.mightyarchitect.block.AllBlocks;
-import com.simibubi.mightyarchitect.buildomatico.DesignExporter;
-import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignTheme;
+import com.simibubi.mightyarchitect.control.design.DesignExporter;
+import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.gui.GuiDesignExporter;
 import com.simibubi.mightyarchitect.gui.GuiOpener;
 

@@ -1,7 +1,7 @@
 package com.simibubi.mightyarchitect.command;
 
-import com.simibubi.mightyarchitect.buildomatico.client.ArchitectController;
-import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignTheme;
+import com.simibubi.mightyarchitect.control.ArchitectManager;
+import com.simibubi.mightyarchitect.control.design.DesignTheme;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -26,11 +26,11 @@ public class CommandStartDrawing extends CommandBase implements IClientCommand {
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (sender instanceof EntityPlayer) {
 			if (args.length == 0) {
-				ArchitectController.compose();
+				ArchitectManager.compose();
 			} else {
 				for (DesignTheme theme : DesignTheme.values()) {
 					if (args[0].equals(theme.name())) {
-						ArchitectController.compose(theme);
+						ArchitectManager.compose(theme);
 						return;
 					}
 				}

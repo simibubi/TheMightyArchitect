@@ -9,9 +9,9 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import com.google.common.collect.ImmutableList;
-import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignLayer;
-import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignTheme;
-import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignType;
+import com.simibubi.mightyarchitect.control.design.DesignLayer;
+import com.simibubi.mightyarchitect.control.design.DesignTheme;
+import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.gui.widgets.DynamicLabel;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollArea;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollArea.IScrollAction;
