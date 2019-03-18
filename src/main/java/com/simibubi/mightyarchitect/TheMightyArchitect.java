@@ -7,8 +7,8 @@ import com.simibubi.mightyarchitect.gui.GuiHandler;
 import com.simibubi.mightyarchitect.item.AllItems;
 import com.simibubi.mightyarchitect.networking.PacketInstantPrint;
 import com.simibubi.mightyarchitect.networking.PacketInstantPrint.PacketHandlerInstantPrint;
-import com.simibubi.mightyarchitect.networking.PacketItemNBT;
-import com.simibubi.mightyarchitect.networking.PacketItemNBT.SimiNbtPacketHandler;
+import com.simibubi.mightyarchitect.networking.PacketNbt;
+import com.simibubi.mightyarchitect.networking.PacketNbt.PacketHandlerNbt;
 import com.simibubi.mightyarchitect.networking.PacketSender;
 import com.simibubi.mightyarchitect.proxy.IProxy;
 
@@ -57,7 +57,7 @@ public class TheMightyArchitect {
     public void init(FMLInitializationEvent event) {
     	proxy.init(event);
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
-      	PacketSender.INSTANCE.registerMessage(SimiNbtPacketHandler.class, PacketItemNBT.class, 0, Side.SERVER);
+      	PacketSender.INSTANCE.registerMessage(PacketHandlerNbt.class, PacketNbt.class, 0, Side.SERVER);
       	PacketSender.INSTANCE.registerMessage(PacketHandlerInstantPrint.class, PacketInstantPrint.class, 1, Side.SERVER);
     }
 

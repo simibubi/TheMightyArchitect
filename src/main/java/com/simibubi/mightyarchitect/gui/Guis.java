@@ -2,7 +2,6 @@ package com.simibubi.mightyarchitect.gui;
 
 public enum Guis {
 
-	SYMMETRY_WAND("symmetry_wand"),
 	COMPOSER("composer"),
 	PALETTE("palette");
 	

@@ -8,14 +8,14 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class PacketItemNBT implements IMessage {
+public class PacketNbt implements IMessage {
 	
 	public ItemStack stack;
 
-	public PacketItemNBT() {
+	public PacketNbt() {
 	}
 	
-	public PacketItemNBT(ItemStack stack) {
+	public PacketNbt(ItemStack stack) {
 		this.stack = stack;
 	}
 	
@@ -29,10 +29,10 @@ public class PacketItemNBT implements IMessage {
 		ByteBufUtils.writeItemStack(buf, stack);
 	}
 
-	public static class SimiNbtPacketHandler implements IMessageHandler<PacketItemNBT, IMessage>{
+	public static class PacketHandlerNbt implements IMessageHandler<PacketNbt, IMessage>{
 
 		@Override
-		public IMessage onMessage(PacketItemNBT message, MessageContext ctx) {
+		public IMessage onMessage(PacketNbt message, MessageContext ctx) {
 			EntityPlayerMP player = ctx.getServerHandler().player;
 			
 			player.getServerWorld().addScheduledTask(() -> {

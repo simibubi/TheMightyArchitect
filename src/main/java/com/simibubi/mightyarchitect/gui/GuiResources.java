@@ -9,7 +9,6 @@ public enum GuiResources {
 	
 	// Inventories
 	PLAYER_INVENTORY("player_inventory.png", 176, 108),
-	SYMMETRY_WAND("wand_symmetry.png", 256, 175),
 	COMPOSER("composer.png", 256, 58),
 	PALETTES("palette_picker.png", 256, 236),
 	EXPORTER("design_exporter.png", 173, 111),
@@ -25,9 +24,6 @@ public enum GuiResources {
 	INDICATOR_GREEN("widgets.png", 0, 23, 18, 5),
 	INDICATOR_YELLOW("widgets.png", 18, 23, 18, 5),
 	INDICATOR_RED("widgets.png", 36, 23, 18, 5),
-	
-	SYMMETRY_EMPTY("wand_symmetry.png", 16, 0, 67, 175),
-	SYMMETRY_ELEMENT("wand_symmetry.png", 91, 0, 67, 175),
 	
 	// Icons
 	ICON_NONE("icons.png", 16, 16, 16, 16),

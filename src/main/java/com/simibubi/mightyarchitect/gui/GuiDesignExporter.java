@@ -15,7 +15,7 @@ import com.simibubi.mightyarchitect.buildomatico.model.sketch.DesignType;
 import com.simibubi.mightyarchitect.gui.widgets.DynamicLabel;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollArea;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollArea.IScrollAction;
-import com.simibubi.mightyarchitect.networking.PacketItemNBT;
+import com.simibubi.mightyarchitect.networking.PacketNbt;
 import com.simibubi.mightyarchitect.networking.PacketSender;
 
 import net.minecraft.client.gui.GuiScreen;
@@ -232,7 +232,7 @@ public class GuiDesignExporter extends GuiScreen {
 			nbt.setInteger("Additional", additionalDataValue);
 
 		heldItemMainhand.setTagCompound(nbt);
-		PacketSender.INSTANCE.sendToServer(new PacketItemNBT(heldItemMainhand));
+		PacketSender.INSTANCE.sendToServer(new PacketNbt(heldItemMainhand));
 	}
 
 	@Override

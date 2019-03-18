@@ -1,4 +1,4 @@
-package com.simibubi.mightyarchitect.gui;
+package com.simibubi.mightyarchitect.gui.widgets;
 
 public class GuiElementAnimation {
 	public float y;
