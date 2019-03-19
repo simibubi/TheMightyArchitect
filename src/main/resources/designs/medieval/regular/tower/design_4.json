@@ -1,0 +1,38 @@
+{
+  "Radius": 3,
+  "Size": {
+    "X": 7,
+    "Y": 7,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Blocks": "  EEE  , EGGGE ,EGRRRGE,EGRRRGE,EGRRRGE, EGGGE ,  EEE  ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "  III  , EGHGE ,IGRRRGI,IHRRRHI,IGRRRGI, EGHGE ,  III  ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "  J J  , EGHGE ,JGRRRGJ, HRRRH ,JGRRRGJ, EGHGE ,  J J  ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "  J J  , EGHGE ,JGRRRGJ, HRRRH ,JGRRRGJ, EGHGE ,  J J  ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "  EEE  , EGGGE ,EGRRRGE,EGRRRGE,EGRRRGE, EGGGE ,  EEE  ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "  J J  , EGHGE ,JGRRRGJ, HRRRH ,JGRRRGJ, EGHGE ,  J J  ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "  EEE  , FGGGF ,EGNNNGE,EGNNNGE,EGNNNGE, FGGGF ,  EEE  ",
+      "Trait": "Standard"
+    }
+  ]
+}

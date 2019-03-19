@@ -1,0 +1,42 @@
+{
+  "Radius": 2,
+  "Size": {
+    "X": 5,
+    "Y": 8,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Blocks": "POIOP,OMMMO,IMMMI,OMMMO,POIOP",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "  P  , MMM ,PMMMP, MMM ,  P  ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "     ,  M  , MMM ,  M  ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "     ,  I  , IMI ,  I  ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "     ,  P  , PMP ,  P  ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "     ,     ,  M  ,     ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "     ,     ,  I  ,     ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "     ,     ,  I  ,     ,     ",
+      "Trait": "Standard"
+    }
+  ]
+}

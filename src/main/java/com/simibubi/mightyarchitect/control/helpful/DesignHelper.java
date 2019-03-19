@@ -10,9 +10,12 @@ import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.design.StyleGroupManager.StyleGroupDesignProvider;
 import com.simibubi.mightyarchitect.control.design.partials.Design;
+import com.simibubi.mightyarchitect.control.design.partials.Design.DesignInstance;
 import com.simibubi.mightyarchitect.control.design.partials.FlatRoof;
 import com.simibubi.mightyarchitect.control.design.partials.Roof;
-import com.simibubi.mightyarchitect.control.design.partials.Design.DesignInstance;
+import com.simibubi.mightyarchitect.control.design.partials.Tower;
+import com.simibubi.mightyarchitect.control.design.partials.TowerFlatRoof;
+import com.simibubi.mightyarchitect.control.design.partials.TowerRoof;
 
 import net.minecraft.util.math.BlockPos;
 
@@ -82,6 +85,34 @@ public class DesignHelper {
 			designList.add(corner(corner, cornerX, -135, height));
 		}
 
+	}
+	
+	public static void addTower(StyleGroupDesignProvider designProvider, List<DesignInstance> designList,
+			DesignTheme theme, DesignLayer layer, BlockPos start, BlockPos size) {
+		int diameter = size.getX();
+		int height = size.getY();
+		
+		DesignQuery towerQuery = new DesignQuery(theme, layer, DesignType.TOWER).withWidth(diameter).withHeight(height);
+		Design tower = designProvider.find(towerQuery);
+		
+		if (tower == null)
+			return;
+		
+		designList.add(tower(tower, start, height));
+	}
+	
+	public static void addTowerRoof(StyleGroupDesignProvider designProvider, List<DesignInstance> designList,
+			DesignTheme theme, DesignLayer layer, BlockPos start, BlockPos size, boolean flat) {
+		int diameter = size.getX();
+		
+		DesignType type = flat? DesignType.TOWER_FLAT_ROOF : DesignType.TOWER_ROOF;
+		DesignQuery roofQuery = new DesignQuery(theme, layer, type).withWidth(diameter);
+		Design roof = designProvider.find(roofQuery);
+		
+		if (roof == null)
+			return;
+		
+		designList.add(flat ? towerFlatRoof(roof, start) : towerRoof(roof, start));
 	}
 
 	/**
@@ -201,5 +232,17 @@ public class DesignHelper {
 	 */
 	public static DesignInstance flatroof(Design design, BlockPos pos, int angle, int width, int depth) {
 		return ((FlatRoof) design).create(pos, angle, width, depth);
+	}
+	
+	public static DesignInstance tower(Design design, BlockPos pos, int height) {
+		return ((Tower) design).create(pos, height);
+	}
+	
+	public static DesignInstance towerRoof(Design design, BlockPos pos) {
+		return ((TowerRoof) design).create(pos);
+	}
+	
+	public static DesignInstance towerFlatRoof(Design design, BlockPos pos) {
+		return ((TowerFlatRoof) design).create(pos);
 	}
 }

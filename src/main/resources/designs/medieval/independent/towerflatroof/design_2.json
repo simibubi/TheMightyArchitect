@@ -1,0 +1,18 @@
+{
+  "Radius": 2,
+  "Size": {
+    "X": 7,
+    "Y": 2,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Blocks": "  PPP  , PMMMP ,PMMMMMP,PMMMMMP,PMMMMMP, PMMMP ,  PPP  ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "  PPP  , P   P ,P     P,P     P,P     P, P   P ,  PPP  ",
+      "Trait": "Standard"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "Radius": 3,
+  "Size": {
+    "X": 7,
+    "Y": 5,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Blocks": "   F   , F   F ,       ,F     F,       , F   F ,   F   ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "   G   , G   G ,       ,G     G,       , G   G ,   G   ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "   G   , G   G ,       ,G     G,       , G   G ,   G   ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": " JJEJJ ,JE   EJ,J     J,E     E,J     J,JE   EJ, JJEJJ ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": " KKAKK ,KAA AAK,KA   AK,A     A,KA   AK,KAA AAK, KKAKK ",
+      "Trait": "Standard"
+    }
+  ]
+}

@@ -2,6 +2,7 @@ package com.simibubi.mightyarchitect.control.design;
 
 import java.util.List;
 
+import com.simibubi.mightyarchitect.control.compose.CylinderStack;
 import com.simibubi.mightyarchitect.control.compose.GroundPlan;
 import com.simibubi.mightyarchitect.control.design.StyleGroupManager.StyleGroupDesignProvider;
 import com.simibubi.mightyarchitect.control.design.partials.Design.DesignInstance;
@@ -30,22 +31,40 @@ public class StandardDesignPicker implements IPickDesigns {
 				StyleGroupDesignProvider styleGroup = styleGroupManager.getStyleGroup(room.styleGroup);
 
 				BlockPos size = room.getSize();
-				DesignHelper.addCuboid(styleGroup, designList, theme, room.designLayer, origin, size);
+				
+				if (stack instanceof CylinderStack) {
+					DesignHelper.addTower(styleGroup, designList, theme, room.designLayer, origin, size);
+					
+				} else {
+					DesignHelper.addCuboid(styleGroup, designList, theme, room.designLayer, origin, size);
+				}
 				
 				if (room != stack.highest())
 					return;
 				
+				DesignLayer roofLayer = DesignLayer.Independent;
+				
 				switch (room.roofType) {
 				case ROOF:
+					if (stack instanceof CylinderStack) {
+						DesignHelper.addTowerRoof(styleGroup, designList, theme, roofLayer, origin.up(room.height), size, false);
+						break;
+					}
+					
 					if (room.width == room.length) {
-						DesignHelper.addNormalCrossRoof(styleGroup, designList, theme, DesignLayer.Independent, origin.up(room.height), size);
+						DesignHelper.addNormalCrossRoof(styleGroup, designList, theme, roofLayer, origin.up(room.height), size);
 					} else {
-						DesignHelper.addNormalRoof(styleGroup, designList, theme, DesignLayer.Independent, origin.up(room.height), size);
+						DesignHelper.addNormalRoof(styleGroup, designList, theme, roofLayer, origin.up(room.height), size);
 					}
 					break;
 					
 				case FLAT_ROOF:
-					DesignHelper.addFlatRoof(styleGroup, designList, theme, DesignLayer.Independent, origin.up(room.height), size);
+					if (stack instanceof CylinderStack) {
+						DesignHelper.addTowerRoof(styleGroup, designList, theme, roofLayer, origin.up(room.height), size, true);
+						break;
+					}
+					
+					DesignHelper.addFlatRoof(styleGroup, designList, theme, roofLayer, origin.up(room.height), size);
 					break;
 					
 				default:

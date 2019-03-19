@@ -1,0 +1,18 @@
+{
+  "Radius": 4,
+  "Size": {
+    "X": 9,
+    "Y": 2,
+    "Z": 9
+  },
+  "Layers": [
+    {
+      "Blocks": "   GEG   , GEMMMEG , EMMMMME ,GMMMMMMMG,EMMMMMMME,GMMMMMMMG, EMMMMME , GEMMMEG ,   GEG   ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "   P P   , P     P ,         ,P       P,         ,P       P,         , P     P ,   P P   ",
+      "Trait": "Standard"
+    }
+  ]
+}

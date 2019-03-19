@@ -1,0 +1,18 @@
+{
+  "Radius": 3,
+  "Size": {
+    "X": 9,
+    "Y": 2,
+    "Z": 9
+  },
+  "Layers": [
+    {
+      "Blocks": "   Q Q   ,  IMMMI  , IMMMMMI ,QMMMMMMMQ, MMMMMMM ,QMMMMMMMQ, IMMMMMI ,  IMMMI  ,   Q Q   ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "   POP   , PP   PP , P     P ,P       P,O       O,P       P, P     P , PP   PP ,   POP   ",
+      "Trait": "Standard"
+    }
+  ]
+}

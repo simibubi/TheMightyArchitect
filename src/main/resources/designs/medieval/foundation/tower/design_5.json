@@ -1,0 +1,30 @@
+{
+  "Radius": 5,
+  "Size": {
+    "X": 11,
+    "Y": 5,
+    "Z": 11
+  },
+  "Layers": [
+    {
+      "Blocks": "  DAAAAAD  , AAARRRAAA ,DARRRRRRRAD,AARRRRRRRAA,ARRRRRRRRRA,ARRRRRRRRRA,ARRRRRRRRRA,AARRRRRRRAA,DARRRRRRRAD, AAARRRAAA ,  DAAAAAD  ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "  JACACAJ  , DADRRRDAD ,JARRRRRRRAJ,ADRRRRRRRDA,CRRRRRRRRRC,ARRRRRRRRRA,CRRRRRRRRRC,ADRRRRRRRDA,JARRRRRRRAJ, DADRRRDAD ,  JACACAJ  ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "  JACACAJ  , DADRRRDAD ,JARRRRRRRAJ,ADRRRRRRRDA,CRRRRRRRRRC,ARRRRRRRRRA,CRRRRRRRRRC,ADRRRRRRRDA,JARRRRRRRAJ, DADRRRDAD ,  JACACAJ  ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "  DAAAAAD  , AAABBBAAA ,DABBNNNBBAD,AABNNNNNBAA,ABNNNNNNNBA,ABNNNNNNNBA,ABNNNNNNNBA,AABNNNNNBAA,DABBNNNBBAD, AAABBBAAA ,  DAAAAAD  ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "  K     K  , B       B ,K         K,           ,           ,           ,           ,           ,K         K, B       B ,  K     K  ",
+      "Trait": "MaskAbove"
+    }
+  ]
+}

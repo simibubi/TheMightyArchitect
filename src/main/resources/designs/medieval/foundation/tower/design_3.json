@@ -1,0 +1,26 @@
+{
+  "Radius": 3,
+  "Size": {
+    "X": 7,
+    "Y": 4,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Blocks": "  AAA  , AAAAA ,AARRRAA,AARRRAA,AARRRAA, AAAAA ,  AAA  ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "  ACA  , DBRBD ,ABRRRBA,CRRRRRC,ABRRRBA, DBRBD ,  ACA  ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "  ACA  , DBRBD ,ABRRRBA,CRRRRRC,ABRRRBA, DBRBD ,  ACA  ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "  AAA  , ABBBA ,ABNNNBA,ABNNNBA,ABNNNBA, ABBBA ,  AAA  ",
+      "Trait": "Standard"
+    }
+  ]
+}

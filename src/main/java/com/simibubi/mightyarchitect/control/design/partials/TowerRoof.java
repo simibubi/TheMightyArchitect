@@ -7,21 +7,19 @@ import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
-public class Tower extends Design {
+public class TowerRoof extends Tower {
 
-	public int radius;
-	
 	@Override
 	public Design fromNBT(NBTTagCompound compound) {
-		Tower tower = new Tower();
-		tower.applyNBT(compound);
-		tower.radius = compound.getInteger("Radius");
-		tower.defaultWidth = tower.radius * 2 + 1;
-		return tower;
+		TowerRoof towerRoof = new TowerRoof();
+		towerRoof.applyNBT(compound);
+		towerRoof.radius = compound.getInteger("Radius");
+		towerRoof.defaultWidth = towerRoof.radius * 2 + 1;
+		return towerRoof;
 	}
 	
-	public DesignInstance create(BlockPos anchor, int height) {
-		return create(anchor, 0, size.getX(), height);
+	public DesignInstance create(BlockPos anchor) {
+		return create(anchor, 0, size.getX(), size.getY());
 	}
 	
 	@Override
@@ -40,7 +38,9 @@ public class Tower extends Design {
 		return width == defaultWidth;
 	}
 	
+	@Override
+	public boolean fitsVertically(int height) {
+		return true;
+	}
 	
-
-
 }

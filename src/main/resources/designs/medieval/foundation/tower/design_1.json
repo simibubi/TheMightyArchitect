@@ -1,0 +1,26 @@
+{
+  "Radius": 2,
+  "Size": {
+    "X": 5,
+    "Y": 4,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Blocks": "DAAAD,ARRRA,ARRRA,ARRRA,DAAAD",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "JACAJ,ARRRA,CRRRC,ARRRA,JACAJ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "JACAJ,ARRRA,CRRRC,ARRRA,JACAJ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "DBBBD,BNNNB,BNNNB,BNNNB,DBBBD",
+      "Trait": "Standard"
+    }
+  ]
+}

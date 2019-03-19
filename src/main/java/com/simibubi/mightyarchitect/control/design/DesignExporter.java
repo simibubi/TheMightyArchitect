@@ -95,6 +95,8 @@ public class DesignExporter {
 				case WALL:
 					compound.setString("ExpandBehaviour", Wall.ExpandBehaviour.values()[data].name());
 					break;
+				case TOWER_FLAT_ROOF:
+				case TOWER_ROOF:
 				case TOWER:
 					compound.setInteger("Radius", data);
 					break;

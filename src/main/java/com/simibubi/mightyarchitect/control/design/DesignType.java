@@ -11,15 +11,23 @@ import com.simibubi.mightyarchitect.control.design.partials.Facade;
 import com.simibubi.mightyarchitect.control.design.partials.FlatRoof;
 import com.simibubi.mightyarchitect.control.design.partials.Roof;
 import com.simibubi.mightyarchitect.control.design.partials.Tower;
+import com.simibubi.mightyarchitect.control.design.partials.TowerFlatRoof;
+import com.simibubi.mightyarchitect.control.design.partials.TowerRoof;
 import com.simibubi.mightyarchitect.control.design.partials.Trim;
 import com.simibubi.mightyarchitect.control.design.partials.Wall;
 
 public enum DesignType {
 
-	WALL("wall", "Wall", new Wall()), FACADE("facade", "Facade", new Facade()),
-	CORNER("corner", "Corner", new Corner()), TOWER("tower", "Tower", new Tower()), TRIM("trim", "Trim", new Trim()),
-	ROOF("roof", "Roof", new Roof()),
-	FLAT_ROOF("flatroof", "Flat Roof", new FlatRoof()),
+	WALL("wall", "Wall", new Wall()), 
+	FACADE("facade", "Facade", new Facade()), 
+	CORNER("corner", "Corner", new Corner()), 
+	TOWER("tower", "Tower", new Tower()), 
+	TRIM("trim", "Trim", new Trim()), 
+	ROOF("roof", "Roof", new Roof()), 
+	FLAT_ROOF("flatroof", "Flat Roof", new FlatRoof()), 
+	TOWER_ROOF("towerroof", "Round Roof", new TowerRoof()), 
+	TOWER_FLAT_ROOF("towerflatroof", "Flat Round Roof", new TowerFlatRoof()), 
+	
 	NONE("none", "Don't use", null);
 
 	private String filePath;
@@ -55,6 +63,8 @@ public enum DesignType {
 		case FLAT_ROOF:
 			return "Margin";
 		case TOWER:
+		case TOWER_FLAT_ROOF:
+		case TOWER_ROOF:
 			return "Tower Radius";
 		case WALL:
 			return "Expandability";
@@ -64,21 +74,36 @@ public enum DesignType {
 	}
 
 	public boolean hasSizeData() {
-		return this == TOWER || this == ROOF || this == FLAT_ROOF;
+		switch (this) {
+		case FLAT_ROOF:
+		case ROOF:
+		case TOWER:
+		case TOWER_FLAT_ROOF:
+		case TOWER_ROOF:
+			return true;
+		default:
+			return false;
+		}
 	}
 
 	public boolean hasSubtypes() {
-		return this == WALL;
+		switch (this) {
+		case WALL:
+			return true;
+		default:
+			return false;
+		}
 	}
 
 	public List<String> getSubtypeOptions() {
-		if (this == WALL) {
+		switch (this) {
+		case WALL:
 			List<String> list = new ArrayList<>();
 			ImmutableList.copyOf(Wall.ExpandBehaviour.values()).forEach(value -> list.add(value.name()));
 			return list;
+		default:
+			return Collections.emptyList();
 		}
-
-		return Collections.emptyList();
 	}
 
 }

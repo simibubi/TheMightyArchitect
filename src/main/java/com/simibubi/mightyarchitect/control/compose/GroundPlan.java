@@ -25,13 +25,16 @@ public class GroundPlan {
 
 	public List<Room> getInterior() {
 		interior.clear();
-		forEachRoom(room -> {
-			
-			if (room.designLayer.isExterior())
+		forEachStack(stack -> {
+			if (stack instanceof CylinderStack)
 				return;
-			
-			interior.add(room.getInterior());
-			
+			 
+			stack.forEach(room -> {
+				if (room.designLayer.isExterior())
+					return;
+				
+				interior.add(room.getInterior());				
+			});
 		});
 		return interior;
 	}

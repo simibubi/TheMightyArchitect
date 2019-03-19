@@ -1,0 +1,26 @@
+{
+  "Radius": 2,
+  "Size": {
+    "X": 5,
+    "Y": 4,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Blocks": "GEEEG,ERRRE,ERRRE,ERRRE,GEEEG",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "JEHEJ,ERRRE,HRRRH,ERRRE,JEHEJ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "JEHEJ,ERRRE,HRRRH,ERRRE,JEHEJ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "GEEEG,ENNNE,ENNNE,ENNNE,GEEEG",
+      "Trait": "Standard"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "Radius": 4,
+  "Size": {
+    "X": 11,
+    "Y": 7,
+    "Z": 11
+  },
+  "Layers": [
+    {
+      "Blocks": "           ,    AAA    ,  AA   AA  ,  A     A  , A       A , A       A , A       A ,  A     A  ,  AA   AA  ,    AAA    ,           ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "           ,    I I    ,  I     I  ,           , I       I ,           , I       I ,           ,  I     I  ,    I I    ,           ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "           ,    J J    ,  I     I  ,           , J       J ,           , J       J ,           ,  I     I  ,    J J    ,           ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "           ,    J J    ,  J     J  ,           , J       J ,           , J       J ,           ,  J     J  ,    J J    ,           ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "           ,    J J    ,  I     I  ,           , J       J ,           , J       J ,           ,  I     I  ,    J J    ,           ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "           ,    I I    ,  I     I  ,           , I       I ,           , I       I ,           ,  I     I  ,    I I    ,           ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "    KKK    ,  KKAEAKK  , KAE   EAK , KE     EK ,KA       AK,KE       EK,KA       AK, KE     EK , KAE   EAK ,  KKAEAKK  ,    KKK    ",
+      "Trait": "Standard"
+    }
+  ]
+}

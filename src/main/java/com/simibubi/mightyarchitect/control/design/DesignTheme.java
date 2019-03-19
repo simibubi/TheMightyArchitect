@@ -23,7 +23,9 @@ public enum DesignTheme {
 					DesignType.ROOF,
 					DesignType.TOWER,
 					DesignType.FACADE,
-					DesignType.FLAT_ROOF
+					DesignType.FLAT_ROOF,
+					DesignType.TOWER_FLAT_ROOF,
+					DesignType.TOWER_ROOF
 					), 
 			new StandardDesignPicker()
 			),

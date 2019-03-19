@@ -1,0 +1,30 @@
+{
+  "Radius": 4,
+  "Size": {
+    "X": 11,
+    "Y": 5,
+    "Z": 11
+  },
+  "Layers": [
+    {
+      "Blocks": "    D D    ,    ABA    ,  AARRRAA  ,  ARRRRRA  ,DARRRRRRRAD, BRRRRRRRB ,DARRRRRRRAD,  ARRRRRA  ,  AARRRAA  ,    ABA    ,    D D    ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "    D D    ,    ACA    ,  DARRRAD  ,  ARRRRRA  ,DARRRRRRRAD, CRRRRRRRC ,DARRRRRRRAD,  ARRRRRA  ,  DARRRAD  ,    ACA    ,    D D    ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "    D D    ,   JACAJ   ,  DARRRAD  , JARRRRRAJ ,DARRRRRRRAD, CRRRRRRRC ,DARRRRRRRAD, JARRRRRAJ ,  DARRRAD  ,   JACAJ   ,    D D    ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "    D D    ,  JJABAJJ  , JAABBBAAJ , JABNNNBAJ ,DABNNNNNBAD, BBNNNNNBB ,DABNNNNNBAD, JABNNNBAJ , JAABBBAAJ ,  JJABAJJ  ,    D D    ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "    KBK    ,  KK   KK  , K       K , K       K ,K         K,B         B,K         K, K       K , K       K ,  KK   KK  ,    KBK    ",
+      "Trait": "MaskAbove"
+    }
+  ]
+}

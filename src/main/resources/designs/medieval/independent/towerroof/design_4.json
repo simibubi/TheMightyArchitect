@@ -1,0 +1,34 @@
+{
+  "Radius": 2,
+  "Size": {
+    "X": 7,
+    "Y": 6,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Blocks": "  Q Q  , OMMMO ,QMM MMQ, M   M ,QMM MMQ, OMMMO ,  Q Q  ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "  POP  ,  IMI  ,PIM MIP,OM   MO,PIM MIP,  IMI  ,  POP  ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "       ,   M   ,  MMM  , MM MM ,  MMM  ,   M   ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "       ,       ,  IMI  ,  M M  ,  IMI  ,       ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "       ,       ,  POP  ,  OMO  ,  POP  ,       ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "       ,       ,       ,   P   ,       ,       ,       ",
+      "Trait": "Standard"
+    }
+  ]
+}

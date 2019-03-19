@@ -1,0 +1,46 @@
+{
+  "Radius": 5,
+  "Size": {
+    "X": 11,
+    "Y": 9,
+    "Z": 11
+  },
+  "Layers": [
+    {
+      "Blocks": "    GGG    ,  GGRRRGG  , GRRRRRRRG , GRRRRRRRG ,GRRRRRRRRRG,GRRRRRRRRRG,GRRRRRRRRRG, GRRRRRRRG , GRRRRRRRG ,  GGRRRGG  ,    GGG    ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "    EEE    ,  EGRRRGE  , ERRRRRRRE , GRRRRRRRG ,ERRRRRRRRRE,ERRRRRRRRRE,ERRRRRRRRRE, GRRRRRRRG , ERRRRRRRE ,  EGRRRGE  ,    EEE    ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "    EHE    , JEGRRRGEJ , ERRRRRRRE , GRRRRRRRG ,ERRRRRRRRRE,HRRRRRRRRRH,ERRRRRRRRRE, GRRRRRRRG , ERRRRRRRE , JEGRRRGEJ ,    EHE    ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "   JEHEJ   , JEGRRRGEJ , ERRRRRRRE ,JGRRRRRRRGJ,ERRRRRRRRRE,HRRRRRRRRRH,ERRRRRRRRRE,JGRRRRRRRGJ, ERRRRRRRE , JEGRRRGEJ ,   JEHEJ   ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "   JEHEJ   , IEGRRRGEI , ERRRRRRRE ,JGRRRRRRRGJ,ERRRRRRRRRE,HRRRRRRRRRH,ERRRRRRRRRE,JGRRRRRRRGJ, ERRRRRRRE , IEGRRRGEI ,   JEHEJ   ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "   IEEEI   , FFGRRRGFF , FRRRRRRRF ,IGRRRRRRRGI,ERRRRRRRRRE,ERRRRRRRRRE,ERRRRRRRRRE,IGRRRRRRRGI, FRRRRRRRF , FFGRRRGFF ,   IEEEI   ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "   JEHEJ   ,  EGRRRGE  , ERRRRRRRE ,JGRRRRRRRGJ,ERRRRRRRRRE,HRRRRRRRRRH,ERRRRRRRRRE,JGRRRRRRRGJ, ERRRRRRRE ,  EGRRRGE  ,   JEHEJ   ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "   IEEEI   ,  EGRRRGE  , ERRRRRRRE ,IGRRRRRRRGI,ERRRRRRRRRE,ERRRRRRRRRE,ERRRRRRRRRE,IGRRRRRRRGI, ERRRRRRRE ,  EGRRRGE  ,   IEEEI   ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "   BGGGB   ,  GGNNNGG  , GNNNNNNNG ,BGNNNNNNNGB,GNNNNNNNNNG,GNNNNNNNNNG,GNNNNNNNNNG,BGNNNNNNNGB, GNNNNNNNG ,  GGNNNGG  ,   BGGGB   ",
+      "Trait": "Standard"
+    }
+  ]
+}

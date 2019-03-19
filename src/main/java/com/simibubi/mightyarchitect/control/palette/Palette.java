@@ -19,7 +19,7 @@ public enum Palette {
 	OUTER_FLAT("Detailing Panels", 2),
 	
 	ROOF_PRIMARY("Main Roofing", 4),
-	FLOOR("Flooring Material", 4),
+	FLOOR("Flooring Material", 9),
 	ROOF_DETAIL("Detailed Roof Edges", 5),
 	ROOF_SLAB("Main Roofing Slabs", 3),
 	
