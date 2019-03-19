@@ -59,7 +59,7 @@ public class RoomTool extends GroundPlanningToolBase {
 		if (facadeWidth < 5) {
 			return "§cFacade is too narrow (<5): " + facadeWidth;
 		}
-		if (facadeWidth > 25) {
+		if (facadeWidth > 35) {
 			return "§cFacade is too wide (>25): " + facadeWidth;
 		}
 

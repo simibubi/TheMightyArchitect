@@ -10,5 +10,9 @@ public class CylinderStack extends Stack {
 		return 11;
 	}
 	
+	public int getMinWidth() {
+		return 5;
+	}
+	
 	
 }

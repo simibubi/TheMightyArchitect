@@ -84,5 +84,9 @@ public class Stack {
 		return 35;
 	}
 	
+	public int getMinWidth() {
+		return 5;
+	}
+	
 	
 }

@@ -151,6 +151,9 @@ public class GuiComposer extends GuiScreen {
 		private Room cuboid;
 		private GuiComposer parent;
 		private int layer;
+		
+		private Vector<ScrollArea> scrollAreaPosition;
+		private Vector<ScrollArea> scrollAreaSize;
 
 		private Vector<DynamicLabel> labelPosition;
 		private Vector<DynamicLabel> labelSize;
@@ -165,6 +168,8 @@ public class GuiComposer extends GuiScreen {
 			this.parent = parent;
 			labelPosition = new Vector<>(3);
 			labelSize = new Vector<>(3);
+			scrollAreaPosition = new Vector<>(3);
+			scrollAreaSize = new Vector<>(3);
 		}
 
 		public void initGui(int yOffset) {
@@ -251,6 +256,9 @@ public class GuiComposer extends GuiScreen {
 			size.addElement(cuboid.width);
 			size.addElement(cuboid.height);
 			size.addElement(cuboid.length);
+			
+			scrollAreaPosition = new Vector<>(3);
+			scrollAreaSize = new Vector<>(3);
 
 			final int X = 0, Y = 1, Z = 2;
 
@@ -288,6 +296,7 @@ public class GuiComposer extends GuiScreen {
 				scrollArea.setNumeric(true);
 				labelPosition.elementAt(i).text = pos.elementAt(i).toString();
 				scrollAreas.add(scrollArea);
+				scrollAreaPosition.addElement(scrollArea);
 			}
 
 			for (int i = 0; i < 3; i++) {
@@ -303,6 +312,15 @@ public class GuiComposer extends GuiScreen {
 								case X:
 									diff = (position * 2 + 1) - cuboid.width;
 									stack.forRoomAndEachAbove(cuboid, room -> {
+										if (Math.min(room.width + diff, room.length) > stack.getMaxFacadeWidth())
+											return;
+										if (Math.min(room.width + diff, room.length) < stack.getMinWidth())
+											return;
+										if (stack instanceof CylinderStack && room.width + diff > stack.getMaxFacadeWidth())
+											return;
+										if (stack instanceof CylinderStack && room.width + diff < stack.getMinWidth())
+											return;
+										
 										room.width += diff;
 										room.x += diff / -2;
 										
@@ -325,6 +343,15 @@ public class GuiComposer extends GuiScreen {
 								case Z:
 									diff = (position * 2 + 1) - cuboid.length;
 									stack.forRoomAndEachAbove(cuboid, room -> {
+										if (Math.min(room.width, room.length + diff) > stack.getMaxFacadeWidth())
+											return;
+										if (Math.min(room.width, room.length + diff) < stack.getMinWidth())
+											return;
+										if (stack instanceof CylinderStack && room.width + diff > stack.getMaxFacadeWidth())
+											return;
+										if (stack instanceof CylinderStack && room.width + diff < stack.getMinWidth())
+											return;
+										
 										room.length += diff;
 										room.z += diff / -2;
 										
@@ -361,6 +388,7 @@ public class GuiComposer extends GuiScreen {
 				scrollArea.setNumeric(true);
 				labelSize.elementAt(i).text = size.elementAt(i).toString();
 				scrollAreas.add(scrollArea);
+				scrollAreaSize.addElement(scrollArea);
 			}
 
 		}
@@ -379,6 +407,8 @@ public class GuiComposer extends GuiScreen {
 			for (int i = 0; i < 3; i++) {
 				labelPosition.elementAt(i).text = pos.elementAt(i).toString();
 				labelSize.elementAt(i).text = size.elementAt(i).toString();
+				scrollAreaPosition.elementAt(i).setState(pos.elementAt(i));
+				scrollAreaSize.elementAt(i).setState(i == 1? size.elementAt(i) : (size.elementAt(i) - 1) / 2);
 			}
 		}
 

@@ -276,12 +276,16 @@ public class ArchitectManager {
 	
 	@SubscribeEvent
 	public static void onClientTick(ClientTickEvent event) {
-		phase.update();
+		if (Minecraft.getMinecraft().world != null) {
+			phase.update();			
+		}
 	}
 
 	@SubscribeEvent
 	public static void render(RenderWorldLastEvent event) {
-		phase.render();
+		if (Minecraft.getMinecraft().world != null) {
+			phase.render();
+		}
 	}
 
 	@SubscribeEvent
