@@ -44,6 +44,7 @@ public class FilesHelper {
 
 	public static boolean saveTagCompoundAsJson(NBTTagCompound compound, String path) {
 		try {
+			Files.deleteIfExists(Paths.get(path));
 			JsonWriter writer = new JsonWriter(Files.newBufferedWriter(Paths.get(path), StandardOpenOption.CREATE));
 			writer.setIndent("  ");
 			Streams.write(new JsonParser().parse(compound.toString()), writer);

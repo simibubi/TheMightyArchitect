@@ -9,6 +9,8 @@ import com.simibubi.mightyarchitect.networking.PacketInstantPrint;
 import com.simibubi.mightyarchitect.networking.PacketInstantPrint.PacketHandlerInstantPrint;
 import com.simibubi.mightyarchitect.networking.PacketNbt;
 import com.simibubi.mightyarchitect.networking.PacketNbt.PacketHandlerNbt;
+import com.simibubi.mightyarchitect.networking.PacketPlaceSign;
+import com.simibubi.mightyarchitect.networking.PacketPlaceSign.PacketHandlerPlaceSign;
 import com.simibubi.mightyarchitect.networking.PacketSender;
 import com.simibubi.mightyarchitect.proxy.IProxy;
 
@@ -59,6 +61,7 @@ public class TheMightyArchitect {
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
       	PacketSender.INSTANCE.registerMessage(PacketHandlerNbt.class, PacketNbt.class, 0, Side.SERVER);
       	PacketSender.INSTANCE.registerMessage(PacketHandlerInstantPrint.class, PacketInstantPrint.class, 1, Side.SERVER);
+      	PacketSender.INSTANCE.registerMessage(PacketHandlerPlaceSign.class, PacketPlaceSign.class, 2, Side.SERVER);
     }
 
     @Mod.EventHandler

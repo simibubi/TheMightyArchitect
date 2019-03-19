@@ -12,12 +12,16 @@ import com.simibubi.mightyarchitect.control.design.partials.Wall;
 import com.simibubi.mightyarchitect.control.helpful.FilesHelper;
 import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
+import com.simibubi.mightyarchitect.networking.PacketPlaceSign;
+import com.simibubi.mightyarchitect.networking.PacketSender;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -110,6 +114,7 @@ public class DesignExporter {
 			}
 
 			// Write nbt to file
+			
 			String basePath = "designs";
 			FilesHelper.createFolderIfMissing(basePath);
 			String themePath = basePath + "/" + theme.getFilePath();
@@ -121,17 +126,26 @@ public class DesignExporter {
 
 			String filename = "";
 			String designPath = "";
-
-			int index = 0;
-			while (index < 2048) {
-				filename = "design" + ((index == 0) ? "" : "_" + index) + ".json";
+			
+			BlockPos signPos = anchor.up();
+			if (worldIn.getBlockState(signPos).getBlock() == Blocks.STANDING_SIGN) {
+				TileEntitySign sign = (TileEntitySign) worldIn.getTileEntity(signPos);
+				filename = sign.signText[1].getUnformattedText();
 				designPath = typePath + "/" + filename;
-				if (TheMightyArchitect.class.getClassLoader().getResource(designPath) == null
-						&& !Files.exists(Paths.get(designPath)))
-					break;
-				index++;
+				
+			} else {
+				int index = 0;
+				while (index < 2048) {
+					filename = "design" + ((index == 0) ? "" : "_" + index) + ".json";
+					designPath = typePath + "/" + filename;
+					if (TheMightyArchitect.class.getClassLoader().getResource(designPath) == null
+							&& !Files.exists(Paths.get(designPath)))
+						break;
+					index++;
+				}
 			}
 
+			PacketSender.INSTANCE.sendToServer(new PacketPlaceSign(filename, signPos));
 			FilesHelper.saveTagCompoundAsJson(compound, designPath);
 			return designPath;
 			//
