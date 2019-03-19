@@ -1,8 +1,11 @@
 package com.simibubi.mightyarchitect.control.design;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.simibubi.mightyarchitect.TheMightyArchitect;
 import com.simibubi.mightyarchitect.block.AllBlocks;
 import com.simibubi.mightyarchitect.control.design.DesignSlice.DesignSliceTrait;
 import com.simibubi.mightyarchitect.control.design.partials.Wall;
@@ -22,7 +25,7 @@ public class DesignExporter {
 
 	public static String exportDesign(World worldIn, BlockPos anchor, ItemStack exporter) {
 		NBTTagCompound itemTag = exporter.getTagCompound();
-		
+
 		DesignTheme theme = DesignTheme.valueOf(itemTag.getString("Theme"));
 		DesignType type = DesignType.valueOf(itemTag.getString("Type"));
 		DesignLayer layer = DesignLayer.valueOf(itemTag.getString("Layer"));
@@ -42,7 +45,7 @@ public class DesignExporter {
 				}
 			}
 		}
-		
+
 		if (found) {
 			// Collect information
 			int height = 0;
@@ -66,12 +69,12 @@ public class DesignExporter {
 				NBTTagCompound layerTag = new NBTTagCompound();
 				DesignSliceTrait trait = DesignSliceTrait.values()[markerValueAt(worldIn, layerDefAnchor.up(y))];
 				layerTag.setString("Trait", trait.name());
-				
+
 				StringBuilder data = new StringBuilder();
 				for (int z = 0; z < size.getZ(); z++) {
 					for (int x = 0; x < size.getX(); x++) {
 						Palette block = scanMap.get(worldIn.getBlockState(anchor.east().add(x, y, z)));
-						data.append(block != null? block.asChar() : ' ');
+						data.append(block != null ? block.asChar() : ' ');
 					}
 					if (z < size.getZ() - 1)
 						data.append(",");
@@ -81,7 +84,7 @@ public class DesignExporter {
 			}
 
 			compound.setTag("Layers", layers);
-			
+
 			// Additional data
 			if (itemTag.hasKey("Additional")) {
 				int data = itemTag.getInteger("Additional");
@@ -103,9 +106,9 @@ public class DesignExporter {
 				default:
 					break;
 				}
-				
+
 			}
-			
+
 			// Write nbt to file
 			String basePath = "designs";
 			FilesHelper.createFolderIfMissing(basePath);
@@ -115,9 +118,20 @@ public class DesignExporter {
 			FilesHelper.createFolderIfMissing(layerPath);
 			String typePath = layerPath + "/" + type.getFilePath();
 			FilesHelper.createFolderIfMissing(typePath);
-			
-			String filename = FilesHelper.findFirstValidFilename("design", typePath, "json");
-			String designPath = typePath + "/" + filename;
+
+			String filename = "";
+			String designPath = "";
+
+			int index = 0;
+			while (index < 2048) {
+				filename = "design" + ((index == 0) ? "" : "_" + index) + ".json";
+				designPath = typePath + "/" + filename;
+				if (TheMightyArchitect.class.getClassLoader().getResource(designPath) == null
+						&& !Files.exists(Paths.get(designPath)))
+					break;
+				index++;
+			}
+
 			FilesHelper.saveTagCompoundAsJson(compound, designPath);
 			return designPath;
 			//

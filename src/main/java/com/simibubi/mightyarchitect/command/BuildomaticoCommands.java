@@ -12,6 +12,7 @@ public class BuildomaticoCommands {
 				new CommandPalette(),
 				new CommandInstantPrint(),
 				new CommandSaveSchematic(),
+				new CommandValidate(),
 				new CommandUnload()
 		};
 		
