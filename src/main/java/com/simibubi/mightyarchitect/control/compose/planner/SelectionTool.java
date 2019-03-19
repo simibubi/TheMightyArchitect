@@ -33,8 +33,10 @@ public class SelectionTool extends GroundPlanningToolBase {
 		final GroundPlan groundPlan = ArchitectManager.getModel().getGroundPlan();
 		final BlockPos anchor = ArchitectManager.getModel().getAnchor();
 		
-		if (groundPlan.isEmpty())
+		if (groundPlan.isEmpty()) {
+			selectedStack = null;
 			return;
+		}
 
 		EntityPlayerSP player = Minecraft.getMinecraft().player;
 

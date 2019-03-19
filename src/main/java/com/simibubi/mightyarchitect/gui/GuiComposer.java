@@ -33,6 +33,7 @@ public class GuiComposer extends GuiScreen {
 	private static final int BUTTON_NORMAL_ROOF = 1;
 	private static final int BUTTON_FLAT_ROOF = 2;
 	private static final int BUTTON_NO_ROOF = 3;
+	private static final int BUTTON_REMOVE_LAYER = 4;
 
 	private List<GuiComposerPartial> partials;
 	private int xSize, ySize;
@@ -108,6 +109,7 @@ public class GuiComposer extends GuiScreen {
 		init(stack);
 		if (stack.floors() <= 4)
 			addButton(new SimiButton(BUTTON_ADD_LAYER, xTopLeft + 2, yTopLeft, GuiResources.ICON_ADD));
+		addButton(new SimiButton(BUTTON_REMOVE_LAYER, xTopLeft + 22, yTopLeft, GuiResources.ICON_TRASH));
 
 		for (int layer = 0; layer < partials.size(); layer++) {
 			GuiComposerPartial partial = partials.get(layer);
@@ -408,6 +410,16 @@ public class GuiComposer extends GuiScreen {
 		switch (button.id) {
 		case BUTTON_ADD_LAYER:
 			stack.increase();
+			initGui();
+			return;
+
+		case BUTTON_REMOVE_LAYER:
+			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || stack.floors() == 1) {
+				ArchitectManager.getModel().getGroundPlan().remove(stack);
+				mc.displayGuiScreen(null);
+				return;
+			}
+			stack.decrease();
 			initGui();
 			return;
 
