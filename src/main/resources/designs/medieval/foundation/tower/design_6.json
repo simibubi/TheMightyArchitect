@@ -1,0 +1,38 @@
+{
+  "Radius": 2,
+  "Size": {
+    "X": 7,
+    "Y": 7,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Blocks": "  D D  , DABAD ,DARRRAD, BRRRB ,DARRRAD, DABAD ,  D D  ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "       , DBCBD , BRRRB , CRRRC , BRRRB , DBCBD ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "       ,  BCB  , BRRRB , CRRRC , BRRRB ,  BCB  ,       ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "       ,  BCB  , BRRRB , CRRRC , BRRRB ,  BCB  ,       ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "       ,  ABAJ , ARRRA , BRRRB , ARRRA , JABAJ ,       ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "  J J  , JGCGJ ,JGRRRGJ, CRRRC ,JGRRRGJ, JGCGJ ,  J J  ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "  I I  , IABAI ,IANNNAI, BNNNB ,IANNNAI, IABAI ,  I I  ",
+      "Trait": "Standard"
+    }
+  ]
+}

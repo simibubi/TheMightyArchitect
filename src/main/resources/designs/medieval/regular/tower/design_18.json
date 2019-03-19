@@ -1,0 +1,34 @@
+{
+  "Radius": 5,
+  "Size": {
+    "X": 11,
+    "Y": 6,
+    "Z": 11
+  },
+  "Layers": [
+    {
+      "Blocks": "    I I    ,  JEFFFEJ  , JGRRRRRGJ , ERRRRRRRE ,IFRRRRRRRFI, FRRRRRRRF ,IFRRRRRRRFI, ERRRRRRRE , JGRRRRRGJ ,  JEFFFEJ  ,    I I    ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "    J J    ,   EFHFE   ,  GRRRRRG  , ERRRRRRRE ,JFRRRRRRRFJ, HRRRRRRRH ,JFRRRRRRRFJ, ERRRRRRRE ,  GRRRRRG  ,   EFHFE   ,    J J    ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "    J J    ,   EFHFE   ,  GRRRRRG  , ERRRRRRRE ,JFRRRRRRRFJ, HRRRRRRRH ,JFRRRRRRRFJ, ERRRRRRRE ,  GRRRRRG  ,   EFHFE   ,    J J    ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "    J J    ,   EFHFE   ,  GRRRRRG  , ERRRRRRRE ,JFRRRRRRRFJ, HRRRRRRRH ,JFRRRRRRRFJ, ERRRRRRRE ,  GRRRRRG  ,   EFHFE   ,    J J    ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "    I I    ,  JEFFFEJ  , JGRRRRRGJ , ERRRRRRRE ,IFRRRRRRRFI, FRRRRRRRF ,IFRRRRRRRFI, ERRRRRRRE , JGRRRRRGJ ,  JEFFFEJ  ,    I I    ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "    EEE    ,  EENNNEE  , ENNNNNNNE , ENNNNNNNE ,ENNNNNNNNNE,ENNNNNNNNNE,ENNNNNNNNNE, ENNNNNNNE , ENNNNNNNE ,  EENNNEE  ,    EEE    ",
+      "Trait": "Standard"
+    }
+  ]
+}

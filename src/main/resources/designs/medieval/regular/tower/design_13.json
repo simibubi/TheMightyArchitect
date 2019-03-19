@@ -1,0 +1,14 @@
+{
+  "Radius": 4,
+  "Size": {
+    "X": 9,
+    "Y": 1,
+    "Z": 9
+  },
+  "Layers": [
+    {
+      "Blocks": "JJIGFGIJJ,JGFNNNFGJ,IFNNNNNFI,GNNNNNNNG,FNNNNNNNF,GNNNNNNNG,IFNNNNNFI,JGFNNNFGJ,JJIGFGIJJ",
+      "Trait": "Standard"
+    }
+  ]
+}

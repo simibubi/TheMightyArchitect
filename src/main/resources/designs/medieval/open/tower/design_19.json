@@ -1,0 +1,18 @@
+{
+  "Radius": 5,
+  "Size": {
+    "X": 11,
+    "Y": 2,
+    "Z": 11
+  },
+  "Layers": [
+    {
+      "Blocks": "     J     ,   J   J   ,  I     I  , J       J ,           ,J         J,           , J       J ,  I     I  ,   J   J   ,     J     ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "     J     ,   J   J   ,  A     A  , J       J ,           ,J         J,           , J       J ,  A     A  ,   J   J   ,     J     ",
+      "Trait": "Standard"
+    }
+  ]
+}

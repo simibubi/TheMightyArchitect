@@ -1,0 +1,14 @@
+{
+  "Radius": 4,
+  "Size": {
+    "X": 11,
+    "Y": 1,
+    "Z": 11
+  },
+  "Layers": [
+    {
+      "Blocks": "    D D    ,  DKABAKD  , DBANNNABD , KANNNNNAK ,DANNNNNNNAD, BNNNNNNNB ,DANNNNNNNAD, KANNNNNAK , DBANNNABD ,  DKABAKD  ,    D D    ",
+      "Trait": "Standard"
+    }
+  ]
+}

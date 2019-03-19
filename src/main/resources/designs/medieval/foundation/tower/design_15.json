@@ -1,0 +1,46 @@
+{
+  "Radius": 5,
+  "Size": {
+    "X": 13,
+    "Y": 9,
+    "Z": 13
+  },
+  "Layers": [
+    {
+      "Blocks": "     D D     ,    BAAAB    ,  DAARRRAAD  ,  AGRRRRRGA  , BARRRRRRRAB ,DARRRRRRRRRAD, ARRRRRRRRRA ,DARRRRRRRRRAD, BARRRRRRRAB ,  AGRRRRRGA  ,  DAARRRAAD  ,    BAAAB    ,     D D     ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "     J J     ,    IACAI    ,  JDARRRADJ  ,  DGRRRRRGD  , IARRRRRRRAI ,JARRRRRRRRRAJ, CRRRRRRRRRC ,JARRRRRRRRRAJ, IARRRRRRRAI ,  DGRRRRRGD  ,  JDARRRADJ  ,    IACAI    ,     J J     ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "     J J     ,    BACAB    ,   JARRRAJ   ,  JGRRRRRGJ  , BARRRRRRRAB ,JARRRRRRRRRAJ, CRRRRRRRRRC ,JARRRRRRRRRAJ, BARRRRRRRAB ,  JGRRRRRGJ  ,   JARRRAJ   ,    BACAB    ,     J J     ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "     J J     ,    IACAI    ,    ARRRA    ,   GRRRRRG   , IARRRRRRRAI ,JARRRRRRRRRAJ, CRRRRRRRRRC ,JARRRRRRRRRAJ, IARRRRRRRAI ,   GRRRRRG   ,    ARRRA    ,    IACAI    ,     J J     ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "     KBK     ,    BGGGB    ,    ARRRA    ,   GRRRRRG   , BARRRRRRRAB ,KGRRRRRRRRRGK,BGRRRRRRRRRGB,KGRRRRRRRRRGK, BARRRRRRRAB ,   GRRRRRG   ,    ARRRA    ,    BGGGB    ,     KBK     ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "             ,    IAAAI    ,   JARRRAJ   ,  JGRRRRRGJ  , IARRRRRRRAI , ARRRRRRRRRA , ARRRRRRRRRA , ARRRRRRRRRA , IARRRRRRRAI ,  JGRRRRRGJ  ,   JARRRAJ   ,    IAAAI    ,             ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "     J J     ,    BECEB    ,  JDARRRADJ  ,  DGRRRRRGD  , BARRRRRRRAB ,JERRRRRRRRREJ, CRRRRRRRRRC ,JERRRRRRRRREJ, BARRRRRRRAB ,  DGRRRRRGD  ,  JDARRRADJ  ,    BECEB    ,     J J     ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "     KBK     ,    DAAAD    ,  DAARRRAAD  ,  AGRRRRRGA  , DARRRRRRRAD ,KARRRRRRRRRAK,BARRRRRRRRRAB,KARRRRRRRRRAK, DARRRRRRRAD ,  AGRRRRRGA  ,  DAARRRAAD  ,    DAAAD    ,     KBK     ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "             ,    KGGGK    ,   GGNNNGG   ,  GGNNNNNGG  , KGNNNNNNNGK , GNNNNNNNNNG , GNNNNNNNNNG , GNNNNNNNNNG , KGNNNNNNNGK ,  GGNNNNNGG  ,   GGNNNGG   ,    KGGGK    ,             ",
+      "Trait": "Standard"
+    }
+  ]
+}

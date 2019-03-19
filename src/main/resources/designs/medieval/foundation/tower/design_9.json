@@ -1,0 +1,18 @@
+{
+  "Radius": 3,
+  "Size": {
+    "X": 9,
+    "Y": 2,
+    "Z": 9
+  },
+  "Layers": [
+    {
+      "Blocks": "    D    ,  DAAAD  , DARRRAD , ARRRRRA ,DARRRRRAD, ARRRRRA , DARRRAD ,  DAAAD  ,    D    ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "    K    ,  KBGBK  , KGNNNGK , BNNNNNB ,KGNNNNNGK, BNNNNNB , KGNNNGK ,  KBGBK  ,    K    ",
+      "Trait": "Standard"
+    }
+  ]
+}

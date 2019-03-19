@@ -1,0 +1,34 @@
+{
+  "Radius": 3,
+  "Size": {
+    "X": 9,
+    "Y": 6,
+    "Z": 9
+  },
+  "Layers": [
+    {
+      "Blocks": "         , KDAAADK , DARRRAD , ARRRRRA , ARRRRRA , ARRRRRA , DARRRAD , KDAAADK ,         ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "         ,  DACAD  , DGRRRGD , ARRRRRA , CRRRRRC , ARRRRRA , DGRRRGD ,  DACAD  ,         ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "         ,  JBCBJ  , JGRRRGJ , BRRRRRB , CRRRRRC , BRRRRRB , JGRRRGJ ,  JBCBJ  ,         ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "   J J   ,  DBCBD  , DGRRRGD ,JBRRRRRBJ, CRRRRRC ,JBRRRRRBJ, DGRRRGD ,  DBCBD  ,   J J   ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Blocks": "   I I   , DDAAADD , DARRRAD ,IARRRRRAI, ARRRRRA ,IARRRRRAI, DARRRAD , DDAAADD ,   I I   ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "   KBK   , KGGGGGK , GGNNNGG ,KGNNNNNGK,BGNNNNNGB,KGNNNNNGK, GGNNNGG , KGGGGGK ,   KBK   ",
+      "Trait": "Standard"
+    }
+  ]
+}

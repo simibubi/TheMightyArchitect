@@ -1,0 +1,22 @@
+{
+  "Radius": 3,
+  "Size": {
+    "X": 7,
+    "Y": 3,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Blocks": " JGGGJ ,JGRRRGJ,GRRRRRG,GRRRRRG,GRRRRRG,JGRRRGJ, JGGGJ ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": " IEHEI ,IFRRRFI,ERRRRRE,HRRRRRH,ERRRRRE,IFRRRFI, IEHEI ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": " JGGGJ ,JGNNNGJ,GNNNNNG,GNNNNNG,GNNNNNG,JGNNNGJ, JGGGJ ",
+      "Trait": "Standard"
+    }
+  ]
+}

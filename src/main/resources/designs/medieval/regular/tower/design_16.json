@@ -1,0 +1,14 @@
+{
+  "Radius": 5,
+  "Size": {
+    "X": 11,
+    "Y": 1,
+    "Z": 11
+  },
+  "Layers": [
+    {
+      "Blocks": "   JGFGJ   , JGGNNNGGJ , GNNNNNNNG ,JGNNNNNNNGJ,GNNNNNNNNNG,FNNNNNNNNNF,GNNNNNNNNNG,JGNNNNNNNGJ, GNNNNNNNG , JGGNNNGGJ ,   JGFGJ   ",
+      "Trait": "CloneOnce"
+    }
+  ]
+}

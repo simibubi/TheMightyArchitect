@@ -1,0 +1,18 @@
+{
+  "Radius": 4,
+  "Size": {
+    "X": 9,
+    "Y": 2,
+    "Z": 9
+  },
+  "Layers": [
+    {
+      "Blocks": "  JGEGJ  , GERRREG ,JERRRRREJ,GRRRRRRRG,ERRRRRRRE,GRRRRRRRG,JERRRRREJ, GERRREG ,  JGEGJ  ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": " JJEFEJJ ,JEFNNNFEJ,JFNNNNNFJ,ENNNNNNNE,FNNNNNNNF,ENNNNNNNE,JFNNNNNFJ,JEFNNNFEJ, JJEFEJJ ",
+      "Trait": "Standard"
+    }
+  ]
+}

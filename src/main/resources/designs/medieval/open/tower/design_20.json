@@ -1,0 +1,26 @@
+{
+  "Radius": 5,
+  "Size": {
+    "X": 11,
+    "Y": 4,
+    "Z": 11
+  },
+  "Layers": [
+    {
+      "Blocks": "    I I    ,  I     I  , I       I ,           ,I         I,           ,I         I,           , I       I ,  I     I  ,    I I    ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "    J J    ,  J     J  , J       J ,           ,J         J,           ,J         J,           , J       J ,  J     J  ,    J J    ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "    I I    ,  I     I  , I       I ,           ,I         I,           ,I         I,           , I       I ,  I     I  ,    I I    ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "    ABA    ,  AB   BA  , A       A , B       B ,A         A,B         B,A         A, B       B , A       A ,  AB   BA  ,    ABA    ",
+      "Trait": "Standard"
+    }
+  ]
+}

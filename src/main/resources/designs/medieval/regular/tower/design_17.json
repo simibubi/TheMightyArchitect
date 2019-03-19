@@ -1,0 +1,26 @@
+{
+  "Radius": 5,
+  "Size": {
+    "X": 11,
+    "Y": 4,
+    "Z": 11
+  },
+  "Layers": [
+    {
+      "Blocks": "    EEE    ,  EEEREEE  , ERRRRRRRE , ERRRRRRRE ,EERRRRRRREE,ERRRRRRRRRE,EERRRRRRREE, ERRRRRRRE , ERRRRRRRE ,  EEEREEE  ,    EEE    ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "    EHE    , JEHEREHEJ , ERRRRRRRE , HRRRRRRRH ,EERRRRRRREE,HRRRRRRRRRH,EERRRRRRREE, HRRRRRRRH , ERRRRRRRE , JEHEREHEJ ,    EHE    ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "    FHF    , JFHFRFHFJ , FRRRRRRRF , HRRRRRRRH ,FFRRRRRRRFF,HRRRRRRRRRH,FFRRRRRRRFF, HRRRRRRRH , FRRRRRRRF , JFHFRFHFJ ,    FHF    ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "    EEE    , IEENNNEEI , ENNNNNNNE , ENNNNNNNE ,ENNNNNNNNNE,ENNNNNNNNNE,ENNNNNNNNNE, ENNNNNNNE , ENNNNNNNE , IEENNNEEI ,    EEE    ",
+      "Trait": "Standard"
+    }
+  ]
+}

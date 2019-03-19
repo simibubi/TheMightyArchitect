@@ -1,0 +1,22 @@
+{
+  "Radius": 3,
+  "Size": {
+    "X": 7,
+    "Y": 3,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Blocks": "   I   , I   I ,       ,I     I,       , I   I ,   I   ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "   J   , J   J ,       ,J     J,       , J   J ,   J   ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Blocks": "   I   , I   I ,       ,I     I,       , I   I ,   I   ",
+      "Trait": "Optional"
+    }
+  ]
+}

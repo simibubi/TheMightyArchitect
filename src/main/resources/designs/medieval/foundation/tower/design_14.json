@@ -1,0 +1,22 @@
+{
+  "Radius": 5,
+  "Size": {
+    "X": 13,
+    "Y": 3,
+    "Z": 13
+  },
+  "Layers": [
+    {
+      "Blocks": "     DBD     ,   DBAAABD   ,  BAARRRAAB  , DARRRRRRRAD , BARRRRRRRAB ,DARRRRRRRRRAD,BARRRRRRRRRAB,DARRRRRRRRRAD, BARRRRRRRAB , DARRRRRRRAD ,  BAARRRAAB  ,   DBAAABD   ,     DBD     ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "      D      ,    DABAD    ,  DABNNNBAD  ,  ANNNNNNNA  , DBNNNNNNNBD , ANNNNNNNNNA ,DBNNNNNNNNNBD, ANNNNNNNNNA , DBNNNNNNNBD ,  ANNNNNNNA  ,  DABNNNBAD  ,    DABAD    ,      D      ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "      K      ,             ,  K       K  ,             ,             ,             ,K           K,             ,             ,             ,  K       K  ,             ,      K      ",
+      "Trait": "MaskAbove"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "Radius": 5,
+  "Size": {
+    "X": 11,
+    "Y": 1,
+    "Z": 11
+  },
+  "Layers": [
+    {
+      "Blocks": "    JJJ    ,  JJJ JJJ  , JG     GJ , J       J ,JJ       JJ,J         J,JJ       JJ, J       J , JG     GJ ,  JJJ JJJ  ,    JJJ    ",
+      "Trait": "Standard"
+    }
+  ]
+}

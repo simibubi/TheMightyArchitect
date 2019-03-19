@@ -1,0 +1,18 @@
+{
+  "Radius": 3,
+  "Size": {
+    "X": 9,
+    "Y": 2,
+    "Z": 9
+  },
+  "Layers": [
+    {
+      "Blocks": "   J J   ,  JGEGJ  , JERRREJ ,JGRRRRRGJ,JERRRRRE ,JGRRRRRGJ, JERRREJ ,  JGEGJ  ,   J J   ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "   KKK   ,  KGFGK  , KFNNNFK ,KGNNNNNGK,KFNNNNNFK,KGNNNNNGK, KFNNNFK ,  KGFGK  ,   KKK   ",
+      "Trait": "Standard"
+    }
+  ]
+}

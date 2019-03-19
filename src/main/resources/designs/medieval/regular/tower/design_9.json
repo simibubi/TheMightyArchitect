@@ -1,0 +1,18 @@
+{
+  "Radius": 2,
+  "Size": {
+    "X": 5,
+    "Y": 2,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Blocks": "JGFGJ,GRRRG,FRRRF,GRRRG,JGFGJ",
+      "Trait": "Optional"
+    },
+    {
+      "Blocks": "KFGFK,FNNNF,GNNNG,FNNNF,KFGFK",
+      "Trait": "Standard"
+    }
+  ]
+}
