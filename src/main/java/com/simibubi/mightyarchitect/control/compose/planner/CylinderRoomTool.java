@@ -78,6 +78,7 @@ public class CylinderRoomTool extends RoomTool {
 	@Override
 	protected String createRoom(GroundPlan groundPlan) {
 		int distance = (int) Math.sqrt(firstPosition.distanceSq(selectedPosition));
+		distance = Math.min(distance, 5);
 		BlockPos size = new BlockPos(distance * 2, 0, distance * 2);
 		
 		Room room = new Room(firstPosition, size);
@@ -130,6 +131,7 @@ public class CylinderRoomTool extends RoomTool {
 
 		if (firstPos != null) {
 			int distance = (int) Math.sqrt(firstPosition.distanceSq(selectedPosition));
+			distance = Math.min(distance, 5);
 			BlockPos size = new BlockPos(distance * 2, 0, distance * 2);
 			Cuboid selection = new Cuboid(firstPos, size.getX(), 1, size.getZ());
 			

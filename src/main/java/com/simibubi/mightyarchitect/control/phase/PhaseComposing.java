@@ -6,17 +6,19 @@ import org.lwjgl.opengl.GL11;
 import com.simibubi.mightyarchitect.control.Schematic;
 import com.simibubi.mightyarchitect.control.compose.GroundPlan;
 import com.simibubi.mightyarchitect.control.compose.planner.Tools;
-import com.simibubi.mightyarchitect.control.helpful.Shaders;
 import com.simibubi.mightyarchitect.control.helpful.ShaderManager;
+import com.simibubi.mightyarchitect.control.helpful.Shaders;
 import com.simibubi.mightyarchitect.control.helpful.TesselatorTextures;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
 
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.Post;
 
-public class PhaseComposing extends PhaseBase {
+public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 
 	private Tools activeTool;
 
@@ -24,7 +26,7 @@ public class PhaseComposing extends PhaseBase {
 	public void whenEntered() {
 		activeTool = Tools.Room;
 		activeTool.getTool().init();
-		
+
 		ShaderManager.setActiveShader(Shaders.Blueprint);
 	}
 
@@ -49,13 +51,13 @@ public class PhaseComposing extends PhaseBase {
 			activeTool.getTool().init();
 			return;
 		}
-		
+
 		if (key == Keyboard.KEY_LEFT) {
 			activeTool = activeTool.previous();
 			activeTool.getTool().init();
 			return;
 		}
-		
+
 		activeTool.getTool().handleKey(key);
 	}
 
@@ -104,6 +106,13 @@ public class PhaseComposing extends PhaseBase {
 
 			Tessellator.getInstance().draw();
 		}
+	}
+
+	@Override
+	public void renderGameOverlay(Post event) {
+		ScaledResolution scaledresolution = new ScaledResolution(minecraft);
+		minecraft.fontRenderer.drawString(activeTool.getDisplayName(), scaledresolution.getScaledWidth() / 2 + 15,
+				scaledresolution.getScaledHeight() / 2 + 5, 0xDDDDDD, true);
 	}
 
 }

@@ -20,6 +20,7 @@ import com.simibubi.mightyarchitect.control.phase.ArchitectPhases;
 import com.simibubi.mightyarchitect.control.phase.IArchitectPhase;
 import com.simibubi.mightyarchitect.control.phase.IDrawBlockHighlights;
 import com.simibubi.mightyarchitect.control.phase.IListenForBlockEvents;
+import com.simibubi.mightyarchitect.control.phase.IRenderGameOverlay;
 import com.simibubi.mightyarchitect.gui.GuiOpener;
 import com.simibubi.mightyarchitect.gui.GuiPalettePicker;
 import com.simibubi.mightyarchitect.networking.PacketInstantPrint;
@@ -35,6 +36,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentUtils;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.MouseEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -80,6 +82,7 @@ public class ArchitectManager {
 
 			chatMarkerTop();
 			tellrawpacked("The Mighty Architect v" + TheMightyArchitect.VERSION, " - Time for a new Build!");
+			tellrawpacked("Use the [Arrow Keys] to change the Tool.");
 			tellrawpacked("Once finished, type:        ", clickable("/design", "/design"), " to continue.");
 			tellrawpacked("You can always exit with: ", clickable("/unload", "/unload"));
 			chatMarkerBottom();
@@ -322,6 +325,13 @@ public class ArchitectManager {
 	public static void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
 		if (phase instanceof IDrawBlockHighlights) {
 			((IDrawBlockHighlights) phase).onBlockHighlight(event);
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onDrawGameOverlay(RenderGameOverlayEvent.Post event) {
+		if (phase instanceof IRenderGameOverlay) {
+			((IRenderGameOverlay) phase).renderGameOverlay(event);
 		}
 	}
 	

@@ -27,10 +27,6 @@ public class TemplateBlockAccess implements IBlockAccess {
 		this.anchor = anchor;
 	}
 	
-	public void writeToTemplate(Template template) {
-		blocks.forEach((pos, state) -> template.putBlock(pos, state));
-	}
-	
 	public Set<BlockPos> getAllPositions() {
 		return blocks.keySet();
 	}

@@ -37,11 +37,11 @@ public class Schematic {
 		primaryPalette = PaletteDefinition.defaultPalette().clone();
 		secondaryPalette = PaletteDefinition.defaultPalette().clone();
 	}
-	
+
 	public void setGroundPlan(GroundPlan groundPlan) {
 		this.groundPlan = groundPlan;
 	}
-	
+
 	public void setAnchor(BlockPos anchor) {
 		this.anchor = anchor;
 	}
@@ -79,7 +79,7 @@ public class Schematic {
 	public BlockPos getAnchor() {
 		return anchor;
 	}
-	
+
 	public PaletteDefinition getPrimary() {
 		return primaryPalette;
 	}
@@ -130,7 +130,7 @@ public class Schematic {
 	public void applyCreatedPalette() {
 		if (editingPrimary)
 			primaryPalette = editedPalette;
-		else 
+		else
 			secondaryPalette = editedPalette;
 		materializeSketch();
 	}
@@ -195,13 +195,14 @@ public class Schematic {
 
 		template.setAuthor(Minecraft.getMinecraft().player.getName());
 		template.setSize(bounds.getSize());
-		materializedSketch.writeToTemplate(template);
+		materializedSketch.getBlockMap()
+				.forEach((pos, state) -> template.putBlock(pos.subtract(bounds.getOrigin()), state));
 
 		return template;
 	}
-	
+
 	public List<PacketInstantPrint> getPackets() {
 		return PacketInstantPrint.sendSchematic(materializedSketch.getBlockMap(), anchor);
 	}
-	
+
 }

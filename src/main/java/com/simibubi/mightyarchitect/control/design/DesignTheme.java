@@ -28,22 +28,7 @@ public enum DesignTheme {
 					DesignType.TOWER_ROOF
 					), 
 			new StandardDesignPicker()
-			),
-
-	Modern("modern", "Modern", 
-			withLayers(
-					DesignLayer.Regular, 
-					DesignLayer.Independent
-					),
-			withTypes(
-					DesignType.WALL, 
-					DesignType.CORNER,
-					DesignType.TRIM,
-					DesignType.ROOF
-					), 
-			new StandardDesignPicker()
 			);
-	
 
 	private String filePath;
 	private String displayName;
