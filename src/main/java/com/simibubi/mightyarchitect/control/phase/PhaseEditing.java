@@ -1,5 +1,9 @@
 package com.simibubi.mightyarchitect.control.phase;
 
+import java.util.List;
+
+import com.google.common.collect.ImmutableList;
+
 public class PhaseEditing extends PhaseBase {
 
 	@Override
@@ -36,6 +40,11 @@ public class PhaseEditing extends PhaseBase {
 	public void whenExited() {
 		// TODO Auto-generated method stub
 
+	}
+	
+	@Override
+	public List<String> getToolTip() {
+		return ImmutableList.of("");
 	}
 
 }

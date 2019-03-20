@@ -69,8 +69,8 @@ public class GuiTextPrompt extends GuiScreen {
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
 
-		fontRenderer.drawString(title, xTopLeft + 13, yTopLeft + 9, 0x955215, false);
-
+		fontRenderer.drawString(title, xTopLeft + (xSize/2) - (fontRenderer.getStringWidth(title)/2), yTopLeft + 11, GuiResources.FONT_COLOR, false);
+		
 		this.nameField.drawTextBox();
 	}
 

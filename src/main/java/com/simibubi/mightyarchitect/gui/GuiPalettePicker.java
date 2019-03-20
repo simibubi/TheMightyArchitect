@@ -92,11 +92,12 @@ public class GuiPalettePicker extends GuiScreen {
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
 
-		fontRenderer.drawString("Palette Picker", xTopLeft + 8, yTopLeft + 10, 0x274A44, false);
-		fontRenderer.drawString("Included Palettes", xTopLeft + 8, yTopLeft + 53, 0x274A44, false);
-		fontRenderer.drawString("My Palettes", xTopLeft + 134, yTopLeft + 53, 0x274A44, false);
-		fontRenderer.drawString("Primary", xTopLeft + 134, yTopLeft + 30, 0x274A44, false);
-		fontRenderer.drawString("Secondary", xTopLeft + 191, yTopLeft + 30, 0x274A44, false);
+		int color = GuiResources.FONT_COLOR;
+		fontRenderer.drawString("Palette Picker", xTopLeft + 8, yTopLeft + 10, color, false);
+		fontRenderer.drawString("Included Palettes", xTopLeft + 8, yTopLeft + 53, color, false);
+		fontRenderer.drawString("My Palettes", xTopLeft + 134, yTopLeft + 53, color, false);
+		fontRenderer.drawString("Primary", xTopLeft + 134, yTopLeft + 30, color, false);
+		fontRenderer.drawString("Secondary", xTopLeft + 191, yTopLeft + 30, color, false);
 
 		for (GuiButton button : buttonList)
 			button.drawButtonForegroundLayer(mouseX, mouseY);

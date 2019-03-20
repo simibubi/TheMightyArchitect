@@ -417,10 +417,10 @@ public class GuiComposer extends GuiScreen {
 			int y = parent.yTopLeft + yOffset;
 			GuiResources.COMPOSER.draw(parent, x, y);
 
-			drawString(fontRenderer, "" + (layer + 1), x + 9, y + 11, 0x4B5F9E);
+			drawString(fontRenderer, "" + (layer + 1), x + 10, y + 15, 0xCCDDFF);
 
-			fontRenderer.drawString("Type", x + 32, y + 15, 0x3B4152, false);
-			fontRenderer.drawString("Style", x + 32, y + 35, 0x3B4152, false);
+			fontRenderer.drawString("Type", x + 32, y + 15, GuiResources.FONT_COLOR, false);
+			fontRenderer.drawString("Style", x + 32, y + 35, GuiResources.FONT_COLOR, false);
 
 			style.draw(parent);
 			styleGroup.draw(parent);

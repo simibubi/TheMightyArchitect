@@ -1,7 +1,10 @@
 package com.simibubi.mightyarchitect.control.phase;
 
+import java.util.List;
+
 import org.lwjgl.input.Keyboard;
 
+import com.google.common.collect.ImmutableList;
 import com.simibubi.mightyarchitect.control.compose.planner.Tools;
 import com.simibubi.mightyarchitect.control.helpful.ShaderManager;
 import com.simibubi.mightyarchitect.control.helpful.Shaders;
@@ -71,6 +74,11 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 		ScaledResolution scaledresolution = new ScaledResolution(minecraft);
 		minecraft.fontRenderer.drawString(activeTool.getDisplayName(), scaledresolution.getScaledWidth() / 2 + 15,
 				scaledresolution.getScaledHeight() / 2 + 5, 0xDDDDDD, true);
+	}
+
+	@Override
+	public List<String> getToolTip() {
+		return ImmutableList.of("Draw the layout of your build, adding rooms, towers and other. Modify their size, style and palette using the Selection Tool.", "Use your < > Arrow Keys to switch tools.");
 	}
 
 }

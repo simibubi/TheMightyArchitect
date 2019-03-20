@@ -7,13 +7,7 @@ public class BuildomaticoCommands {
 
 	public static void init() {
 		CommandBase[] commands = new CommandBase[] {
-				new CommandStartDrawing(),
-				new CommandDesign(),
-				new CommandPalette(),
-				new CommandInstantPrint(),
-				new CommandSaveSchematic(),
-				new CommandValidate(),
-				new CommandUnload()
+				new CommandValidate()
 		};
 		
 		for (CommandBase commandBase : commands) {

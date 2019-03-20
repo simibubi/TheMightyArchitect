@@ -201,12 +201,13 @@ public class GuiDesignExporter extends GuiScreen {
 		GuiResources.EXPORTER.draw(this, xTopLeft, yTopLeft);
 		super.drawScreen(mouseX, mouseY, partialTicks);
 
-		fontRenderer.drawString("Export custom Designs", xTopLeft + 10, yTopLeft + 10, 0x4F7023, false);
+		int color = GuiResources.FONT_COLOR;
+		fontRenderer.drawString("Export custom Designs", xTopLeft + 10, yTopLeft + 10, color, false);
 
-		fontRenderer.drawString("Theme / Style", xTopLeft + 10, yTopLeft + 28, 0x4F7023, false);
-		fontRenderer.drawString("Building Layer", xTopLeft + 10, yTopLeft + 48, 0x4F7023, false);
-		fontRenderer.drawString("Design Type", xTopLeft + 10, yTopLeft + 68, 0x4F7023, false);
-		fontRenderer.drawString(additionalDataKey, xTopLeft + 10, yTopLeft + 88, 0x4F7023, false);
+		fontRenderer.drawString("Theme / Style", xTopLeft + 10, yTopLeft + 28, color, false);
+		fontRenderer.drawString("Building Layer", xTopLeft + 10, yTopLeft + 48, color, false);
+		fontRenderer.drawString("Design Type", xTopLeft + 10, yTopLeft + 68, color, false);
+		fontRenderer.drawString(additionalDataKey, xTopLeft + 10, yTopLeft + 88, color, false);
 
 		labelTheme.draw(this);
 		labelLayer.draw(this);

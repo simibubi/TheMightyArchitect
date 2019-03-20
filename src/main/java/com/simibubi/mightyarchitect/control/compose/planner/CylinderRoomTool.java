@@ -34,6 +34,7 @@ public class CylinderRoomTool extends RoomTool {
 	@Override
 	public void updateSelection() {
 		EntityPlayerSP player = Minecraft.getMinecraft().player;
+		transparentStacks.clear();
 
 		RayTraceResult trace = RaycastHelper.rayTraceRange(player.world, player, 75);
 		if (trace != null && trace.typeOfHit == Type.BLOCK) {

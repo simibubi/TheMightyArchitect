@@ -5,12 +5,13 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import com.simibubi.mightyarchitect.TheMightyArchitect;
 import com.simibubi.mightyarchitect.control.compose.GroundPlan;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.helpful.FilesHelper;
@@ -21,27 +22,27 @@ import com.simibubi.mightyarchitect.control.phase.IArchitectPhase;
 import com.simibubi.mightyarchitect.control.phase.IDrawBlockHighlights;
 import com.simibubi.mightyarchitect.control.phase.IListenForBlockEvents;
 import com.simibubi.mightyarchitect.control.phase.IRenderGameOverlay;
+import com.simibubi.mightyarchitect.gui.GuiArchitectMenu;
 import com.simibubi.mightyarchitect.gui.GuiOpener;
 import com.simibubi.mightyarchitect.gui.GuiPalettePicker;
+import com.simibubi.mightyarchitect.gui.GuiTextPrompt;
 import com.simibubi.mightyarchitect.networking.PacketInstantPrint;
 import com.simibubi.mightyarchitect.networking.PacketSender;
+import com.simibubi.mightyarchitect.proxy.CombinedClientProxy;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.command.CommandException;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentUtils;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -53,91 +54,41 @@ import net.minecraftforge.fml.relauncher.Side;
 @EventBusSubscriber(value = Side.CLIENT)
 public class ArchitectManager {
 
-	private static IArchitectPhase phase = ArchitectPhases.Empty.getPhaseHandler();
+	private static ArchitectPhases phase = ArchitectPhases.Empty;
 	private static Schematic model = new Schematic();
+	private static GuiArchitectMenu menu = new GuiArchitectMenu();
 
 	// Commands
 
 	public static void compose() {
-		if (inPhase(ArchitectPhases.Composing)) {
-			status("Already composing, use /unload to reset progress.");
-			return;
-		}
-
-		if (getModel().getGroundPlan() == null) {
-			chatMarkerTop();
-			tellrawpacked("Choose the Theme for your Build:");
-			for (DesignTheme theme : DesignTheme.values()) {
-				tellrawpacked("[", clickable(theme.getDisplayName(), "/compose " + theme.name()), "]");
-			}
-			chatMarkerBottom();
-			return;
-		}
-
 		enterPhase(ArchitectPhases.Composing);
 	}
 
 	public static void compose(DesignTheme theme) {
-		if (inPhase(ArchitectPhases.Composing)) {
-			status("Already composing, use /unload to reset progress.");
-			return;
-		}
-
 		if (getModel().getGroundPlan() == null) {
 			getModel().setGroundPlan(new GroundPlan(theme));
-
-			chatMarkerTop();
-			tellrawpacked("The Mighty Architect v" + TheMightyArchitect.VERSION, " - Time for a new Build!");
-			tellrawpacked("Use the [Arrow Keys] to change the Tool.");
-			tellrawpacked("Once finished, type:        ", clickable("/design", "/design"), " to continue.");
-			tellrawpacked("You can always exit with: ", clickable("/unload", "/unload"));
-			chatMarkerBottom();
 		}
-
 		enterPhase(ArchitectPhases.Composing);
 	}
 
 	public static void pauseCompose() {
-		// TODO
 		status("Composer paused, use /compose to return.");
 	}
 
 	public static void unload() {
 		enterPhase(ArchitectPhases.Empty);
 		resetSchematic();
-
-		chatMarkerTop();
-		tellrawpacked("Progress has been reset.");
-		tellrawpacked("Start a new Build: ", clickable("/compose", "/compose"));
-		chatMarkerBottom();
+		menu.setVisible(false);
 	}
 
 	public static void design() {
 		GroundPlan groundPlan = model.getGroundPlan();
-
-		if (groundPlan == null) {
-			status("Use /compose to start your build.");
+		
+		if (groundPlan.isEmpty()) {
+			status("Draw some rooms before going to the next step!");
 			return;
 		}
-
-		if (model.getSketch() == null) {
-			status("Ground plan has been decorated.");
-
-			chatMarkerTop();
-			tellrawpacked("The walls have been decorated!");
-			tellrawpacked("Pick the materials for your build:        ", clickable("/palette", "/palette"));
-			tellrawpacked("Not a fan? You can always re-roll with:   ", clickable("/design", "/design"));
-			tellrawpacked("For further tweaking on your Ground plan: ", clickable("/compose", "/compose"));
-			tellrawpacked("");
-			tellrawpacked("Save your Build to a file:                ", clickable("/saveSchematic", "/saveSchematic"));
-			if (Minecraft.getMinecraft().isSingleplayer())
-				tellrawpacked("Materialize your Build into the World:    ", clickable("/print", "/print"));
-			chatMarkerBottom();
-
-		} else {
-			status("Re-rolled designs.");
-		}
-
+		
 		model.setSketch(groundPlan.theme.getDesignPicker().assembleSketch(groundPlan));
 		enterPhase(ArchitectPhases.Previewing);
 	}
@@ -145,13 +96,6 @@ public class ArchitectManager {
 	public static void createPalette(boolean primary) {
 		getModel().startCreatingNewPalette(primary);
 		enterPhase(ArchitectPhases.CreatingPalette);
-
-		chatMarkerTop();
-		tellrawpacked("Creating a new custom palette! Fill the marked positions with your block choices.");
-		tellrawpacked("Once finished, click here or type:   ", clickable("/palette save", "/palette save"));
-		tellrawpacked("Return to the palette picker with:   ", clickable("/palette", "/palette"),
-				" (Palette will be discarded)");
-		chatMarkerBottom();
 	}
 
 	public static void finishPalette(String name) {
@@ -172,17 +116,13 @@ public class ArchitectManager {
 		if (getModel().getSketch() == null)
 			return;
 
-		if (!Minecraft.getMinecraft().isSingleplayer() || !Minecraft.getMinecraft().player.isCreative()) {
-			status("Print is only available in creative singleplayer.");
-			return;
-		}
-
 		for (PacketInstantPrint packet : getModel().getPackets()) {
 			PacketSender.INSTANCE.sendToServer(packet);
 		}
 
 		SchematicHologram.reset();
-		status("Printed result. Use /unload to start over.");
+		status("Printed result into world.");
+		unload();
 	}
 
 	public static void writeToFile(String name) {
@@ -216,43 +156,6 @@ public class ArchitectManager {
 		Minecraft.getMinecraft().player.sendStatusMessage(new TextComponentString(message), true);
 	}
 
-	public static void chatMarkerTop() {
-		tellrawpacked("+-----------------------------------------------+");
-	}
-
-	public static void chatMarkerBottom() {
-		tellrawpacked("+-----------------------------------------------+");
-	}
-
-	public static String clickable(String message, String command) {
-		return "{\"text\":\"" + message
-				+ "\",\"color\":\"green\",\"underline\":\"true\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\""
-				+ command + "\"}}";
-	}
-
-	public static void tellrawpacked(String... strings) {
-		String result = "[";
-		for (String string : strings) {
-			boolean plaintext = !string.startsWith("{");
-			if (plaintext) {
-				result += "\"" + string + "\",";
-			} else {
-				result += string + ",";
-			}
-		}
-		tellraw(result + "\"\"]");
-	}
-
-	public static void tellraw(String json) {
-		ITextComponent itextcomponent = ITextComponent.Serializer.jsonToComponent(json);
-		EntityPlayerSP player = Minecraft.getMinecraft().player;
-		try {
-			player.sendMessage(TextComponentUtils.processComponent(player, itextcomponent, player));
-		} catch (CommandException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public static void pickPalette() {
 		if (getModel().getSketch() == null)
 			return;
@@ -265,42 +168,52 @@ public class ArchitectManager {
 		GuiOpener.open(new GuiPalettePicker());
 	}
 
+	public static boolean inPhase(ArchitectPhases phase) {
+		return ArchitectManager.phase == phase;
+	}
+
 	// Phases
 
 	public static void enterPhase(ArchitectPhases newPhase) {
-		phase.whenExited();
-		phase = newPhase.getPhaseHandler();
-		phase.whenEntered();
+		IArchitectPhase phaseHandler = phase.getPhaseHandler();
+		phaseHandler.whenExited();
+		phaseHandler = newPhase.getPhaseHandler();
+		phaseHandler.whenEntered();
+		phase = newPhase;
+		menu.updateContents();
 	}
 
 	public static Schematic getModel() {
 		return model;
 	}
+	
+	
 
-	public static boolean inPhase(ArchitectPhases phaseIn) {
-		return phase == phaseIn.getPhaseHandler();
+	public static ArchitectPhases getPhase() {
+		return phase;
 	}
-
+	
 	// Events
 
 	@SubscribeEvent
 	public static void onClientTick(ClientTickEvent event) {
 		if (Minecraft.getMinecraft().world != null) {
-			phase.update();
+			phase.getPhaseHandler().update();
 		}
+		menu.onClientTick();
 	}
 
 	@SubscribeEvent
 	public static void render(RenderWorldLastEvent event) {
 		if (Minecraft.getMinecraft().world != null) {
-			phase.render();
+			phase.getPhaseHandler().render();
 		}
 	}
 
 	@SubscribeEvent
 	public static void onRightClick(MouseEvent event) {
 		if (event.isButtonstate() && Mouse.isButtonDown(event.getButton())) {
-			phase.onClick(event.getButton());
+			phase.getPhaseHandler().onClick(event.getButton());
 		}
 	}
 
@@ -308,8 +221,19 @@ public class ArchitectManager {
 	public static void onKeyTyped(KeyInputEvent event) {
 		if (!Keyboard.getEventKeyState())
 			return;
+		
+		if (CombinedClientProxy.COMPOSE.isPressed()) {
+			if (menu.isFocused())
+				return;
 
-		phase.onKey(Keyboard.getEventKey());
+			menu.updateContents();
+			GuiOpener.open(menu);
+			menu.setFocused(true);
+			menu.setVisible(true);
+			return;
+		}
+
+		phase.getPhaseHandler().onKey(Keyboard.getEventKey());
 	}
 
 	@SubscribeEvent
@@ -320,12 +244,13 @@ public class ArchitectManager {
 
 		Item item = event.getItemStack().getItem();
 		if (item instanceof ItemBlock) {
-			if (phase instanceof IListenForBlockEvents) {
+			IArchitectPhase phaseHandler = phase.getPhaseHandler();
+			if (phaseHandler instanceof IListenForBlockEvents) {
 				Vec3d hitVec = event.getHitVec();
 				IBlockState stateForPlacement = ((ItemBlock) item).getBlock().getStateForPlacement(event.getWorld(),
 						event.getPos(), event.getFace(), (float) hitVec.x, (float) hitVec.y, (float) hitVec.z,
 						event.getItemStack().getMetadata(), event.getEntityPlayer(), event.getHand());
-				((IListenForBlockEvents) phase).onBlockPlaced(event.getPos().offset(event.getFace()), stateForPlacement);
+				((IListenForBlockEvents) phaseHandler).onBlockPlaced(event.getPos().offset(event.getFace()), stateForPlacement);
 			}
 		}
 
@@ -333,23 +258,31 @@ public class ArchitectManager {
 
 	@SubscribeEvent
 	public static void onBlockBroken(PlayerInteractEvent.LeftClickBlock event) {
-		if (phase instanceof IListenForBlockEvents) {
-			((IListenForBlockEvents) phase).onBlockBroken(event.getPos());
+		IArchitectPhase phaseHandler = phase.getPhaseHandler();
+		if (phaseHandler instanceof IListenForBlockEvents) {
+			((IListenForBlockEvents) phaseHandler).onBlockBroken(event.getPos());
 		}
 	}
 
 	@SubscribeEvent
 	public static void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
-		if (phase instanceof IDrawBlockHighlights) {
-			((IDrawBlockHighlights) phase).onBlockHighlight(event);
+		IArchitectPhase phaseHandler = phase.getPhaseHandler();
+		if (phaseHandler instanceof IDrawBlockHighlights) {
+			((IDrawBlockHighlights) phaseHandler).onBlockHighlight(event);
 		}
 	}
 
 	@SubscribeEvent
 	public static void onDrawGameOverlay(RenderGameOverlayEvent.Post event) {
-		if (phase instanceof IRenderGameOverlay) {
-			((IRenderGameOverlay) phase).renderGameOverlay(event);
+		if (event.getType() != ElementType.HOTBAR)
+			return;
+		
+		IArchitectPhase phaseHandler = phase.getPhaseHandler();
+		if (phaseHandler instanceof IRenderGameOverlay) {
+			((IRenderGameOverlay) phaseHandler).renderGameOverlay(event);
 		}
+		
+		menu.drawPassive();
 	}
 
 	@SubscribeEvent
@@ -358,6 +291,123 @@ public class ArchitectManager {
 
 	public static void resetSchematic() {
 		model = new Schematic();
+	}
+	
+	public static boolean handleMenuInput(int key, char character) {
+		switch (phase) {
+		case Composing:
+			if (character == 'f') {
+				design();
+				return true;
+			}
+			if (character == 'u') {
+				unload();
+				return true;
+			}
+		case CreatingPalette:
+			if (character == 'f') {
+				GuiTextPrompt gui = new GuiTextPrompt(result -> ArchitectManager.finishPalette(result),
+						result -> {});
+				gui.setButtonTextConfirm("Save and Apply");
+				gui.setButtonTextAbort("Cancel");
+				gui.setTitle("Enter a name for your Palette:");
+				GuiOpener.open(gui);
+				return true;
+			}
+			if (character == 'r') {
+				pickPalette();
+				return true;
+			}
+			if (character == 'u') {
+				unload();
+				return true;
+			}
+		case Editing:
+			break;
+		case Empty:
+			if (character == 'c') {
+				unload();
+				return true;
+			}
+			int ordinal = character - '1';
+			if (ordinal < DesignTheme.values().length && ordinal >= 0) {
+				compose(DesignTheme.values()[ordinal]);
+				return true;
+			} else 
+				return false;
+		case Previewing:
+			if (character == 'c') {
+				pickPalette();
+				return true;
+			}
+			if (character == 'r') {
+				design();
+				return false;
+			}
+			if (character == 'e') {
+				compose();
+				return true;
+			}
+			if (character == 's') {
+				GuiTextPrompt gui = new GuiTextPrompt(result -> ArchitectManager.writeToFile(result), result -> {});
+				gui.setButtonTextConfirm("Save Schematic");
+				gui.setButtonTextAbort("Cancel");
+				gui.setTitle("Enter a name for your Build:");
+				
+				GuiOpener.open(gui);
+				return true;
+			}
+			if (character == 'p') {
+				if (!Minecraft.getMinecraft().isSingleplayer())
+					return false;
+				print();
+				return true;
+			}
+			if (character == 'u') {
+				unload();
+				return true;
+			}
+		default:
+			break;
+		}
+		return false;
+	}
+	
+	public static Map<String, String> getKeybinds() {
+		Map<String, String> keybinds = new HashMap<>();
+		
+		switch (phase) {
+		case Composing:
+			keybinds.put("U", "Unload");
+			keybinds.put("F", "Finish");
+			break;
+		case CreatingPalette:
+			keybinds.put("U", "Unload");
+			keybinds.put("R", "Return to Picker");
+			keybinds.put("F", "Save Palette");
+			break;
+		case Editing:
+			break;
+		case Empty:
+			for (DesignTheme theme : DesignTheme.values()) {
+				keybinds.put("" + (theme.ordinal() + 1), theme.getDisplayName());				
+			}
+			keybinds.put("C", "Cancel");
+			break;
+		case Previewing:
+			keybinds.put("C", "Choose a Palette");
+			keybinds.put("R", "Re-Roll Designs");
+			keybinds.put("E", "Edit Ground Plan");
+			keybinds.put("S", "Save as Schematic");
+			if (Minecraft.getMinecraft().isSingleplayer())
+				keybinds.put("P", "Print blocks into world");
+			keybinds.put("U", "Unload");
+			break;
+		default:
+			break;
+		}
+		
+		return keybinds;
 	}
 
 }

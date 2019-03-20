@@ -24,6 +24,7 @@ public enum GuiResources {
 	INDICATOR_GREEN("widgets.png", 0, 23, 18, 5),
 	INDICATOR_YELLOW("widgets.png", 18, 23, 18, 5),
 	INDICATOR_RED("widgets.png", 36, 23, 18, 5),
+	GRAY("background.png", 0, 0, 16, 16),
 	
 	// Icons
 	ICON_NONE("icons.png", 16, 16, 16, 16),
@@ -36,6 +37,8 @@ public enum GuiResources {
 	ICON_NORMAL_ROOF("icons.png", 32, 16, 16, 16),
 	ICON_FLAT_ROOF("icons.png", 48, 16, 16, 16),
 	ICON_NO_ROOF("icons.png", 0, 32, 16, 16);
+	
+	public static final int FONT_COLOR = 0x575F7A;
 	
 	public final ResourceLocation location;
 	public int width, height;

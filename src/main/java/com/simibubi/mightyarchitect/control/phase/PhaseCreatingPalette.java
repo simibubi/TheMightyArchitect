@@ -1,10 +1,12 @@
 package com.simibubi.mightyarchitect.control.phase;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
 
+import com.google.common.collect.ImmutableList;
 import com.simibubi.mightyarchitect.control.Schematic;
 import com.simibubi.mightyarchitect.control.SchematicHologram;
 import com.simibubi.mightyarchitect.control.helpful.TesselatorTextures;
@@ -144,6 +146,11 @@ public class PhaseCreatingPalette extends PhaseBase implements IListenForBlockEv
 
 	private BlockPos positionFromIndex(int index) {
 		return center.east(-3 + (index % 4) * 2).south(-3 + (index / 4) * 2);
+	}
+	
+	@Override
+	public List<String> getToolTip() {
+		return ImmutableList.of("The Ghost blocks show the individual materials used in this build.", "Modify the palette by placing blocks into the marked areas. You do not have to fill all the gaps.", "Once finished, make sure to save it. [F]");
 	}
 
 }

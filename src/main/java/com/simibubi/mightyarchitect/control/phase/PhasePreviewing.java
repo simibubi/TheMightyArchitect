@@ -1,5 +1,8 @@
 package com.simibubi.mightyarchitect.control.phase;
 
+import java.util.List;
+
+import com.google.common.collect.ImmutableList;
 import com.simibubi.mightyarchitect.control.SchematicHologram;
 
 public class PhasePreviewing extends PhaseBase {
@@ -30,4 +33,9 @@ public class PhasePreviewing extends PhaseBase {
 		SchematicHologram.reset();
 	}
 
+	@Override
+	public List<String> getToolTip() {
+		return ImmutableList.of("Here is a preview of your new build.", "From here you can pick your materials in the palette picker [C]", "Once you are happy with what you see, save or build your structure.");
+	}
+	
 }
