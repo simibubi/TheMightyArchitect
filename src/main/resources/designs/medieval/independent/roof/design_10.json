@@ -1,0 +1,30 @@
+{
+  "Size": {
+    "X": 11,
+    "Y": 5,
+    "Z": 4
+  },
+  "Layers": [
+    {
+      "Blocks": "PMRRRRRRRMP,PMRRRRRRRMP,POGEGFGEGOP, OQ     QO ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "  MRRRRRM  ,  MRRRRRM  ,  OEGHGEO  ,  PJ   JP  ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "  IERRREI  ,  GERRREG  ,  IEGHGEI  ,  IJ   JI  ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "  PMMRMMP  ,  PMMRMMP  ,  PMGFGMP  ,  POQ QOP  ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "    PMP    ,    PMP    ,    PMP    ,    POP    ",
+      "Trait": "Standard"
+    }
+  ],
+  "Roofspan": 7
+}

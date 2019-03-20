@@ -1,0 +1,26 @@
+{
+  "Size": {
+    "X": 7,
+    "Y": 4,
+    "Z": 3
+  },
+  "Layers": [
+    {
+      "Blocks": "KORRROK,BORRROB,GEEHEEG",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "  MRM  , POROP ,JGEHEGJ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "   M   ,  POP  ,  GEG  ",
+      "Trait": "Standard"
+    },
+    {
+      "Blocks": "       ,   P   ,   G   ",
+      "Trait": "Standard"
+    }
+  ],
+  "Roofspan": 7
+}
