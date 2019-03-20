@@ -392,6 +392,7 @@ public class ArchitectManager {
 			for (DesignTheme theme : DesignTheme.values()) {
 				keybinds.put("" + (theme.ordinal() + 1), theme.getDisplayName());				
 			}
+			keybinds.put("...", "More Themes coming!");
 			keybinds.put("C", "Cancel");
 			break;
 		case Previewing:

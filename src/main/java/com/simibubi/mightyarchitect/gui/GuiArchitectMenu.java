@@ -39,6 +39,7 @@ public class GuiArchitectMenu extends GuiScreen {
 		visible = false;
 		movingY = 0;
 		targetY = 0;
+		adjustTarget();
 	}
 
 	public void updateContents() {
