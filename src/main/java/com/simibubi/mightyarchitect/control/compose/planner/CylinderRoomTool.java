@@ -39,6 +39,8 @@ public class CylinderRoomTool extends RoomTool {
 		if (trace != null && trace.typeOfHit == Type.BLOCK) {
 
 			BlockPos hit = trace.getBlockPos();
+			makeStacksTransparent(player, hit);
+			
 			if (trace.sideHit.getAxis() == Axis.Y)
 				hit = hit.offset(trace.sideHit);
 
@@ -56,22 +58,6 @@ public class CylinderRoomTool extends RoomTool {
 
 		if (selectedPosition == null)
 			return;
-
-		// selections can only be square
-//		BlockPos size = selectedPosition.subtract(firstPosition);
-//		Cuboid selection = new Cuboid(firstPosition, size);
-//
-//		int width = selection.width;
-//		int length = selection.length;
-//
-//		if (width == length)
-//			return;
-//
-//		if (width > length)
-//			selectedPosition = selectedPosition.west((size.getX() > 0 ? 1 : -1) * (width - length));
-//
-//		if (length > width)
-//			selectedPosition = selectedPosition.north((size.getZ() > 0 ? 1 : -1) * (length - width));
 
 	}
 
@@ -113,7 +99,7 @@ public class CylinderRoomTool extends RoomTool {
 	}
 	
 	@Override
-	public void render() {
+	public void renderTool() {
 		
 		if (selectedPosition == null) {
 			return;

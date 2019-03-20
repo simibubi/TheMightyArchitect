@@ -63,7 +63,7 @@ public class SelectionTool extends GroundPlanningToolBase {
 	}
 
 	@Override
-	public void render() {
+	public void renderTool() {
 		if (selectedStack == null)
 			return;
 

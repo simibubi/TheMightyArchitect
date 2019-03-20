@@ -26,11 +26,16 @@ import com.simibubi.mightyarchitect.gui.GuiPalettePicker;
 import com.simibubi.mightyarchitect.networking.PacketInstantPrint;
 import com.simibubi.mightyarchitect.networking.PacketSender;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.command.CommandException;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentUtils;
@@ -38,20 +43,21 @@ import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
-@EventBusSubscriber
+@EventBusSubscriber(value = Side.CLIENT)
 public class ArchitectManager {
 
 	private static IArchitectPhase phase = ArchitectPhases.Empty.getPhaseHandler();
 	private static Schematic model = new Schematic();
-	
+
 	// Commands
-	
+
 	public static void compose() {
 		if (inPhase(ArchitectPhases.Composing)) {
 			status("Already composing, use /unload to reset progress.");
@@ -255,32 +261,32 @@ public class ArchitectManager {
 			getModel().stopPalettePreview();
 			enterPhase(ArchitectPhases.Previewing);
 		}
-		
+
 		GuiOpener.open(new GuiPalettePicker());
 	}
-	
+
 	// Phases
-	
+
 	public static void enterPhase(ArchitectPhases newPhase) {
 		phase.whenExited();
 		phase = newPhase.getPhaseHandler();
 		phase.whenEntered();
 	}
-	
+
 	public static Schematic getModel() {
 		return model;
 	}
-	
+
 	public static boolean inPhase(ArchitectPhases phaseIn) {
 		return phase == phaseIn.getPhaseHandler();
 	}
-	
+
 	// Events
-	
+
 	@SubscribeEvent
 	public static void onClientTick(ClientTickEvent event) {
 		if (Minecraft.getMinecraft().world != null) {
-			phase.update();			
+			phase.update();
 		}
 	}
 
@@ -297,46 +303,61 @@ public class ArchitectManager {
 			phase.onClick(event.getButton());
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void onKeyTyped(KeyInputEvent event) {
 		if (!Keyboard.getEventKeyState())
 			return;
-		
+
 		phase.onKey(Keyboard.getEventKey());
 	}
-	
 
 	@SubscribeEvent
-	public static void onBlockPlaced(BlockEvent.PlaceEvent event) {
+	public static void onBlockPlaced(PlayerInteractEvent.RightClickBlock event) {
+		if (event.getItemStack() == ItemStack.EMPTY) {
+			return;
+		}
+
+		Item item = event.getItemStack().getItem();
+		if (item instanceof ItemBlock) {
+			if (phase instanceof IListenForBlockEvents) {
+				Vec3d hitVec = event.getHitVec();
+				IBlockState stateForPlacement = ((ItemBlock) item).getBlock().getStateForPlacement(event.getWorld(),
+						event.getPos(), event.getFace(), (float) hitVec.x, (float) hitVec.y, (float) hitVec.z,
+						event.getItemStack().getMetadata(), event.getEntityPlayer(), event.getHand());
+				((IListenForBlockEvents) phase).onBlockPlaced(event.getPos().offset(event.getFace()), stateForPlacement);
+			}
+		}
+
+	}
+
+	@SubscribeEvent
+	public static void onBlockBroken(PlayerInteractEvent.LeftClickBlock event) {
 		if (phase instanceof IListenForBlockEvents) {
-			((IListenForBlockEvents) phase).onBlockPlaced(event);
+			((IListenForBlockEvents) phase).onBlockBroken(event.getPos());
 		}
 	}
-	
-	@SubscribeEvent
-	public static void onBlockBroken(BlockEvent.BreakEvent event) {
-		if (phase instanceof IListenForBlockEvents) {
-			((IListenForBlockEvents) phase).onBlockBroken(event);
-		}		
-	}
-	
+
 	@SubscribeEvent
 	public static void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
 		if (phase instanceof IDrawBlockHighlights) {
 			((IDrawBlockHighlights) phase).onBlockHighlight(event);
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void onDrawGameOverlay(RenderGameOverlayEvent.Post event) {
 		if (phase instanceof IRenderGameOverlay) {
 			((IRenderGameOverlay) phase).renderGameOverlay(event);
 		}
 	}
-	
+
+	@SubscribeEvent
+	public static void onItemRightClick(PlayerInteractEvent.RightClickBlock event) {
+	}
+
 	public static void resetSchematic() {
 		model = new Schematic();
 	}
-	
+
 }

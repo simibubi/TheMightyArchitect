@@ -117,7 +117,7 @@ public class Schematic {
 	}
 
 	public void updatePalettePreview() {
-		if (editingPrimary)
+		if (isEditingPrimary())
 			materializeSketch(editedPalette, secondaryPalette);
 		else
 			materializeSketch(primaryPalette, editedPalette);
@@ -128,7 +128,7 @@ public class Schematic {
 	}
 
 	public void applyCreatedPalette() {
-		if (editingPrimary)
+		if (isEditingPrimary())
 			primaryPalette = editedPalette;
 		else
 			secondaryPalette = editedPalette;
@@ -203,6 +203,10 @@ public class Schematic {
 
 	public List<PacketInstantPrint> getPackets() {
 		return PacketInstantPrint.sendSchematic(materializedSketch.getBlockMap(), anchor);
+	}
+
+	public boolean isEditingPrimary() {
+		return editingPrimary;
 	}
 
 }

@@ -14,6 +14,7 @@ import com.simibubi.mightyarchitect.control.helpful.TesselatorTextures;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
 
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
@@ -109,7 +110,7 @@ public class RoomTool extends GroundPlanningToolBase {
 	}
 
 	@Override
-	public void render() {
+	public void renderTool() {
 		if (selectedPosition == null) {
 			return;
 		}
@@ -119,6 +120,8 @@ public class RoomTool extends GroundPlanningToolBase {
 		BlockPos firstPos = (firstPosition != null)? firstPosition.add(anchor) : null;
 
 		TesselatorTextures.Selection.bind();
+		GlStateManager.enableAlpha();
+		GlStateManager.enableBlend();
 		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 

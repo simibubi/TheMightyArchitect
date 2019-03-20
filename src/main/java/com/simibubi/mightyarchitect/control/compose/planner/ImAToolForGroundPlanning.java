@@ -6,6 +6,9 @@ public interface ImAToolForGroundPlanning {
 	
 	public void handleKey(int key);
 	public void updateSelection();
-	public void render();
+	
+	public void renderTool();
+	public void renderGroundPlan();
+	
 	public void init();
 }

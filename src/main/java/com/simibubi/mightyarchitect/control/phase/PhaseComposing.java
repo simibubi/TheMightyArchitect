@@ -1,21 +1,13 @@
 package com.simibubi.mightyarchitect.control.phase;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
-import com.simibubi.mightyarchitect.control.Schematic;
-import com.simibubi.mightyarchitect.control.compose.GroundPlan;
 import com.simibubi.mightyarchitect.control.compose.planner.Tools;
 import com.simibubi.mightyarchitect.control.helpful.ShaderManager;
 import com.simibubi.mightyarchitect.control.helpful.Shaders;
-import com.simibubi.mightyarchitect.control.helpful.TesselatorTextures;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
 
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Post;
 
 public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
@@ -64,48 +56,14 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 	@Override
 	public void render() {
 		TessellatorHelper.prepareForDrawing();
-		Schematic model = getModel();
-		renderGroundPlan(model.getGroundPlan(), model.getAnchor());
-		activeTool.getTool().render();
+		activeTool.getTool().renderGroundPlan();
+		activeTool.getTool().renderTool();
 		TessellatorHelper.cleanUpAfterDrawing();
 	}
 
 	@Override
 	public void whenExited() {
 		ShaderManager.stopUsingShaders();
-	}
-
-	protected void renderGroundPlan(GroundPlan groundPlan, BlockPos anchor) {
-		if (groundPlan != null && anchor != null) {
-			BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-			TesselatorTextures.Trim.bind();
-			bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-
-			groundPlan.forEachStack(stack -> {
-				stack.forEach(room -> {
-
-					BlockPos pos = room.getOrigin().add(anchor);
-					TessellatorHelper.walls(bufferBuilder, pos, new BlockPos(room.width, 1, room.length), 0.125, false,
-							true);
-
-					if (room == stack.highest())
-						TessellatorHelper.walls(bufferBuilder, pos.add(0, room.height, 0),
-								new BlockPos(room.width, 1, room.length), 0.125, false, true);
-
-				});
-			});
-
-			Tessellator.getInstance().draw();
-			TesselatorTextures.Room.bind();
-			bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-
-			groundPlan.forEachRoom(room -> {
-				BlockPos pos = room.getOrigin().add(anchor);
-				TessellatorHelper.cube(bufferBuilder, pos, room.getSize(), 0, false, false);
-			});
-
-			Tessellator.getInstance().draw();
-		}
 	}
 
 	@Override

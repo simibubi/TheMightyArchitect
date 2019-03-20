@@ -8,6 +8,7 @@ import net.minecraft.util.ResourceLocation;
 public enum TesselatorTextures {
 
 	Room("inner.png"),
+	RoomTransparent("inner_transparent.png"),
 	SelectedRoom("inner_selected.png"),
 	Selection("select.png"),
 	Trim("trim.png");

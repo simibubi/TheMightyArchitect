@@ -1,10 +1,11 @@
 package com.simibubi.mightyarchitect.control.phase;
 
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
 
 public interface IListenForBlockEvents {
 
-	public void onBlockPlaced(BlockEvent.PlaceEvent event);
-	public void onBlockBroken(BlockEvent.BreakEvent event);
+	public void onBlockPlaced(BlockPos pos, IBlockState state);
+	public void onBlockBroken(BlockPos pos);
 	
 }
