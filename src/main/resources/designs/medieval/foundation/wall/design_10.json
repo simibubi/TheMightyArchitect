@@ -7,10 +7,12 @@
   "ExpandBehaviour": "MergedRepeat",
   "Layers": [
     {
+      "Facing": "AAAA,AAAA",
       "Blocks": "AAAA,A  A",
       "Trait": "Optional"
     },
     {
+      "Facing": "AAAA,AAAA",
       "Blocks": "ADDA,    ",
       "Trait": "CloneOnce"
     }

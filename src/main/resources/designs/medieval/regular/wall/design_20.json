@@ -7,6 +7,7 @@
   "ExpandBehaviour": "MergedRepeat",
   "Layers": [
     {
+      "Facing": "AAAA",
       "Blocks": "FEEF",
       "Trait": "Standard"
     }

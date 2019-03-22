@@ -7,31 +7,38 @@
   "ExpandBehaviour": "MergedRepeat",
   "Layers": [
     {
+      "Facing": "AAA,AAA",
       "Blocks": "EEE,   ",
       "Trait": "Standard"
     },
     {
-      "Blocks": "EFE,   ",
-      "Trait": "Standard"
+      "Facing": "AAA,AAA",
+      "Blocks": "EEE,   ",
+      "Trait": "CloneThrice"
     },
     {
+      "Facing": "AAA,AAA",
       "Blocks": "EHE,   ",
-      "Trait": "Optional"
-    },
-    {
-      "Blocks": "EHE,J J",
       "Trait": "Standard"
     },
     {
-      "Blocks": "EHE,I I",
+      "Facing": "AAA,AAA",
+      "Blocks": "EHE,   ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "AAA,AAA",
+      "Blocks": "EHE,   ",
       "Trait": "Standard"
     },
     {
-      "Blocks": "EEE,KBK",
+      "Facing": "AAA,AAA",
+      "Blocks": "EEE,J J",
       "Trait": "Standard"
     },
     {
-      "Blocks": "GGG,   ",
+      "Facing": "AAA,AAA",
+      "Blocks": "FFF,IJI",
       "Trait": "Standard"
     }
   ]

@@ -7,22 +7,27 @@
   },
   "Layers": [
     {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
       "Blocks": "   F   , F   F ,       ,F     F,       , F   F ,   F   ",
       "Trait": "Optional"
     },
     {
+      "Facing": "AAADAAA,ADAAADA,AAAAAAA,DAAAAAD,AAAAAAA,ADAAADA,AAADAAA",
       "Blocks": "   G   , G   G ,       ,G     G,       , G   G ,   G   ",
       "Trait": "CloneThrice"
     },
     {
+      "Facing": "AAADAAA,ADAAADA,AAAAAAA,DAAAAAD,AAAAAAA,ADAAADA,AAADAAA",
       "Blocks": "   G   , G   G ,       ,G     G,       , G   G ,   G   ",
       "Trait": "CloneThrice"
     },
     {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
       "Blocks": " JJEJJ ,JE   EJ,J     J,E     E,J     J,JE   EJ, JJEJJ ",
       "Trait": "Standard"
     },
     {
+      "Facing": "ACCACCA,CAAAAAC,CAAAAAC,AAAAAAA,CAAAAAC,CAAAAAC,ACCACCA",
       "Blocks": " KKAKK ,KAA AAK,KA   AK,A     A,KA   AK,KAA AAK, KKAKK ",
       "Trait": "Standard"
     }

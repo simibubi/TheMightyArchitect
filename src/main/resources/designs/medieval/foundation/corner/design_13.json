@@ -6,10 +6,12 @@
   },
   "Layers": [
     {
+      "Facing": "AC,CA",
       "Blocks": "AK,KD",
       "Trait": "Standard"
     },
     {
+      "Facing": "AA,AC",
       "Blocks": "  , K",
       "Trait": "MaskAbove"
     }

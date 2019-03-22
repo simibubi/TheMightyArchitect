@@ -11,6 +11,7 @@ public enum TesselatorTextures {
 	RoomTransparent("inner_transparent.png"),
 	SelectedRoom("inner_selected.png"),
 	Selection("select.png"),
+	Exporter("exporter.png"),
 	Trim("trim.png");
 	
 	private ResourceLocation location;

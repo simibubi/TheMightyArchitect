@@ -6,18 +6,22 @@
   },
   "Layers": [
     {
+      "Facing": "AAAAAAA,AADADAA",
       "Blocks": "AAAAAAA,DDGDGDD",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAAAAAA,AAAAAAA",
       "Blocks": "AACACAA, D D D ",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAAAAAA,AAAAAAA",
       "Blocks": "AACACAA,       ",
       "Trait": "CloneOnce"
     },
     {
+      "Facing": "AAAAAAA,AAAAAAA",
       "Blocks": "AAAAAAA,       ",
       "Trait": "Standard"
     }

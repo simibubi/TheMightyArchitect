@@ -9,6 +9,7 @@ import com.simibubi.mightyarchitect.control.design.DesignQuery;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.design.StyleGroupManager.StyleGroupDesignProvider;
+import com.simibubi.mightyarchitect.control.design.partials.Corner;
 import com.simibubi.mightyarchitect.control.design.partials.Design;
 import com.simibubi.mightyarchitect.control.design.partials.Design.DesignInstance;
 import com.simibubi.mightyarchitect.control.design.partials.FlatRoof;
@@ -61,9 +62,11 @@ public class DesignHelper {
 		DesignLayer cornerLayer = (layer != DesignLayer.Open) ? layer : DesignLayer.Regular;
 		DesignQuery cornerQuery = new DesignQuery(theme, cornerLayer, DesignType.CORNER).withHeight(height);
 
-		if (width <= length)
+		boolean facadeAlongX = width <= length;
+		boolean facadeAlongZ = width >= length;
+		if (facadeAlongX)
 			facadeA = designProvider.find(facadeQuery.withWidth(width - 2));
-		if (length <= width)
+		if (facadeAlongZ)
 			facadeB = designProvider.find(facadeQuery.withWidth(length - 2));
 
 		Design wallA = (facadeA != null) ? facadeA : designProvider.find(wallQuery.withWidth(width - 2));
@@ -79,10 +82,11 @@ public class DesignHelper {
 			designList.add(wall(wallB, cornerXZ, cornerX, height));
 			designList.add(wall(wallA, cornerX, start, height));
 			designList.add(wall(wallB, start, cornerZ, height));
-			designList.add(corner(corner, start, 135, height));
-			designList.add(corner(corner, cornerZ, 45, height));
-			designList.add(corner(corner, cornerXZ, -45, height));
-			designList.add(corner(corner, cornerX, -135, height));
+			
+			designList.add(corner(corner, start, facadeAlongX? 135 : 45, height, !facadeAlongX));
+			designList.add(corner(corner, cornerZ, facadeAlongX? -45 : 45, height, facadeAlongX));
+			designList.add(corner(corner, cornerXZ, facadeAlongX? -45 : -135, height, !facadeAlongX));
+			designList.add(corner(corner, cornerX, facadeAlongX? 135 : -135, height, facadeAlongX));
 		}
 
 	}
@@ -202,8 +206,8 @@ public class DesignHelper {
 	/**
 	 * Creates a corner of the specified design. Valid angles: 45, 135, -135, -45,
 	 */
-	public static DesignInstance corner(Design design, BlockPos pos, int angle, int height) {
-		return design.create(pos, angle + 45, height);
+	public static DesignInstance corner(Design design, BlockPos pos, int angle, int height, boolean flip) {
+		return ((Corner) design).create(pos, angle + 45, height, flip);
 	}
 
 	/**

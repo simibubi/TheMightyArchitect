@@ -22,7 +22,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
@@ -76,13 +75,13 @@ public class PhaseCreatingPalette extends PhaseBase implements IListenForBlockEv
 		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 
 		for (int i = 0; i < 16; i++) {
-			IBlockState state = palette.get(Palette.values()[i], EnumFacing.UP);
+			IBlockState state = palette.get(Palette.values()[i]);
 			PaletteDefinition paletteDef = getModel().isEditingPrimary() ? getModel().getPrimary()
 					: getModel().getSecondary();
 			
 			if (state == null)
 				continue;
-			if (!state.equals(paletteDef.get(Palette.values()[i], EnumFacing.UP)))
+			if (!state.equals(paletteDef.get(Palette.values()[i])))
 				continue;
 			
 			GlStateManager.pushMatrix();
@@ -123,7 +122,7 @@ public class PhaseCreatingPalette extends PhaseBase implements IListenForBlockEv
 			PaletteDefinition paletteDef = getModel().isEditingPrimary() ? getModel().getPrimary()
 					: getModel().getSecondary();
 			Palette key = grid.get(pos);
-			palette.put(key, paletteDef.get(key, EnumFacing.UP));
+			palette.put(key, paletteDef.get(key));
 			notifyChange();
 		}
 	}

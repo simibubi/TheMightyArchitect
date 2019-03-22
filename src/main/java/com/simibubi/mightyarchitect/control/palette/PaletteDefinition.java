@@ -3,23 +3,33 @@ package com.simibubi.mightyarchitect.control.palette;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.collect.ImmutableMap;
+
+import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockOldLog;
 import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.block.BlockPlanks.EnumType;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockSlab.EnumBlockHalf;
+import net.minecraft.block.BlockStairs.EnumHalf;
+import net.minecraft.block.BlockTrapDoor.DoorHalf;
 import net.minecraft.block.BlockStainedGlassPane;
+import net.minecraft.block.BlockStairs;
 import net.minecraft.block.BlockStone;
 import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.BlockWall;
+import net.minecraft.block.BlockLog.EnumAxis;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Rotation;
+import net.minecraft.util.EnumFacing.Axis;
 
 public class PaletteDefinition {
 
@@ -65,10 +75,6 @@ public class PaletteDefinition {
 					.put(Palette.ROOF_SLAB,
 							Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT,
 									BlockStoneSlab.EnumType.BRICK))
-					.put(Palette.ROOF_SLAB_TOP,
-							Blocks.STONE_SLAB.getDefaultState()
-									.withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.BRICK)
-									.withProperty(BlockSlab.HALF, EnumBlockHalf.TOP))
 					.put(Palette.WINDOW, Blocks.GLASS_PANE.getDefaultState());
 		}
 		return defaultPalette;
@@ -101,34 +107,17 @@ public class PaletteDefinition {
 
 	public IBlockState clear() {
 		if (clear == null)
-			clear = get(Palette.CLEAR, EnumFacing.UP);
+			clear = get(Palette.CLEAR);
 		return clear;
 	}
 
-	public IBlockState get(Palette key, EnumFacing facing) {
-		IBlockState iBlockState = definition.get(key);
-		if (key == Palette.ROOF_SLAB_TOP) {
-			IBlockState roofSlab = get(Palette.ROOF_SLAB, facing);
-			if (roofSlab.getPropertyKeys().contains(BlockSlab.HALF))
-				return roofSlab.withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP);
-			return roofSlab;
-		}
-		return iBlockState == null ? Blocks.AIR.getDefaultState()
-				: iBlockState.withRotation(rotationFromFacing(facing));
+	public IBlockState get(Palette key) {
+		return get(key, BlockOrientation.NONE);
 	}
 
-	private Rotation rotationFromFacing(EnumFacing facing) {
-		switch (facing) {
-		case EAST:
-			return Rotation.COUNTERCLOCKWISE_90;
-		case WEST:
-			return Rotation.CLOCKWISE_90;
-		case NORTH:
-			return Rotation.CLOCKWISE_180;
-		case SOUTH:
-		default:
-			return Rotation.NONE;
-		}
+	private IBlockState get(Palette key, BlockOrientation orientation) {
+		IBlockState iBlockState = definition.get(key);
+		return iBlockState == null ? Blocks.AIR.getDefaultState() : orientation.apply(iBlockState);
 	}
 
 	public void setName(String name) {
@@ -147,7 +136,7 @@ public class PaletteDefinition {
 
 		for (int i = 0; i < values.length; i++) {
 			NBTTagCompound state = new NBTTagCompound();
-			NBTUtil.writeBlockState(state, get(values[i], EnumFacing.UP));
+			NBTUtil.writeBlockState(state, get(values[i]));
 			palette.setTag(values[i].name(), state);
 		}
 
@@ -170,6 +159,99 @@ public class PaletteDefinition {
 			}
 		}
 		return palette;
+	}
+
+	public IBlockState get(PaletteBlockInfo paletteInfo) {
+		IBlockState state = definition.get(paletteInfo.palette);
+		state = state == null ? Blocks.AIR.getDefaultState()
+				: paletteInfo.orientation.apply(state, paletteInfo.forceAxis);
+
+		ImmutableMap<IProperty<?>, Comparable<?>> properties = state.getProperties();
+
+		for (IProperty<?> property : properties.keySet()) {
+			if (property instanceof PropertyDirection) {
+				EnumFacing facing = (EnumFacing) properties.get(property);
+				if (facing.getAxis() == Axis.Y)
+					continue;
+
+				if ((paletteInfo.mirrorZ && facing.getAxis() != Axis.Z)
+						|| (paletteInfo.mirrorX && facing.getAxis() != Axis.X))
+					state = state.withProperty((PropertyDirection) property, facing.getOpposite());
+			}
+		}
+
+		return state;
+	}
+
+	public boolean hasDuplicates() {
+		for (Palette key : definition.keySet()) {
+			if (key != getKeyIgnoreRotation(definition.get(key))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public Palette scan(IBlockState state) {
+		if (state.getBlock() == Blocks.AIR)
+			return null;
+
+		if (definition.containsValue(state)) {
+			for (Palette key : definition.keySet())
+				if (definition.get(key).equals(state))
+					return key;
+		}
+
+		// contains but rotated
+		return getKeyIgnoreRotation(state);
+	}
+
+	protected Palette getKeyIgnoreRotation(IBlockState state) {
+		Map<IBlockState, Palette> scanMap = new HashMap<>();
+		definition.forEach((palette, block) -> {
+			scanMap.put(block, palette);
+		});
+		ImmutableMap<IProperty<?>, Comparable<?>> properties = state.getProperties();
+		for (IProperty<?> property : properties.keySet()) {
+
+			// I'm so sorry
+			if (property == BlockSlab.HALF)
+				for (EnumBlockHalf half : EnumBlockHalf.values())
+					if (scanMap.containsKey(state.withProperty(BlockSlab.HALF, half)))
+						return scanMap.get(state.withProperty(BlockSlab.HALF, half));
+
+			if (property == BlockStairs.HALF)
+				for (EnumHalf half : EnumHalf.values())
+					if (scanMap.containsKey(state.withProperty(BlockStairs.HALF, half)))
+						return scanMap.get(state.withProperty(BlockStairs.HALF, half));
+
+			if (property == BlockTrapDoor.HALF)
+				for (DoorHalf half : DoorHalf.values())
+					if (scanMap.containsKey(state.withProperty(BlockTrapDoor.HALF, half)))
+						return scanMap.get(state.withProperty(BlockTrapDoor.HALF, half));
+
+			if (property == BlockRotatedPillar.AXIS)
+				for (Axis axis : Axis.values())
+					if (scanMap.containsKey(state.withProperty(BlockRotatedPillar.AXIS, axis)))
+						return scanMap.get(state.withProperty(BlockRotatedPillar.AXIS, axis));
+
+			if (property == BlockLog.LOG_AXIS)
+				for (EnumAxis axis : EnumAxis.values())
+					if (scanMap.containsKey(state.withProperty(BlockLog.LOG_AXIS, axis)))
+						return scanMap.get(state.withProperty(BlockLog.LOG_AXIS, axis));
+
+			if (property instanceof PropertyDirection)
+				for (Comparable<?> facing : property.getAllowedValues())
+					if (scanMap.containsKey(state.withProperty((PropertyDirection) property, (EnumFacing) facing)))
+						return scanMap.get(state.withProperty((PropertyDirection) property, (EnumFacing) facing));
+		}
+
+		if (definition.containsValue(state)) {
+			for (Palette key : definition.keySet())
+				if (definition.get(key).equals(state))
+					return key;
+		}
+		return null;
 	}
 
 }

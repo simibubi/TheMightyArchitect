@@ -1,30 +1,20 @@
 {
-  "Radius": 5,
+  "Radius": 3,
   "Size": {
-    "X": 11,
-    "Y": 5,
-    "Z": 11
+    "X": 9,
+    "Y": 2,
+    "Z": 9
   },
   "Layers": [
     {
-      "Blocks": "  DAAAAAD  , AAARRRAAA ,DARRRRRRRAD,AARRRRRRRAA,ARRRRRRRRRA,ARRRRRRRRRA,ARRRRRRRRRA,AARRRRRRRAA,DARRRRRRRAD, AAARRRAAA ,  DAAAAAD  ",
-      "Trait": "CloneOnce"
-    },
-    {
-      "Blocks": "  JACACAJ  , DADRRRDAD ,JARRRRRRRAJ,ADRRRRRRRDA,CRRRRRRRRRC,ARRRRRRRRRA,CRRRRRRRRRC,ADRRRRRRRDA,JARRRRRRRAJ, DADRRRDAD ,  JACACAJ  ",
+      "Facing": "AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA",
+      "Blocks": "    D    ,  DAAAD  , DAQQQAD , AQQQQQA ,DAQQQQQAD, AQQQQQA , DAQQQAD ,  DAAAD  ,    D    ",
       "Trait": "Optional"
     },
     {
-      "Blocks": "  JACACAJ  , DADRRRDAD ,JARRRRRRRAJ,ADRRRRRRRDA,CRRRRRRRRRC,ARRRRRRRRRA,CRRRRRRRRRC,ADRRRRRRRDA,JARRRRRRRAJ, DADRRRDAD ,  JACACAJ  ",
-      "Trait": "CloneOnce"
-    },
-    {
-      "Blocks": "  DAAAAAD  , AAABBBAAA ,DABBNNNBBAD,AABNNNNNBAA,ABNNNNNNNBA,ABNNNNNNNBA,ABNNNNNNNBA,AABNNNNNBAA,DABBNNNBBAD, AAABBBAAA ,  DAAAAAD  ",
+      "Facing": "AAAACAAAA,AACADACAA,ACDAAADCA,AAAAAAAAA,CDAAAAADC,AAAAAAAAA,ACDAAADCA,AACADACAA,AAAACAAAA",
+      "Blocks": "    K    ,  KBGBK  , KGNNNGK , BNNNNNB ,KGNNNNNGK, BNNNNNB , KGNNNGK ,  KBGBK  ,    K    ",
       "Trait": "Standard"
-    },
-    {
-      "Blocks": "  K     K  , B       B ,K         K,           ,           ,           ,           ,           ,K         K, B       B ,  K     K  ",
-      "Trait": "MaskAbove"
     }
   ]
 }

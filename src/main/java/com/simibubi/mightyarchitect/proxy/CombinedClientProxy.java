@@ -2,7 +2,6 @@ package com.simibubi.mightyarchitect.proxy;
 
 import org.lwjgl.input.Keyboard;
 
-import com.simibubi.mightyarchitect.command.BuildomaticoCommands;
 import com.simibubi.mightyarchitect.item.AllItems;
 
 import net.minecraft.client.settings.KeyBinding;
@@ -25,7 +24,6 @@ public class CombinedClientProxy implements IProxy {
 	@Override
 	public void init(FMLInitializationEvent event) {
 		AllItems.initColorHandlers();
-		BuildomaticoCommands.init();
 		
 		COMPOSE = new KeyBinding("Start composing", Keyboard.KEY_G, "The Mighty Architect");
 		ClientRegistry.registerKeyBinding(COMPOSE);

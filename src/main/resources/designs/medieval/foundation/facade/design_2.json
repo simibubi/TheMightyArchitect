@@ -6,22 +6,27 @@
   },
   "Layers": [
     {
+      "Facing": "AAAAAAAAA,AAAAAAAAA,AAAAAAAAA",
       "Blocks": "AAAA AAAA,B BAAAB B,         ",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAAAAAAAA,AAAAAAAAA,AAAAAAAAA",
       "Blocks": "ACAA AACA,D DACAD D,         ",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAAAAAAAA,AAAAAAAAA,AAAAAAAAA",
       "Blocks": "ACAA AACA,  DACAD  ,         ",
       "Trait": "CloneThrice"
     },
     {
+      "Facing": "AAAAAAAAA,AACAAACAA,AAAAAAAAA",
       "Blocks": "AAAA AAAA,  KAAAK  ,   D D   ",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAAAAAAAA,AAACACAAA,AAACACAAA",
       "Blocks": "         ,   KBK   ,   KBK   ",
       "Trait": "MaskAbove"
     }

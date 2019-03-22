@@ -7,26 +7,32 @@
   "ExpandBehaviour": "MergedRepeat",
   "Layers": [
     {
+      "Facing": "AAAAA,AAAAA",
       "Blocks": "BAAAB,AD DA",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAAAA,AAAAA",
       "Blocks": "BAAAB,IJ JI",
       "Trait": "Optional"
     },
     {
+      "Facing": "AAAAA,AAAAA",
       "Blocks": "BACAB,I   I",
       "Trait": "CloneThrice"
     },
     {
+      "Facing": "AAAAA,AAAAA",
       "Blocks": "BACAB,AD DA",
       "Trait": "CloneOnce"
     },
     {
+      "Facing": "AAAAA,AAAAA",
       "Blocks": "BAAAB, ADA ",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAAAA,AACAA",
       "Blocks": "     ,  K  ",
       "Trait": "MaskAbove"
     }

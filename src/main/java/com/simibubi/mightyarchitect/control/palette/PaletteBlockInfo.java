@@ -1,14 +1,15 @@
 package com.simibubi.mightyarchitect.control.palette;
 
-import net.minecraft.util.EnumFacing;
-
 public class PaletteBlockInfo {
 	public Palette palette;
-	public EnumFacing facing;
+	public BlockOrientation orientation;
+	public boolean mirrorX;
+	public boolean mirrorZ;
+	public boolean forceAxis;
 	
-	public PaletteBlockInfo(Palette palette, EnumFacing facing) {
+	public PaletteBlockInfo(Palette palette, BlockOrientation orientation) {
 		this.palette = palette;
-		this.facing = facing;
+		this.orientation = orientation;
 	}
 	
 }

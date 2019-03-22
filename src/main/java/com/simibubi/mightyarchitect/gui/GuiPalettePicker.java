@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.SchematicHologram;
+import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 import com.simibubi.mightyarchitect.control.palette.PaletteStorage;
@@ -19,18 +20,24 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 
 public class GuiPalettePicker extends GuiScreen {
 
 	private int xSize, ySize;
 	private int xTopLeft, yTopLeft;
 	private PaletteButton primary, secondary;
-
+	private boolean scanPicker;
+	
 	public GuiPalettePicker() {
+		this(false);
+	}
+	
+	public GuiPalettePicker(boolean scanPicker) {
 		super();
 		mc = Minecraft.getMinecraft();
+		this.scanPicker = scanPicker;
 	}
 
 	@Override
@@ -65,21 +72,42 @@ public class GuiPalettePicker extends GuiScreen {
 		}
 
 		// create
-		addButton(new SimiButton(id + i, x + 1 + (i % 5) * 23, y + 1 + (i / 5) * 23, GuiResources.ICON_ADD));
-		i++;
+		if (!scanPicker) {
+			addButton(new SimiButton(id + i, x + 1 + (i % 5) * 23, y + 1 + (i / 5) * 23, GuiResources.ICON_ADD));
+			i++;			
+		}
 
 	}
 
+	@Override
+	public void onGuiClosed() {
+		super.onGuiClosed();
+		
+		if (scanPicker && primary.palette.hasDuplicates()) {
+			mc.player.sendMessage(new TextComponentString("WARNING: The scanner palette you chose contains the same block type for several palette entries!"));
+			mc.player.sendMessage(new TextComponentString("The exporter will not be able to distinguish the palette entries and always choose the first one."));
+		}
+	}
+	
 	private void updateSelected() {
 		if (buttonList.contains(primary))
 			buttonList.remove(primary);
 		if (buttonList.contains(secondary))
 			buttonList.remove(secondary);
+		
+		if (scanPicker) {
+			primary = new PaletteButton(DesignExporter.scanningPalette, this, 0, xTopLeft + 134,
+					yTopLeft + 6);
+			primary.enabled = false;
+			buttonList.add(primary);
+			return;
+		}
+		
 		primary = new PaletteButton(ArchitectManager.getModel().getPrimary(), this, 0, xTopLeft + 134,
 				yTopLeft + 6);
+		primary.enabled = false;
 		secondary = new PaletteButton(ArchitectManager.getModel().getSecondary(), this, 1, xTopLeft + 191,
 				yTopLeft + 6);
-		primary.enabled = false;
 		secondary.enabled = false;
 		buttonList.add(primary);
 		buttonList.add(secondary);
@@ -93,11 +121,21 @@ public class GuiPalettePicker extends GuiScreen {
 		super.drawScreen(mouseX, mouseY, partialTicks);
 
 		int color = GuiResources.FONT_COLOR;
-		fontRenderer.drawString("Palette Picker", xTopLeft + 8, yTopLeft + 10, color, false);
+		
+		if (scanPicker) {
+			fontRenderer.drawString("Choose a palette for", xTopLeft + 8, yTopLeft + 10, color, false);
+			fontRenderer.drawString("scanning your Designs.", xTopLeft + 8, yTopLeft + 18, color, false);
+			fontRenderer.drawString("Selected", xTopLeft + 134, yTopLeft + 30, color, false);
+			
+		} else {
+			fontRenderer.drawString("Palette Picker", xTopLeft + 8, yTopLeft + 10, color, false);
+			fontRenderer.drawString("Primary", xTopLeft + 134, yTopLeft + 30, color, false);
+			fontRenderer.drawString("Secondary", xTopLeft + 191, yTopLeft + 30, color, false);
+			
+		}
+		
 		fontRenderer.drawString("Included Palettes", xTopLeft + 8, yTopLeft + 53, color, false);
 		fontRenderer.drawString("My Palettes", xTopLeft + 134, yTopLeft + 53, color, false);
-		fontRenderer.drawString("Primary", xTopLeft + 134, yTopLeft + 30, color, false);
-		fontRenderer.drawString("Secondary", xTopLeft + 191, yTopLeft + 30, color, false);
 
 		for (GuiButton button : buttonList)
 			button.drawButtonForegroundLayer(mouseX, mouseY);
@@ -122,6 +160,13 @@ public class GuiPalettePicker extends GuiScreen {
 
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
+		if (scanPicker) {
+			if (button instanceof PaletteButton)
+				DesignExporter.scanningPalette = ((PaletteButton) button).palette;
+			updateSelected();
+			return;
+		}
+		
 		if (button instanceof SimiButton) {
 			ArchitectManager.createPalette(true);
 			mc.displayGuiScreen(null);			
@@ -132,7 +177,10 @@ public class GuiPalettePicker extends GuiScreen {
 		}
 	}
 
-	private void actionRightClickPerformed(GuiButton button) {
+	protected void actionRightClickPerformed(GuiButton button) {
+		if (scanPicker)
+			return;
+		
 		if (button instanceof SimiButton) {
 			ArchitectManager.createPalette(false);
 			mc.displayGuiScreen(null);
@@ -172,10 +220,10 @@ public class GuiPalettePicker extends GuiScreen {
 			GlStateManager.rotate(-22.5f, .3f, 1f, 0f);
 			GlStateManager.scale(7, -7, 7);
 			GlStateManager.shadeModel(GL11.GL_SMOOTH);
-			mc.getBlockRendererDispatcher().renderBlock(palette.get(Palette.INNER_PRIMARY, EnumFacing.UP), new BlockPos(0,0,0), mc.world, buffer);
-			mc.getBlockRendererDispatcher().renderBlock(palette.get(Palette.INNER_DETAIL, EnumFacing.UP), new BlockPos(1,0,0), mc.world, buffer);
-			mc.getBlockRendererDispatcher().renderBlock(palette.get(Palette.HEAVY_PRIMARY, EnumFacing.UP), new BlockPos(0,1,0), mc.world, buffer);
-			mc.getBlockRendererDispatcher().renderBlock(palette.get(Palette.ROOF_PRIMARY, EnumFacing.UP), new BlockPos(1,1,0), mc.world, buffer);
+			mc.getBlockRendererDispatcher().renderBlock(palette.get(Palette.INNER_PRIMARY), new BlockPos(0,0,0), mc.world, buffer);
+			mc.getBlockRendererDispatcher().renderBlock(palette.get(Palette.INNER_DETAIL), new BlockPos(1,0,0), mc.world, buffer);
+			mc.getBlockRendererDispatcher().renderBlock(palette.get(Palette.HEAVY_PRIMARY), new BlockPos(0,1,0), mc.world, buffer);
+			mc.getBlockRendererDispatcher().renderBlock(palette.get(Palette.ROOF_PRIMARY), new BlockPos(1,1,0), mc.world, buffer);
 			
 			Tessellator.getInstance().draw();
 			GlStateManager.popMatrix();

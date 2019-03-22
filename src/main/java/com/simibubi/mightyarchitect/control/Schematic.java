@@ -144,14 +144,14 @@ public class Schematic {
 
 		HashMap<BlockPos, IBlockState> blockMap = new HashMap<>();
 		assembledSketch.get(0).forEach((pos, paletteInfo) -> {
-			IBlockState state = primary.get(paletteInfo.palette, paletteInfo.facing);
+			IBlockState state = primary.get(paletteInfo);
 			blockMap.put(pos, state);
 			checkBounds(pos);
 		});
 		assembledSketch.get(1).forEach((pos, paletteInfo) -> {
 			if (!assembledSketch.get(0).containsKey(pos)
 					|| !assembledSketch.get(0).get(pos).palette.isPrefferedOver(paletteInfo.palette)) {
-				IBlockState state = secondary.get(paletteInfo.palette, paletteInfo.facing);
+				IBlockState state = secondary.get(paletteInfo);
 				blockMap.put(pos, state);
 				checkBounds(pos);
 			}

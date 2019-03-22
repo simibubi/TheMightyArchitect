@@ -8,10 +8,10 @@ import java.util.Vector;
 
 import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.control.design.partials.Design.DesignInstance;
+import com.simibubi.mightyarchitect.control.palette.BlockOrientation;
 import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 public class Sketch {
@@ -78,7 +78,7 @@ public class Sketch {
 			});
 
 			int y = cuboid.height - 1;
-			PaletteBlockInfo paletteBlockInfo = new PaletteBlockInfo(Palette.FLOOR, EnumFacing.UP);
+			PaletteBlockInfo paletteBlockInfo = new PaletteBlockInfo(Palette.FLOOR, BlockOrientation.TOP_UP);
 			Map<BlockPos, PaletteBlockInfo> blocks = cuboid.secondaryPalette ? secondary : primary;
 			
 			for (int x = 0; x < cuboid.width; x++) {

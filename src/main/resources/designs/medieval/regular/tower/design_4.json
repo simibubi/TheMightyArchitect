@@ -1,37 +1,54 @@
 {
-  "Radius": 3,
+  "Radius": 2,
   "Size": {
     "X": 7,
-    "Y": 7,
+    "Y": 9,
     "Z": 7
   },
   "Layers": [
     {
-      "Blocks": "  EEE  , EGGGE ,EGRRRGE,EGRRRGE,EGRRRGE, EGGGE ,  EEE  ",
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       , JEEEJ , EQQQE , EQQQE , EQQQE , JEEEJ ,       ",
       "Trait": "Standard"
     },
     {
-      "Blocks": "  III  , EGHGE ,IGRRRGI,IHRRRHI,IGRRRGI, EGHGE ,  III  ",
+      "Facing": "AADDDAA,AAAAAAA,DAAAAAD,DAAAAAD,DAAAAAD,AAAAAAA,AADDDAA",
+      "Blocks": "  GGG  , JEEEJ ,GEQQQEG,GEQQQEG,GEQQQEG, JEEEJ ,  GGG  ",
       "Trait": "Standard"
     },
     {
-      "Blocks": "  J J  , EGHGE ,JGRRRGJ, HRRRH ,JGRRRGJ, EGHGE ,  J J  ",
-      "Trait": "Optional"
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "  III  ,  EHE  ,IEQQQEI,IHQQQHI,IEQQQEI,  EHE  ,  III  ",
+      "Trait": "Standard"
     },
     {
-      "Blocks": "  J J  , EGHGE ,JGRRRGJ, HRRRH ,JGRRRGJ, EGHGE ,  J J  ",
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,  EHE  , EQQQE , HQQQH , EQQQE ,  EHE  ,       ",
       "Trait": "CloneThrice"
     },
     {
-      "Blocks": "  EEE  , EGGGE ,EGRRRGE,EGRRRGE,EGRRRGE, EGGGE ,  EEE  ",
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,  EHE  , EQQQE , HQQQH , EQQQE ,  EHE  ,       ",
       "Trait": "Optional"
     },
     {
-      "Blocks": "  J J  , EGHGE ,JGRRRGJ, HRRRH ,JGRRRGJ, EGHGE ,  J J  ",
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,  EEE  , EQQQE , EQQQE , EQQQE ,  EEE  ,       ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       , JEHEJ , EQQQE , HQQQH , EQQQE , JEHEJ ,       ",
       "Trait": "CloneOnce"
     },
     {
-      "Blocks": "  EEE  , FGGGF ,EGNNNGE,EGNNNGE,EGNNNGE, FGGGF ,  EEE  ",
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       , JEEEJ , EQQQE , EQQQE , EQQQE , JEEEJ ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AADDDAA,ADAAADA,ADAAADA,ADAAADA,AADDDAA,AAAAAAA",
+      "Blocks": "       , IGGGI , GNNNG , GNNNG , GNNNG , IGGGI ,       ",
       "Trait": "Standard"
     }
   ]

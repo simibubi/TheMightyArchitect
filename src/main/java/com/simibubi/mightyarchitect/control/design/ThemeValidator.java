@@ -14,6 +14,7 @@ public class ThemeValidator {
 
 	public static void check(DesignTheme theme) {
 		status("Validating the " + theme.getDisplayName() + " theme...");
+		theme.clearDesigns();
 		
 		for (DesignLayer layer : theme.getLayers()) {
 			for (DesignType type : theme.getTypes()) {
@@ -39,7 +40,7 @@ public class ThemeValidator {
 					for (int span = 5; span <= 15; span += 2) {
 						DesignQuery roofQuery = new DesignQuery(theme, layer, type).withWidth(span);
 						if (!exists(roofQuery))
-							alert("No " + layer.getDisplayName() + " " + type.getDisplayName()
+							alert("No " + type.getDisplayName()
 									+ " has a span of " + span + "m.");
 					}
 					break;
@@ -60,7 +61,7 @@ public class ThemeValidator {
 					for (int radius = MIN_RADIUS; radius <= MAX_RADIUS; radius++) {
 						DesignQuery towerQuery = new DesignQuery(theme, layer, type).withWidth(radius * 2 + 1);
 						if (!exists(towerQuery))
-							alert("No " + layer.getDisplayName() + " " + type.getDisplayName()
+							alert("No " + type.getDisplayName()
 									+ " has a radius of " + radius + "m.");
 					}
 					break;

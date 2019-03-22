@@ -7,22 +7,27 @@
   "ExpandBehaviour": "MergedRepeat",
   "Layers": [
     {
+      "Facing": "AAAAA",
       "Blocks": "A   A",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAAAA",
       "Blocks": "I   I",
       "Trait": "CloneThrice"
     },
     {
+      "Facing": "AAAAA",
       "Blocks": "B   B",
       "Trait": "CloneOnce"
     },
     {
+      "Facing": "AAAAA",
       "Blocks": "EEJEE",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAAAA",
       "Blocks": "AIBIA",
       "Trait": "Standard"
     }

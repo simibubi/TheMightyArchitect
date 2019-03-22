@@ -35,11 +35,15 @@ public class FilesHelper {
 		String filename;
 		String filepath;
 		do {
-			filename = name.toLowerCase().replace(' ', '_') + ((index == 0) ? "" : "_" + index) + "." + extension;
+			filename = slug(name) + ((index == 0) ? "" : "_" + index) + "." + extension;
 			index++;
 			filepath = folderPath + "/" + filename;
 		} while (Files.exists(Paths.get(filepath)));
 		return filename;
+	}
+
+	public static String slug(String name) {
+		return name.toLowerCase().replace(' ', '_');
 	}
 
 	public static boolean saveTagCompoundAsJson(NBTTagCompound compound, String path) {
@@ -62,8 +66,27 @@ public class FilesHelper {
 					new InputStreamReader(TheMightyArchitect.class.getClassLoader().getResourceAsStream(filepath))));
 			reader.setLenient(true);
 			JsonElement element = Streams.parse(reader);
+			reader.close();
 			return JsonToNBT.getTagFromJson(element.toString());
 		} catch (NBTException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+		return null;
+	}
+	
+	public static NBTTagCompound loadJsonAsNBT(String filepath) {
+		try {
+			JsonReader reader = new JsonReader(new BufferedReader(
+					new InputStreamReader(Files.newInputStream(Paths.get(filepath), StandardOpenOption.READ))));
+			reader.setLenient(true);
+			JsonElement element = Streams.parse(reader);
+			reader.close();
+			return JsonToNBT.getTagFromJson(element.toString());
+		} catch (NBTException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;

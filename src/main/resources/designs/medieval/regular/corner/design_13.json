@@ -6,26 +6,32 @@
   },
   "Layers": [
     {
+      "Facing": "DA,AA",
       "Blocks": "G ,  ",
       "Trait": "Standard"
     },
     {
+      "Facing": "DA,AA",
       "Blocks": "G ,  ",
       "Trait": "CloneThrice"
     },
     {
+      "Facing": "DA,AA",
       "Blocks": "G ,  ",
       "Trait": "Standard"
     },
     {
+      "Facing": "DA,AA",
       "Blocks": "G ,  ",
       "Trait": "Optional"
     },
     {
+      "Facing": "DA,AA",
       "Blocks": "GJ,J ",
       "Trait": "CloneThrice"
     },
     {
+      "Facing": "DA,AA",
       "Blocks": "GJ,JJ",
       "Trait": "Standard"
     }

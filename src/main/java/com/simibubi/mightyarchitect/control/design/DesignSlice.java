@@ -1,12 +1,17 @@
 package com.simibubi.mightyarchitect.control.design;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.simibubi.mightyarchitect.control.palette.BlockOrientation;
 import com.simibubi.mightyarchitect.control.palette.Palette;
+import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.IStringSerializable;
 
 public class DesignSlice {
@@ -37,6 +42,7 @@ public class DesignSlice {
 
 	private DesignSliceTrait trait;
 	private Palette[][] blocks;
+	private BlockOrientation[][] orientations;
 
 	public static DesignSlice fromNBT(NBTTagCompound sliceTag) {
 		DesignSlice slice = new DesignSlice();
@@ -55,12 +61,52 @@ public class DesignSlice {
 					slice.blocks[z][x] = Palette.getByChar(charAt);
 			}
 		}
+		
+		slice.orientations = new BlockOrientation[length][width];
+		if (sliceTag.hasKey("Facing")) {
+			strips = sliceTag.getString("Facing").split(",");
+			
+			for (int z = 0; z < length; z++) {
+				String strip = strips[z];
+				for (int x = 0; x < width; x++) {
+					char charAt = strip.charAt(x);
+					slice.orientations[z][x] = BlockOrientation.valueOf(charAt);
+				}
+			}
+			
+		} else {
+			for (int z = 0; z < length; z++) {
+				Arrays.fill(slice.orientations[z], BlockOrientation.NONE);
+			}
+		}
 
 		return slice;
 	}
-
-	public Palette[][] getBlocks() {
-		return blocks;
+	
+	public PaletteBlockInfo getBlockAt(int x, int z, int rotation) {
+		return getBlockAt(x, z, rotation, false);
+	}
+	
+	public PaletteBlockInfo getBlockAt(int x, int z, int rotation, boolean mirrorX) {
+		Palette palette = blocks[z][x];
+		if (palette == null)
+			return null;
+		
+		BlockOrientation blockOrientation = orientations[z][x];
+		if (!blockOrientation.hasFacing())
+			blockOrientation = BlockOrientation.valueOf(blockOrientation.getHalf(), EnumFacing.SOUTH);		
+		
+		BlockOrientation withRotation = blockOrientation.withRotation(rotation);
+		PaletteBlockInfo paletteBlockInfo = new PaletteBlockInfo(palette, withRotation);			
+		
+		if (orientations[z][x].hasFacing() && orientations[z][x].getFacing().getAxis() != Axis.Y)
+			paletteBlockInfo.forceAxis = true;
+		
+		if (rotation % 180 == 0)
+			paletteBlockInfo.mirrorZ = mirrorX;
+		else 
+			paletteBlockInfo.mirrorX = mirrorX;
+		return paletteBlockInfo;
 	}
 
 	public DesignSliceTrait getTrait() {

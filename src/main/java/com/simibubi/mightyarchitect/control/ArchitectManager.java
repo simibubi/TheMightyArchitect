@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
@@ -13,7 +14,10 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import com.simibubi.mightyarchitect.control.compose.GroundPlan;
+import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
+import com.simibubi.mightyarchitect.control.design.ThemeStorage;
+import com.simibubi.mightyarchitect.control.design.ThemeValidator;
 import com.simibubi.mightyarchitect.control.helpful.FilesHelper;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 import com.simibubi.mightyarchitect.control.palette.PaletteStorage;
@@ -23,6 +27,8 @@ import com.simibubi.mightyarchitect.control.phase.IDrawBlockHighlights;
 import com.simibubi.mightyarchitect.control.phase.IListenForBlockEvents;
 import com.simibubi.mightyarchitect.control.phase.IRenderGameOverlay;
 import com.simibubi.mightyarchitect.gui.GuiArchitectMenu;
+import com.simibubi.mightyarchitect.gui.GuiDesignExporter;
+import com.simibubi.mightyarchitect.gui.GuiEditTheme;
 import com.simibubi.mightyarchitect.gui.GuiOpener;
 import com.simibubi.mightyarchitect.gui.GuiPalettePicker;
 import com.simibubi.mightyarchitect.gui.GuiTextPrompt;
@@ -83,12 +89,12 @@ public class ArchitectManager {
 
 	public static void design() {
 		GroundPlan groundPlan = model.getGroundPlan();
-		
+
 		if (groundPlan.isEmpty()) {
 			status("Draw some rooms before going to the next step!");
 			return;
 		}
-		
+
 		model.setSketch(groundPlan.theme.getDesignPicker().assembleSketch(groundPlan));
 		enterPhase(ArchitectPhases.Previewing);
 	}
@@ -168,11 +174,41 @@ public class ArchitectManager {
 		GuiOpener.open(new GuiPalettePicker());
 	}
 
-	public static boolean inPhase(ArchitectPhases phase) {
-		return ArchitectManager.phase == phase;
+	public static void pickScanPalette() {
+		GuiOpener.open(new GuiPalettePicker(true));
+	}
+
+	private static void manageThemes() {
+		enterPhase(ArchitectPhases.ManagingThemes);
+	}
+
+	public static void createTheme() {
+		GuiTextPrompt gui = new GuiTextPrompt(result -> {
+			DesignExporter.theme = ThemeStorage.createTheme(result);
+			GuiOpener.open(new GuiEditTheme());
+		}, result -> {
+		});
+		gui.setButtonTextConfirm("Create");
+		gui.setButtonTextAbort("Cancel");
+		gui.setTitle("Enter a name for your Theme:");
+
+		GuiOpener.open(gui);
+	}
+
+	public static void editTheme(DesignTheme theme) {
+		DesignExporter.theme = theme;
+		enterPhase(ArchitectPhases.EditingThemes);
+	}
+
+	public static void changeExportedDesign() {
+		GuiOpener.open(new GuiDesignExporter());
 	}
 
 	// Phases
+
+	public static boolean inPhase(ArchitectPhases phase) {
+		return ArchitectManager.phase == phase;
+	}
 
 	public static void enterPhase(ArchitectPhases newPhase) {
 		IArchitectPhase phaseHandler = phase.getPhaseHandler();
@@ -186,13 +222,11 @@ public class ArchitectManager {
 	public static Schematic getModel() {
 		return model;
 	}
-	
-	
 
 	public static ArchitectPhases getPhase() {
 		return phase;
 	}
-	
+
 	// Events
 
 	@SubscribeEvent
@@ -221,7 +255,7 @@ public class ArchitectManager {
 	public static void onKeyTyped(KeyInputEvent event) {
 		if (!Keyboard.getEventKeyState())
 			return;
-		
+
 		if (CombinedClientProxy.COMPOSE.isPressed()) {
 			if (menu.isFocused())
 				return;
@@ -250,7 +284,8 @@ public class ArchitectManager {
 				IBlockState stateForPlacement = ((ItemBlock) item).getBlock().getStateForPlacement(event.getWorld(),
 						event.getPos(), event.getFace(), (float) hitVec.x, (float) hitVec.y, (float) hitVec.z,
 						event.getItemStack().getMetadata(), event.getEntityPlayer(), event.getHand());
-				((IListenForBlockEvents) phaseHandler).onBlockPlaced(event.getPos().offset(event.getFace()), stateForPlacement);
+				((IListenForBlockEvents) phaseHandler).onBlockPlaced(event.getPos().offset(event.getFace()),
+						stateForPlacement);
 			}
 		}
 
@@ -276,12 +311,12 @@ public class ArchitectManager {
 	public static void onDrawGameOverlay(RenderGameOverlayEvent.Post event) {
 		if (event.getType() != ElementType.HOTBAR)
 			return;
-		
+
 		IArchitectPhase phaseHandler = phase.getPhaseHandler();
 		if (phaseHandler instanceof IRenderGameOverlay) {
 			((IRenderGameOverlay) phaseHandler).renderGameOverlay(event);
 		}
-		
+
 		menu.drawPassive();
 	}
 
@@ -292,7 +327,7 @@ public class ArchitectManager {
 	public static void resetSchematic() {
 		model = new Schematic();
 	}
-	
+
 	public static boolean handleMenuInput(int key, char character) {
 		switch (phase) {
 		case Composing:
@@ -304,10 +339,11 @@ public class ArchitectManager {
 				unload();
 				return true;
 			}
+			break;
 		case CreatingPalette:
 			if (character == 'f') {
-				GuiTextPrompt gui = new GuiTextPrompt(result -> ArchitectManager.finishPalette(result),
-						result -> {});
+				GuiTextPrompt gui = new GuiTextPrompt(result -> ArchitectManager.finishPalette(result), result -> {
+				});
 				gui.setButtonTextConfirm("Save and Apply");
 				gui.setButtonTextAbort("Cancel");
 				gui.setTitle("Enter a name for your Palette:");
@@ -315,6 +351,10 @@ public class ArchitectManager {
 				return true;
 			}
 			if (character == 'r') {
+				design();
+				return true;
+			}
+			if (character == 'c') {
 				pickPalette();
 				return true;
 			}
@@ -322,6 +362,7 @@ public class ArchitectManager {
 				unload();
 				return true;
 			}
+			break;
 		case Editing:
 			break;
 		case Empty:
@@ -329,12 +370,18 @@ public class ArchitectManager {
 				unload();
 				return true;
 			}
-			int ordinal = character - '1';
-			if (ordinal < DesignTheme.values().length && ordinal >= 0) {
-				compose(DesignTheme.values()[ordinal]);
-				return true;
-			} else 
+			if (character == 'm') {
+				manageThemes();
 				return false;
+			}
+			int index = character - '1';
+			ThemeStorage.reloadExternal();
+			List<DesignTheme> themes = ThemeStorage.getAllThemes();
+			if (index < themes.size() && index >= 0) {
+				compose(themes.get(index));
+				return true;
+			}
+			break;
 		case Previewing:
 			if (character == 'c') {
 				pickPalette();
@@ -349,11 +396,12 @@ public class ArchitectManager {
 				return true;
 			}
 			if (character == 's') {
-				GuiTextPrompt gui = new GuiTextPrompt(result -> ArchitectManager.writeToFile(result), result -> {});
+				GuiTextPrompt gui = new GuiTextPrompt(result -> ArchitectManager.writeToFile(result), result -> {
+				});
 				gui.setButtonTextConfirm("Save Schematic");
 				gui.setButtonTextAbort("Cancel");
 				gui.setTitle("Enter a name for your Build:");
-				
+
 				GuiOpener.open(gui);
 				return true;
 			}
@@ -367,15 +415,64 @@ public class ArchitectManager {
 				unload();
 				return true;
 			}
+			break;
+		case ManagingThemes:
+			if (character == 'c') {
+				pickScanPalette();
+				return true;
+			}
+			if (character == 'n') {
+				createTheme();
+				return true;
+			}
+			if (character == 'e') {
+				enterPhase(ArchitectPhases.ListForEdit);
+				return false;
+			}
+			if (character == 'f') {
+				unload();
+				return true;
+			}
+			break;
+		case ListForEdit:
+			if (character == 'c') {
+				enterPhase(ArchitectPhases.ManagingThemes);
+				return false;
+			}
+			index = character - '1';
+			themes = ThemeStorage.getImported();
+			if (index < themes.size() && index >= 0) {
+				editTheme(themes.get(index));
+				return true;
+			}
+			break;
+		case EditingThemes:
+			if (character == 'e') {
+				GuiOpener.open(new GuiEditTheme());
+				return true;
+			}
+			if (character == 'c') {
+				changeExportedDesign();
+				return true;
+			}
+			if (character == 'f') {
+				manageThemes();
+				return false;
+			}
+			if (character == 'v') {
+				ThemeValidator.check(DesignExporter.theme);
+				return true;
+			}
+			break;
 		default:
 			break;
 		}
 		return false;
 	}
-	
+
 	public static Map<String, String> getKeybinds() {
 		Map<String, String> keybinds = new HashMap<>();
-		
+
 		switch (phase) {
 		case Composing:
 			keybinds.put("U", "Unload");
@@ -383,16 +480,18 @@ public class ArchitectManager {
 			break;
 		case CreatingPalette:
 			keybinds.put("U", "Unload");
-			keybinds.put("R", "Return to Picker");
+			keybinds.put("R", "Re-roll Designs");
+			keybinds.put("C", "Return to Picker");
 			keybinds.put("F", "Save Palette");
 			break;
 		case Editing:
 			break;
 		case Empty:
-			for (DesignTheme theme : DesignTheme.values()) {
-				keybinds.put("" + (theme.ordinal() + 1), theme.getDisplayName());				
+			List<DesignTheme> allThemes = ThemeStorage.getAllThemes();
+			for (DesignTheme theme : allThemes) {
+				keybinds.put("" + (allThemes.indexOf(theme) + 1), theme.getDisplayName());
 			}
-			keybinds.put("...", "More Themes coming!");
+			keybinds.put("M", "Manage Themes...");
 			keybinds.put("C", "Cancel");
 			break;
 		case Previewing:
@@ -404,10 +503,29 @@ public class ArchitectManager {
 				keybinds.put("P", "Print blocks into world");
 			keybinds.put("U", "Unload");
 			break;
+		case ManagingThemes:
+			keybinds.put("C", "Change reader palette");
+			keybinds.put("N", "Create new Theme");
+			keybinds.put("E", "Edit an existing Theme");
+			keybinds.put("F", "Finish and Exit");
+			break;
+		case ListForEdit:
+			allThemes = ThemeStorage.getImported();
+			for (DesignTheme theme : allThemes) {
+				keybinds.put("" + (allThemes.indexOf(theme) + 1), theme.getDisplayName());
+			}
+			keybinds.put("C", "Cancel");
+			break;
+		case EditingThemes:
+			keybinds.put("E", "Edit Theme settings");
+			keybinds.put("C", "Change Design traits");
+			keybinds.put("V", "Validate Theme");
+			keybinds.put("F", "Finish editing");
+			break;
 		default:
 			break;
 		}
-		
+
 		return keybinds;
 	}
 

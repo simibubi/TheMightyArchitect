@@ -6,22 +6,27 @@
   },
   "Layers": [
     {
+      "Facing": "AA,AA",
       "Blocks": "AD,DA",
       "Trait": "Standard"
     },
     {
+      "Facing": "AA,AA",
       "Blocks": "B , B",
       "Trait": "CloneOnce"
     },
     {
+      "Facing": "AA,AA",
       "Blocks": "AD,DA",
       "Trait": "Optional"
     },
     {
+      "Facing": "AA,AA",
       "Blocks": "B , D",
       "Trait": "CloneOnce"
     },
     {
+      "Facing": "AA,AA",
       "Blocks": "A ,  ",
       "Trait": "CloneOnce"
     }

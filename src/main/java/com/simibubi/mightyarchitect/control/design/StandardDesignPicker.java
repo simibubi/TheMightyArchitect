@@ -42,7 +42,7 @@ public class StandardDesignPicker implements IPickDesigns {
 				if (room != stack.highest())
 					return;
 				
-				DesignLayer roofLayer = DesignLayer.Independent;
+				DesignLayer roofLayer = DesignLayer.Roofing;
 				
 				switch (room.roofType) {
 				case ROOF:

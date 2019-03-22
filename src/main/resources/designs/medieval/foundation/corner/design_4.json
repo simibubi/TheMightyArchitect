@@ -6,18 +6,22 @@
   },
   "Layers": [
     {
+      "Facing": "DA,AA",
       "Blocks": "GJ,JA",
       "Trait": "Standard"
     },
     {
+      "Facing": "AA,AA",
       "Blocks": "AD,DA",
       "Trait": "Standard"
     },
     {
+      "Facing": "DA,AA",
       "Blocks": "GJ,JA",
       "Trait": "Standard"
     },
     {
+      "Facing": "AA,AC",
       "Blocks": "AD,DK",
       "Trait": "Standard"
     }

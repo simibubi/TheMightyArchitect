@@ -24,9 +24,7 @@ public enum Palette {
 	ROOF_SLAB("Main Roofing Slabs", 3),
 	
 	// dynamic
-	ROOF_SLAB_TOP("", 3),
-	CLEAR("", 10),
-	ROOF_SECONDARY("", 4); // old palettes dont crash
+	CLEAR("", 10);
 	
 	private int priority;
 	private String displayName;

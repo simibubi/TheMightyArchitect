@@ -67,7 +67,7 @@ public enum DesignType {
 		case TOWER_ROOF:
 			return "Tower Radius";
 		case WALL:
-			return "Expandability";
+			return "Size Behaviour";
 		default:
 			return "";
 		}
@@ -104,6 +104,14 @@ public enum DesignType {
 		default:
 			return Collections.emptyList();
 		}
+	}
+	
+	public static List<DesignType> defaults() {
+		return ImmutableList.of(WALL, FACADE, CORNER);
+	}
+	
+	public static List<DesignType> roofTypes() {
+		return ImmutableList.of(ROOF, FLAT_ROOF, TOWER_FLAT_ROOF, TOWER_ROOF);
 	}
 
 }

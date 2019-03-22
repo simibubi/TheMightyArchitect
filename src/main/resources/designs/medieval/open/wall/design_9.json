@@ -7,10 +7,12 @@
   "ExpandBehaviour": "MergedRepeat",
   "Layers": [
     {
+      "Facing": "AAA",
       "Blocks": "J J",
       "Trait": "Optional"
     },
     {
+      "Facing": "AAA",
       "Blocks": "JJJ",
       "Trait": "Standard"
     }

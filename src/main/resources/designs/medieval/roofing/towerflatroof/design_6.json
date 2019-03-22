@@ -1,0 +1,20 @@
+{
+  "Radius": 5,
+  "Size": {
+    "X": 11,
+    "Y": 2,
+    "Z": 11
+  },
+  "Layers": [
+    {
+      "Facing": "AAAADADAAAA,ABDAAAAADBA,ADAAAAAAADA,AAAAAAAAAAA,DAAAAAAAAAD,AAAAAAAAAAA,DAAAAAAAAAD,AAAAAAAAAAA,ADAAAAAAADA,ABDAAAAADBA,AAAADADAAAA",
+      "Blocks": "   IGEGI   , PGMMMMMGP , GMMMMMMMG ,IMMMMMMMMMI,GMMMMMMMMMG,EMMMMMMMMME,GMMMMMMMMMG,IMMMMMMMMMI, GMMMMMMMG , PGMMMMMGP ,   IGEGI   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAACCACCAAA,AACAAAAACAA,ACAAAAAAACA,CAAAAAAAAAC,CAAAAAAAAAC,AAAAAAAAAAA,CAAAAAAAAAC,CAAAAAAAAAC,ACAAAAAAACA,AACAAAAACAA,AAACCACCAAA",
+      "Blocks": "   PPOPP   ,  P     P  , P       P ,P         P,P         P,O         O,P         P,P         P, P       P ,  P     P  ,   PPOPP   ",
+      "Trait": "Standard"
+    }
+  ]
+}

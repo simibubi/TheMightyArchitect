@@ -8,13 +8,11 @@ import java.util.Set;
 import com.google.common.collect.ImmutableSet;
 import com.simibubi.mightyarchitect.control.design.DesignSlice;
 import com.simibubi.mightyarchitect.control.design.DesignSlice.DesignSliceTrait;
-import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 public abstract class Design {
@@ -62,12 +60,12 @@ public abstract class Design {
 			DesignSlice layer = toPrint.get(y);
 			for (int x = 0; x < size.getX(); x++) {
 				for (int z = 0; z < size.getZ(); z++) {
-					Palette key = layer.getBlocks()[z][x];
-					if (key == null)
+					PaletteBlockInfo block = layer.getBlockAt(x, z, instance.rotationY);
+					if (block == null)
 						continue;
 					BlockPos pos = rotateAroundZero(new BlockPos(x, y, z).add(totalShift), instance.rotationY)
 							.add(position);
-					putBlock(blocks, pos, key, EnumFacing.fromAngle(instance.rotationY));
+					putBlock(blocks, pos, block);
 				}
 			}
 		}
@@ -81,9 +79,9 @@ public abstract class Design {
 		return toPrint;
 	}
 
-	protected void putBlock(Map<BlockPos, PaletteBlockInfo> blocks, BlockPos pos, Palette palette, EnumFacing facing) {
-		if (!blocks.containsKey(pos) || !blocks.get(pos).palette.isPrefferedOver(palette)) {
-			blocks.put(pos, new PaletteBlockInfo(palette, facing));
+	protected void putBlock(Map<BlockPos, PaletteBlockInfo> blocks, BlockPos pos, PaletteBlockInfo block) {
+		if (!blocks.containsKey(pos) || !blocks.get(pos).palette.isPrefferedOver(block.palette)) {
+			blocks.put(pos, block);
 		}
 	}
 
@@ -131,6 +129,7 @@ public abstract class Design {
 		int rotationY, rotationZ;
 		int width, height, depth;
 		Design template;
+		boolean flippedX;
 
 		public DesignInstance(Design template, BlockPos anchor, int rotation, int width, int height, int depth) {
 			this.template = template;

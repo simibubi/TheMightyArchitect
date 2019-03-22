@@ -1,26 +1,35 @@
 {
   "Size": {
     "X": 3,
-    "Y": 4,
+    "Y": 5,
     "Z": 2
   },
   "ExpandBehaviour": "MergedRepeat",
   "Layers": [
     {
-      "Blocks": "EFE,   ",
+      "Facing": "AAA,AAA",
+      "Blocks": "EFE,I I",
       "Trait": "Standard"
     },
     {
-      "Blocks": "EHE,   ",
-      "Trait": "CloneOnce"
-    },
-    {
+      "Facing": "AAA,AAA",
       "Blocks": "EHE,J J",
       "Trait": "Optional"
     },
     {
-      "Blocks": "EFE,J J",
+      "Facing": "AAA,AAA",
+      "Blocks": "EHE,J J",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAA,AAA",
+      "Blocks": "EFE,I I",
       "Trait": "Standard"
+    },
+    {
+      "Facing": "AAA,CAC",
+      "Blocks": "   ,KBK",
+      "Trait": "MaskAbove"
     }
   ]
 }

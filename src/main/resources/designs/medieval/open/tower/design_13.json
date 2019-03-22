@@ -7,10 +7,12 @@
   },
   "Layers": [
     {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
       "Blocks": "   J   , J   J ,       ,J     J,       , J   J ,   J   ",
       "Trait": "CloneOnce"
     },
     {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
       "Blocks": "   J   , J   J ,       ,J     J,       , J   J ,   J   ",
       "Trait": "Standard"
     }

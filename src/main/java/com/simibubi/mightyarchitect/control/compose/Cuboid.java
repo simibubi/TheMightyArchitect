@@ -15,7 +15,7 @@ public class Cuboid {
 	public Cuboid(BlockPos origin, BlockPos size) {
 		this(origin, size.getX(), size.getY(), size.getZ());
 	}
-	
+
 	public Cuboid(BlockPos origin, int width, int height, int length) {
 		this.x = origin.getX() + ((width < 0) ? width : 0);
 		this.y = origin.getY() + ((height < 0) ? height : 0);
@@ -62,7 +62,7 @@ public class Cuboid {
 	public BlockPos getCenter() {
 		return getOrigin().add(width / 2, height / 2, length / 2);
 	}
-	
+
 	public void moveToAttach(Room other, EnumFacing side, int shift) {
 		if (side != EnumFacing.EAST && side != EnumFacing.WEST)
 			centerOnOthersX(other, shift);
@@ -99,6 +99,12 @@ public class Cuboid {
 
 	private void centerOnOthersX(Cuboid other, int shift) {
 		this.x = other.x + shift + (other.width - this.width) / 2;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof Cuboid && ((Cuboid) obj).getOrigin().equals(getOrigin())
+				&& ((Cuboid) obj).getSize().equals(getSize());
 	}
 
 }

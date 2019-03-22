@@ -6,6 +6,7 @@
   },
   "Layers": [
     {
+      "Facing": "D",
       "Blocks": "G",
       "Trait": "CloneOnce"
     }

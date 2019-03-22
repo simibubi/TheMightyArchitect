@@ -53,6 +53,7 @@ public class GuiTextPrompt extends GuiScreen {
 		this.nameField.setDisabledTextColour(-1);
 		this.nameField.setEnableBackgroundDrawing(false);
 		this.nameField.setMaxStringLength(35);
+		this.nameField.setFocused(true);
 
 		confirm = new GuiButton(1, xTopLeft - 5, yTopLeft + 50, 100, 20, buttonTextConfirm);
 		abort = new GuiButton(2, xTopLeft + 100, yTopLeft + 50, 100, 20, buttonTextAbort);

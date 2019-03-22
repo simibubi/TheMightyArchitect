@@ -6,6 +6,7 @@
   },
   "Layers": [
     {
+      "Facing": "DC,CA",
       "Blocks": "GK,K ",
       "Trait": "Standard"
     }

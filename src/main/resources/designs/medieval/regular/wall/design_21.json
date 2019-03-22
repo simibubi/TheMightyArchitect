@@ -7,10 +7,12 @@
   "ExpandBehaviour": "MergedRepeat",
   "Layers": [
     {
+      "Facing": "DDD",
       "Blocks": "GGG",
       "Trait": "Standard"
     },
     {
+      "Facing": "DDD",
       "Blocks": "GGG",
       "Trait": "Optional"
     }

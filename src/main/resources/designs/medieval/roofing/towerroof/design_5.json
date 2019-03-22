@@ -1,0 +1,30 @@
+{
+  "Radius": 4,
+  "Size": {
+    "X": 11,
+    "Y": 4,
+    "Z": 11
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAAAAAAAA,AAAADADAAAA,AADAAAAADAA,AAAAAAAAAAA,ADAAAAAAADA,AAAAAAAAAAA,ADAAAAAAADA,AAAAAAAAAAA,AADAAAAADAA,AAAADADAAAA,AAAAAAAAAAA",
+      "Blocks": "    I I    ,  I GMG I  , IGM   MGI ,  M     M  ,IG       GI, M       M ,IG       GI,  M     M  , IGM   MGI ,  I GMG I  ,    I I    ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAACBCAAAA,ABCCCACCCBA,ACAAAAAAACA,ACAAAAAAACA,CCAAAAAAACC,BAAAAAAAAAB,CCAAAAAAACC,ACAAAAAAACA,ACAAAAAAACA,ABCCCACCCBA,AAAACBCAAAA",
+      "Blocks": "    PPP    , PPPPOPPPP , POMMMMMOP , PMMMMMMMP ,PPMMMMMMMPP,POMMMMMMMOP,PPMMMMMMMPP, PMMMMMMMP , POMMMMMOP , PPPPOPPPP ,    PPP    ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAAAA,AAAAAAAAAAA,AAAAACAAAAA,AAACAAACAAA,AAAAAAAAAAA,AACAAAAACAA,AAAAAAAAAAA,AAACAAACAAA,AAAAACAAAAA,AAAAAAAAAAA,AAAAAAAAAAA",
+      "Blocks": "           ,           ,     P     ,   P O P   ,    OMO    ,  POMMMOP  ,    OMO    ,   P O P   ,     P     ,           ,           ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAACAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA",
+      "Blocks": "           ,           ,           ,           ,           ,     P     ,           ,           ,           ,           ,           ",
+      "Trait": "Standard"
+    }
+  ]
+}

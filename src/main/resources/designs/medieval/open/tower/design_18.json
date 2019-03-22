@@ -7,6 +7,7 @@
   },
   "Layers": [
     {
+      "Facing": "AAAAAAAAAAA,AAAAAAAAAAA,AADAAAAADAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AADAAAAADAA,AAAAAAAAAAA,AAAAAAAAAAA",
       "Blocks": "    JJJ    ,  JJJ JJJ  , JG     GJ , J       J ,JJ       JJ,J         J,JJ       JJ, J       J , JG     GJ ,  JJJ JJJ  ,    JJJ    ",
       "Trait": "Standard"
     }

@@ -4,11 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.simibubi.mightyarchitect.control.design.DesignSlice;
-import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 public class Roof extends Design {
@@ -56,29 +54,29 @@ public class Roof extends Design {
 				int currentDepth = (size.getX() - 1) / 2 - Math.abs((size.getX() - 1) / 2 - x);
 
 				for (int z = -(depth + zShift + 1); z < 0; z++) {
-					Palette key = layer.getBlocks()[0][x];
+					PaletteBlockInfo block = layer.getBlockAt(x, 0, instance.rotationY);
 
-					if (key == null)
+					if (block == null)
 						continue;
 					if (crossRoof && depth - z + zShift > currentDepth)
 						continue;
 
 					BlockPos pos = position
 							.add(rotateAroundZero(new BlockPos(x, y, z).add(totalShift), instance.rotationY));
-					putBlock(blocks, pos, key, EnumFacing.fromAngle(instance.rotationY));
+					putBlock(blocks, pos, block);
 				}
 								
 				for (int z = 0; z < size.getZ(); z++) {
-					Palette key = layer.getBlocks()[z][x];
+					PaletteBlockInfo block = layer.getBlockAt(x, z, instance.rotationY);
 
-					if (key == null)
+					if (block == null)
 						continue;
 					if (crossRoof && depth - z + zShift > currentDepth)
 						continue;
 
 					BlockPos pos = rotateAroundZero(new BlockPos(x, y, z).add(totalShift), instance.rotationY)
 							.add(position);
-					putBlock(blocks, pos, key, EnumFacing.fromAngle(instance.rotationY));
+					putBlock(blocks, pos, block);
 				}
 			}
 		}

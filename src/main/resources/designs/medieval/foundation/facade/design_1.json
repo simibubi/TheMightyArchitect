@@ -6,22 +6,27 @@
   },
   "Layers": [
     {
+      "Facing": "AAAAAAAAA,AAAAAAAAA",
       "Blocks": "AAAAAAAAA, D D D D ",
       "Trait": "CloneOnce"
     },
     {
+      "Facing": "AAAAAAAAA,AAAAAAAAA",
       "Blocks": "AACACACAA, J J J J ",
       "Trait": "CloneOnce"
     },
     {
+      "Facing": "AAAAAAAAA,AAAAAAAAA",
       "Blocks": "AACACACAA, J J J J ",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAAAAAAAA,AAAAAAAAA",
       "Blocks": "BBBBBBBBB, D D D D ",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAAAAAAAA,ACAACAACA",
       "Blocks": "         , K BKB K ",
       "Trait": "MaskAbove"
     }

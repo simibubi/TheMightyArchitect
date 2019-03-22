@@ -7,26 +7,32 @@
   "ExpandBehaviour": "MergedRepeat",
   "Layers": [
     {
+      "Facing": "AAA,AAA",
       "Blocks": "ABA,D D",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAA,AAA",
       "Blocks": "BAB,D D",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAA,AAA",
       "Blocks": "ABA,   ",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAA,AAA",
       "Blocks": "BAB,J J",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAA,AAA",
       "Blocks": "ABA,I I",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAA,ACA",
       "Blocks": "   ,AKA",
       "Trait": "MaskAbove"
     }

@@ -6,18 +6,22 @@
   },
   "Layers": [
     {
+      "Facing": "D",
       "Blocks": "G",
       "Trait": "Standard"
     },
     {
+      "Facing": "D",
       "Blocks": "G",
       "Trait": "CloneThrice"
     },
     {
+      "Facing": "D",
       "Blocks": "G",
       "Trait": "Optional"
     },
     {
+      "Facing": "D",
       "Blocks": "G",
       "Trait": "Standard"
     }

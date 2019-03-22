@@ -7,10 +7,12 @@
   },
   "Layers": [
     {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
       "Blocks": "I   I,     ,     ,     ,I   I",
       "Trait": "MaskBelow"
     },
     {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
       "Blocks": "BJJJB,J   J,J   J,J   J,BJJJB",
       "Trait": "Standard"
     }

@@ -7,18 +7,22 @@
   "ExpandBehaviour": "MergedRepeat",
   "Layers": [
     {
+      "Facing": "AAAA,AAAA",
       "Blocks": "FEEF,    ",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAAA,AAAA",
       "Blocks": "EEEE,    ",
       "Trait": "CloneOnce"
     },
     {
+      "Facing": "AAAA,AAAA",
       "Blocks": "FEEF,    ",
       "Trait": "Standard"
     },
     {
+      "Facing": "DDDD,AAAA",
       "Blocks": "GGGG,JJJJ",
       "Trait": "Standard"
     }

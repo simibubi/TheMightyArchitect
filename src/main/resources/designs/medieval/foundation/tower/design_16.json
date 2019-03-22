@@ -1,38 +1,15 @@
 {
-  "Radius": 5,
+  "Radius": 4,
   "Size": {
-    "X": 13,
-    "Y": 7,
-    "Z": 13
+    "X": 11,
+    "Y": 1,
+    "Z": 11
   },
   "Layers": [
     {
-      "Blocks": "     D D     ,   BBAAABB   ,  GAARRRAAG  , BARRRRRRRAB , BARRRRRRRAB ,DARRRRRRRRRAD, ARRRRRRRRRA ,DARRRRRRRRRAD, BARRRRRRRAB , BARRRRRRRAB ,  GAARRRAAG  ,   BBAAABB   ,     D D     ",
+      "Facing": "AAAAAAAAAAA,AAACAAACAAA,AAAAAAAAAAA,ACAAAAAAACA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,ACAAAAAAACA,AAAAAAAAAAA,AAACAAACAAA,AAAAAAAAAAA",
+      "Blocks": "    D D    ,  DKABAKD  , DBANNNABD , KANNNNNAK ,DANNNNNNNAD, BNNNNNNNB ,DANNNNNNNAD, KANNNNNAK , DBANNNABD ,  DKABAKD  ,    D D    ",
       "Trait": "Standard"
-    },
-    {
-      "Blocks": "     J J     ,   IIGCGII   ,  JAARRRAAJ  , IARRRRRRRAI , IARRRRRRRAI ,JGRRRRRRRRRGJ, CRRRRRRRRRC ,JGRRRRRRRRRGJ, IARRRRRRRAI , IARRRRRRRAI ,  JAARRRAAJ  ,   IIGCGII   ,     J J     ",
-      "Trait": "CloneOnce"
-    },
-    {
-      "Blocks": "     J J     ,   IIGCGII   ,  JAARRRAAJ  , IARRRRRRRAI , IARRRRRRRAI ,JGRRRRRRRRRGJ, CRRRRRRRRRC ,JGRRRRRRRRRGJ, IARRRRRRRAI , IARRRRRRRAI ,  JAARRRAAJ  ,   IIGCGII   ,     J J     ",
-      "Trait": "Optional"
-    },
-    {
-      "Blocks": "     D D     ,   BBAAABB   ,  JAARRRAAJ  , BARRRRRRRAB , BARRRRRRRAB ,DARRRRRRRRRAD, ARRRRRRRRRA ,DARRRRRRRRRAD, BARRRRRRRAB , BARRRRRRRAB ,  JAARRRAAJ  ,   BBAAABB   ,     D D     ",
-      "Trait": "Standard"
-    },
-    {
-      "Blocks": "     J J     ,   IIGCGII   ,  JAARRRAAJ  , IARRRRRRRAI , IARRRRRRRAI ,JGRRRRRRRRRGJ, CRRRRRRRRRC ,JGRRRRRRRRRGJ, IARRRRRRRAI , IARRRRRRRAI ,  JAARRRAAJ  ,   IIGCGII   ,     J J     ",
-      "Trait": "CloneOnce"
-    },
-    {
-      "Blocks": "     D D     ,   BBAAABB   ,  GAANNNAAG  , BANNNNNNNAB , BANNNNNNNAB ,DANNNNNNNNNAD, ANNNNNNNNNA ,DANNNNNNNNNAD, BANNNNNNNAB , BANNNNNNNAB ,  GAANNNAAG  ,   BBAAABB   ,     D D     ",
-      "Trait": "Standard"
-    },
-    {
-      "Blocks": "     KBK     ,             ,             ,             ,             ,K           K,B           B,K           K,             ,             ,             ,             ,     KBK     ",
-      "Trait": "MaskAbove"
     }
   ]
 }

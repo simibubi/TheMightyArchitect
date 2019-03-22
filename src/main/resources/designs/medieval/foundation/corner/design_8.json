@@ -6,10 +6,12 @@
   },
   "Layers": [
     {
+      "Facing": "A",
       "Blocks": "A",
       "Trait": "CloneOnce"
     },
     {
+      "Facing": "A",
       "Blocks": "D",
       "Trait": "CloneThrice"
     }

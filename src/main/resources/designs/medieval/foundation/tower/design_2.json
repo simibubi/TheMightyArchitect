@@ -1,29 +1,29 @@
 {
   "Radius": 2,
   "Size": {
-    "X": 7,
-    "Y": 5,
-    "Z": 7
+    "X": 5,
+    "Y": 4,
+    "Z": 5
   },
   "Layers": [
     {
-      "Blocks": "  AAA  , ABBBA ,ABRRRBA,ABRRRBA,ABRRRBA, ABBBA ,  AAA  ",
-      "Trait": "CloneOnce"
-    },
-    {
-      "Blocks": "  D D  , DBCBD ,DBRRRBD, CRRRC ,DBRRRBD, DBCBD ,  D D  ",
-      "Trait": "Optional"
-    },
-    {
-      "Blocks": "  D D  , ABCBA ,DBRRRBD, CRRRC ,DBRRRBD, ABCBA ,  D D  ",
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": "DAAAD,AQQQA,AQQQA,AQQQA,DAAAD",
       "Trait": "Standard"
     },
     {
-      "Blocks": "  KBK  , DBBBD ,KBRRRBK,BBRRRBB,KBRRRBK, DBBBD ,  KBK  ",
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": "JACAJ,AQQQA,CQQQC,AQQQA,JACAJ",
       "Trait": "Standard"
     },
     {
-      "Blocks": "       , AAAAA , ANNNA , ANNNA , ANNNA , AAAAA ,       ",
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": "JACAJ,AQQQA,CQQQC,AQQQA,JACAJ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": "DBBBD,BNNNB,BNNNB,BNNNB,DBBBD",
       "Trait": "Standard"
     }
   ]

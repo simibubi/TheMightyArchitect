@@ -7,14 +7,17 @@
   },
   "Layers": [
     {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
       "Blocks": "   I   , I   I ,       ,I     I,       , I   I ,   I   ",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
       "Blocks": "   J   , J   J ,       ,J     J,       , J   J ,   J   ",
       "Trait": "CloneThrice"
     },
     {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
       "Blocks": "   I   , I   I ,       ,I     I,       , I   I ,   I   ",
       "Trait": "Optional"
     }

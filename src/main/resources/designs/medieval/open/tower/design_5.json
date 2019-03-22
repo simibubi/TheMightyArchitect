@@ -7,30 +7,37 @@
   },
   "Layers": [
     {
+      "Facing": "AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA",
       "Blocks": "           ,    AAA    ,  AA   AA  ,  A     A  , A       A , A       A , A       A ,  A     A  ,  AA   AA  ,    AAA    ,           ",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA",
       "Blocks": "           ,    I I    ,  I     I  ,           , I       I ,           , I       I ,           ,  I     I  ,    I I    ,           ",
       "Trait": "CloneOnce"
     },
     {
+      "Facing": "AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA",
       "Blocks": "           ,    J J    ,  I     I  ,           , J       J ,           , J       J ,           ,  I     I  ,    J J    ,           ",
       "Trait": "Optional"
     },
     {
+      "Facing": "AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA",
       "Blocks": "           ,    J J    ,  J     J  ,           , J       J ,           , J       J ,           ,  J     J  ,    J J    ,           ",
       "Trait": "CloneThrice"
     },
     {
+      "Facing": "AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA",
       "Blocks": "           ,    J J    ,  I     I  ,           , J       J ,           , J       J ,           ,  I     I  ,    J J    ,           ",
       "Trait": "Optional"
     },
     {
+      "Facing": "AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA",
       "Blocks": "           ,    I I    ,  I     I  ,           , I       I ,           , I       I ,           ,  I     I  ,    I I    ,           ",
       "Trait": "CloneOnce"
     },
     {
+      "Facing": "AAAACCCAAAA,AACCAAACCAA,ACAAAAAAACA,ACAAAAAAACA,CAAAAAAAAAC,CAAAAAAAAAC,CAAAAAAAAAC,ACAAAAAAACA,ACAAAAAAACA,AACCAAACCAA,AAAACCCAAAA",
       "Blocks": "    KKK    ,  KKAEAKK  , KAE   EAK , KE     EK ,KA       AK,KE       EK,KA       AK, KE     EK , KAE   EAK ,  KKAEAKK  ,    KKK    ",
       "Trait": "Standard"
     }

@@ -2,24 +2,23 @@
   "Radius": 2,
   "Size": {
     "X": 5,
-    "Y": 4,
+    "Y": 3,
     "Z": 5
   },
   "Layers": [
     {
-      "Blocks": "DAAAD,ARRRA,ARRRA,ARRRA,DAAAD",
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": "DAAAD,AQQQA,AQQQA,AQQQA,DAAAD",
       "Trait": "Standard"
     },
     {
-      "Blocks": "JACAJ,ARRRA,CRRRC,ARRRA,JACAJ",
-      "Trait": "Standard"
-    },
-    {
-      "Blocks": "JACAJ,ARRRA,CRRRC,ARRRA,JACAJ",
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": "JACAJ,AQQQA,CQQQC,AQQQA,JACAJ",
       "Trait": "CloneThrice"
     },
     {
-      "Blocks": "DBBBD,BNNNB,BNNNB,BNNNB,DBBBD",
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": "DAAAD,ANNNA,ANNNA,ANNNA,DAAAD",
       "Trait": "Standard"
     }
   ]

@@ -4,11 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.simibubi.mightyarchitect.control.design.DesignSlice;
-import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 public class FlatRoof extends Design {
@@ -53,10 +51,10 @@ public class FlatRoof extends Design {
 		for (int y = 0; y < printedSlices.size(); y++) {
 			for (int x = 0; x < size.getX(); x++) {
 				for (int z = size.getZ() - 1; z < instance.depth - size.getZ() + 2 * margin; z++) {
-					Palette key = printedSlices.get(y).getBlocks()[0][x];
-					if (key == null) continue;
+					PaletteBlockInfo block = printedSlices.get(y).getBlockAt(x, 0, instance.rotationY);
+					if (block == null) continue;
 					BlockPos pos = position.add(rotateAroundZero(new BlockPos(x - xShift, y + yShift, -z + zShift), instance.rotationY));
-					putBlock(blocks, pos, key, EnumFacing.fromAngle(instance.rotationY)); 
+					putBlock(blocks, pos, block); 
 				}
 			}
 		}
@@ -64,11 +62,11 @@ public class FlatRoof extends Design {
 		// Drag roof blocks into width
 		for (int y = 0; y < printedSlices.size(); y++) {
 			for (int x = size.getX(); x <= instance.width - (size.getX() - margin - 1); x++) {
-				for (int z = -(instance.depth - size.getZ() + zShift - 2); z < size.getZ(); z++) {
-					Palette key = printedSlices.get(y).getBlocks()[Math.max(z, 0)][size.getX() - 1];
-					if (key == null) continue;
+				for (int z = -(instance.depth - size.getZ() - zShift - 1); z < size.getZ(); z++) {
+					PaletteBlockInfo block = printedSlices.get(y).getBlockAt(size.getX() - 1, Math.max(z, 0), instance.rotationY);
+					if (block == null) continue;
 					BlockPos pos = position.add(rotateAroundZero(new BlockPos(x - xShift, y + yShift, z + zShift - size.getZ() + 1), instance.rotationY));
-					putBlock(blocks, pos, key, EnumFacing.fromAngle(instance.rotationY)); 
+					putBlock(blocks, pos, block); 
 				}
 			}
 		}
@@ -80,15 +78,16 @@ public class FlatRoof extends Design {
 			DesignSlice layer = printedSlices.get(y);
 			for (int x = 0; x < size.getX(); x++) {
 				for (int z = 0; z < size.getZ(); z++) {
-					Palette key = layer.getBlocks()[z][x];
-					if (key == null)
+					PaletteBlockInfo block = layer.getBlockAt(x, z, instance.rotationY, false);
+					PaletteBlockInfo blockMirrored = layer.getBlockAt(x, z, instance.rotationY, true);
+					if (block == null)
 						continue;
 					BlockPos pos = rotateAroundZero(new BlockPos(x, y, z).add(totalShift), instance.rotationY)
 							.add(position);
 					BlockPos posMirrored = rotateAroundZero(new BlockPos(instance.width - x - 1, y, z).add(mirrorShift), instance.rotationY)
 							.add(position);
-					putBlock(blocks, pos, key, EnumFacing.fromAngle(instance.rotationY));
-					putBlock(blocks, posMirrored, key, EnumFacing.fromAngle(instance.rotationY));
+					putBlock(blocks, pos, block);
+					putBlock(blocks, posMirrored, blockMirrored);
 				}
 			}
 		}

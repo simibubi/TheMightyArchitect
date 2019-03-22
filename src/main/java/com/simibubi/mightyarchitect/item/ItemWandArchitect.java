@@ -1,8 +1,11 @@
 package com.simibubi.mightyarchitect.item;
 
 import com.simibubi.mightyarchitect.block.AllBlocks;
+import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
+import com.simibubi.mightyarchitect.control.design.ThemeStorage;
+import com.simibubi.mightyarchitect.control.phase.ArchitectPhases;
 import com.simibubi.mightyarchitect.gui.GuiDesignExporter;
 import com.simibubi.mightyarchitect.gui.GuiOpener;
 
@@ -30,35 +33,35 @@ public class ItemWandArchitect extends ItemForMightyArchitects {
 			IBlockState blockState = worldIn.getBlockState(anchor);
 
 			if (blockState.getBlock() == AllBlocks.slice_marker) {
+				if (!ArchitectManager.inPhase(ArchitectPhases.EditingThemes))
+					return EnumActionResult.FAIL;
+				
 				ItemStack heldItem = player.getHeldItem(hand);
 				if (heldItem.hasTagCompound()) {
-					String name = DesignExporter.exportDesign(worldIn, anchor, heldItem);
+					String name = DesignExporter.exportDesign(worldIn, anchor);
 					if (!name.isEmpty()) {
-						player.sendMessage(new TextComponentString("Exported new Design: " + name));
+						player.sendMessage(new TextComponentString(name));
 					}					
 				}
 			} else if (blockState.getBlock() == Blocks.DIAMOND_BLOCK) {
-				for (DesignTheme theme : DesignTheme.values()) {
+				for (DesignTheme theme : ThemeStorage.getAllThemes()) {
 					theme.clearDesigns();
 				}
 				player.sendMessage(new TextComponentString("Reloading desings..."));
 			} else {
+				if (!ArchitectManager.inPhase(ArchitectPhases.EditingThemes))
+					return EnumActionResult.FAIL;
 				GuiOpener.open(new GuiDesignExporter());
 			}
 		}
 		
-		player.getCooldownTracker().setCooldown(this, 10);
+		player.getCooldownTracker().setCooldown(this, 5);
 		return EnumActionResult.SUCCESS;
 	}
 	
 	@Override
 	public int getItemStackLimit(ItemStack stack) {
 		return 1;
-	}
-
-	@Override
-	public boolean hasEffect(ItemStack stack) {
-		return true;
 	}
 
 }

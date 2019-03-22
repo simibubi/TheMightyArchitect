@@ -1,5 +1,11 @@
 package com.simibubi.mightyarchitect.control.phase;
 
+import com.simibubi.mightyarchitect.control.design.DesignExporter;
+import com.simibubi.mightyarchitect.control.phase.export.PhaseAddDesign;
+import com.simibubi.mightyarchitect.control.phase.export.PhaseEditTheme;
+import com.simibubi.mightyarchitect.control.phase.export.PhaseListThemesForEditing;
+import com.simibubi.mightyarchitect.control.phase.export.PhaseManageThemes;
+
 public enum ArchitectPhases {
 
 	/** No active architect process, don't do anything. */
@@ -15,7 +21,14 @@ public enum ArchitectPhases {
 	CreatingPalette(new PhaseCreatingPalette(), "Pallete Mode"),
 	
 	/** Modify the blocks in the world before writing it to the Schematic (WIP) */
-	Editing(new PhaseEditing(), "");
+	Editing(new PhaseEditing(), ""),
+	
+	// Creator phases
+	
+	ManagingThemes(new PhaseManageThemes(), "Manage Themes"),
+	ListForEdit(new PhaseListThemesForEditing(), "Edit a Theme"),
+	EditingThemes(new PhaseEditTheme(), "Editing "),
+	AddingDesign(new PhaseAddDesign(), "Import Mode");
 	
 	private IArchitectPhase handler;
 	private String displayTitle;
@@ -30,6 +43,8 @@ public enum ArchitectPhases {
 	}
 	
 	public String getDisplayTitle() {
+		if (this == ArchitectPhases.EditingThemes)
+			 return displayTitle + DesignExporter.theme.getDisplayName();
 		return displayTitle;
 	}
 

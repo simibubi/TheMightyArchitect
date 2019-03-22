@@ -7,6 +7,7 @@
   "ExpandBehaviour": "MergedRepeat",
   "Layers": [
     {
+      "Facing": "AAA",
       "Blocks": "ADA",
       "Trait": "Standard"
     }

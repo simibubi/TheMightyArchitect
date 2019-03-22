@@ -7,22 +7,27 @@
   "ExpandBehaviour": "MergedRepeat",
   "Layers": [
     {
+      "Facing": "AAAAAAA,AAAAAAA",
       "Blocks": "EEEEEEE,J     J",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAAAAAA,AAAAAAA",
       "Blocks": "EEHEHEE,       ",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAAAAAA,AAAAAAA",
       "Blocks": "EEHEHEE,       ",
       "Trait": "Optional"
     },
     {
+      "Facing": "AAAAAAA,AAAAAAA",
       "Blocks": "EEHEHEE,J     J",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAAAAAA,AAAAAAA",
       "Blocks": "EEEEEEE,I     I",
       "Trait": "Standard"
     }

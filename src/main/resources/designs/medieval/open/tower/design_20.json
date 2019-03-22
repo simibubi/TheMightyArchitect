@@ -7,18 +7,22 @@
   },
   "Layers": [
     {
+      "Facing": "AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA",
       "Blocks": "    I I    ,  I     I  , I       I ,           ,I         I,           ,I         I,           , I       I ,  I     I  ,    I I    ",
       "Trait": "Optional"
     },
     {
+      "Facing": "AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA",
       "Blocks": "    J J    ,  J     J  , J       J ,           ,J         J,           ,J         J,           , J       J ,  J     J  ,    J J    ",
       "Trait": "CloneThrice"
     },
     {
+      "Facing": "AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA",
       "Blocks": "    I I    ,  I     I  , I       I ,           ,I         I,           ,I         I,           , I       I ,  I     I  ,    I I    ",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA",
       "Blocks": "    ABA    ,  AB   BA  , A       A , B       B ,A         A,B         B,A         A, B       B , A       A ,  AB   BA  ,    ABA    ",
       "Trait": "Standard"
     }

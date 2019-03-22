@@ -1,0 +1,15 @@
+{
+  "Size": {
+    "X": 3,
+    "Y": 1,
+    "Z": 3
+  },
+  "Layers": [
+    {
+      "Facing": "CAA,CAA,ACC",
+      "Blocks": "PMM,PMM,OPP",
+      "Trait": "Standard"
+    }
+  ],
+  "Margin": 1
+}

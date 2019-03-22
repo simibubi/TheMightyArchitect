@@ -6,30 +6,37 @@
   },
   "Layers": [
     {
+      "Facing": "AA,AA",
       "Blocks": "AD,D ",
       "Trait": "Standard"
     },
     {
+      "Facing": "AA,AA",
       "Blocks": "BJ,J ",
       "Trait": "Standard"
     },
     {
+      "Facing": "AA,AA",
       "Blocks": "B ,  ",
       "Trait": "CloneThrice"
     },
     {
+      "Facing": "AA,AA",
       "Blocks": "A ,  ",
       "Trait": "Optional"
     },
     {
+      "Facing": "AA,AA",
       "Blocks": "BJ,J ",
       "Trait": "CloneOnce"
     },
     {
+      "Facing": "AA,AA",
       "Blocks": "BD,D ",
       "Trait": "Standard"
     },
     {
+      "Facing": "DC,CA",
       "Blocks": "GK,K ",
       "Trait": "Standard"
     }

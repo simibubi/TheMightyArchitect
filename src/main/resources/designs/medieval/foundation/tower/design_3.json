@@ -1,26 +1,20 @@
 {
-  "Radius": 3,
+  "Radius": 2,
   "Size": {
     "X": 7,
-    "Y": 4,
+    "Y": 2,
     "Z": 7
   },
   "Layers": [
     {
-      "Blocks": "  AAA  , AAAAA ,AARRRAA,AARRRAA,AARRRAA, AAAAA ,  AAA  ",
-      "Trait": "Standard"
-    },
-    {
-      "Blocks": "  ACA  , DBRBD ,ABRRRBA,CRRRRRC,ABRRRBA, DBRBD ,  ACA  ",
-      "Trait": "Optional"
-    },
-    {
-      "Blocks": "  ACA  , DBRBD ,ABRRRBA,CRRRRRC,ABRRRBA, DBRBD ,  ACA  ",
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "   D   , DABAD , ANNNA ,DBNNNBD, ANNNA , DABAD ,   D   ",
       "Trait": "CloneOnce"
     },
     {
-      "Blocks": "  AAA  , ABBBA ,ABNNNBA,ABNNNBA,ABNNNBA, ABBBA ,  AAA  ",
-      "Trait": "Standard"
+      "Facing": "AAACAAA,ACAAACA,AAAAAAA,CAAAAAC,AAAAAAA,ACAAACA,AAACAAA",
+      "Blocks": "   K   , K   K ,       ,K     K,       , K   K ,   K   ",
+      "Trait": "MaskAbove"
     }
   ]
 }

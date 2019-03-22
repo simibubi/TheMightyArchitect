@@ -7,14 +7,17 @@
   "ExpandBehaviour": "MergedRepeat",
   "Layers": [
     {
+      "Facing": "DADAD,AAAAA",
       "Blocks": "GEGEG,     ",
       "Trait": "CloneOnce"
     },
     {
+      "Facing": "DADAD,AAAAA",
       "Blocks": "GFGFG,J J J",
       "Trait": "CloneOnce"
     },
     {
+      "Facing": "DADAD,AAAAA",
       "Blocks": "GFGFG,I I I",
       "Trait": "Standard"
     }

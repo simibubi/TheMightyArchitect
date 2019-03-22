@@ -8,19 +8,15 @@ import java.util.List;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import com.google.common.collect.ImmutableList;
+import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.gui.widgets.DynamicLabel;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollArea;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollArea.IScrollAction;
-import com.simibubi.mightyarchitect.networking.PacketNbt;
-import com.simibubi.mightyarchitect.networking.PacketSender;
 
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class GuiDesignExporter extends GuiScreen {
 
@@ -29,7 +25,6 @@ public class GuiDesignExporter extends GuiScreen {
 
 	private List<ScrollArea> scrollAreas;
 
-	private ScrollArea scrollAreaTheme;
 	private ScrollArea scrollAreaLayer;
 	private ScrollArea scrollAreaType;
 	private ScrollArea scrollAreaAdditionalData;
@@ -50,24 +45,11 @@ public class GuiDesignExporter extends GuiScreen {
 		xTopLeft = (this.width - this.xSize) / 2;
 		yTopLeft = (this.height - this.ySize) / 2;
 
-		DesignTheme theme = DesignTheme.Medieval;
-		DesignLayer layer = DesignLayer.Independent;
-		DesignType type = DesignType.WALL;
-		additionalDataValue = -1;
+		DesignTheme theme = DesignExporter.theme;
+		DesignLayer layer = DesignExporter.layer;
+		DesignType type = DesignExporter.type;
 
-		ItemStack heldItem = mc.player.getHeldItemMainhand();
-		if (heldItem.hasTagCompound()) {
-			NBTTagCompound tag = heldItem.getTagCompound();
-
-			if (tag.hasKey("Theme"))
-				theme = DesignTheme.valueOf(tag.getString("Theme"));
-			if (tag.hasKey("Layer"))
-				layer = DesignLayer.valueOf(tag.getString("Layer"));
-			if (tag.hasKey("Type"))
-				type = DesignType.valueOf(tag.getString("Type"));
-			if (tag.hasKey("Additional"))
-				additionalDataValue = tag.getInteger("Additional");
-		}
+		additionalDataValue = DesignExporter.designParameter;
 
 		labelTheme = new DynamicLabel(xTopLeft + 96, yTopLeft + 28);
 		labelLayer = new DynamicLabel(xTopLeft + 96, yTopLeft + 48);
@@ -82,15 +64,10 @@ public class GuiDesignExporter extends GuiScreen {
 	private void initScrollAreas(DesignTheme theme, DesignLayer layer, DesignType type) {
 		scrollAreas.clear();
 
-		List<DesignTheme> themes = ImmutableList.copyOf(DesignTheme.values());
 		List<DesignLayer> layers = theme.getLayers();
 
 		if (!layers.contains(layer))
-			layer = DesignLayer.Independent;
-
-		List<DesignType> types = theme.getTypes();
-		if (!types.contains(type))
-			type = DesignType.WALL;
+			layer = DesignLayer.Regular;
 
 		List<String> layerOptions = new ArrayList<>();
 		layers.forEach(l -> layerOptions.add(l.getDisplayName()));
@@ -99,6 +76,7 @@ public class GuiDesignExporter extends GuiScreen {
 			@Override
 			public void onScroll(int position) {
 				labelLayer.text = layerOptions.get(position);
+				initTypeScrollArea(theme, layers.get(position), DesignExporter.type);
 			}
 		});
 		scrollAreaLayer.setBounds(xTopLeft + 93, yTopLeft + 45, 70, 14);
@@ -107,9 +85,41 @@ public class GuiDesignExporter extends GuiScreen {
 		labelLayer.text = layer.getDisplayName();
 		scrollAreas.add(scrollAreaLayer);
 
+		initTypeScrollArea(theme, layer, type);
+
+		labelTheme.text = theme.getDisplayName();
+	}
+
+	protected void initTypeScrollArea(DesignTheme theme, DesignLayer layer, DesignType type) {
+		List<DesignType> types = new ArrayList<>(theme.getTypes());
+		
+		// Roofs only in Roofing layer and vice versa
+		if (layer == DesignLayer.Roofing) {
+			types.retainAll(DesignType.roofTypes());
+		} else {
+			types.removeAll(DesignType.roofTypes());			
+		}
+		
+		// Fallback if previous type is not selectable anymore
+		if (!types.contains(type)) {
+			type = DesignType.WALL;
+			if (layer == DesignLayer.Roofing) {
+				for (DesignType dt : DesignType.roofTypes()) {
+					if (types.contains(dt)) {
+						type = dt;
+						break;
+					}
+				}
+			}
+		}
+
+		// Prepare options
 		List<String> typeOptions = new ArrayList<>();
 		types.forEach(t -> typeOptions.add(t.getDisplayName()));
 
+		if (scrollAreas.contains(scrollAreaType))
+			scrollAreas.remove(scrollAreaType);
+		
 		scrollAreaType = new ScrollArea(typeOptions, new IScrollAction() {
 			@Override
 			public void onScroll(int position) {
@@ -122,24 +132,7 @@ public class GuiDesignExporter extends GuiScreen {
 		scrollAreaType.setState(types.indexOf(type));
 		labelType.text = type.getDisplayName();
 		scrollAreas.add(scrollAreaType);
-
-		List<String> themeOptions = new ArrayList<>();
-		themes.forEach(t -> themeOptions.add(t.getDisplayName()));
-
-		scrollAreaTheme = new ScrollArea(themeOptions, new IScrollAction() {
-			@Override
-			public void onScroll(int position) {
-				labelTheme.text = themeOptions.get(position);
-				initScrollAreas(DesignTheme.values()[position], layers.get(scrollAreaLayer.getState()),
-						types.get(scrollAreaType.getState()));
-			}
-		});
-		scrollAreaTheme.setBounds(xTopLeft + 93, yTopLeft + 25, 70, 14);
-		scrollAreaTheme.setTitle("Theme");
-		scrollAreaTheme.setState(themes.indexOf(theme));
-		labelTheme.text = theme.getDisplayName();
-		scrollAreas.add(scrollAreaTheme);
-
+		
 		initAdditionalDataScrollArea(type);
 	}
 
@@ -151,9 +144,9 @@ public class GuiDesignExporter extends GuiScreen {
 			if (type.hasSizeData()) {
 				if (additionalDataValue == -1)
 					additionalDataValue = 1;
-				
+
 				labelAdditionalData.text = additionalDataValue + "m";
-				scrollAreaAdditionalData = new ScrollArea(1, 32, new IScrollAction() {
+				scrollAreaAdditionalData = new ScrollArea(1, 33, new IScrollAction() {
 					@Override
 					public void onScroll(int position) {
 						additionalDataValue = position;
@@ -162,14 +155,14 @@ public class GuiDesignExporter extends GuiScreen {
 				});
 				scrollAreaAdditionalData.setNumeric(true);
 
-			} else if (type.hasSubtypes()) {				
+			} else if (type.hasSubtypes()) {
 				if (additionalDataValue == -1)
 					additionalDataValue = 0;
-				
+
 				List<String> subtypeOptions = type.getSubtypeOptions();
 				if (additionalDataValue >= subtypeOptions.size())
 					additionalDataValue = 0;
-					
+
 				labelAdditionalData.text = subtypeOptions.get(additionalDataValue);
 				scrollAreaAdditionalData = new ScrollArea(subtypeOptions, new IScrollAction() {
 					@Override
@@ -184,7 +177,7 @@ public class GuiDesignExporter extends GuiScreen {
 			scrollAreaAdditionalData.setTitle(additionalDataKey);
 			scrollAreaAdditionalData.setBounds(xTopLeft + 93, yTopLeft + 85, 70, 14);
 			scrollAreaAdditionalData.setState(additionalDataValue);
-			
+
 		} else {
 
 			additionalDataValue = -1;
@@ -204,7 +197,7 @@ public class GuiDesignExporter extends GuiScreen {
 		int color = GuiResources.FONT_COLOR;
 		fontRenderer.drawString("Export custom Designs", xTopLeft + 10, yTopLeft + 10, color, false);
 
-		fontRenderer.drawString("Theme / Style", xTopLeft + 10, yTopLeft + 28, color, false);
+		fontRenderer.drawString("Theme", xTopLeft + 10, yTopLeft + 28, color, false);
 		fontRenderer.drawString("Building Layer", xTopLeft + 10, yTopLeft + 48, color, false);
 		fontRenderer.drawString("Design Type", xTopLeft + 10, yTopLeft + 68, color, false);
 		fontRenderer.drawString(additionalDataKey, xTopLeft + 10, yTopLeft + 88, color, false);
@@ -221,19 +214,22 @@ public class GuiDesignExporter extends GuiScreen {
 
 	@Override
 	public void onGuiClosed() {
-		ItemStack heldItemMainhand = mc.player.getHeldItemMainhand();
-		NBTTagCompound nbt = new NBTTagCompound();
-
-		DesignTheme chosenTheme = DesignTheme.values()[scrollAreaTheme.getState()];
-		nbt.setString("Theme", chosenTheme.name());
-		nbt.setString("Layer", chosenTheme.getLayers().get(scrollAreaLayer.getState()).name());
-		nbt.setString("Type", chosenTheme.getTypes().get(scrollAreaType.getState()).name());
-
-		if (additionalDataValue != -1)
-			nbt.setInteger("Additional", additionalDataValue);
-
-		heldItemMainhand.setTagCompound(nbt);
-		PacketSender.INSTANCE.sendToServer(new PacketNbt(heldItemMainhand));
+		DesignTheme theme = DesignExporter.theme;
+		DesignExporter.layer = theme.getLayers().get(scrollAreaLayer.getState());
+		
+		List<DesignType> types = new ArrayList<>(theme.getTypes());
+		
+		// Roofs only in Roofing layer and vice versa
+		if (DesignExporter.layer == DesignLayer.Roofing) {
+			types.retainAll(DesignType.roofTypes());
+		} else {
+			types.removeAll(DesignType.roofTypes());			
+		}
+		
+		DesignExporter.type = types.get(scrollAreaType.getState());
+		DesignExporter.designParameter = additionalDataValue;
+		
+		DesignExporter.changed = true;
 	}
 
 	@Override
@@ -261,7 +257,8 @@ public class GuiDesignExporter extends GuiScreen {
 		int scroll = Mouse.getEventDWheel();
 		if (scroll != 0) {
 			int amount = (int) (scroll / -120f);
-			scrollAreas.forEach(area -> area.tryScroll(i, j, amount));
+			scrollAreaLayer.tryScroll(i, j, amount);
+			scrollAreaType.tryScroll(i, j, amount);
 			if (scrollAreaAdditionalData != null)
 				scrollAreaAdditionalData.tryScroll(i, j, amount);
 		}

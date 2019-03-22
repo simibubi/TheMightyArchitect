@@ -7,10 +7,12 @@
   "ExpandBehaviour": "MergedRepeat",
   "Layers": [
     {
+      "Facing": "AAA,AAA",
       "Blocks": "AIA,D D",
       "Trait": "Standard"
     },
     {
+      "Facing": "AAA,CAC",
       "Blocks": "   ,K K",
       "Trait": "MaskAbove"
     }
