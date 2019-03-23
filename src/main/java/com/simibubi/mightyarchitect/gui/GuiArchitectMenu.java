@@ -2,13 +2,13 @@ package com.simibubi.mightyarchitect.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.lwjgl.input.Keyboard;
 
 import com.simibubi.mightyarchitect.control.ArchitectManager;
+import com.simibubi.mightyarchitect.control.ArchitectMenu;
+import com.simibubi.mightyarchitect.control.ArchitectMenu.KeyBindList;
 import com.simibubi.mightyarchitect.proxy.CombinedClientProxy;
 
 import net.minecraft.client.Minecraft;
@@ -19,7 +19,7 @@ import net.minecraft.client.renderer.GlStateManager;
 
 public class GuiArchitectMenu extends GuiScreen {
 
-	private Map<String, String> keybinds;
+	private KeyBindList keybinds;
 	private String title;
 	private List<String> tooltip;
 	private boolean focused;
@@ -32,7 +32,7 @@ public class GuiArchitectMenu extends GuiScreen {
 	private float movingY;
 
 	public GuiArchitectMenu() {
-		keybinds = new HashMap<>();
+		keybinds = new KeyBindList();
 		tooltip = new ArrayList<>();
 		title = "";
 		focused = false;
@@ -47,7 +47,7 @@ public class GuiArchitectMenu extends GuiScreen {
 
 		// update tooltips and keybinds
 		tooltip = ArchitectManager.getPhase().getPhaseHandler().getToolTip();
-		keybinds = ArchitectManager.getKeybinds();
+		keybinds = ArchitectMenu.getKeybinds();
 		title = ArchitectManager.getPhase().getDisplayTitle();
 
 		menuWidth = 158;
@@ -89,7 +89,7 @@ public class GuiArchitectMenu extends GuiScreen {
 			return;
 		}
 		
-		if (ArchitectManager.handleMenuInput(keyCode, typedChar))
+		if (ArchitectMenu.handleMenuInput(keyCode, typedChar))
 			mc.displayGuiScreen(null);
 	}
 
@@ -122,7 +122,12 @@ public class GuiArchitectMenu extends GuiScreen {
 		font.drawString(title, xPos, yPos, 0xEEEEEE, false);
 
 		yPos += 4;
-		for (String key : keybinds.keySet()) {
+		for (String key : keybinds.getKeys()) {
+			if (key.isEmpty()) {
+				yPos += font.FONT_HEIGHT / 2;
+				continue;
+			}
+			
 			yPos += font.FONT_HEIGHT;
 			font.drawString("[" + key + "] " + keybinds.get(key), xPos, yPos, 0xEEEEEE, false);
 			font.drawString(">", xPos - 12, yPos, 0xCCDDFF, true);

@@ -1,5 +1,6 @@
 package com.simibubi.mightyarchitect.control.phase.export;
 
+import java.nio.file.Paths;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
@@ -29,7 +30,8 @@ public class PhaseManageThemes extends PhaseBase {
 
 	@Override
 	public List<String> getToolTip() {
-		return ImmutableList.of("Create your own themes or make Extensions to existing themes!");
+		return ImmutableList.of("Create your own themes for the architect, or import someone elses.",
+				"Drop downloaded theme files into " + Paths.get("themes/").toAbsolutePath().toString());
 	}
 
 }
