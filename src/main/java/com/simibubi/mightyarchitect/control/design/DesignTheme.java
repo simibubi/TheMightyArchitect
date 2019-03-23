@@ -73,11 +73,6 @@ public class DesignTheme {
 			designs = DesignResourceLoader.loadDesignsForTheme(this);
 		}
 
-		if (!getLayers().contains(designLayer))
-			fail(getDisplayName() + " theme does not support " + designLayer.getDisplayName() + " layers.");
-		if (!getTypes().contains(designType))
-			fail(getDisplayName() + " theme does not support the type " + designLayer.getDisplayName() + ".");
-
 		if (designs.containsKey(designLayer)) {
 			Map<DesignType, Set<Design>> typeMap = designs.get(designLayer);
 
@@ -87,10 +82,6 @@ public class DesignTheme {
 		}
 
 		return new HashSet<>();
-	}
-
-	private void fail(String message) {
-		throw new IllegalArgumentException(message);
 	}
 
 	public void clearDesigns() {

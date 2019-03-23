@@ -180,7 +180,7 @@ public class ArchitectManager {
 
 	public static void createTheme() {
 		GuiTextPrompt gui = new GuiTextPrompt(result -> {
-			DesignExporter.theme = ThemeStorage.createTheme(result);
+			DesignExporter.setTheme(ThemeStorage.createTheme(result));
 			GuiOpener.open(new GuiEditTheme());
 		}, result -> {
 		});
@@ -192,7 +192,7 @@ public class ArchitectManager {
 	}
 
 	public static void editTheme(DesignTheme theme) {
-		DesignExporter.theme = theme;
+		DesignExporter.setTheme(theme);
 		enterPhase(ArchitectPhases.EditingThemes);
 	}
 

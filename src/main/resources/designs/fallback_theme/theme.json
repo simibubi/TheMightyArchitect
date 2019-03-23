@@ -1,0 +1,21 @@
+{
+  "Designer": "simibubi",
+  "Types": [
+    "WALL",
+    "FACADE",
+    "CORNER",
+    "FLAT_ROOF",
+    "ROOF",
+    "TOWER",
+    "TOWER_FLAT_ROOF",
+    "TOWER_ROOF"
+  ],
+  "Layers": [
+    "Roofing",
+    "Regular",
+    "Foundation",
+    "Open",
+    "Special"
+  ],
+  "Name": "Fallback Theme"
+}

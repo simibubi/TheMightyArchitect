@@ -10,6 +10,7 @@ public class DesignQuery {
 
 	public int desiredWidth;
 	public int desiredHeight;
+	public boolean fallback;
 
 	public DesignQuery(DesignTheme theme, DesignLayer layer, DesignType type) {
 		this.theme = theme;
@@ -17,6 +18,7 @@ public class DesignQuery {
 		this.type = type;
 		this.desiredWidth = 0;
 		this.desiredHeight = 0;
+		this.fallback = true;
 	}
 	
 	public DesignQuery withWidth(int desiredWidth) {
@@ -26,6 +28,16 @@ public class DesignQuery {
 
 	public DesignQuery withHeight(int desiredHeight) {
 		this.desiredHeight = desiredHeight;
+		return this;
+	}
+	
+	public DesignQuery withTheme(DesignTheme theme) {
+		this.theme = theme;
+		return this;
+	}
+	
+	public DesignQuery withoutFallback() {
+		fallback = false;
 		return this;
 	}
 	

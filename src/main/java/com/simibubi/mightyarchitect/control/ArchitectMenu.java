@@ -162,6 +162,7 @@ public class ArchitectMenu {
 				return true;
 
 			case 'f':
+				DesignExporter.theme.clearDesigns();
 				ArchitectManager.manageThemes();
 				return false;
 

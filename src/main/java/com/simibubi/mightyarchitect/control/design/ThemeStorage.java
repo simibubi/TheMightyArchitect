@@ -19,6 +19,11 @@ public class ThemeStorage {
 		Medieval(new DesignTheme("medieval", "Medieval", "simibubi", new StandardDesignPicker())
 				.withLayers(DesignLayer.Foundation, DesignLayer.Regular, DesignLayer.Open, DesignLayer.Roofing)
 				.withTypes(DesignType.WALL, DesignType.CORNER, DesignType.ROOF, DesignType.TOWER, DesignType.FACADE,
+						DesignType.FLAT_ROOF, DesignType.TOWER_FLAT_ROOF, DesignType.TOWER_ROOF)),
+
+		Fallback(new DesignTheme("fallback_theme", "Fallback Theme", "simibubi", new StandardDesignPicker()).withLayers(
+				DesignLayer.Foundation, DesignLayer.Regular, DesignLayer.Open, DesignLayer.Roofing, DesignLayer.Special)
+				.withTypes(DesignType.WALL, DesignType.CORNER, DesignType.ROOF, DesignType.TOWER, DesignType.FACADE,
 						DesignType.FLAT_ROOF, DesignType.TOWER_FLAT_ROOF, DesignType.TOWER_ROOF));
 
 		public DesignTheme theme;
@@ -38,8 +43,11 @@ public class ThemeStorage {
 
 	public static List<DesignTheme> getIncluded() {
 		List<DesignTheme> included = new ArrayList<>();
-		for (IncludedThemes theme : IncludedThemes.values())
+		for (IncludedThemes theme : IncludedThemes.values()) {
+			if (theme == IncludedThemes.Fallback)
+				continue;
 			included.add(theme.theme);
+		}
 		return included;
 	}
 
@@ -49,7 +57,7 @@ public class ThemeStorage {
 
 		return importedThemes;
 	}
-	
+
 	public static void reloadExternal() {
 		importedThemes = null;
 	}
@@ -58,8 +66,7 @@ public class ThemeStorage {
 		DesignTheme theme = new DesignTheme(FilesHelper.slug(name), name, Minecraft.getMinecraft().player.getName(),
 				new StandardDesignPicker());
 		return theme.withLayers(DesignLayer.Regular, DesignLayer.Roofing, DesignLayer.Foundation).withTypes(
-				DesignType.WALL, DesignType.CORNER, DesignType.ROOF, DesignType.FACADE,
-				DesignType.FLAT_ROOF);
+				DesignType.WALL, DesignType.CORNER, DesignType.ROOF, DesignType.FACADE, DesignType.FLAT_ROOF);
 	}
 
 	public static void exportTheme(DesignTheme theme) {
@@ -82,16 +89,15 @@ public class ThemeStorage {
 				DirectoryStream<Path> newDirectoryStream = Files.newDirectoryStream(Paths.get(folderPath));
 				for (Path path : newDirectoryStream) {
 					String string = path.getFileName().toString();
-					
-					NBTTagCompound compound = FilesHelper
-							.loadJsonAsNBT(folderPath + "/" + string + "/theme.json");
+
+					NBTTagCompound compound = FilesHelper.loadJsonAsNBT(folderPath + "/" + string + "/theme.json");
 					DesignTheme theme = DesignTheme.fromNBT(string, compound);
 					importedThemes.add(theme);
 				}
 				newDirectoryStream.close();
 			} catch (IOException e) {
 				e.printStackTrace();
-			} 
+			}
 
 		}
 

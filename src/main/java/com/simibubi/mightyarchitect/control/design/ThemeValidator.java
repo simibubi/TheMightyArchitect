@@ -88,7 +88,7 @@ public class ThemeValidator {
 	}
 
 	private static boolean exists(DesignQuery query) {
-		return DesignHelper.pickRandom(query) != null;
+		return DesignHelper.pickRandom(query.withoutFallback()) != null;
 	}
 
 	private static void status(String message) {

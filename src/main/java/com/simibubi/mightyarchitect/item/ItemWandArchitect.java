@@ -3,15 +3,12 @@ package com.simibubi.mightyarchitect.item;
 import com.simibubi.mightyarchitect.block.AllBlocks;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
-import com.simibubi.mightyarchitect.control.design.DesignTheme;
-import com.simibubi.mightyarchitect.control.design.ThemeStorage;
 import com.simibubi.mightyarchitect.control.phase.ArchitectPhases;
 import com.simibubi.mightyarchitect.gui.GuiDesignExporter;
 import com.simibubi.mightyarchitect.gui.GuiOpener;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -36,18 +33,11 @@ public class ItemWandArchitect extends ItemForMightyArchitects {
 				if (!ArchitectManager.inPhase(ArchitectPhases.EditingThemes))
 					return EnumActionResult.FAIL;
 				
-				ItemStack heldItem = player.getHeldItem(hand);
-				if (heldItem.hasTagCompound()) {
-					String name = DesignExporter.exportDesign(worldIn, anchor);
-					if (!name.isEmpty()) {
-						player.sendMessage(new TextComponentString(name));
-					}					
-				}
-			} else if (blockState.getBlock() == Blocks.DIAMOND_BLOCK) {
-				for (DesignTheme theme : ThemeStorage.getAllThemes()) {
-					theme.clearDesigns();
-				}
-				player.sendMessage(new TextComponentString("Reloading desings..."));
+				String name = DesignExporter.exportDesign(worldIn, anchor);
+				if (!name.isEmpty()) {
+					player.sendMessage(new TextComponentString(name));
+				}		
+				
 			} else {
 				if (!ArchitectManager.inPhase(ArchitectPhases.EditingThemes))
 					return EnumActionResult.FAIL;

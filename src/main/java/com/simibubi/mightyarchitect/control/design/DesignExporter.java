@@ -175,6 +175,17 @@ public class DesignExporter {
 		//
 
 	}
+	
+	public static void setTheme(DesignTheme theme) {
+		DesignExporter.theme = theme;
+		layer = DesignLayer.Regular;
+		type = DesignType.WALL;
+		changed = true;
+	}
+
+	public static DesignTheme getTheme() {
+		return theme;
+	}
 
 	private static boolean isMarker(World worldIn, BlockPos pos) {
 		return worldIn.getBlockState(pos).getBlock() == AllBlocks.slice_marker;
