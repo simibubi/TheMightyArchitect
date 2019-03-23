@@ -163,6 +163,7 @@ public class ArchitectMenu {
 
 			case 'f':
 				DesignExporter.theme.clearDesigns();
+				ThemeStorage.exportTheme(DesignExporter.theme);
 				ArchitectManager.manageThemes();
 				return false;
 
@@ -239,7 +240,7 @@ public class ArchitectMenu {
 			keybinds.put("E", "Edit Theme settings");
 			keybinds.put("V", "Validate Theme");
 			keybinds.lineBreak();
-			keybinds.put("C", "Change reader palette");
+			keybinds.put("C", "Change default palette");
 			keybinds.put("F", "Finish editing");
 			break;
 		default:

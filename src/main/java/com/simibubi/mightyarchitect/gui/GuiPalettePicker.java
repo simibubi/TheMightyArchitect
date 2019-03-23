@@ -87,6 +87,10 @@ public class GuiPalettePicker extends GuiScreen {
 			mc.player.sendMessage(new TextComponentString("WARNING: The scanner palette you chose contains the same block type for several palette entries!"));
 			mc.player.sendMessage(new TextComponentString("The exporter will not be able to distinguish the palette entries and always choose the first one."));
 		}
+		
+		if (scanPicker) {
+			DesignExporter.theme.setDefaultPalette(primary.palette);
+		}
 	}
 	
 	private void updateSelected() {

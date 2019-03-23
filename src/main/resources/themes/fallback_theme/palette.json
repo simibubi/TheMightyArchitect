@@ -1,0 +1,130 @@
+{
+  "Palette": {
+    "OUTER_THICK": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "variant": "cobblestone",
+        "west": "false",
+        "up": "false"
+      },
+      "Name": "minecraft:cobblestone_wall"
+    },
+    "OUTER_FLAT": {
+      "Properties": {
+        "half": "bottom",
+        "facing": "south",
+        "open": "true"
+      },
+      "Name": "minecraft:trapdoor"
+    },
+    "INNER_PRIMARY": {
+      "Properties": {
+        "variant": "spruce"
+      },
+      "Name": "minecraft:planks"
+    },
+    "HEAVY_POST": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "variant": "mossy_cobblestone",
+        "west": "false",
+        "up": "false"
+      },
+      "Name": "minecraft:cobblestone_wall"
+    },
+    "ROOF_PRIMARY": {
+      "Properties": {
+        "variant": "granite"
+      },
+      "Name": "minecraft:stone"
+    },
+    "INNER_DETAIL": {
+      "Properties": {
+        "variant": "spruce",
+        "axis": "y"
+      },
+      "Name": "minecraft:log"
+    },
+    "ROOF_SLAB": {
+      "Properties": {
+        "half": "bottom",
+        "variant": "brick"
+      },
+      "Name": "minecraft:stone_slab"
+    },
+    "WINDOW": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:glass_pane"
+    },
+    "Name": "Default Palette",
+    "HEAVY_PRIMARY": {
+      "Properties": {
+        "variant": "smooth_andesite"
+      },
+      "Name": "minecraft:stone"
+    },
+    "HEAVY_SECONDARY": {
+      "Name": "minecraft:cobblestone"
+    },
+    "ROOF_DETAIL": {
+      "Name": "minecraft:brick_block"
+    },
+    "ROOF_SLAB_TOP": {
+      "Properties": {
+        "half": "top",
+        "variant": "brick"
+      },
+      "Name": "minecraft:stone_slab"
+    },
+    "ROOF_SECONDARY": {
+      "Properties": {
+        "variant": "smooth_granite"
+      },
+      "Name": "minecraft:stone"
+    },
+    "INNER_SECONDARY": {
+      "Properties": {
+        "variant": "dark_oak"
+      },
+      "Name": "minecraft:planks"
+    },
+    "OUTER_SLAB": {
+      "Properties": {
+        "half": "bottom",
+        "variant": "cobblestone"
+      },
+      "Name": "minecraft:stone_slab"
+    },
+    "HEAVY_WINDOW": {
+      "Properties": {
+        "east": "false",
+        "color": "black",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:stained_glass_pane"
+    },
+    "CLEAR": {
+      "Name": "minecraft:glass"
+    },
+    "OUTER_THIN": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:spruce_fence"
+    }
+  }
+}

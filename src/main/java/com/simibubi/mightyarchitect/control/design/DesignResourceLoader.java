@@ -18,7 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class DesignResourceLoader {
 
-	private static final String BASE_PATH = "designs";
+	private static final String BASE_PATH = "themes";
 
 	public static Map<DesignLayer, Map<DesignType, Set<Design>>> loadDesignsForTheme(DesignTheme theme) {
 		if (theme.isImported())

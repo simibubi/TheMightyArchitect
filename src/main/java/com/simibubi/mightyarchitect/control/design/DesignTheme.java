@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
 import com.simibubi.mightyarchitect.control.design.partials.Design;
+import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -20,13 +21,13 @@ public class DesignTheme {
 	private String designer;
 	private IPickDesigns designPicker;
 	private boolean imported;
+	private PaletteDefinition defaultPalette;
 	
 	private List<DesignLayer> layers;
 	private List<DesignType> types;
 	private Map<DesignLayer, Map<DesignType, Set<Design>>> designs;
 
-	public DesignTheme(String filePath, String displayName, String designer, IPickDesigns designPicker) {
-		this.filePath = filePath;
+	public DesignTheme(String displayName, String designer, IPickDesigns designPicker) {
 		this.designer = designer;
 		this.displayName = displayName;
 		this.designPicker = designPicker;
@@ -46,6 +47,10 @@ public class DesignTheme {
 
 	public String getFilePath() {
 		return filePath;
+	}
+	
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
 	}
 
 	public String getDisplayName() {
@@ -126,11 +131,11 @@ public class DesignTheme {
 		return compound;
 	}
 
-	public static DesignTheme fromNBT(String filepath, NBTTagCompound compound) {
+	public static DesignTheme fromNBT(NBTTagCompound compound) {
 		if (compound == null)
 			return null;
 
-		DesignTheme theme = new DesignTheme(filepath, compound.getString("Name"), compound.getString("Designer"),
+		DesignTheme theme = new DesignTheme(compound.getString("Name"), compound.getString("Designer"),
 				new StandardDesignPicker());
 
 		theme.layers = new ArrayList<>();
@@ -141,8 +146,19 @@ public class DesignTheme {
 		compound.getTagList("Types", 8)
 				.forEach(s -> theme.types.add(DesignType.valueOf(((NBTTagString) s).getString())));
 
-		theme.imported = true;
 		return theme;
+	}
+	
+	public void setImported(boolean imported) {
+		this.imported = imported;
+	}
+
+	public PaletteDefinition getDefaultPalette() {
+		return defaultPalette;
+	}
+
+	public void setDefaultPalette(PaletteDefinition defaultPalette) {
+		this.defaultPalette = defaultPalette;
 	}
 
 }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.simibubi.mightyarchitect.control.helpful.FilesHelper;
+import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,20 +17,14 @@ import net.minecraft.nbt.NBTTagCompound;
 public class ThemeStorage {
 
 	public enum IncludedThemes {
-		Medieval(new DesignTheme("medieval", "Medieval", "simibubi", new StandardDesignPicker())
-				.withLayers(DesignLayer.Foundation, DesignLayer.Regular, DesignLayer.Open, DesignLayer.Roofing)
-				.withTypes(DesignType.WALL, DesignType.CORNER, DesignType.ROOF, DesignType.TOWER, DesignType.FACADE,
-						DesignType.FLAT_ROOF, DesignType.TOWER_FLAT_ROOF, DesignType.TOWER_ROOF)),
 
-		Fallback(new DesignTheme("fallback_theme", "Fallback Theme", "simibubi", new StandardDesignPicker()).withLayers(
-				DesignLayer.Foundation, DesignLayer.Regular, DesignLayer.Open, DesignLayer.Roofing, DesignLayer.Special)
-				.withTypes(DesignType.WALL, DesignType.CORNER, DesignType.ROOF, DesignType.TOWER, DesignType.FACADE,
-						DesignType.FLAT_ROOF, DesignType.TOWER_FLAT_ROOF, DesignType.TOWER_ROOF));
+		Medieval("medieval"), Fallback("fallback_theme");
 
 		public DesignTheme theme;
+		public String themeFolder;
 
-		private IncludedThemes(DesignTheme theme) {
-			this.theme = theme;
+		private IncludedThemes(String themeFolder) {
+			this.themeFolder = themeFolder;
 		}
 	}
 
@@ -44,8 +39,13 @@ public class ThemeStorage {
 	public static List<DesignTheme> getIncluded() {
 		List<DesignTheme> included = new ArrayList<>();
 		for (IncludedThemes theme : IncludedThemes.values()) {
+
+			if (theme.theme == null)
+				theme.theme = loadInternalTheme(theme.themeFolder);
+
 			if (theme == IncludedThemes.Fallback)
 				continue;
+
 			included.add(theme.theme);
 		}
 		return included;
@@ -63,8 +63,11 @@ public class ThemeStorage {
 	}
 
 	public static DesignTheme createTheme(String name) {
-		DesignTheme theme = new DesignTheme(FilesHelper.slug(name), name, Minecraft.getMinecraft().player.getName(),
+		DesignTheme theme = new DesignTheme(name, Minecraft.getMinecraft().player.getName(),
 				new StandardDesignPicker());
+		theme.setFilePath(FilesHelper.slug(name));
+		theme.setImported(true);
+		theme.setDefaultPalette(PaletteDefinition.defaultPalette());
 		return theme.withLayers(DesignLayer.Regular, DesignLayer.Roofing, DesignLayer.Foundation).withTypes(
 				DesignType.WALL, DesignType.CORNER, DesignType.ROOF, DesignType.FACADE, DesignType.FLAT_ROOF);
 	}
@@ -78,6 +81,19 @@ public class ThemeStorage {
 
 		String filepath = folderPath + "/" + foldername + "/theme.json";
 		FilesHelper.saveTagCompoundAsJson(theme.asTagCompound(), filepath);
+
+		String palettePath = folderPath + "/" + foldername + "/palette.json";
+		FilesHelper.saveTagCompoundAsJson(theme.getDefaultPalette().writeToNBT(new NBTTagCompound()), palettePath);
+	}
+
+	private static DesignTheme loadInternalTheme(String themeFolder) {
+		NBTTagCompound themeCompound = FilesHelper.loadJsonResourceAsNBT("themes/" + themeFolder + "/theme.json");
+		NBTTagCompound paletteCompound = FilesHelper.loadJsonResourceAsNBT("themes/" + themeFolder + "/palette.json");
+		DesignTheme theme = DesignTheme.fromNBT(themeCompound);
+		theme.setFilePath(themeFolder);
+		theme.setImported(false);
+		theme.setDefaultPalette(PaletteDefinition.fromNBT(paletteCompound));
+		return theme;
 	}
 
 	private static void importThemes() {
@@ -88,10 +104,16 @@ public class ThemeStorage {
 			try {
 				DirectoryStream<Path> newDirectoryStream = Files.newDirectoryStream(Paths.get(folderPath));
 				for (Path path : newDirectoryStream) {
-					String string = path.getFileName().toString();
+					String themeFolder = path.getFileName().toString();
 
-					NBTTagCompound compound = FilesHelper.loadJsonAsNBT(folderPath + "/" + string + "/theme.json");
-					DesignTheme theme = DesignTheme.fromNBT(string, compound);
+					NBTTagCompound themeCompound = FilesHelper
+							.loadJsonAsNBT(folderPath + "/" + themeFolder + "/theme.json");
+					NBTTagCompound paletteCompound = FilesHelper
+							.loadJsonAsNBT(folderPath + "/" + themeFolder + "/palette.json");
+					DesignTheme theme = DesignTheme.fromNBT(themeCompound);
+					theme.setFilePath(themeFolder);
+					theme.setImported(true);
+					theme.setDefaultPalette(PaletteDefinition.fromNBT(paletteCompound));
 					importedThemes.add(theme);
 				}
 				newDirectoryStream.close();

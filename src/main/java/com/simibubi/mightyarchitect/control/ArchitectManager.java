@@ -90,7 +90,7 @@ public class ArchitectManager {
 			status("Draw some rooms before going to the next step!");
 			return;
 		}
-
+		
 		model.setSketch(groundPlan.theme.getDesignPicker().assembleSketch(groundPlan));
 		enterPhase(ArchitectPhases.Previewing);
 	}

@@ -1,7 +1,6 @@
 package com.simibubi.mightyarchitect.control.phase;
 
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
-import com.simibubi.mightyarchitect.control.phase.export.PhaseAddDesign;
 import com.simibubi.mightyarchitect.control.phase.export.PhaseEditTheme;
 import com.simibubi.mightyarchitect.control.phase.export.PhaseListThemesForEditing;
 import com.simibubi.mightyarchitect.control.phase.export.PhaseManageThemes;
@@ -27,8 +26,7 @@ public enum ArchitectPhases {
 	
 	ManagingThemes(new PhaseManageThemes(), "Manage Themes"),
 	ListForEdit(new PhaseListThemesForEditing(), "Edit a Theme"),
-	EditingThemes(new PhaseEditTheme(), "Editing "),
-	AddingDesign(new PhaseAddDesign(), "Import Mode");
+	EditingThemes(new PhaseEditTheme(), "Editing ");
 	
 	private IArchitectPhase handler;
 	private String displayTitle;

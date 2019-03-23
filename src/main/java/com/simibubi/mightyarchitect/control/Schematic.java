@@ -34,8 +34,6 @@ public class Schematic {
 	private boolean editingPrimary;
 
 	public Schematic() {
-		primaryPalette = PaletteDefinition.defaultPalette().clone();
-		secondaryPalette = PaletteDefinition.defaultPalette().clone();
 	}
 
 	public void setGroundPlan(GroundPlan groundPlan) {
@@ -53,12 +51,6 @@ public class Schematic {
 
 	public void swapSecondaryPalette(PaletteDefinition newPalette) {
 		this.secondaryPalette = newPalette;
-		materializeSketch();
-	}
-
-	public void swapPalettes(PaletteDefinition primary, PaletteDefinition secondary) {
-		this.primaryPalette = primary;
-		this.secondaryPalette = secondary;
 		materializeSketch();
 	}
 
@@ -136,6 +128,12 @@ public class Schematic {
 	}
 
 	private void materializeSketch() {
+		if (primaryPalette == null) {
+			PaletteDefinition defaultPalette = groundPlan.theme.getDefaultPalette();
+			primaryPalette = defaultPalette.clone();
+			secondaryPalette = defaultPalette.clone();
+		}
+		
 		materializeSketch(primaryPalette, secondaryPalette);
 	}
 
