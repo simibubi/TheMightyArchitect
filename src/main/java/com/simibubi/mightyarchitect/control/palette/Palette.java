@@ -24,7 +24,7 @@ public enum Palette {
 	ROOF_SLAB("Main Roofing Slabs", 3),
 	
 	// dynamic
-	CLEAR("", 10);
+	CLEAR("Clearing Material", 10);
 	
 	private int priority;
 	private String displayName;

@@ -12,6 +12,8 @@ import com.simibubi.mightyarchitect.networking.PacketNbt.PacketHandlerNbt;
 import com.simibubi.mightyarchitect.networking.PacketPlaceSign;
 import com.simibubi.mightyarchitect.networking.PacketPlaceSign.PacketHandlerPlaceSign;
 import com.simibubi.mightyarchitect.networking.PacketSender;
+import com.simibubi.mightyarchitect.networking.PacketSetHotbarItem;
+import com.simibubi.mightyarchitect.networking.PacketSetHotbarItem.PacketHandlerSetHotbarItem;
 import com.simibubi.mightyarchitect.networking.PacketSymmetryEffect;
 import com.simibubi.mightyarchitect.networking.PacketSymmetryEffect.PacketHandlerSymmetryEffect;
 import com.simibubi.mightyarchitect.proxy.IProxy;
@@ -65,6 +67,7 @@ public class TheMightyArchitect {
       	PacketSender.INSTANCE.registerMessage(PacketHandlerInstantPrint.class, PacketInstantPrint.class, 1, Side.SERVER);
       	PacketSender.INSTANCE.registerMessage(PacketHandlerPlaceSign.class, PacketPlaceSign.class, 2, Side.SERVER);
       	PacketSender.INSTANCE.registerMessage(PacketHandlerSymmetryEffect.class, PacketSymmetryEffect.class, 3, Side.CLIENT);
+      	PacketSender.INSTANCE.registerMessage(PacketHandlerSetHotbarItem.class, PacketSetHotbarItem.class, 4, Side.SERVER);
     }
 
     @Mod.EventHandler

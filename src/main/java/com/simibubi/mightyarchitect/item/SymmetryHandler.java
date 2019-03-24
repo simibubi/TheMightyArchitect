@@ -118,12 +118,13 @@ public class SymmetryHandler {
 			for (int i = 0; i < InventoryPlayer.getHotbarSize(); i++) {
 				ItemStack stackInSlot = player.inventory.getStackInSlot(i);
 
-				SymmetryElement mirror = ItemWandSymmetry.getMirror(stackInSlot);
-				if (mirror instanceof SymmetryEmptySlot)
-					continue;
-
 				if (stackInSlot != null && stackInSlot.getItem() == AllItems.wand_symmetry
 						&& ItemWandSymmetry.isEnabled(stackInSlot)) {
+					
+					SymmetryElement mirror = ItemWandSymmetry.getMirror(stackInSlot);
+					if (mirror instanceof SymmetryEmptySlot)
+						continue;
+					
 					Random r = new Random();
 					double offsetX = (r.nextDouble() - 0.5) * 0.3;
 					double offsetZ = (r.nextDouble() - 0.5) * 0.3;

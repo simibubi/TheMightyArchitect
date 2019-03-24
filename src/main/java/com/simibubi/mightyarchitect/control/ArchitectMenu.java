@@ -148,13 +148,29 @@ public class ArchitectMenu {
 				List<DesignTheme> themes = ThemeStorage.getImported();
 				if (index < themes.size() && index >= 0) {
 					ArchitectManager.editTheme(themes.get(index));
-					return true;
+					return false;
 				}
 			}
 			break;
 
 		case EditingThemes:
 			switch (c) {
+			
+			case '1':
+				ArchitectKits.ExporterToolkit();
+				return true;
+				
+			case '2':
+				ArchitectKits.FoundationToolkit();
+				return true;
+				
+			case '3':
+				ArchitectKits.RegularToolkit();
+				return true;
+				
+			case '4':
+				ArchitectKits.RoofingToolkit();
+				return true;
 
 			case 'c':
 				ArchitectManager.pickScanPalette();
@@ -253,8 +269,13 @@ public class ArchitectMenu {
 			break;
 			
 		case EditingThemes:
-			keybinds.put("E", "Edit Theme settings");
+			keybinds.put("1", "Equip Exporter Tools");
+			keybinds.put("2", "Equip Foundation Blocks");
+			keybinds.put("3", "Equip Regular Blocks");
+			keybinds.put("4", "Equip Roofing Blocks");
+			keybinds.lineBreak();
 			keybinds.put("C", "Change default palette");
+			keybinds.put("E", "Edit Theme settings");
 			keybinds.lineBreak();
 			keybinds.put("V", "Validate Theme");
 			keybinds.put("R", "Run a Test");

@@ -17,7 +17,7 @@ public class AllItems {
 	public static final ItemForMightyArchitects blueprint_filled = new ItemBlueprintFilled("blueprint_filled");
 
 	public static void registerAll(IForgeRegistry<Item> registry) {
-		registry.registerAll(wand_architect, wand_symmetry, wand_fill);
+		registry.registerAll(wand_architect, wand_symmetry, wand_fill, blueprint_filled);
 	}
 	
 	public static void initModels() {
