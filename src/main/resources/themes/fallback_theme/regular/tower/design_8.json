@@ -1,0 +1,30 @@
+{
+  "Radius": 3,
+  "Size": {
+    "X": 7,
+    "Y": 4,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "  EEE  , EQQQE ,EQQQQQE,EQQQQQE,EQQQQQE, EQQQE ,  EEE  ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "  EEE  , EQQQE ,EQQQQQE,EQQQQQE,EQQQQQE, EQQQE ,  EEE  ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "  EEE  , EQQQE ,EQQQQQE,EQQQQQE,EQQQQQE, EQQQE ,  EEE  ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "  EEE  , ENNNE ,ENNNNNE,ENNNNNE,ENNNNNE, ENNNE ,  EEE  ",
+      "Trait": "Standard"
+    }
+  ]
+}

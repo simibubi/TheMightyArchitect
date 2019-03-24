@@ -1,0 +1,30 @@
+{
+  "Radius": 1,
+  "Size": {
+    "X": 3,
+    "Y": 4,
+    "Z": 3
+  },
+  "Layers": [
+    {
+      "Facing": "AAA,AAA,AAA",
+      "Blocks": "AAA,AQA,AAA",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "AAA,AAA,AAA",
+      "Blocks": "AAA,AQA,AAA",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "AAA,AAA,AAA",
+      "Blocks": "AAA,AQA,AAA",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "AAA,AAA,AAA",
+      "Blocks": "AAA,ANA,AAA",
+      "Trait": "Standard"
+    }
+  ]
+}

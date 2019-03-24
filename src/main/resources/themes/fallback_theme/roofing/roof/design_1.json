@@ -1,0 +1,30 @@
+{
+  "Size": {
+    "X": 7,
+    "Y": 4,
+    "Z": 3
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "OQQQQQO,OQQQQQO,OEEEEEO",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": " MQQQM , MQQQM , OEEEO ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "  MQM  ,  MQM  ,  OEO  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "   M   ,   M   ,   O   ",
+      "Trait": "Standard"
+    }
+  ],
+  "Roofspan": 5
+}

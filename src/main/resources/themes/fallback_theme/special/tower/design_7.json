@@ -1,0 +1,20 @@
+{
+  "Radius": 3,
+  "Size": {
+    "X": 7,
+    "Y": 2,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "  FFF  , FQQQF ,FQQQQQF,FQQQQQF,FQQQQQF, FQQQF ,  FFF  ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "  FFF  , FNNNF ,FNNNNNF,FNNNNNF,FNNNNNF, FNNNF ,  FFF  ",
+      "Trait": "Standard"
+    }
+  ]
+}

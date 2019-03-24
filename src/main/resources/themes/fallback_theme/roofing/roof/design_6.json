@@ -1,0 +1,35 @@
+{
+  "Size": {
+    "X": 17,
+    "Y": 5,
+    "Z": 3
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAA",
+      "Blocks": "OMQQQQQQQQQQQQQMO,OMQQQQQQQQQQQQQMO,OOEEEEEEEEEEEEEOO",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAA",
+      "Blocks": "  MMQQQQQQQQQMM  ,  MMQQQQQQQQQMM  ,  OOEEEEEEEEEOO  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAA",
+      "Blocks": "    MMQQQQQMM    ,    MMQQQQQMM    ,    OOEEEEEOO    ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAA",
+      "Blocks": "      MMQMM      ,      MMQMM      ,      OOEOO      ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAA",
+      "Blocks": "        M        ,        M        ,        O        ",
+      "Trait": "Standard"
+    }
+  ],
+  "Roofspan": 15
+}

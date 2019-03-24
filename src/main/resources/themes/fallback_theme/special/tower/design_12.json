@@ -1,0 +1,15 @@
+{
+  "Radius": 5,
+  "Size": {
+    "X": 11,
+    "Y": 1,
+    "Z": 11
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA",
+      "Blocks": "    FFF    ,  FFNNNFF  , FNNNNNNNF , FNNNNNNNF ,FNNNNNNNNNF,FNNNNNNNNNF,FNNNNNNNNNF, FNNNNNNNF , FNNNNNNNF ,  FFNNNFF  ,    FFF    ",
+      "Trait": "Standard"
+    }
+  ]
+}

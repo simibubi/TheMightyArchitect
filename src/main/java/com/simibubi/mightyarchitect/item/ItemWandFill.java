@@ -31,10 +31,12 @@ public class ItemWandFill extends ItemForMightyArchitects {
 
 		BlockPos start = pos.offset(facing);
 		Set<BlockPos> filledBlocks = new HashSet<>();
+		Set<BlockPos> checked = new HashSet<>();
 		List<BlockPos> toCheck = new LinkedList<>();
 		toCheck.add(start);
-		int limit = 500;
+		int limit = 10000;
 		
+		checked.add(start);						
 		for (int i = 0; i <= limit; i++) {
 			if (i == limit)
 				return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
@@ -48,8 +50,10 @@ public class ItemWandFill extends ItemForMightyArchitects {
 					if (facing.getAxis() == offset.getAxis())
 						continue;
 					BlockPos newCheckedPos = checkedPos.offset(offset);
-					if (!filledBlocks.contains(newCheckedPos))
+					if (!checked.contains(newCheckedPos)) {
 						toCheck.add(newCheckedPos);
+						checked.add(newCheckedPos);						
+					}
 				}
 				
 				filledBlocks.add(checkedPos);
