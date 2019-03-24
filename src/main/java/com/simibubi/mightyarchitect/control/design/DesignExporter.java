@@ -40,7 +40,7 @@ public class DesignExporter {
 		BlockPos layerDefAnchor = anchor;
 		boolean found = false;
 		for (int range = 1; range < 100 && !found; range++) {
-			for (int i = 0; i < range; i++) {
+			for (int i = 0; i <= range; i++) {
 				if (isMarker(worldIn, anchor.add(range, 0, i))) {
 					layerDefAnchor = anchor.add(range, 0, i);
 					found = true;
@@ -59,8 +59,17 @@ public class DesignExporter {
 
 		// Collect information
 		int height = 0;
-		for (BlockPos pos = layerDefAnchor; isMarker(worldIn, pos); pos = pos.up())
+		int effectiveHeight = 0;
+		for (BlockPos pos = layerDefAnchor; isMarker(worldIn, pos); pos = pos.up()) {
 			height++;
+			if (DesignSliceTrait.values()[markerValueAt(worldIn, pos)] != DesignSliceTrait.MaskAbove) 
+				effectiveHeight++;
+		}
+		
+		if (effectiveHeight != PhaseEditTheme.effectiveHeight) {
+			PhaseEditTheme.effectiveHeight = effectiveHeight;
+			changed = true;
+		}
 
 		BlockPos size = layerDefAnchor.west().subtract(anchor.east()).add(1, height, 1);
 

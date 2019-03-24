@@ -1,71 +1,43 @@
 package com.simibubi.mightyarchitect.control.helpful;
 
-import java.util.Map;
-
-import com.simibubi.mightyarchitect.control.palette.Palette;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.minecraft.util.math.BlockPos;
 
 public class BuildingHelper {
 
-	public static void circle(Map<BlockPos, Palette> building, BlockPos center, int radius, Palette block) {
+	public static Set<BlockPos> getCircle(BlockPos center, int radius) {
+		Set<BlockPos> result = new HashSet<>();
 		int z = 0;
 		int x = radius;
 		int p = (5 - radius * 4) / 4;
 
-		building.put(center.add(x, 0, z), block);
+		result.add(center.add(x, 0, z));
+		result.add(center.add(-x, 0, z));
+		result.add(center.add(-z, 0, x));
+		result.add(center.add(z, 0, -x));
 
 		while (z < x) {
 			z++;
-			if (p < 0) {
+			if (radius < 5 && p <= 0 || radius >= 5 && p < 0) {
 				p += 2 * z + 1;
 			} else {
 				x--;
 				p += 2 * (z - x) + 1;
 			}
-			building.put(center.add(x, 0, z), block);
+			result.add(center.add(x, 0, z));
+			result.add(center.add(-x, 0, -z));
+			result.add(center.add(-x, 0, z));
+			result.add(center.add(x, 0, -z));
+			
+			result.add(center.add(z, 0, x));
+			result.add(center.add(-z, 0, -x));
+			result.add(center.add(-z, 0, x));
+			result.add(center.add(z, 0, -x));
 		}
+		return result;
 	}
-	
-	public static void thickCircle(Map<BlockPos, Palette> building, BlockPos center, int radius, Palette block) {
-		int z = 0;
-		int x = radius;
-		int p = (5 - radius * 4) / 4;
-		
-		building.put(center.add(x, 0, z), block);
-		
-		while (z < x) {
-			z++;
-			if (p < 0) {
-				p += 2 * z + 1;
-			} else {
-				building.put(center.add(x, 0, z), block);
-				x--;
-				p += 2 * (z - x) + 1;
-			}
-			building.put(center.add(x, 0, z), block);
-		}
-	}
-	
-	public static void filledCircle(Map<BlockPos, Palette> building, BlockPos center, int radius, Palette block) {
-		int z = 0;
-		int x = radius;
-		int p = (5 - radius * 4) / 4;
-		
-		for (int i = 0; i <= x; i++)
-			building.put(center.add(i, 0, z), block);
-		
-		while (z < x) {
-			z++;
-			if (p < 0) {
-				p += 2 * z + 1;
-			} else {
-				x--;
-				p += 2 * (z - x) + 1;
-			}
-			for (int i = 0; i <= x; i++)
-				building.put(center.add(i, 0, z), block);
-		}
-	}
+
 
 }

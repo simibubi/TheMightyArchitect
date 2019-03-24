@@ -1,0 +1,7 @@
+{
+	"multipart": [
+		{ "apply": { "model": "mightyarchitect:design_anchor" }},
+		{ "when": { "compass": "true" }, "apply": { "model": "mightyarchitect:slice_marker_compass", "y": 180, "uvlock": true }
+       }
+	]
+}

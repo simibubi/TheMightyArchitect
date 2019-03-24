@@ -4,6 +4,8 @@ import com.simibubi.mightyarchitect.control.design.DesignSlice.DesignSliceTrait;
 import com.simibubi.mightyarchitect.item.AllItems;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -13,10 +15,12 @@ import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockSliceMarker extends BlockForMightyArchitects {
 
+	public static final PropertyBool compass = PropertyBool.create("compass");
 	public static final PropertyEnum<DesignSliceTrait> VARIANT = PropertyEnum.<DesignSliceTrait>create("variant",
 			DesignSliceTrait.class);
 
@@ -28,7 +32,14 @@ public class BlockSliceMarker extends BlockForMightyArchitects {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, VARIANT);
+		return new BlockStateContainer(this, new IProperty[] {compass, VARIANT});
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		if (worldIn.getBlockState(pos.down()).getBlock() == this)
+			return state.withProperty(compass, false);
+		return state.withProperty(compass, true);
 	}
 
 	@Override

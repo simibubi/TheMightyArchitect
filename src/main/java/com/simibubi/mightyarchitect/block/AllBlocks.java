@@ -15,13 +15,14 @@ import net.minecraftforge.registries.IForgeRegistry;
 public class AllBlocks {
 
 	public static final BlockForMightyArchitects slice_marker = new BlockSliceMarker("slice_marker");
+	public static final BlockForMightyArchitects design_anchor = new BlockDesignAnchor("design_anchor");
 	
 	public static final BlockForMightyArchitects symmetry_plane = new BlockSymmetryPlane("symmetry_plane");
 	public static final BlockForMightyArchitects symmetry_crossplane = new BlockSymmetryCrossPlane("symmetry_crossplane");
 	public static final BlockForMightyArchitects symmetry_tripleplane = new BlockSymmetryTriplePlane("symmetry_tripleplane");
 	
 	private static BlockForMightyArchitects[] placeables = {
-			slice_marker
+			design_anchor, slice_marker 
 	};
 	
 	private static BlockForMightyArchitects[] renderOnly = {

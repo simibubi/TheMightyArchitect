@@ -12,6 +12,7 @@ import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.DesignType;
+import com.simibubi.mightyarchitect.control.phase.export.PhaseEditTheme;
 import com.simibubi.mightyarchitect.gui.widgets.DynamicLabel;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollArea;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollArea.IScrollAction;
@@ -45,8 +46,8 @@ public class GuiDesignExporter extends GuiScreen {
 	public void initGui() {
 		super.initGui();
 		animationProgress = 0;
-		xSize = GuiResources.EXPORTER.width;
-		ySize = GuiResources.EXPORTER.height;
+		xSize = GuiResources.EXPORTER.width + 100;
+		ySize = GuiResources.EXPORTER.height + 50;
 		xTopLeft = (this.width - this.xSize) / 2;
 		yTopLeft = (this.height - this.ySize) / 2;
 
@@ -129,6 +130,7 @@ public class GuiDesignExporter extends GuiScreen {
 			@Override
 			public void onScroll(int position) {
 				labelType.text = typeOptions.get(position);
+				DesignExporter.type = types.get(position);
 				initAdditionalDataScrollArea(types.get(position));
 			}
 		});
@@ -218,7 +220,7 @@ public class GuiDesignExporter extends GuiScreen {
 		
 		RenderHelper.disableStandardItemLighting();
         GlStateManager.pushMatrix();
-		GlStateManager.translate((this.width - this.xSize) / 2 + 250, 300, 100);
+		GlStateManager.translate((this.width - this.xSize) / 2 + 250, 280, 100);
 		GlStateManager.rotate(-30, .4f, 0, -.2f);
 		GlStateManager.rotate(90 + 0.2f * animationProgress, 0, 1, 0);
 		GlStateManager.scale(300, -300, 300);
@@ -244,8 +246,7 @@ public class GuiDesignExporter extends GuiScreen {
 		
 		DesignExporter.type = types.get(scrollAreaType.getState());
 		DesignExporter.designParameter = additionalDataValue;
-		
-		DesignExporter.changed = true;
+		PhaseEditTheme.setVisualization(PhaseEditTheme.selectedDesign);
 	}
 
 	@Override
@@ -258,7 +259,8 @@ public class GuiDesignExporter extends GuiScreen {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 
 		int scrollAmount = ((mouseButton == 0) ? -1 : 1) * ((Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) ? 5 : 1);
-		scrollAreas.forEach(area -> area.tryScroll(mouseX, mouseY, scrollAmount));
+		scrollAreaLayer.tryScroll(mouseX, mouseY, scrollAmount);
+		scrollAreaType.tryScroll(mouseX, mouseY, scrollAmount);
 		if (scrollAreaAdditionalData != null)
 			scrollAreaAdditionalData.tryScroll(mouseX, mouseY, scrollAmount);
 	}

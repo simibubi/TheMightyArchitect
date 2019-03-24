@@ -40,7 +40,8 @@ public class ItemWandSymmetry extends ItemForMightyArchitects {
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
 			EnumFacing facing, float hitX, float hitY, float hitZ) {
-
+		player.getCooldownTracker().setCooldown(this, 5);
+		
 		if (!worldIn.isRemote && hand == EnumHand.MAIN_HAND) {
 			ItemStack wand = player.getHeldItem(hand);
 			checkNBT(wand);
@@ -98,7 +99,10 @@ public class ItemWandSymmetry extends ItemForMightyArchitects {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		GuiOpener.open(new GuiWandSymmetry(playerIn.getHeldItem(handIn)));
+		if (worldIn.isRemote) {
+			GuiOpener.open(new GuiWandSymmetry(playerIn.getHeldItem(handIn)));
+			playerIn.getCooldownTracker().setCooldown(this, 5);			
+		}
 		return super.onItemRightClick(worldIn, playerIn, handIn);
 	}
 
