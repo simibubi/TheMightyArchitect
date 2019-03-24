@@ -27,6 +27,7 @@ public class ItemWandArchitect extends ItemForMightyArchitects {
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos anchor, EnumHand hand,
 			EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (worldIn.isRemote) {
+			
 			IBlockState blockState = worldIn.getBlockState(anchor);
 
 			if (blockState.getBlock() == AllBlocks.slice_marker) {

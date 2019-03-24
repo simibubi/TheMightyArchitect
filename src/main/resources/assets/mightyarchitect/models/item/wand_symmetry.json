@@ -1,7 +1,6 @@
 {
     "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
-	"parent": "builtin/generated",
-"ambientocclusion": false,
+"ambientocclusion": true,
 	"display": {
 		"firstperson_righthand": {
             "rotation": [ 15, 0, 0 ],
@@ -30,11 +29,11 @@
         }
     },
     "textures": {
-        "0": "blocks/redstone_block",
-        "1": "blocks/iron_block",
-        "2": "blocks/stone_slab_side",
+        "0": "blocks/obsidian",
+        "1": "blocks/concrete_powder_purple",
+        "2": "blocks/log_big_oak",
         "3": "blocks/glass_white",
-        "4": "blocks/glass_red",
+        "4": "blocks/glass_purple",
 		"5": "blocks/concrete_white"
     },
     "elements": [

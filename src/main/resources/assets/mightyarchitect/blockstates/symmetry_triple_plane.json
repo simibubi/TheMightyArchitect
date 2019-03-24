@@ -1,7 +1,0 @@
-{
-    "variants": {
-        "align=x": { "model": "mightyarchitect:symmetry_tripleplane", "y": 90, "x": 90 },
-        "align=y": { "model": "mightyarchitect:symmetry_tripleplane" },
-        "align=z": { "model": "mightyarchitect:symmetry_tripleplane", "x": 90 }
-    }
-}

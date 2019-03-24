@@ -11,8 +11,9 @@ public enum GuiResources {
 	PLAYER_INVENTORY("player_inventory.png", 176, 108),
 	COMPOSER("composer.png", 256, 58),
 	PALETTES("palette_picker.png", 256, 236),
-	EXPORTER("design_exporter.png", 173, 111),
+	EXPORTER("design_exporter.png", 200, 111),
 	THEME_EDITOR("theme_editor.png", 200, 181),
+	WAND_SYMMETRY("wand_symmetry.png", 207, 58),
 
 	// Widgets
 	PALETTE_BUTTON("palette_picker.png", 0, 236, 20, 20),

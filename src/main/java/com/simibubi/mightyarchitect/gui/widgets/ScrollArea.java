@@ -113,7 +113,7 @@ public class ScrollArea extends Gui {
 			if (tooltipContent.isPresent())
 				screen.drawHoveringText(getToolTip(), mouseX, mouseY);
 			else
-				screen.drawHoveringText(ChatFormatting.RED + title, mouseX, mouseY);
+				screen.drawHoveringText(ChatFormatting.BLUE + title, mouseX, mouseY);
 		}
 
 		GlStateManager.popAttrib();
@@ -130,7 +130,7 @@ public class ScrollArea extends Gui {
 
 	private void updateTooltip() {
 		tooltip = new LinkedList<>();
-		tooltip.add(ChatFormatting.RED + title);
+		tooltip.add(ChatFormatting.BLUE + title);
 
 		if (tooltipContent.isPresent()) {
 			for (int i = min; i < max; i++) {

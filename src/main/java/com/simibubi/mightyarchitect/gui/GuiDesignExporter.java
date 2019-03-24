@@ -17,6 +17,9 @@ import com.simibubi.mightyarchitect.gui.widgets.ScrollArea;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollArea.IScrollAction;
 
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 
 public class GuiDesignExporter extends GuiScreen {
 
@@ -36,10 +39,12 @@ public class GuiDesignExporter extends GuiScreen {
 
 	private String additionalDataKey;
 	private int additionalDataValue;
+	private float animationProgress;
 
 	@Override
 	public void initGui() {
 		super.initGui();
+		animationProgress = 0;
 		xSize = GuiResources.EXPORTER.width;
 		ySize = GuiResources.EXPORTER.height;
 		xTopLeft = (this.width - this.xSize) / 2;
@@ -79,7 +84,7 @@ public class GuiDesignExporter extends GuiScreen {
 				initTypeScrollArea(theme, layers.get(position), DesignExporter.type);
 			}
 		});
-		scrollAreaLayer.setBounds(xTopLeft + 93, yTopLeft + 45, 70, 14);
+		scrollAreaLayer.setBounds(xTopLeft + 93, yTopLeft + 45, 90, 14);
 		scrollAreaLayer.setTitle("Style Layer");
 		scrollAreaLayer.setState(layers.indexOf(layer));
 		labelLayer.text = layer.getDisplayName();
@@ -127,7 +132,7 @@ public class GuiDesignExporter extends GuiScreen {
 				initAdditionalDataScrollArea(types.get(position));
 			}
 		});
-		scrollAreaType.setBounds(xTopLeft + 93, yTopLeft + 65, 70, 14);
+		scrollAreaType.setBounds(xTopLeft + 93, yTopLeft + 65, 90, 14);
 		scrollAreaType.setTitle("Design Type");
 		scrollAreaType.setState(types.indexOf(type));
 		labelType.text = type.getDisplayName();
@@ -175,7 +180,7 @@ public class GuiDesignExporter extends GuiScreen {
 			}
 
 			scrollAreaAdditionalData.setTitle(additionalDataKey);
-			scrollAreaAdditionalData.setBounds(xTopLeft + 93, yTopLeft + 85, 70, 14);
+			scrollAreaAdditionalData.setBounds(xTopLeft + 93, yTopLeft + 85, 90, 14);
 			scrollAreaAdditionalData.setState(additionalDataValue);
 
 		} else {
@@ -210,6 +215,17 @@ public class GuiDesignExporter extends GuiScreen {
 		scrollAreas.forEach(area -> area.draw(this, mouseX, mouseY));
 		if (scrollAreaAdditionalData != null)
 			scrollAreaAdditionalData.draw(this, mouseX, mouseY);
+		
+		RenderHelper.disableStandardItemLighting();
+        GlStateManager.pushMatrix();
+		GlStateManager.translate((this.width - this.xSize) / 2 + 250, 300, 100);
+		GlStateManager.rotate(-30, .4f, 0, -.2f);
+		GlStateManager.rotate(90 + 0.2f * animationProgress, 0, 1, 0);
+		GlStateManager.scale(300, -300, 300);
+		itemRender.renderItem(mc.player.getHeldItemMainhand(), TransformType.GROUND);
+		GlStateManager.popMatrix();
+		RenderHelper.enableStandardItemLighting();
+		animationProgress++;
 	}
 
 	@Override
