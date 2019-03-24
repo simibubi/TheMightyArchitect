@@ -29,6 +29,7 @@ public class ThemeStorage {
 	}
 
 	private static List<DesignTheme> importedThemes;
+	private static List<DesignTheme> createdThemes;
 
 	public static List<DesignTheme> getAllThemes() {
 		List<DesignTheme> themes = new ArrayList<>(getIncluded());
@@ -57,9 +58,17 @@ public class ThemeStorage {
 
 		return importedThemes;
 	}
+	
+	public static List<DesignTheme> getCreated() {
+		if (createdThemes == null)
+			importThemes();
+		
+		return createdThemes;
+	}
 
 	public static void reloadExternal() {
 		importedThemes = null;
+		createdThemes = null;
 	}
 
 	public static DesignTheme createTheme(String name) {
@@ -98,6 +107,7 @@ public class ThemeStorage {
 
 	private static void importThemes() {
 		importedThemes = new ArrayList<>();
+		createdThemes = new ArrayList<>();
 		String folderPath = "themes";
 		if (Files.isDirectory(Paths.get(folderPath))) {
 
@@ -106,15 +116,28 @@ public class ThemeStorage {
 				for (Path path : newDirectoryStream) {
 					String themeFolder = path.getFileName().toString();
 
-					NBTTagCompound themeCompound = FilesHelper
-							.loadJsonAsNBT(folderPath + "/" + themeFolder + "/theme.json");
-					NBTTagCompound paletteCompound = FilesHelper
-							.loadJsonAsNBT(folderPath + "/" + themeFolder + "/palette.json");
+					NBTTagCompound themeCompound;
+					NBTTagCompound paletteCompound;
+
+					if (themeFolder.endsWith(".zip")) {
+						String themelocation = themeFolder.replace(".zip", "/theme.json");
+						String palettelocation = themeFolder.replace(".zip", "/palette.json");
+						Path zipPath = Paths.get(folderPath, themeFolder);
+						themeCompound = FilesHelper.loadJsonFromZip(zipPath, themelocation);
+						paletteCompound = FilesHelper.loadJsonFromZip(zipPath, palettelocation);
+
+					} else {
+						themeCompound = FilesHelper.loadJsonAsNBT(folderPath + "/" + themeFolder + "/theme.json");
+						paletteCompound = FilesHelper.loadJsonAsNBT(folderPath + "/" + themeFolder + "/palette.json");
+					}
+
 					DesignTheme theme = DesignTheme.fromNBT(themeCompound);
 					theme.setFilePath(themeFolder);
 					theme.setImported(true);
 					theme.setDefaultPalette(PaletteDefinition.fromNBT(paletteCompound));
 					importedThemes.add(theme);
+					if (!themeFolder.endsWith(".zip"))
+						createdThemes.add(theme);
 				}
 				newDirectoryStream.close();
 			} catch (IOException e) {
@@ -122,7 +145,5 @@ public class ThemeStorage {
 			}
 
 		}
-
 	}
-
 }

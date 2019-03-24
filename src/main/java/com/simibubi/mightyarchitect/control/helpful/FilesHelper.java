@@ -1,11 +1,16 @@
 package com.simibubi.mightyarchitect.control.helpful;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -59,33 +64,50 @@ public class FilesHelper {
 		}
 		return false;
 	}
-	
-	public static NBTTagCompound loadJsonResourceAsNBT(String filepath) {
+
+	public static NBTTagCompound loadJsonNBT(InputStream inputStream) {
 		try {
-			JsonReader reader = new JsonReader(new BufferedReader(
-					new InputStreamReader(TheMightyArchitect.class.getClassLoader().getResourceAsStream(filepath))));
+			JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(inputStream)));
 			reader.setLenient(true);
 			JsonElement element = Streams.parse(reader);
 			reader.close();
+			inputStream.close();
 			return JsonToNBT.getTagFromJson(element.toString());
 		} catch (NBTException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} 
+		}
 		return null;
 	}
-	
+
+	public static NBTTagCompound loadJsonResourceAsNBT(String filepath) {
+		return loadJsonNBT(TheMightyArchitect.class.getClassLoader().getResourceAsStream(filepath));
+	}
+
 	public static NBTTagCompound loadJsonAsNBT(String filepath) {
 		try {
-			JsonReader reader = new JsonReader(new BufferedReader(
-					new InputStreamReader(Files.newInputStream(Paths.get(filepath), StandardOpenOption.READ))));
-			reader.setLenient(true);
-			JsonElement element = Streams.parse(reader);
-			reader.close();
-			return JsonToNBT.getTagFromJson(element.toString());
-		} catch (NBTException e) {
+			return loadJsonNBT(Files.newInputStream(Paths.get(filepath), StandardOpenOption.READ));
+		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static NBTTagCompound loadJsonFromZip(Path zipPath, String path) {
+		ZipFile zipfile;
+		try {
+			zipfile = new ZipFile(new File(zipPath.toString()));
+			ZipEntry zipentry = zipfile.getEntry(path);
+			
+			if (zipentry == null) {
+				zipfile.close();
+				return null;
+			} 
+			
+			NBTTagCompound loadJsonNBT = loadJsonNBT(zipfile.getInputStream(zipentry));
+			zipfile.close();
+			return loadJsonNBT;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

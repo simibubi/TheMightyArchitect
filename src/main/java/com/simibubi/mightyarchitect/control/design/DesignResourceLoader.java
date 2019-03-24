@@ -23,7 +23,7 @@ public class DesignResourceLoader {
 	public static Map<DesignLayer, Map<DesignType, Set<Design>>> loadDesignsForTheme(DesignTheme theme) {
 		if (theme.isImported())
 			return loadExternalDesignsForTheme(theme);
-		
+
 		final Map<DesignLayer, Map<DesignType, Set<Design>>> designMap = new HashMap<>();
 		theme.getLayers().forEach(layer -> {
 
@@ -38,25 +38,31 @@ public class DesignResourceLoader {
 			designMap.put(layer, typeMap);
 
 		});
-		
+
 		designMap.putAll(loadExternalDesignsForTheme(theme)); // extensions
 
 		return designMap;
 	}
-	
+
 	public static Map<DesignLayer, Map<DesignType, Set<Design>>> loadExternalDesignsForTheme(DesignTheme theme) {
 		final Map<DesignLayer, Map<DesignType, Set<Design>>> designMap = new HashMap<>();
-		
+
 		String folderPath = "themes";
 		String themePath = folderPath + "/" + theme.getFilePath();
-		
-		if (!Files.isDirectory(Paths.get(themePath)))
+
+		if (!Files.exists(Paths.get(themePath)) && !Files.isDirectory(Paths.get(themePath)))
 			return designMap;
-		
+
 		theme.getLayers().forEach(layer -> {
 
 			final HashMap<DesignType, Set<Design>> typeMap = new HashMap<>();
 			theme.getTypes().forEach(type -> {
+
+				if (themePath.endsWith(".zip")) {
+					typeMap.put(type, importZipDesigns(theme, layer, type, themePath, theme.getFilePath().replace(".zip", "") + "/"
+							+ layer.getFilePath() + "/" + type.getFilePath()));
+					return;
+				}
 
 				String path = folderPath + "/" + theme.getFilePath() + "/" + layer.getFilePath() + "/"
 						+ type.getFilePath();
@@ -66,7 +72,7 @@ public class DesignResourceLoader {
 			designMap.put(layer, typeMap);
 
 		});
-		
+
 		return designMap;
 	}
 
@@ -85,24 +91,40 @@ public class DesignResourceLoader {
 
 		return designs;
 	}
-	
-	private static Set<Design> importExternalDesigns(DesignTheme theme, DesignLayer layer, DesignType type, String folderPath) {
+
+	private static Set<Design> importExternalDesigns(DesignTheme theme, DesignLayer layer, DesignType type,
+			String folderPath) {
 		final Set<Design> designs = new HashSet<>();
-		
+
 		if (!Files.exists(Paths.get(folderPath)))
 			return designs;
-		
+
 		try {
 			DirectoryStream<Path> newDirectoryStream = Files.newDirectoryStream(Paths.get(folderPath));
 			for (Path path : newDirectoryStream) {
 				final NBTTagCompound designTag = FilesHelper.loadJsonAsNBT(path.toString());
-				designs.add(type.getDesign().fromNBT(designTag));			
+				designs.add(type.getDesign().fromNBT(designTag));
 			}
 			newDirectoryStream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
+		return designs;
+	}
+
+	private static Set<Design> importZipDesigns(DesignTheme theme, DesignLayer layer, DesignType type, String zipPath,
+			String elementPath) {
+		final Set<Design> designs = new HashSet<>();
+
+		for (int i = 0; i < 2048; i++) {
+			NBTTagCompound designTag = FilesHelper.loadJsonFromZip(Paths.get(zipPath),
+					elementPath + ((i == 0) ? "/design" : "/design_" + i) + ".json");
+			if (designTag == null)
+				break;
+			designs.add(type.getDesign().fromNBT(designTag));
+		}
+
 		return designs;
 	}
 

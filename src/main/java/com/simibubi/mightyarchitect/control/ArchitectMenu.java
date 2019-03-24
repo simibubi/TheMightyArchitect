@@ -260,7 +260,7 @@ public class ArchitectMenu {
 			break;
 			
 		case ListForEdit:
-			allThemes = ThemeStorage.getImported();
+			allThemes = ThemeStorage.getCreated();
 			for (DesignTheme theme : allThemes) {
 				keybinds.put("" + (allThemes.indexOf(theme) + 1), theme.getDisplayName());
 			}
