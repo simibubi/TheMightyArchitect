@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 
+import net.minecraft.block.BlockColored;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockOldLog;
 import net.minecraft.block.BlockPlanks;
@@ -71,7 +72,7 @@ public class PaletteDefinition {
 									BlockStone.EnumType.GRANITE))
 					.put(Palette.FLOOR, Blocks.PLANKS.getDefaultState())
 					.put(Palette.ROOF_DETAIL, Blocks.BRICK_BLOCK.getDefaultState())
-					.put(Palette.CLEAR, Blocks.GLASS.getDefaultState())
+					.put(Palette.CLEAR, Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.RED))
 					.put(Palette.ROOF_SLAB,
 							Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT,
 									BlockStoneSlab.EnumType.BRICK))

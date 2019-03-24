@@ -60,6 +60,9 @@ public class ItemWandArchitect extends ItemForMightyArchitects {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		if (worldIn.isRemote) {
+			if (!ArchitectManager.inPhase(ArchitectPhases.EditingThemes))
+				return super.onItemRightClick(worldIn, playerIn, handIn);
+			
 			if (playerIn.isSneaking()) {
 				PhaseEditTheme.resetVisualization();
 

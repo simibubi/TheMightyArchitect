@@ -166,6 +166,9 @@ public class PhaseEditTheme extends PhaseBase {
 	public static void setVisualization(Cuboid bounds) {
 		selectedDesign = bounds;
 		effectiveSelectedDesign = null;
+		
+		if (selectedDesign == null)
+			return;
 
 		switch (DesignExporter.type) {
 		case CORNER:
