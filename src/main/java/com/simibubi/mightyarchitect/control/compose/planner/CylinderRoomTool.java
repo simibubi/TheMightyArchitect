@@ -8,6 +8,7 @@ import com.simibubi.mightyarchitect.control.compose.CylinderStack;
 import com.simibubi.mightyarchitect.control.compose.GroundPlan;
 import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
+import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.helpful.RaycastHelper;
 import com.simibubi.mightyarchitect.control.helpful.TesselatorTextures;
@@ -74,8 +75,11 @@ public class CylinderRoomTool extends RoomTool {
 		room.length++;
 		room.x -= distance;
 		room.z -= distance;
-		room.height = 2;
-		room.designLayer = DesignLayer.Foundation;
+		
+		DesignTheme theme = groundPlan.theme;
+		boolean hasFoundation = theme.getLayers().contains(DesignLayer.Foundation);
+		room.height = hasFoundation? 2 : 4;
+		room.designLayer = hasFoundation ? DesignLayer.Foundation : DesignLayer.Regular;
 		
 		int radius = (room.width - 1) / 2;
 
@@ -91,8 +95,11 @@ public class CylinderRoomTool extends RoomTool {
 		if (radius > 5) {
 			return "§cTower radius is too large (>5): " + radius;
 		}
-
-		room.roofType = DesignType.ROOF;
+		
+		boolean hasFlatRoof = theme.getTypes().contains(DesignType.TOWER_FLAT_ROOF);
+		boolean hasNormalRoof = theme.getTypes().contains(DesignType.TOWER_ROOF);
+		room.roofType = hasNormalRoof? DesignType.ROOF : hasFlatRoof ? DesignType.FLAT_ROOF : DesignType.NONE;
+				
 		lastAddedStack = new CylinderStack(room);
 		groundPlan.addStack(lastAddedStack);
 		firstPosition = null;

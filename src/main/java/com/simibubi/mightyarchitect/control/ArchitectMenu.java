@@ -83,6 +83,7 @@ public class ArchitectMenu {
 			break;
 
 		case Previewing:
+			boolean test = ArchitectManager.testRun;
 			switch (c) {
 
 			case 'c':
@@ -98,6 +99,7 @@ public class ArchitectMenu {
 				return true;
 
 			case 's':
+				if (test) return false;
 				GuiTextPrompt gui = new GuiTextPrompt(result -> ArchitectManager.writeToFile(result), result -> {
 				});
 				gui.setButtonTextConfirm("Save Schematic");
@@ -108,6 +110,7 @@ public class ArchitectMenu {
 				return true;
 
 			case 'p':
+				if (test) return false;
 				if (!Minecraft.getMinecraft().isSingleplayer())
 					return false;
 				ArchitectManager.print();
@@ -127,7 +130,7 @@ public class ArchitectMenu {
 			case 'e':
 				ArchitectManager.enterPhase(ArchitectPhases.ListForEdit);
 				return false;
-			case 'f':
+			case 'c':
 				ArchitectManager.unload();
 				return true;
 			}
@@ -160,12 +163,19 @@ public class ArchitectMenu {
 			case 'e':
 				GuiOpener.open(new GuiEditTheme());
 				return true;
+				
+			case 'r':
+				DesignExporter.theme.clearDesigns();
+				ThemeStorage.exportTheme(DesignExporter.theme);
+				ArchitectManager.testRun = true;
+				ArchitectManager.compose(DesignExporter.theme);
+				return true;
 
 			case 'f':
 				DesignExporter.theme.clearDesigns();
 				ThemeStorage.exportTheme(DesignExporter.theme);
-				ArchitectManager.manageThemes();
-				return false;
+				ArchitectManager.unload();
+				return true;
 
 			case 'v':
 				ThemeValidator.check(DesignExporter.theme);
@@ -213,18 +223,24 @@ public class ArchitectMenu {
 			keybinds.put("R", "Re-Roll Designs");
 			keybinds.put("C", "Choose a Palette");
 			keybinds.lineBreak();
-			keybinds.put("S", "Save as Schematic");
-			if (Minecraft.getMinecraft().isSingleplayer())
-				keybinds.put("P", "Print blocks into world");
-			keybinds.lineBreak();
-			keybinds.put("U", "Unload");
+			
+			if (!ArchitectManager.testRun) {
+				keybinds.put("S", "Save as Schematic");
+				if (Minecraft.getMinecraft().isSingleplayer())
+					keybinds.put("P", "Print blocks into world");
+				keybinds.lineBreak();
+				keybinds.put("U", "Unload");				
+			} else {
+				keybinds.put("U", "Exit Test Run");								
+			}
+			
 			break;
 			
 		case ManagingThemes:
 			keybinds.put("N", "Create new Theme");
 			keybinds.put("E", "Edit an existing Theme");
 			keybinds.lineBreak();
-			keybinds.put("F", "Finish and Exit");
+			keybinds.put("C", "Cancel");
 			break;
 			
 		case ListForEdit:
@@ -238,9 +254,10 @@ public class ArchitectMenu {
 			
 		case EditingThemes:
 			keybinds.put("E", "Edit Theme settings");
-			keybinds.put("V", "Validate Theme");
-			keybinds.lineBreak();
 			keybinds.put("C", "Change default palette");
+			keybinds.lineBreak();
+			keybinds.put("V", "Validate Theme");
+			keybinds.put("R", "Run a Test");
 			keybinds.put("F", "Finish editing");
 			break;
 		default:

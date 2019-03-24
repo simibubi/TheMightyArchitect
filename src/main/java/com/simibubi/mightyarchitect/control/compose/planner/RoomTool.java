@@ -9,6 +9,7 @@ import com.simibubi.mightyarchitect.control.compose.GroundPlan;
 import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.control.compose.Stack;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
+import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.helpful.TesselatorTextures;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
@@ -50,8 +51,12 @@ public class RoomTool extends GroundPlanningToolBase {
 		Room room = new Room(firstPosition, selectedPosition.subtract(firstPosition));
 		room.width++;
 		room.length++;
-		room.height = 2;
-		room.designLayer = DesignLayer.Foundation;
+		
+		DesignTheme theme = groundPlan.theme;
+		boolean hasFoundation = theme.getLayers().contains(DesignLayer.Foundation);
+		room.height = hasFoundation? 2 : 4;
+		room.designLayer = hasFoundation ? DesignLayer.Foundation : DesignLayer.Regular;
+		
 		int facadeWidth = Math.min(room.width, room.length);
 
 		if (facadeWidth % 2 == 0) {
@@ -64,7 +69,15 @@ public class RoomTool extends GroundPlanningToolBase {
 			return "§cFacade is too wide (>25): " + facadeWidth;
 		}
 
-		room.roofType = facadeWidth > 15 ? DesignType.FLAT_ROOF : DesignType.ROOF;
+		boolean hasFlatRoof = theme.getTypes().contains(DesignType.FLAT_ROOF);
+		boolean hasNormalRoof = theme.getTypes().contains(DesignType.ROOF);
+		
+		if (facadeWidth > 15 || !hasNormalRoof) {
+			room.roofType = hasFlatRoof ?  DesignType.FLAT_ROOF : DesignType.NONE;
+		} else {
+			room.roofType = hasNormalRoof ? DesignType.ROOF : DesignType.NONE;			
+		}
+		
 		lastAddedStack = new Stack(room);
 		groundPlan.addStack(lastAddedStack);
 		firstPosition = null;

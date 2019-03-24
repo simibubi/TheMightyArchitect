@@ -60,6 +60,8 @@ public class ArchitectManager {
 	private static Schematic model = new Schematic();
 	private static GuiArchitectMenu menu = new GuiArchitectMenu();
 
+	public static boolean testRun = false;
+	
 	// Commands
 
 	public static void compose() {
@@ -80,7 +82,13 @@ public class ArchitectManager {
 	public static void unload() {
 		enterPhase(ArchitectPhases.Empty);
 		resetSchematic();
-		menu.setVisible(false);
+		
+		if (testRun) {
+			testRun = false;
+			editTheme(DesignExporter.theme);
+		} else {
+			menu.setVisible(false);
+		}
 	}
 
 	public static void design() {

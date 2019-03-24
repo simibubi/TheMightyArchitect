@@ -23,6 +23,7 @@ public class DesignTheme {
 	private boolean imported;
 	private PaletteDefinition defaultPalette;
 	
+	private List<DesignLayer> roomLayers;
 	private List<DesignLayer> layers;
 	private List<DesignType> types;
 	private Map<DesignLayer, Map<DesignType, Set<Design>>> designs;
@@ -37,7 +38,14 @@ public class DesignTheme {
 
 	public DesignTheme withLayers(DesignLayer... designLayers) {
 		layers = ImmutableList.copyOf(designLayers);
+		updateRoomLayers();
 		return this;
+	}
+
+	protected void updateRoomLayers() {
+		roomLayers = new ArrayList<>();
+		roomLayers.addAll(layers);
+		roomLayers.remove(DesignLayer.Roofing);
 	}
 
 	public DesignTheme withTypes(DesignType... designtypes) {
@@ -107,6 +115,7 @@ public class DesignTheme {
 	
 	public void setLayers(List<DesignLayer> layers) {
 		this.layers = layers;
+		updateRoomLayers();
 	}
 	
 	public void setTypes(List<DesignType> types) {
@@ -140,12 +149,13 @@ public class DesignTheme {
 
 		theme.layers = new ArrayList<>();
 		theme.types = new ArrayList<>();
-
+		
 		compound.getTagList("Layers", 8)
 				.forEach(s -> theme.layers.add(DesignLayer.valueOf(((NBTTagString) s).getString())));
 		compound.getTagList("Types", 8)
 				.forEach(s -> theme.types.add(DesignType.valueOf(((NBTTagString) s).getString())));
 
+		theme.updateRoomLayers();
 		return theme;
 	}
 	
@@ -159,6 +169,10 @@ public class DesignTheme {
 
 	public void setDefaultPalette(PaletteDefinition defaultPalette) {
 		this.defaultPalette = defaultPalette;
+	}
+
+	public List<DesignLayer> getRoomLayers() {
+		return roomLayers;
 	}
 
 }

@@ -54,6 +54,8 @@ public class GuiComposer extends GuiScreen {
 	private void init(Stack stack) {
 		partials = new ArrayList<>();
 		buttonList.clear();
+		DesignTheme theme = ArchitectManager.getModel().getGroundPlan().theme;
+		boolean tower = stack instanceof CylinderStack;
 
 		List<Room> rooms = stack.getRooms();
 		stack.forEach(room -> {
@@ -65,18 +67,27 @@ public class GuiComposer extends GuiScreen {
 		xTopLeft = (this.width - this.xSize) / 2;
 		yTopLeft = (this.height - this.ySize) / 2;
 
-		buttonNormalRoof = new SimiButton(BUTTON_NORMAL_ROOF, xTopLeft + 3 * 20, yTopLeft,
-				GuiResources.ICON_NORMAL_ROOF);
-		indicatorNormalRoof = new GuiIndicator(xTopLeft + 3 * 20, yTopLeft - 5, "");
+		int x = xTopLeft + 3 * 20;
+		if (theme.getTypes().contains(tower ? DesignType.TOWER_ROOF : DesignType.ROOF)) {
+			buttonNormalRoof = new SimiButton(BUTTON_NORMAL_ROOF, x, yTopLeft,
+					tower ? GuiResources.ICON_TOWER_ROOF : GuiResources.ICON_NORMAL_ROOF);
+			indicatorNormalRoof = new GuiIndicator(x, yTopLeft - 5, "");
+			buttonList.add(buttonNormalRoof);
+			x += 20;
+		}
 
-		buttonFlatRoof = new SimiButton(BUTTON_FLAT_ROOF, xTopLeft + 4 * 20, yTopLeft, GuiResources.ICON_FLAT_ROOF);
-		indicatorFlatRoof = new GuiIndicator(xTopLeft + 4 * 20, yTopLeft - 5, "");
+		if (theme.getTypes().contains(tower ? DesignType.TOWER_FLAT_ROOF : DesignType.FLAT_ROOF)) {
+			buttonFlatRoof = new SimiButton(BUTTON_FLAT_ROOF, x, yTopLeft,
+					tower ? GuiResources.ICON_TOWER_FLAT_ROOF : GuiResources.ICON_FLAT_ROOF);
+			indicatorFlatRoof = new GuiIndicator(x, yTopLeft - 5, "");
+			buttonList.add(buttonFlatRoof);
+			x += 20;
+		}
 
-		buttonNoRoof = new SimiButton(BUTTON_NO_ROOF, xTopLeft + 5 * 20, yTopLeft, GuiResources.ICON_NO_ROOF);
-		indicatorNoRoof = new GuiIndicator(xTopLeft + 5 * 20, yTopLeft - 5, "");
+		buttonNoRoof = new SimiButton(BUTTON_NO_ROOF, x, yTopLeft,
+				tower ? GuiResources.ICON_TOWER_NO_ROOF : GuiResources.ICON_NO_ROOF);
+		indicatorNoRoof = new GuiIndicator(x, yTopLeft - 5, "");
 
-		buttonList.add(buttonNormalRoof);
-		buttonList.add(buttonFlatRoof);
 		buttonList.add(buttonNoRoof);
 
 		swapRoofTypeIfNecessary();
@@ -90,18 +101,26 @@ public class GuiComposer extends GuiScreen {
 	}
 
 	private void swapRoofTypeIfNecessary() {
+		if (buttonNormalRoof == null)
+			return;
 		buttonNormalRoof.enabled = normalRoofPossible();
 
+		if (indicatorNormalRoof.state == State.OFF)
+			return;
+
+		indicate(indicatorNormalRoof);
 		if (normalRoofPossible()) {
 			return;
 		}
 
-		if (stack.highest().roofType != DesignType.ROOF) {
+		if (buttonFlatRoof != null) {
+			stack.highest().roofType = DesignType.FLAT_ROOF;
+			indicate(indicatorFlatRoof);
 			return;
 		}
 
-		stack.highest().roofType = DesignType.FLAT_ROOF;
-		indicate(indicatorFlatRoof);
+		stack.highest().roofType = DesignType.NONE;
+		indicate(indicatorNoRoof);
 	}
 
 	@Override
@@ -130,8 +149,10 @@ public class GuiComposer extends GuiScreen {
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
 
-		indicatorNormalRoof.render(mc, mouseX, mouseY);
-		indicatorFlatRoof.render(mc, mouseX, mouseY);
+		if (indicatorNormalRoof != null)
+			indicatorNormalRoof.render(mc, mouseX, mouseY);
+		if (indicatorFlatRoof != null)
+			indicatorFlatRoof.render(mc, mouseX, mouseY);
 		indicatorNoRoof.render(mc, mouseX, mouseY);
 
 		for (GuiComposerPartial partial : partials) {
@@ -151,7 +172,7 @@ public class GuiComposer extends GuiScreen {
 		private Room cuboid;
 		private GuiComposer parent;
 		private int layer;
-		
+
 		private Vector<ScrollArea> scrollAreaPosition;
 		private Vector<ScrollArea> scrollAreaSize;
 
@@ -188,7 +209,7 @@ public class GuiComposer extends GuiScreen {
 
 		private void initStyleAndStyleGroupFields(int x, int y) {
 			DesignTheme theme = ArchitectManager.getModel().getGroundPlan().theme;
-			List<DesignLayer> layers = theme.getLayers();
+			List<DesignLayer> layers = theme.getRoomLayers();
 			List<String> styleOptions = new ArrayList<>();
 			layers.forEach(layer -> {
 				styleOptions.add(layer.getDisplayName());
@@ -197,7 +218,7 @@ public class GuiComposer extends GuiScreen {
 			ScrollArea styleScrollArea = new ScrollArea(styleOptions, new IScrollAction() {
 				@Override
 				public void onScroll(int position) {
-					cuboid.designLayer = theme.getLayers().get(position);
+					cuboid.designLayer = theme.getRoomLayers().get(position);
 					style.text = styleOptions.get(position);
 				}
 			});
@@ -256,7 +277,7 @@ public class GuiComposer extends GuiScreen {
 			size.addElement(cuboid.width);
 			size.addElement(cuboid.height);
 			size.addElement(cuboid.length);
-			
+
 			scrollAreaPosition = new Vector<>(3);
 			scrollAreaSize = new Vector<>(3);
 
@@ -308,7 +329,7 @@ public class GuiComposer extends GuiScreen {
 							public void onScroll(int position) {
 								int diff;
 								switch (coordinate) {
-								
+
 								case X:
 									diff = (position * 2 + 1) - cuboid.width;
 									stack.forRoomAndEachAbove(cuboid, room -> {
@@ -316,14 +337,15 @@ public class GuiComposer extends GuiScreen {
 											return;
 										if (Math.min(room.width + diff, room.length) < stack.getMinWidth())
 											return;
-										if (stack instanceof CylinderStack && room.width + diff > stack.getMaxFacadeWidth())
+										if (stack instanceof CylinderStack
+												&& room.width + diff > stack.getMaxFacadeWidth())
 											return;
 										if (stack instanceof CylinderStack && room.width + diff < stack.getMinWidth())
 											return;
-										
+
 										room.width += diff;
 										room.x += diff / -2;
-										
+
 										if (stack instanceof CylinderStack) {
 											room.length += diff;
 											room.z += diff / -2;
@@ -331,7 +353,7 @@ public class GuiComposer extends GuiScreen {
 									});
 									swapRoofTypeIfNecessary();
 									break;
-									
+
 								case Y:
 									diff = position - cuboid.height;
 									cuboid.height += diff;
@@ -339,7 +361,7 @@ public class GuiComposer extends GuiScreen {
 										room.y += diff;
 									});
 									break;
-									
+
 								case Z:
 									diff = (position * 2 + 1) - cuboid.length;
 									stack.forRoomAndEachAbove(cuboid, room -> {
@@ -347,14 +369,15 @@ public class GuiComposer extends GuiScreen {
 											return;
 										if (Math.min(room.width, room.length + diff) < stack.getMinWidth())
 											return;
-										if (stack instanceof CylinderStack && room.width + diff > stack.getMaxFacadeWidth())
+										if (stack instanceof CylinderStack
+												&& room.width + diff > stack.getMaxFacadeWidth())
 											return;
 										if (stack instanceof CylinderStack && room.width + diff < stack.getMinWidth())
 											return;
-										
+
 										room.length += diff;
 										room.z += diff / -2;
-										
+
 										if (stack instanceof CylinderStack) {
 											room.width += diff;
 											room.x += diff / -2;
@@ -362,7 +385,7 @@ public class GuiComposer extends GuiScreen {
 									});
 									swapRoofTypeIfNecessary();
 									break;
-									
+
 								}
 								parent.updateAllPositioningLabels();
 							}
@@ -408,7 +431,7 @@ public class GuiComposer extends GuiScreen {
 				labelPosition.elementAt(i).text = pos.elementAt(i).toString();
 				labelSize.elementAt(i).text = size.elementAt(i).toString();
 				scrollAreaPosition.elementAt(i).setState(pos.elementAt(i));
-				scrollAreaSize.elementAt(i).setState(i == 1? size.elementAt(i) : (size.elementAt(i) - 1) / 2);
+				scrollAreaSize.elementAt(i).setState(i == 1 ? size.elementAt(i) : (size.elementAt(i) - 1) / 2);
 			}
 		}
 
@@ -472,8 +495,10 @@ public class GuiComposer extends GuiScreen {
 	}
 
 	private void indicate(GuiIndicator indicator) {
-		indicatorNormalRoof.state = indicator == indicatorNormalRoof ? State.ON : State.OFF;
-		indicatorFlatRoof.state = indicator == indicatorFlatRoof ? State.ON : State.OFF;
+		if (indicatorNormalRoof != null)
+			indicatorNormalRoof.state = indicator == indicatorNormalRoof ? State.ON : State.OFF;
+		if (indicatorFlatRoof != null)
+			indicatorFlatRoof.state = indicator == indicatorFlatRoof ? State.ON : State.OFF;
 		indicatorNoRoof.state = indicator == indicatorNoRoof ? State.ON : State.OFF;
 	}
 

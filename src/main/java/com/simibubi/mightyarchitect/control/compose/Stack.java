@@ -4,39 +4,44 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
+import com.simibubi.mightyarchitect.control.design.DesignTheme;
 
 import net.minecraft.util.math.BlockPos;
 
 public class Stack {
 
 	public static final int MaxHeight = 5;
-	
+
 	private List<Room> rooms;
-	
+
 	public Stack(Room room) {
 		rooms = new ArrayList<>();
-		
-		if (room.designLayer == DesignLayer.None)
-			room.designLayer = DesignLayer.Foundation;
-		
+		DesignTheme theme = ArchitectManager.getModel().getGroundPlan().theme;
+
+		if (room.designLayer == DesignLayer.None) {
+			room.designLayer = theme.getLayers().contains(DesignLayer.Foundation) ? DesignLayer.Foundation
+					: DesignLayer.Regular;
+		}
+
 		rooms.add(room);
 	}
-	
+
 	public Room lowest() {
 		if (rooms.isEmpty())
 			return null;
-		
+
 		return rooms.get(0);
 	}
-	
+
 	public Room highest() {
 		if (rooms.isEmpty())
 			return null;
-		
+
 		return rooms.get(rooms.size() - 1);
 	}
-	
+
 	public void increase() {
 		if (rooms.size() < MaxHeight) {
 			Room newRoom = highest().stack();
@@ -47,12 +52,12 @@ public class Stack {
 			rooms.add(newRoom);
 		}
 	}
-	
+
 	public void decrease() {
-		if (!rooms.isEmpty()) 
+		if (!rooms.isEmpty())
 			rooms.remove(highest());
 	}
-	
+
 	public void forEachAbove(Room anchor, Consumer<? super Room> action) {
 		rooms.subList(rooms.indexOf(anchor) + 1, rooms.size()).forEach(action);
 	}
@@ -60,33 +65,32 @@ public class Stack {
 	public void forRoomAndEachAbove(Room anchor, Consumer<? super Room> action) {
 		rooms.subList(rooms.indexOf(anchor), rooms.size()).forEach(action);
 	}
-	
+
 	public void forEach(Consumer<? super Room> action) {
 		rooms.forEach(action);
 	}
-	
+
 	public Room getRoomAtPos(BlockPos localPos) {
 		for (Room room : rooms)
 			if (room.contains(localPos))
 				return room;
 		return null;
 	}
-	
+
 	public List<Room> getRooms() {
 		return rooms;
 	}
-	
+
 	public int floors() {
 		return rooms.size();
 	}
-	
+
 	public int getMaxFacadeWidth() {
 		return 35;
 	}
-	
+
 	public int getMinWidth() {
 		return 5;
 	}
-	
-	
+
 }
