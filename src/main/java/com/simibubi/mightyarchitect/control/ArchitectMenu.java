@@ -71,6 +71,10 @@ public class ArchitectMenu {
 				ArchitectManager.manageThemes();
 				return false;
 				
+			case 'r':
+				ThemeStorage.reloadExternal();
+				return false;
+				
 			default:
 				int index = c - '1';
 				ThemeStorage.reloadExternal();
@@ -172,12 +176,20 @@ public class ArchitectMenu {
 				ArchitectKits.RoofingToolkit();
 				return true;
 
-			case 'c':
+			case 'd':
 				ArchitectManager.pickScanPalette();
 				return true;
 			
-			case 'e':
+			case 't':
 				GuiOpener.open(new GuiEditTheme());
+				return true;
+				
+			case 'e':
+				ThemeStorage.exportThemeFullyAsFile(DesignExporter.theme, true);
+				return true;
+				
+			case 'j':
+				ThemeStorage.exportThemeFullyAsFile(DesignExporter.theme, false);
 				return true;
 				
 			case 'r':
@@ -230,6 +242,7 @@ public class ArchitectMenu {
 				keybinds.put("" + (allThemes.indexOf(theme) + 1), theme.getDisplayName());
 			}
 			keybinds.lineBreak();
+			keybinds.put("R", "Reload Imported");
 			keybinds.put("M", "Manage Themes...");
 			keybinds.put("C", "Cancel");
 			break;
@@ -274,11 +287,13 @@ public class ArchitectMenu {
 			keybinds.put("3", "Equip Regular Blocks");
 			keybinds.put("4", "Equip Roofing Blocks");
 			keybinds.lineBreak();
-			keybinds.put("C", "Change default palette");
-			keybinds.put("E", "Edit Theme settings");
+			keybinds.put("D", "Default palette");
+			keybinds.put("T", "Theme settings");
 			keybinds.lineBreak();
 			keybinds.put("V", "Validate Theme");
 			keybinds.put("R", "Run a Test");
+			keybinds.put("E", "Export Theme compressed");
+			keybinds.put("J", "Export Theme as Json");
 			keybinds.put("F", "Finish editing");
 			break;
 		default:

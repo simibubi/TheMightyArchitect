@@ -1,18 +1,25 @@
 package com.simibubi.mightyarchitect.control.design;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.simibubi.mightyarchitect.control.helpful.FilesHelper;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 public class ThemeStorage {
 
@@ -58,11 +65,11 @@ public class ThemeStorage {
 
 		return importedThemes;
 	}
-	
+
 	public static List<DesignTheme> getCreated() {
 		if (createdThemes == null)
 			importThemes();
-		
+
 		return createdThemes;
 	}
 
@@ -72,6 +79,8 @@ public class ThemeStorage {
 	}
 
 	public static DesignTheme createTheme(String name) {
+		if (name.isEmpty())
+			name = "My Theme";
 		DesignTheme theme = new DesignTheme(name, Minecraft.getMinecraft().player.getName(),
 				new StandardDesignPicker());
 		theme.setFilePath(FilesHelper.slug(name));
@@ -93,6 +102,56 @@ public class ThemeStorage {
 
 		String palettePath = folderPath + "/" + foldername + "/palette.json";
 		FilesHelper.saveTagCompoundAsJson(theme.getDefaultPalette().writeToNBT(new NBTTagCompound()), palettePath);
+	}
+
+	public static String exportThemeFullyAsFile(DesignTheme theme, boolean compressed) {
+		String folderPath = "themes/export";
+		FilesHelper.createFolderIfMissing(folderPath);
+		NBTTagCompound massiveThemeTag = new NBTTagCompound();
+
+		massiveThemeTag.setTag("Theme", theme.asTagCompound());
+		massiveThemeTag.setTag("Palette", theme.getDefaultPalette().writeToNBT(new NBTTagCompound()));
+
+		Map<DesignLayer, Map<DesignType, Set<NBTTagCompound>>> designFiles = DesignResourceLoader
+				.loadThemeFromFolder(theme);
+
+		NBTTagCompound layers = new NBTTagCompound();
+		for (DesignLayer layer : theme.getLayers()) {
+			if (!designFiles.containsKey(layer))
+				continue;
+
+			NBTTagCompound types = new NBTTagCompound();
+			for (DesignType type : theme.getTypes()) {
+				if (!designFiles.get(layer).containsKey(type))
+					continue;
+
+				NBTTagList designs = new NBTTagList();
+				for (NBTTagCompound tag : designFiles.get(layer).get(type))
+					designs.appendTag(tag);
+				types.setTag(type.name(), designs);
+			}
+			layers.setTag(layer.name(), types);
+		}
+		massiveThemeTag.setTag("Designs", layers);
+
+		if (compressed) {
+			try {
+				OutputStream outputStream = Files.newOutputStream(
+						Paths.get(folderPath + "/" + theme.getFilePath() + ".theme"), StandardOpenOption.CREATE);
+				CompressedStreamTools.writeCompressed(massiveThemeTag, outputStream);
+				outputStream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}			
+		} else {
+			FilesHelper.saveTagCompoundAsJsonCompact(massiveThemeTag, folderPath + "/" + theme.getFilePath() + ".json");	
+		}
+		
+		return theme.getFilePath() + (compressed? ".theme" : ".json");
+	}
+
+	public static DesignTheme importThemeFullyFromFile(String path) {
+		return null;
 	}
 
 	private static DesignTheme loadInternalTheme(String themeFolder) {
@@ -118,25 +177,43 @@ public class ThemeStorage {
 
 					NBTTagCompound themeCompound;
 					NBTTagCompound paletteCompound;
+					
+					if (themeFolder.equals("export"))
+						continue;
 
-					if (themeFolder.endsWith(".zip")) {
-						String themelocation = themeFolder.replace(".zip", "/theme.json");
-						String palettelocation = themeFolder.replace(".zip", "/palette.json");
-						Path zipPath = Paths.get(folderPath, themeFolder);
-						themeCompound = FilesHelper.loadJsonFromZip(zipPath, themelocation);
-						paletteCompound = FilesHelper.loadJsonFromZip(zipPath, palettelocation);
-
+					if (themeFolder.endsWith(".theme") || themeFolder.endsWith(".json")) {
+						NBTTagCompound themeFile = new NBTTagCompound();
+						
+						if (themeFolder.endsWith(".theme")) {
+							try {
+								InputStream inputStream = Files.newInputStream(
+										Paths.get(folderPath + "/" + themeFolder),
+										StandardOpenOption.READ);
+								themeFile = CompressedStreamTools.readCompressed(inputStream);
+								inputStream.close();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}							
+						} else {
+							themeFile = FilesHelper.loadJsonAsNBT("themes/" + themeFolder);
+						}
+						
+						themeCompound = themeFile.getCompoundTag("Theme");
+						paletteCompound = themeFile.getCompoundTag("Palette");						
 					} else {
 						themeCompound = FilesHelper.loadJsonAsNBT(folderPath + "/" + themeFolder + "/theme.json");
 						paletteCompound = FilesHelper.loadJsonAsNBT(folderPath + "/" + themeFolder + "/palette.json");
 					}
+					
+					if (themeCompound == null)
+						continue;
 
 					DesignTheme theme = DesignTheme.fromNBT(themeCompound);
 					theme.setFilePath(themeFolder);
 					theme.setImported(true);
 					theme.setDefaultPalette(PaletteDefinition.fromNBT(paletteCompound));
 					importedThemes.add(theme);
-					if (!themeFolder.endsWith(".zip"))
+					if (!themeFolder.endsWith(".theme"))
 						createdThemes.add(theme);
 				}
 				newDirectoryStream.close();

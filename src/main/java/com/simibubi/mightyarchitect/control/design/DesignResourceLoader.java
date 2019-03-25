@@ -1,10 +1,12 @@
 package com.simibubi.mightyarchitect.control.design;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -14,7 +16,9 @@ import com.simibubi.mightyarchitect.TheMightyArchitect;
 import com.simibubi.mightyarchitect.control.design.partials.Design;
 import com.simibubi.mightyarchitect.control.helpful.FilesHelper;
 
+import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 public class DesignResourceLoader {
 
@@ -46,34 +50,96 @@ public class DesignResourceLoader {
 
 	public static Map<DesignLayer, Map<DesignType, Set<Design>>> loadExternalDesignsForTheme(DesignTheme theme) {
 		final Map<DesignLayer, Map<DesignType, Set<Design>>> designMap = new HashMap<>();
+		boolean isFile = theme.getFilePath().endsWith(".theme") || theme.getFilePath().endsWith(".json");
+		final Map<DesignLayer, Map<DesignType, Set<NBTTagCompound>>> compoundMap = isFile ? loadThemeFromThemeFile(theme) : loadThemeFromFolder(theme);
+
+		theme.getLayers().forEach(layer -> {
+			if (!compoundMap.containsKey(layer))
+				return;
+
+			final HashMap<DesignType, Set<Design>> typeMap = new HashMap<>();
+			theme.getTypes().forEach(type -> {
+				if (!compoundMap.get(layer).containsKey(type))
+					return;
+
+				Set<Design> designs = new HashSet<>();
+				compoundMap.get(layer).get(type).forEach(compound -> designs.add(type.getDesign().fromNBT(compound)));
+				typeMap.put(type, designs);
+			});
+			designMap.put(layer, typeMap);
+		});
+		return designMap;
+	}
+
+	private static Map<DesignLayer, Map<DesignType, Set<NBTTagCompound>>> loadThemeFromThemeFile(DesignTheme theme) {
+		final Map<DesignLayer, Map<DesignType, Set<NBTTagCompound>>> compoundMap = new HashMap<>();
+
+		NBTTagCompound importedThemeFile = new NBTTagCompound();
+		
+		if (theme.getFilePath().endsWith(".theme")) {
+			try {
+				InputStream inputStream = Files.newInputStream(Paths.get("themes/" + theme.getFilePath()),
+						StandardOpenOption.READ);
+				importedThemeFile = CompressedStreamTools.readCompressed(inputStream);
+				inputStream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}			
+		} else {
+			importedThemeFile = FilesHelper.loadJsonAsNBT("themes/" + theme.getFilePath());
+		}
+		
+		final NBTTagCompound themeFile = importedThemeFile;
+
+		if (themeFile.hasKey("Designs")) {
+			theme.getLayers().forEach(layer -> {
+
+				final HashMap<DesignType, Set<NBTTagCompound>> typeMap = new HashMap<>();
+				theme.getTypes().forEach(type -> {
+
+					Set<NBTTagCompound> designs = new HashSet<>();
+					NBTTagCompound tagLayers = themeFile.getCompoundTag("Designs");
+					if (tagLayers.hasKey(layer.name())) {
+						NBTTagCompound tagTypes = tagLayers.getCompoundTag(layer.name());
+						if (tagTypes.hasKey(type.name())) {
+							NBTTagList tagDesigns = tagTypes.getTagList(type.name(), 10);
+							tagDesigns.forEach(tag -> designs.add((NBTTagCompound) tag));
+						}
+					}
+					typeMap.put(type, designs);
+				});
+				compoundMap.put(layer, typeMap);
+
+			});
+		}
+
+		return compoundMap;
+	}
+
+	public static Map<DesignLayer, Map<DesignType, Set<NBTTagCompound>>> loadThemeFromFolder(DesignTheme theme) {
+		final Map<DesignLayer, Map<DesignType, Set<NBTTagCompound>>> compoundMap = new HashMap<>();
 
 		String folderPath = "themes";
 		String themePath = folderPath + "/" + theme.getFilePath();
 
 		if (!Files.exists(Paths.get(themePath)) && !Files.isDirectory(Paths.get(themePath)))
-			return designMap;
+			return compoundMap;
 
 		theme.getLayers().forEach(layer -> {
 
-			final HashMap<DesignType, Set<Design>> typeMap = new HashMap<>();
+			final HashMap<DesignType, Set<NBTTagCompound>> typeMap = new HashMap<>();
 			theme.getTypes().forEach(type -> {
-
-				if (themePath.endsWith(".zip")) {
-					typeMap.put(type, importZipDesigns(theme, layer, type, themePath, theme.getFilePath().replace(".zip", "") + "/"
-							+ layer.getFilePath() + "/" + type.getFilePath()));
-					return;
-				}
 
 				String path = folderPath + "/" + theme.getFilePath() + "/" + layer.getFilePath() + "/"
 						+ type.getFilePath();
 				typeMap.put(type, importExternalDesigns(theme, layer, type, path));
 
 			});
-			designMap.put(layer, typeMap);
+			compoundMap.put(layer, typeMap);
 
 		});
 
-		return designMap;
+		return compoundMap;
 	}
 
 	private static Set<Design> importDesigns(DesignTheme theme, DesignLayer layer, DesignType type, String folderPath) {
@@ -92,9 +158,9 @@ public class DesignResourceLoader {
 		return designs;
 	}
 
-	private static Set<Design> importExternalDesigns(DesignTheme theme, DesignLayer layer, DesignType type,
+	private static Set<NBTTagCompound> importExternalDesigns(DesignTheme theme, DesignLayer layer, DesignType type,
 			String folderPath) {
-		final Set<Design> designs = new HashSet<>();
+		final Set<NBTTagCompound> designs = new HashSet<>();
 
 		if (!Files.exists(Paths.get(folderPath)))
 			return designs;
@@ -103,26 +169,11 @@ public class DesignResourceLoader {
 			DirectoryStream<Path> newDirectoryStream = Files.newDirectoryStream(Paths.get(folderPath));
 			for (Path path : newDirectoryStream) {
 				final NBTTagCompound designTag = FilesHelper.loadJsonAsNBT(path.toString());
-				designs.add(type.getDesign().fromNBT(designTag));
+				designs.add(designTag);
 			}
 			newDirectoryStream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-
-		return designs;
-	}
-
-	private static Set<Design> importZipDesigns(DesignTheme theme, DesignLayer layer, DesignType type, String zipPath,
-			String elementPath) {
-		final Set<Design> designs = new HashSet<>();
-
-		for (int i = 0; i < 2048; i++) {
-			NBTTagCompound designTag = FilesHelper.loadJsonFromZip(Paths.get(zipPath),
-					elementPath + ((i == 0) ? "/design" : "/design_" + i) + ".json");
-			if (designTag == null)
-				break;
-			designs.add(type.getDesign().fromNBT(designTag));
 		}
 
 		return designs;
