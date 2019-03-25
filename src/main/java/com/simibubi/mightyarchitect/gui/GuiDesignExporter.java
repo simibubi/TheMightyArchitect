@@ -149,17 +149,42 @@ public class GuiDesignExporter extends GuiScreen {
 			additionalDataKey = type.getAdditionalDataName();
 
 			if (type.hasSizeData()) {
-				if (additionalDataValue == -1)
-					additionalDataValue = 1;
-
+				
+				if (additionalDataValue % 2 == 0)
+					additionalDataValue++;
+				if (additionalDataValue < type.getMinSize())
+					additionalDataValue = type.getMinSize();
+				if (additionalDataValue > type.getMaxSize())
+					additionalDataValue = type.getMaxSize();
 				labelAdditionalData.text = additionalDataValue + "m";
-				scrollAreaAdditionalData = new ScrollArea(1, 33, new IScrollAction() {
-					@Override
-					public void onScroll(int position) {
-						additionalDataValue = position;
-						labelAdditionalData.text = position + "m";
-					}
-				});
+				
+				if (type == DesignType.ROOF) {
+					int min = (type.getMinSize() - 1) / 2;
+					int max = (type.getMaxSize() - 1) / 2;
+					
+					scrollAreaAdditionalData = new ScrollArea(min, max +1, new IScrollAction() {
+						@Override
+						public void onScroll(int position) {
+							additionalDataValue = position * 2 + 1;
+							labelAdditionalData.text = additionalDataValue + "m";
+						}
+					});
+					scrollAreaAdditionalData.setState((additionalDataValue -1) / 2);
+					
+				} else {
+					int min = type.getMinSize();
+					int max = type.getMaxSize();
+					
+					scrollAreaAdditionalData = new ScrollArea(min, max +1, new IScrollAction() {
+						@Override
+						public void onScroll(int position) {
+							additionalDataValue = position;
+							labelAdditionalData.text = position + "m";
+						}
+					});
+					scrollAreaAdditionalData.setState(additionalDataValue);
+				}
+				
 				scrollAreaAdditionalData.setNumeric(true);
 
 			} else if (type.hasSubtypes()) {
@@ -179,11 +204,11 @@ public class GuiDesignExporter extends GuiScreen {
 					}
 				});
 				scrollAreaAdditionalData.setNumeric(false);
+				scrollAreaAdditionalData.setState(additionalDataValue);
 			}
 
 			scrollAreaAdditionalData.setTitle(additionalDataKey);
 			scrollAreaAdditionalData.setBounds(xTopLeft + 93, yTopLeft + 85, 90, 14);
-			scrollAreaAdditionalData.setState(additionalDataValue);
 
 		} else {
 

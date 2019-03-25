@@ -85,6 +85,36 @@ public enum DesignType {
 			return false;
 		}
 	}
+	
+	public int getMaxSize() {
+		switch (this) {
+		case ROOF:
+			return ThemeStatistics.MAX_ROOF_SPAN;
+		case FLAT_ROOF:
+			return ThemeStatistics.MAX_MARGIN;
+		case TOWER:
+		case TOWER_FLAT_ROOF:
+		case TOWER_ROOF:
+			return ThemeStatistics.MAX_TOWER_RADIUS;
+		default:
+			return 0;
+		}
+	}
+	
+	public int getMinSize() {
+		switch (this) {
+		case ROOF:
+			return ThemeStatistics.MIN_ROOF_SPAN;
+		case FLAT_ROOF:
+			return ThemeStatistics.MIN_MARGIN;
+		case TOWER:
+		case TOWER_FLAT_ROOF:
+		case TOWER_ROOF:
+			return ThemeStatistics.MIN_TOWER_RADIUS;
+		default:
+			return 0;
+		}
+	}
 
 	public boolean hasSubtypes() {
 		switch (this) {

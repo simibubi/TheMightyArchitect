@@ -7,18 +7,18 @@ import java.util.function.Consumer;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
+import com.simibubi.mightyarchitect.control.design.ThemeStatistics;
 
 import net.minecraft.util.math.BlockPos;
 
 public class Stack {
 
-	public static final int MaxHeight = 5;
-
-	private List<Room> rooms;
+	protected List<Room> rooms;
+	protected DesignTheme theme;
 
 	public Stack(Room room) {
 		rooms = new ArrayList<>();
-		DesignTheme theme = ArchitectManager.getModel().getGroundPlan().theme;
+		theme = ArchitectManager.getModel().getGroundPlan().theme;
 
 		if (room.designLayer == DesignLayer.None) {
 			room.designLayer = theme.getLayers().contains(DesignLayer.Foundation) ? DesignLayer.Foundation
@@ -43,11 +43,11 @@ public class Stack {
 	}
 
 	public void increase() {
-		if (rooms.size() < MaxHeight) {
+		if (rooms.size() < ThemeStatistics.MAX_FLOORS) {
 			Room newRoom = highest().stack();
 			if (highest().designLayer == DesignLayer.Foundation) {
 				newRoom.designLayer = DesignLayer.Regular;
-				newRoom.height = Math.max(highest().height, 4);
+				newRoom.height = Math.max(highest().height, Math.min(4, theme.getMaxFloorHeight()));
 			}
 			rooms.add(newRoom);
 		}
@@ -86,11 +86,11 @@ public class Stack {
 	}
 
 	public int getMaxFacadeWidth() {
-		return 35;
+		return ThemeStatistics.MAX_ROOF_SPAN;
 	}
 
 	public int getMinWidth() {
-		return 5;
+		return theme.getStatistics().MinRoomLength;
 	}
 
 }

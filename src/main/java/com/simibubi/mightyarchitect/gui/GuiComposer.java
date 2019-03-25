@@ -16,16 +16,19 @@ import com.simibubi.mightyarchitect.control.compose.Stack;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.DesignType;
+import com.simibubi.mightyarchitect.control.design.ThemeStatistics;
 import com.simibubi.mightyarchitect.gui.widgets.DynamicLabel;
 import com.simibubi.mightyarchitect.gui.widgets.GuiIndicator;
 import com.simibubi.mightyarchitect.gui.widgets.GuiIndicator.State;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollArea;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollArea.ICancelableScrollAction;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollArea.IScrollAction;
+import com.simibubi.mightyarchitect.gui.widgets.ScrollBar;
 import com.simibubi.mightyarchitect.gui.widgets.SimiButton;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 
 public class GuiComposer extends GuiScreen {
 
@@ -47,15 +50,22 @@ public class GuiComposer extends GuiScreen {
 	private GuiIndicator indicatorFlatRoof;
 	private GuiIndicator indicatorNoRoof;
 
+	private ScrollBar scrollBar;
+
+	private DesignTheme theme;
+	private ThemeStatistics stats;
+	private boolean tower;
+
 	public GuiComposer(Stack stack) {
 		this.stack = stack;
+		theme = ArchitectManager.getModel().getGroundPlan().theme;
+		stats = theme.getStatistics();
+		tower = stack instanceof CylinderStack;
 	}
 
 	private void init(Stack stack) {
 		partials = new ArrayList<>();
 		buttonList.clear();
-		DesignTheme theme = ArchitectManager.getModel().getGroundPlan().theme;
-		boolean tower = stack instanceof CylinderStack;
 
 		List<Room> rooms = stack.getRooms();
 		stack.forEach(room -> {
@@ -67,8 +77,10 @@ public class GuiComposer extends GuiScreen {
 		xTopLeft = (this.width - this.xSize) / 2;
 		yTopLeft = (this.height - this.ySize) / 2;
 
+		scrollBar = new ScrollBar(xTopLeft + xSize + 20, ySize);
+
 		int x = xTopLeft + 3 * 20;
-		if (theme.getTypes().contains(tower ? DesignType.TOWER_ROOF : DesignType.ROOF)) {
+		if (tower && stats.hasConicalRoof || !tower && stats.hasGables) {
 			buttonNormalRoof = new SimiButton(BUTTON_NORMAL_ROOF, x, yTopLeft,
 					tower ? GuiResources.ICON_TOWER_ROOF : GuiResources.ICON_NORMAL_ROOF);
 			indicatorNormalRoof = new GuiIndicator(x, yTopLeft - 5, "");
@@ -76,7 +88,7 @@ public class GuiComposer extends GuiScreen {
 			x += 20;
 		}
 
-		if (theme.getTypes().contains(tower ? DesignType.TOWER_FLAT_ROOF : DesignType.FLAT_ROOF)) {
+		if (tower && stats.hasFlatTowerRoof || !tower && stats.hasFlatRoof) {
 			buttonFlatRoof = new SimiButton(BUTTON_FLAT_ROOF, x, yTopLeft,
 					tower ? GuiResources.ICON_TOWER_FLAT_ROOF : GuiResources.ICON_FLAT_ROOF);
 			indicatorFlatRoof = new GuiIndicator(x, yTopLeft - 5, "");
@@ -97,7 +109,8 @@ public class GuiComposer extends GuiScreen {
 	}
 
 	private boolean normalRoofPossible() {
-		return Math.min(stack.highest().width, stack.highest().length) <= 15;
+		return Math.min(stack.highest().width,
+				stack.highest().length) <= (tower ? stats.MaxConicalRoofRadius * 2 + 1 : stats.MaxGableRoof);
 	}
 
 	private void swapRoofTypeIfNecessary() {
@@ -126,7 +139,7 @@ public class GuiComposer extends GuiScreen {
 	@Override
 	public void initGui() {
 		init(stack);
-		if (stack.floors() <= 4)
+		if (stack.floors() <= ThemeStatistics.MAX_FLOORS)
 			addButton(new SimiButton(BUTTON_ADD_LAYER, xTopLeft + 2, yTopLeft, GuiResources.ICON_ADD));
 		addButton(new SimiButton(BUTTON_REMOVE_LAYER, xTopLeft + 22, yTopLeft, GuiResources.ICON_TRASH));
 
@@ -140,6 +153,10 @@ public class GuiComposer extends GuiScreen {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
+
+		mouseY -= scrollBar.getYShift();
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(0, scrollBar.getYShift(), 0);
 
 		for (int layer = 0; layer < partials.size(); layer++) {
 			GuiComposerPartial partial = partials.get(layer);
@@ -155,11 +172,20 @@ public class GuiComposer extends GuiScreen {
 			indicatorFlatRoof.render(mc, mouseX, mouseY);
 		indicatorNoRoof.render(mc, mouseX, mouseY);
 
+		GlStateManager.popMatrix();
+		
+		scrollBar.render(this);
+		
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(0, scrollBar.getYShift(), 0);
+		
 		for (GuiComposerPartial partial : partials) {
 			for (ScrollArea area : partial.scrollAreas) {
 				area.draw(this, mouseX, mouseY);
 			}
 		}
+
+		GlStateManager.popMatrix();
 	}
 
 	public void updateAllPositioningLabels() {
@@ -208,7 +234,6 @@ public class GuiComposer extends GuiScreen {
 		}
 
 		private void initStyleAndStyleGroupFields(int x, int y) {
-			DesignTheme theme = ArchitectManager.getModel().getGroundPlan().theme;
 			List<DesignLayer> layers = theme.getRoomLayers();
 			List<String> styleOptions = new ArrayList<>();
 			layers.forEach(layer -> {
@@ -323,7 +348,7 @@ public class GuiComposer extends GuiScreen {
 			for (int i = 0; i < 3; i++) {
 				final int coordinate = i;
 				final boolean vertical = coordinate == Y;
-				ScrollArea scrollArea = new ScrollArea(vertical ? 1 : 2, vertical ? 11 : 20,
+				ScrollArea scrollArea = new ScrollArea(vertical ? 1 : 2, vertical ? theme.getMaxFloorHeight() + 1 : 20,
 						new ICancelableScrollAction() {
 							@Override
 							public void onScroll(int position) {
@@ -440,7 +465,7 @@ public class GuiComposer extends GuiScreen {
 			int y = parent.yTopLeft + yOffset;
 			GuiResources.COMPOSER.draw(parent, x, y);
 
-			drawString(fontRenderer, "" + (layer + 1), x + 10, y + 15, 0xCCDDFF);
+			drawCenteredString(fontRenderer, "" + (layer + 1), x + 13, y + 15, 0xCCDDFF);
 
 			fontRenderer.drawString("Type", x + 32, y + 15, GuiResources.FONT_COLOR, false);
 			fontRenderer.drawString("Style", x + 32, y + 35, GuiResources.FONT_COLOR, false);
@@ -509,6 +534,7 @@ public class GuiComposer extends GuiScreen {
 
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+		mouseY = (int) (mouseY - scrollBar.getYShift());
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 
 		int scrollAmount = ((mouseButton == 0) ? -1 : 1) * ((Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) ? 5 : 1);
@@ -525,10 +551,13 @@ public class GuiComposer extends GuiScreen {
 		super.handleMouseInput();
 
 		int i = Mouse.getEventX() * this.width / this.mc.displayWidth;
-		int j = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
-
+		float jBeforeShift = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+		int j = (int) (jBeforeShift
+				- scrollBar.getYShift());
 		int scroll = Mouse.getEventDWheel();
+
 		if (scroll != 0) {
+			scrollBar.tryScroll(i, (int) jBeforeShift, (int) (scroll / -120f));
 			for (GuiComposerPartial partial : partials) {
 				for (ScrollArea area : partial.scrollAreas) {
 					area.tryScroll(i, j, (int) (scroll / -120f));

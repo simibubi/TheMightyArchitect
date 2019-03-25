@@ -110,10 +110,13 @@ public class ScrollArea extends Gui {
 	public void draw(GuiScreen screen, int mouseX, int mouseY) {
 		GlStateManager.pushAttrib();
 		if (enabled && isHovered(mouseX, mouseY)) {
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(mouseX, mouseY,0);
 			if (tooltipContent.isPresent())
-				screen.drawHoveringText(getToolTip(), mouseX, mouseY);
+				screen.drawHoveringText(getToolTip(), 0, 0);
 			else
-				screen.drawHoveringText(ChatFormatting.BLUE + title, mouseX, mouseY);
+				screen.drawHoveringText(ChatFormatting.BLUE + title, 0, 0);
+			GlStateManager.popMatrix();
 		}
 
 		GlStateManager.popAttrib();

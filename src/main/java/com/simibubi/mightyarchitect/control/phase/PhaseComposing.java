@@ -6,7 +6,6 @@ import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.ImmutableList;
 import com.simibubi.mightyarchitect.control.compose.planner.Tools;
-import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.helpful.ShaderManager;
 import com.simibubi.mightyarchitect.control.helpful.Shaders;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
@@ -45,7 +44,7 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 		if (key == Keyboard.KEY_RIGHT) {
 			activeTool = activeTool.next();
 			
-			if (!getModel().getGroundPlan().theme.getTypes().contains(DesignType.TOWER)) {
+			if (!getModel().getGroundPlan().theme.getStatistics().hasTowers) {
 				if (activeTool == Tools.Cylinder)
 					activeTool = activeTool.next();					
 			}
@@ -57,7 +56,7 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 		if (key == Keyboard.KEY_LEFT) {
 			activeTool = activeTool.previous();
 			
-			if (!getModel().getGroundPlan().theme.getTypes().contains(DesignType.TOWER)) {
+			if (!getModel().getGroundPlan().theme.getStatistics().hasTowers) {
 				if (activeTool == Tools.Cylinder)
 					activeTool = activeTool.previous();					
 			}

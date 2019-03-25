@@ -11,6 +11,7 @@ import com.simibubi.mightyarchitect.control.compose.Stack;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.DesignType;
+import com.simibubi.mightyarchitect.control.design.ThemeStatistics;
 import com.simibubi.mightyarchitect.control.helpful.TesselatorTextures;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
 
@@ -53,35 +54,37 @@ public class RoomTool extends GroundPlanningToolBase {
 		room.length++;
 		
 		DesignTheme theme = groundPlan.theme;
+		ThemeStatistics stats = theme.getStatistics();
 		boolean hasFoundation = theme.getLayers().contains(DesignLayer.Foundation);
-		room.height = hasFoundation? 2 : 4;
+		
+		room.height = hasFoundation? 2 : Math.min(4, theme.getMaxFloorHeight());
 		room.designLayer = hasFoundation ? DesignLayer.Foundation : DesignLayer.Regular;
 		
 		int facadeWidth = Math.min(room.width, room.length);
 
 		if (facadeWidth % 2 == 0) {
-			return "§cFacade cannot have even width: " + facadeWidth;
+			return "Facade cannot have even width: " + facadeWidth;
 		}
-		if (facadeWidth < 5) {
-			return "§cFacade is too narrow (<5): " + facadeWidth;
+		if (facadeWidth < stats.MinRoomLength) {
+			return "Facade is too narrow (<" + stats.MinRoomLength + "): " + facadeWidth;
 		}
-		if (facadeWidth > 35) {
-			return "§cFacade is too wide (>25): " + facadeWidth;
+		if (room.width > stats.MaxRoomLength) {
+			return "Room is too large (>" + stats.MaxRoomLength + "): " + room.width;
+		}
+		if (room.length > stats.MaxRoomLength) {
+			return "Room is too large (>" + stats.MaxRoomLength + "): " + room.length;
 		}
 
-		boolean hasFlatRoof = theme.getTypes().contains(DesignType.FLAT_ROOF);
-		boolean hasNormalRoof = theme.getTypes().contains(DesignType.ROOF);
-		
-		if (facadeWidth > 15 || !hasNormalRoof) {
-			room.roofType = hasFlatRoof ?  DesignType.FLAT_ROOF : DesignType.NONE;
+		if (facadeWidth > stats.MaxGableRoof || !stats.hasGables) {
+			room.roofType = stats.hasFlatRoof ?  DesignType.FLAT_ROOF : DesignType.NONE;
 		} else {
-			room.roofType = hasNormalRoof ? DesignType.ROOF : DesignType.NONE;			
+			room.roofType = stats.hasGables ? DesignType.ROOF : DesignType.NONE;			
 		}
 		
 		lastAddedStack = new Stack(room);
 		groundPlan.addStack(lastAddedStack);
 		firstPosition = null;
-		return "§aNew Room has been added";
+		return "New Room has been added";
 	}
 	
 	@Override

@@ -4,14 +4,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.design.ThemeStorage;
+import com.simibubi.mightyarchitect.gui.widgets.DynamicLabel;
 import com.simibubi.mightyarchitect.gui.widgets.GuiIndicator;
 import com.simibubi.mightyarchitect.gui.widgets.GuiIndicator.State;
+import com.simibubi.mightyarchitect.gui.widgets.ScrollArea;
+import com.simibubi.mightyarchitect.gui.widgets.ScrollArea.IScrollAction;
 import com.simibubi.mightyarchitect.gui.widgets.SimiButton;
 
 import net.minecraft.client.gui.GuiButton;
@@ -36,6 +42,9 @@ public class GuiEditTheme extends GuiScreen {
 	private int regular, foundation, open, special;
 	private int flatRoof, roof;
 	private int tower, towerFlatRoof, towerRoof;
+	
+	private ScrollArea areaRoomHeight;
+	private DynamicLabel labelRoomHeight;
 
 	public GuiEditTheme() {
 		this.theme = DesignExporter.theme;
@@ -115,7 +124,7 @@ public class GuiEditTheme extends GuiScreen {
 		indicators.add(guiIndicator);
 
 		x = xTopLeft + 10;
-		y += 45;
+		y += 49;
 
 		button = new SimiButton(id++, x, y, GuiResources.ICON_NO_ROOF);
 		button.tooltip = "Enable Rooms [Always Enabled]";
@@ -142,8 +151,7 @@ public class GuiEditTheme extends GuiScreen {
 		guiIndicator.state = theme.getTypes().contains(DesignType.ROOF) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
 
-		x = xTopLeft + 10;
-		y += 30;
+		x += 40;
 
 		tower = id + indexShift;
 		button = new SimiButton(id++, x, y, GuiResources.ICON_TOWER_NO_ROOF);
@@ -171,7 +179,21 @@ public class GuiEditTheme extends GuiScreen {
 		guiIndicator.state = theme.getTypes().contains(DesignType.TOWER_ROOF) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
 		
-		confirm = new SimiButton(id, xTopLeft + 171, yTopLeft + 150, GuiResources.ICON_CONFIRM);
+		labelRoomHeight = new DynamicLabel(xTopLeft + ( theme.getMaxFloorHeight() > 9 ? 102 : 106), yTopLeft + 162);
+		labelRoomHeight.text = theme.getMaxFloorHeight() + "m";
+		areaRoomHeight = new ScrollArea(3, 16, new IScrollAction() {
+			@Override
+			public void onScroll(int position) {
+				labelRoomHeight.text = position + "m";
+				labelRoomHeight.x = position > 9 ? xTopLeft + 102 : xTopLeft + 106;
+			}
+		});
+		areaRoomHeight.setBounds(xTopLeft + 100, yTopLeft + 157, 22, 18);
+		areaRoomHeight.setState(theme.getMaxFloorHeight());
+		areaRoomHeight.setTitle("Maximum Height");
+		areaRoomHeight.setNumeric(true);	
+		
+		confirm = new SimiButton(id, xTopLeft + 172, yTopLeft + 157, GuiResources.ICON_CONFIRM);
 		buttonList.add(confirm);
 	}
 
@@ -241,12 +263,16 @@ public class GuiEditTheme extends GuiScreen {
 		y = yTopLeft + 75;
 
 		fontRenderer.drawString("Styles included", x, y - 17, GuiResources.FONT_COLOR, false);
-		fontRenderer.drawString("Shapes and Roof Types included", x, y + 28, GuiResources.FONT_COLOR, false);
+		fontRenderer.drawString("Shapes and Roof Types included", x, y + 32, GuiResources.FONT_COLOR, false);
+		fontRenderer.drawString("Max. Room Height", x, y + 87, GuiResources.FONT_COLOR, false);
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
 
 		inputs.forEach(input -> input.drawTextBox());
 		indicators.forEach(e -> e.render(mc, mouseX, mouseY));
+		
+		labelRoomHeight.draw(this);
+		areaRoomHeight.draw(this, mouseX, mouseY);
 		
 		buttonList.forEach(button -> {
 			if (((SimiButton) button).tooltip != null && button.isMouseOver()) {
@@ -259,6 +285,9 @@ public class GuiEditTheme extends GuiScreen {
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 		inputs.forEach(input -> input.mouseClicked(mouseX, mouseY, mouseButton));
+		
+		int scrollAmount = ((mouseButton == 0) ? -1 : 1) * ((Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) ? 5 : 1);
+		areaRoomHeight.tryScroll(mouseX, mouseY, scrollAmount);
 	}
 
 	@Override
@@ -268,6 +297,8 @@ public class GuiEditTheme extends GuiScreen {
 			theme.setDisplayName(inputName.getText());
 		if (!inputAuthor.getText().isEmpty())
 			theme.setDesigner(inputAuthor.getText());
+		
+		theme.setMaxFloorHeight(areaRoomHeight.getState());
 		
 		List<DesignLayer> layers = new ArrayList<>();
 		layers.addAll(DesignLayer.defaults());
@@ -315,6 +346,20 @@ public class GuiEditTheme extends GuiScreen {
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
 		if (!this.inputName.textboxKeyTyped(typedChar, keyCode) & !this.inputAuthor.textboxKeyTyped(typedChar, keyCode))
 			super.keyTyped(typedChar, keyCode);
+	}
+	
+	@Override
+	public void handleMouseInput() throws IOException {
+		super.handleMouseInput();
+
+		int i = Mouse.getEventX() * this.width / this.mc.displayWidth;
+		int j = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+
+		int scroll = Mouse.getEventDWheel();
+		if (scroll != 0) {
+			int amount = (int) (scroll / -120f);
+			areaRoomHeight.tryScroll(i, j, amount);
+		}
 	}
 
 }

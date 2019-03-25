@@ -10,6 +10,7 @@ import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.DesignType;
+import com.simibubi.mightyarchitect.control.design.ThemeStatistics;
 import com.simibubi.mightyarchitect.control.helpful.RaycastHelper;
 import com.simibubi.mightyarchitect.control.helpful.TesselatorTextures;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
@@ -66,7 +67,9 @@ public class CylinderRoomTool extends RoomTool {
 	@Override
 	protected String createRoom(GroundPlan groundPlan) {
 		int distance = (int) Math.sqrt(firstPosition.distanceSq(selectedPosition));
-		distance = Math.min(distance, 5);
+		DesignTheme theme = groundPlan.theme;
+		distance = Math.max(distance, theme.getStatistics().MinTowerRadius);
+		distance = Math.min(distance, theme.getStatistics().MaxTowerRadius);
 		BlockPos size = new BlockPos(distance * 2, 0, distance * 2);
 		
 		Room room = new Room(firstPosition, size);
@@ -76,29 +79,32 @@ public class CylinderRoomTool extends RoomTool {
 		room.x -= distance;
 		room.z -= distance;
 		
-		DesignTheme theme = groundPlan.theme;
+		ThemeStatistics stats = theme.getStatistics();
 		boolean hasFoundation = theme.getLayers().contains(DesignLayer.Foundation);
-		room.height = hasFoundation? 2 : 4;
+		
+		room.height = hasFoundation? 2 : Math.min(4, theme.getMaxFloorHeight());
 		room.designLayer = hasFoundation ? DesignLayer.Foundation : DesignLayer.Regular;
 		
 		int radius = (room.width - 1) / 2;
 
 		if (room.width != room.length) {
-			return "§cSelection is not a circle: " + room.width + " != " + room.length;
+			return "Selection is not a circle: " + room.width + " != " + room.length;
 		}
 		if (room.width % 2 == 0D) {
-			return "§cTower cannot have even diameter: " + room.width;
+			return "Tower cannot have even diameter: " + room.width;
 		}
-		if (radius < 2) {
-			return "§cTower is too Thin (<2): " + radius;
+		if (radius < stats.MinTowerRadius) {
+			return "Tower is too Thin (<" + stats.MinTowerRadius + "): " + radius;
 		}
-		if (radius > 5) {
-			return "§cTower radius is too large (>5): " + radius;
+		if (radius > stats.MaxTowerRadius) {
+			return "Tower radius is too large (>" + stats.MaxTowerRadius + "): " + radius;
 		}
 		
-		boolean hasFlatRoof = theme.getTypes().contains(DesignType.TOWER_FLAT_ROOF);
-		boolean hasNormalRoof = theme.getTypes().contains(DesignType.TOWER_ROOF);
-		room.roofType = hasNormalRoof? DesignType.ROOF : hasFlatRoof ? DesignType.FLAT_ROOF : DesignType.NONE;
+		if (radius > stats.MaxConicalRoofRadius || !stats.hasConicalRoof) {
+			room.roofType = stats.hasFlatTowerRoof ?  DesignType.FLAT_ROOF : DesignType.NONE;
+		} else {
+			room.roofType = stats.hasConicalRoof ? DesignType.ROOF : DesignType.NONE;			
+		}
 				
 		lastAddedStack = new CylinderStack(room);
 		groundPlan.addStack(lastAddedStack);
@@ -125,7 +131,9 @@ public class CylinderRoomTool extends RoomTool {
 
 		if (firstPos != null) {
 			int distance = (int) Math.sqrt(firstPosition.distanceSq(selectedPosition));
-			distance = Math.min(distance, 5);
+			DesignTheme theme = ArchitectManager.getModel().getGroundPlan().theme;
+			distance = Math.max(distance, theme.getStatistics().MinTowerRadius);
+			distance = Math.min(distance, theme.getStatistics().MaxTowerRadius);
 			BlockPos size = new BlockPos(distance * 2, 0, distance * 2);
 			Cuboid selection = new Cuboid(firstPos, size.getX(), 1, size.getZ());
 			

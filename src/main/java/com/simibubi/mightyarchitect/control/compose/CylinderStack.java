@@ -7,11 +7,11 @@ public class CylinderStack extends Stack {
 	}
 
 	public int getMaxFacadeWidth() {
-		return 11;
+		return theme.getStatistics().MaxTowerRadius * 2 + 1;
 	}
 	
 	public int getMinWidth() {
-		return 5;
+		return theme.getStatistics().MinTowerRadius * 2 + 1;
 	}
 	
 	

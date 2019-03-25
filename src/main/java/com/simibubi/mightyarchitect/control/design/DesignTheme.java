@@ -22,6 +22,8 @@ public class DesignTheme {
 	private IPickDesigns designPicker;
 	private boolean imported;
 	private PaletteDefinition defaultPalette;
+	private ThemeStatistics statistics;
+	private int maxFloorHeight;
 	
 	private List<DesignLayer> roomLayers;
 	private List<DesignLayer> layers;
@@ -34,6 +36,7 @@ public class DesignTheme {
 		this.designPicker = designPicker;
 		this.designPicker.setTheme(this);
 		imported = false;
+		maxFloorHeight = 10;
 	}
 
 	public DesignTheme withLayers(DesignLayer... designLayers) {
@@ -83,7 +86,7 @@ public class DesignTheme {
 
 	public Set<Design> getDesigns(DesignLayer designLayer, DesignType designType) {
 		if (designs == null) {
-			designs = DesignResourceLoader.loadDesignsForTheme(this);
+			initDesigns();
 		}
 
 		if (designs.containsKey(designLayer)) {
@@ -95,6 +98,18 @@ public class DesignTheme {
 		}
 
 		return new HashSet<>();
+	}
+
+	protected void initDesigns() {
+		designs = DesignResourceLoader.loadDesignsForTheme(this);
+		statistics = ThemeStatistics.evaluate(this);
+	}
+	
+	public ThemeStatistics getStatistics() {
+		if (designs == null) {			
+			initDesigns();
+		}
+		return statistics;
 	}
 
 	public void clearDesigns() {
@@ -136,6 +151,7 @@ public class DesignTheme {
 
 		compound.setTag("Layers", layers);
 		compound.setTag("Types", types);
+		compound.setInteger("Maximum Room Height", maxFloorHeight);
 
 		return compound;
 	}
@@ -149,6 +165,9 @@ public class DesignTheme {
 
 		theme.layers = new ArrayList<>();
 		theme.types = new ArrayList<>();
+		
+		if (compound.hasKey("Maximum Room Height"))
+			theme.maxFloorHeight = compound.getInteger("Maximum Room Height");
 		
 		compound.getTagList("Layers", 8)
 				.forEach(s -> theme.layers.add(DesignLayer.valueOf(((NBTTagString) s).getString())));
@@ -173,6 +192,14 @@ public class DesignTheme {
 
 	public List<DesignLayer> getRoomLayers() {
 		return roomLayers;
+	}
+
+	public int getMaxFloorHeight() {
+		return maxFloorHeight;
+	}
+
+	public void setMaxFloorHeight(int maxFloorHeight) {
+		this.maxFloorHeight = maxFloorHeight;
 	}
 
 }
