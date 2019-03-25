@@ -96,8 +96,8 @@ public class DesignSlice {
 		if (!blockOrientation.hasFacing())
 			blockOrientation = BlockOrientation.valueOf(blockOrientation.getHalf(), EnumFacing.SOUTH);		
 		
-		BlockOrientation withRotation = blockOrientation.withRotation(rotation);
-		PaletteBlockInfo paletteBlockInfo = new PaletteBlockInfo(palette, withRotation);			
+		PaletteBlockInfo paletteBlockInfo = new PaletteBlockInfo(palette, blockOrientation);			
+		paletteBlockInfo.afterPosition = BlockOrientation.SOUTH.withRotation(rotation);
 		
 		if (orientations[z][x].hasFacing() && orientations[z][x].getFacing().getAxis() != Axis.Y)
 			paletteBlockInfo.forceAxis = true;

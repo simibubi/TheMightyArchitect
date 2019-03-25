@@ -102,6 +102,11 @@ public class ArchitectManager {
 		model.setSketch(groundPlan.theme.getDesignPicker().assembleSketch(groundPlan));
 		enterPhase(ArchitectPhases.Previewing);
 	}
+	
+	public static void reroll() {
+		GroundPlan groundPlan = model.getGroundPlan();
+		model.setSketch(groundPlan.theme.getDesignPicker().assembleSketch(groundPlan));
+	}
 
 	public static void createPalette(boolean primary) {
 		getModel().startCreatingNewPalette(primary);

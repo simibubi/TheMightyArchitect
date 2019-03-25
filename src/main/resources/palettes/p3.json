@@ -5,48 +5,53 @@
         "east": "false",
         "south": "false",
         "north": "false",
-        "west": "false"
+        "variant": "cobblestone",
+        "west": "false",
+        "up": "false"
       },
-      "Name": "minecraft:fence"
+      "Name": "minecraft:cobblestone_wall"
     },
     "OUTER_FLAT": {
       "Properties": {
         "half": "bottom",
-        "facing": "north",
+        "facing": "south",
         "open": "true"
       },
       "Name": "minecraft:trapdoor"
     },
     "INNER_PRIMARY": {
       "Properties": {
-        "type": "sandstone"
+        "variant": "birch",
+        "axis": "y"
       },
-      "Name": "minecraft:sandstone"
+      "Name": "minecraft:log"
     },
     "HEAVY_POST": {
       "Properties": {
-        "type": "smooth_sandstone"
+        "check_decay": "false",
+        "decayable": "false",
+        "variant": "birch"
       },
-      "Name": "minecraft:sandstone"
+      "Name": "minecraft:leaves"
     },
     "ROOF_PRIMARY": {
       "Properties": {
-        "variant": "birch"
+        "color": "green"
       },
-      "Name": "minecraft:planks"
+      "Name": "minecraft:stained_hardened_clay"
     },
     "INNER_DETAIL": {
       "Properties": {
-        "type": "smooth_sandstone"
+        "variant": "chiseled"
       },
-      "Name": "minecraft:sandstone"
+      "Name": "minecraft:quartz_block"
     },
     "ROOF_SLAB": {
       "Properties": {
         "half": "bottom",
-        "variant": "sandstone"
+        "variant": "dark_oak"
       },
-      "Name": "minecraft:stone_slab"
+      "Name": "minecraft:wooden_slab"
     },
     "WINDOW": {
       "Properties": {
@@ -57,61 +62,62 @@
       },
       "Name": "minecraft:glass_pane"
     },
-    "Name": "Desert Village",
+    "Name": "Nobel Birchmen",
     "HEAVY_PRIMARY": {
       "Properties": {
-        "type": "smooth_sandstone"
+        "variant": "smooth_andesite"
       },
-      "Name": "minecraft:sandstone"
+      "Name": "minecraft:stone"
+    },
+    "FLOOR": {
+      "Properties": {
+        "variant": "oak"
+      },
+      "Name": "minecraft:planks"
     },
     "HEAVY_SECONDARY": {
       "Properties": {
-        "type": "chiseled_sandstone"
+        "seamless": "false",
+        "variant": "stone"
       },
-      "Name": "minecraft:sandstone"
+      "Name": "minecraft:double_stone_slab"
     },
     "ROOF_DETAIL": {
       "Properties": {
-        "type": "sandstone"
+        "variant": "dark_oak",
+        "axis": "z"
       },
-      "Name": "minecraft:sandstone"
-    },
-    "ROOF_SLAB_TOP": {
-      "Properties": {
-        "half": "top",
-        "variant": "sandstone"
-      },
-      "Name": "minecraft:stone_slab"
-    },
-    "ROOF_SECONDARY": {
-      "Properties": {
-        "variant": "birch"
-      },
-      "Name": "minecraft:planks"
+      "Name": "minecraft:log2"
     },
     "INNER_SECONDARY": {
       "Properties": {
-        "variant": "birch"
+        "variant": "birch",
+        "axis": "x"
       },
-      "Name": "minecraft:planks"
+      "Name": "minecraft:log"
     },
     "OUTER_SLAB": {
       "Properties": {
         "half": "bottom",
-        "variant": "sandstone"
+        "variant": "stone"
       },
       "Name": "minecraft:stone_slab"
     },
     "HEAVY_WINDOW": {
       "Properties": {
-        "half": "bottom",
-        "shape": "straight",
-        "facing": "north"
+        "east": "false",
+        "color": "black",
+        "south": "false",
+        "north": "false",
+        "west": "false"
       },
-      "Name": "minecraft:sandstone_stairs"
+      "Name": "minecraft:stained_glass_pane"
     },
     "CLEAR": {
-      "Name": "minecraft:glass"
+      "Properties": {
+        "color": "red"
+      },
+      "Name": "minecraft:stained_glass"
     },
     "OUTER_THIN": {
       "Properties": {

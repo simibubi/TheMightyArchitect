@@ -3,106 +3,87 @@
     "OUTER_THICK": {
       "Properties": {
         "east": "false",
+        "color": "white",
         "south": "false",
         "north": "false",
         "west": "false"
       },
-      "Name": "minecraft:dark_oak_fence"
+      "Name": "minecraft:stained_glass_pane"
     },
     "OUTER_FLAT": {
-      "Properties": {
-        "half": "bottom",
-        "facing": "south",
-        "open": "true"
-      },
-      "Name": "minecraft:trapdoor"
+      "Name": "minecraft:air"
     },
     "INNER_PRIMARY": {
-      "Name": "minecraft:clay"
+      "Name": "minecraft:packed_ice"
     },
     "HEAVY_POST": {
       "Properties": {
         "east": "false",
+        "color": "white",
         "south": "false",
         "north": "false",
-        "variant": "cobblestone",
-        "west": "false",
-        "up": "false"
+        "west": "false"
       },
-      "Name": "minecraft:cobblestone_wall"
+      "Name": "minecraft:stained_glass_pane"
     },
     "ROOF_PRIMARY": {
-      "Properties": {
-        "variant": "granite"
-      },
-      "Name": "minecraft:stone"
+      "Name": "minecraft:ice"
     },
     "INNER_DETAIL": {
-      "Properties": {
-        "variant": "acacia",
-        "axis": "y"
-      },
-      "Name": "minecraft:log2"
+      "Name": "minecraft:packed_ice"
     },
     "ROOF_SLAB": {
       "Properties": {
         "half": "bottom",
-        "variant": "brick"
+        "variant": "quartz"
       },
       "Name": "minecraft:stone_slab"
     },
     "WINDOW": {
       "Properties": {
-        "east": "false",
-        "south": "false",
-        "north": "false",
-        "west": "false"
+        "color": "light_blue"
       },
-      "Name": "minecraft:glass_pane"
+      "Name": "minecraft:stained_glass"
     },
-    "Name": "Caduceus Clay",
+    "Name": "Icy Castle",
     "HEAVY_PRIMARY": {
       "Properties": {
-        "variant": "smooth_andesite"
+        "color": "white"
       },
-      "Name": "minecraft:stone"
+      "Name": "minecraft:wool"
     },
     "FLOOR": {
       "Properties": {
-        "variant": "oak"
+        "variant": "chiseled"
       },
-      "Name": "minecraft:planks"
+      "Name": "minecraft:quartz_block"
     },
     "HEAVY_SECONDARY": {
       "Properties": {
-        "variant": "stonebrick"
+        "variant": "lines_y"
       },
-      "Name": "minecraft:stonebrick"
+      "Name": "minecraft:quartz_block"
     },
     "ROOF_DETAIL": {
       "Properties": {
-        "variant": "smooth_granite"
+        "color": "white"
       },
-      "Name": "minecraft:stone"
+      "Name": "minecraft:wool"
     },
     "INNER_SECONDARY": {
-      "Properties": {
-        "seamless": "false",
-        "variant": "stone"
-      },
-      "Name": "minecraft:double_stone_slab"
+      "Name": "minecraft:packed_ice"
     },
     "OUTER_SLAB": {
       "Properties": {
         "half": "bottom",
-        "variant": "stone_brick"
+        "variant": "quartz"
       },
       "Name": "minecraft:stone_slab"
     },
     "HEAVY_WINDOW": {
       "Properties": {
         "east": "false",
-        "color": "black",
+        "color": "silver",
         "south": "false",
         "north": "false",
         "west": "false"
@@ -118,11 +99,12 @@
     "OUTER_THIN": {
       "Properties": {
         "east": "false",
+        "color": "white",
         "south": "false",
         "north": "false",
         "west": "false"
       },
-      "Name": "minecraft:spruce_fence"
+      "Name": "minecraft:stained_glass_pane"
     }
   }
 }

@@ -5,95 +5,91 @@
         "east": "false",
         "south": "false",
         "north": "false",
-        "variant": "cobblestone",
-        "west": "false",
-        "up": "false"
+        "west": "false"
       },
-      "Name": "minecraft:cobblestone_wall"
+      "Name": "minecraft:spruce_fence"
     },
     "OUTER_FLAT": {
       "Properties": {
         "half": "bottom",
-        "facing": "north",
+        "facing": "south",
         "open": "true"
       },
       "Name": "minecraft:trapdoor"
     },
     "INNER_PRIMARY": {
       "Properties": {
-        "color": "light_blue"
+        "variant": "dark_oak",
+        "axis": "y"
       },
-      "Name": "minecraft:stained_hardened_clay"
+      "Name": "minecraft:log2"
     },
     "HEAVY_POST": {
-      "Properties": {
-        "variant": "chiseled_stonebrick"
-      },
-      "Name": "minecraft:stonebrick"
-    },
-    "ROOF_PRIMARY": {
-      "Properties": {
-        "variant": "spruce"
-      },
-      "Name": "minecraft:planks"
-    },
-    "INNER_DETAIL": {
-      "Properties": {
-        "variant": "smooth_diorite"
-      },
-      "Name": "minecraft:stone"
-    },
-    "ROOF_SLAB": {
-      "Properties": {
-        "half": "bottom",
-        "variant": "spruce"
-      },
-      "Name": "minecraft:wooden_slab"
-    },
-    "WINDOW": {
       "Properties": {
         "east": "false",
         "south": "false",
         "north": "false",
+        "variant": "cobblestone",
+        "west": "false",
+        "up": "false"
+      },
+      "Name": "minecraft:cobblestone_wall"
+    },
+    "ROOF_PRIMARY": {
+      "Properties": {
+        "variant": "granite"
+      },
+      "Name": "minecraft:stone"
+    },
+    "INNER_DETAIL": {
+      "Properties": {
+        "variant": "jungle",
+        "axis": "y"
+      },
+      "Name": "minecraft:log"
+    },
+    "ROOF_SLAB": {
+      "Properties": {
+        "half": "bottom",
+        "variant": "brick"
+      },
+      "Name": "minecraft:stone_slab"
+    },
+    "WINDOW": {
+      "Properties": {
+        "east": "false",
+        "color": "brown",
+        "south": "false",
+        "north": "false",
         "west": "false"
       },
-      "Name": "minecraft:glass_pane"
+      "Name": "minecraft:stained_glass_pane"
     },
-    "Name": "Northbound",
+    "Name": "Overgrown",
     "HEAVY_PRIMARY": {
       "Properties": {
         "variant": "smooth_andesite"
       },
       "Name": "minecraft:stone"
     },
-    "HEAVY_SECONDARY": {
+    "FLOOR": {
       "Properties": {
-        "variant": "stone"
+        "variant": "oak"
       },
-      "Name": "minecraft:stone"
+      "Name": "minecraft:planks"
+    },
+    "HEAVY_SECONDARY": {
+      "Name": "minecraft:cobblestone"
     },
     "ROOF_DETAIL": {
       "Properties": {
-        "variant": "smooth_diorite"
-      },
-      "Name": "minecraft:stone"
-    },
-    "ROOF_SLAB_TOP": {
-      "Properties": {
-        "half": "top",
-        "variant": "spruce"
-      },
-      "Name": "minecraft:wooden_slab"
-    },
-    "ROOF_SECONDARY": {
-      "Properties": {
-        "variant": "diorite"
+        "variant": "smooth_granite"
       },
       "Name": "minecraft:stone"
     },
     "INNER_SECONDARY": {
       "Properties": {
-        "color": "light_blue"
+        "color": "gray"
       },
       "Name": "minecraft:stained_hardened_clay"
     },
@@ -106,23 +102,27 @@
     },
     "HEAVY_WINDOW": {
       "Properties": {
-        "half": "bottom",
-        "shape": "straight",
-        "facing": "north"
-      },
-      "Name": "minecraft:stone_brick_stairs"
-    },
-    "CLEAR": {
-      "Name": "minecraft:glass"
-    },
-    "OUTER_THIN": {
-      "Properties": {
         "east": "false",
+        "color": "gray",
         "south": "false",
         "north": "false",
         "west": "false"
       },
-      "Name": "minecraft:spruce_fence"
+      "Name": "minecraft:stained_glass_pane"
+    },
+    "CLEAR": {
+      "Properties": {
+        "color": "red"
+      },
+      "Name": "minecraft:stained_glass"
+    },
+    "OUTER_THIN": {
+      "Properties": {
+        "check_decay": "false",
+        "decayable": "false",
+        "variant": "acacia"
+      },
+      "Name": "minecraft:leaves2"
     }
   }
 }

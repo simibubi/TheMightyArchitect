@@ -65,31 +65,24 @@
       },
       "Name": "minecraft:glass_pane"
     },
-    "Name": "Standard Palette",
+    "Name": "Standard Medieval",
     "HEAVY_PRIMARY": {
       "Properties": {
         "variant": "smooth_andesite"
       },
       "Name": "minecraft:stone"
     },
+    "FLOOR": {
+      "Properties": {
+        "variant": "oak"
+      },
+      "Name": "minecraft:planks"
+    },
     "HEAVY_SECONDARY": {
       "Name": "minecraft:cobblestone"
     },
     "ROOF_DETAIL": {
       "Name": "minecraft:brick_block"
-    },
-    "ROOF_SLAB_TOP": {
-      "Properties": {
-        "half": "top",
-        "variant": "brick"
-      },
-      "Name": "minecraft:stone_slab"
-    },
-    "ROOF_SECONDARY": {
-      "Properties": {
-        "variant": "smooth_granite"
-      },
-      "Name": "minecraft:stone"
     },
     "INNER_SECONDARY": {
       "Properties": {
@@ -115,7 +108,10 @@
       "Name": "minecraft:stained_glass_pane"
     },
     "CLEAR": {
-      "Name": "minecraft:glass"
+      "Properties": {
+        "color": "red"
+      },
+      "Name": "minecraft:stained_glass"
     },
     "OUTER_THIN": {
       "Properties": {

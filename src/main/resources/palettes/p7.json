@@ -5,22 +5,23 @@
         "east": "false",
         "south": "false",
         "north": "false",
-        "variant": "cobblestone",
-        "west": "false",
-        "up": "false"
+        "west": "false"
       },
-      "Name": "minecraft:cobblestone_wall"
+      "Name": "minecraft:spruce_fence"
     },
     "OUTER_FLAT": {
       "Properties": {
         "half": "bottom",
-        "facing": "north",
+        "facing": "south",
         "open": "true"
       },
       "Name": "minecraft:trapdoor"
     },
     "INNER_PRIMARY": {
-      "Name": "minecraft:nether_brick"
+      "Properties": {
+        "variant": "dark_oak"
+      },
+      "Name": "minecraft:planks"
     },
     "HEAVY_POST": {
       "Properties": {
@@ -34,62 +35,63 @@
       "Name": "minecraft:cobblestone_wall"
     },
     "ROOF_PRIMARY": {
-      "Name": "minecraft:netherrack"
+      "Name": "minecraft:nether_brick"
     },
     "INNER_DETAIL": {
       "Properties": {
-        "facing": "north"
+        "variant": "spruce",
+        "axis": "y"
       },
-      "Name": "minecraft:lit_pumpkin"
+      "Name": "minecraft:log"
     },
     "ROOF_SLAB": {
       "Properties": {
         "half": "bottom",
-        "variant": "nether_brick"
+        "variant": "spruce"
       },
-      "Name": "minecraft:stone_slab"
+      "Name": "minecraft:wooden_slab"
     },
     "WINDOW": {
       "Properties": {
         "east": "false",
-        "color": "black",
         "south": "false",
         "north": "false",
         "west": "false"
       },
-      "Name": "minecraft:stained_glass_pane"
+      "Name": "minecraft:glass_pane"
     },
-    "Name": "Hotel in Hell",
+    "Name": "Deep Woods",
     "HEAVY_PRIMARY": {
-      "Name": "minecraft:cobblestone"
+      "Properties": {
+        "variant": "stonebrick"
+      },
+      "Name": "minecraft:stonebrick"
+    },
+    "FLOOR": {
+      "Properties": {
+        "variant": "spruce"
+      },
+      "Name": "minecraft:planks"
     },
     "HEAVY_SECONDARY": {
       "Properties": {
-        "variant": "smooth_andesite"
+        "seamless": "false",
+        "variant": "stone"
       },
-      "Name": "minecraft:stone"
+      "Name": "minecraft:double_stone_slab"
     },
     "ROOF_DETAIL": {
       "Properties": {
-        "variant": "smooth_granite"
+        "variant": "spruce"
       },
-      "Name": "minecraft:stone"
-    },
-    "ROOF_SLAB_TOP": {
-      "Properties": {
-        "half": "top",
-        "variant": "nether_brick"
-      },
-      "Name": "minecraft:stone_slab"
-    },
-    "ROOF_SECONDARY": {
-      "Properties": {
-        "variant": "diorite"
-      },
-      "Name": "minecraft:stone"
+      "Name": "minecraft:planks"
     },
     "INNER_SECONDARY": {
-      "Name": "minecraft:nether_brick"
+      "Properties": {
+        "variant": "spruce",
+        "axis": "z"
+      },
+      "Name": "minecraft:log"
     },
     "OUTER_SLAB": {
       "Properties": {
@@ -99,10 +101,18 @@
       "Name": "minecraft:stone_slab"
     },
     "HEAVY_WINDOW": {
-      "Name": "minecraft:gravel"
+      "Properties": {
+        "half": "bottom",
+        "shape": "straight",
+        "facing": "north"
+      },
+      "Name": "minecraft:stone_brick_stairs"
     },
     "CLEAR": {
-      "Name": "minecraft:glass"
+      "Properties": {
+        "color": "red"
+      },
+      "Name": "minecraft:stained_glass"
     },
     "OUTER_THIN": {
       "Properties": {

@@ -5,9 +5,11 @@
         "east": "false",
         "south": "false",
         "north": "false",
-        "west": "false"
+        "variant": "cobblestone",
+        "west": "false",
+        "up": "false"
       },
-      "Name": "minecraft:fence"
+      "Name": "minecraft:cobblestone_wall"
     },
     "OUTER_FLAT": {
       "Properties": {
@@ -18,91 +20,76 @@
       "Name": "minecraft:trapdoor"
     },
     "INNER_PRIMARY": {
-      "Properties": {
-        "type": "sandstone"
-      },
-      "Name": "minecraft:sandstone"
+      "Name": "minecraft:nether_brick"
     },
     "HEAVY_POST": {
       "Properties": {
-        "variant": "acacia",
-        "axis": "y"
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "variant": "cobblestone",
+        "west": "false",
+        "up": "false"
       },
-      "Name": "minecraft:log2"
+      "Name": "minecraft:cobblestone_wall"
     },
     "ROOF_PRIMARY": {
-      "Properties": {
-        "variant": "birch"
-      },
-      "Name": "minecraft:planks"
+      "Name": "minecraft:netherrack"
     },
     "INNER_DETAIL": {
-      "Properties": {
-        "color": "yellow"
-      },
-      "Name": "minecraft:stained_hardened_clay"
+      "Name": "minecraft:magma"
     },
     "ROOF_SLAB": {
       "Properties": {
         "half": "bottom",
-        "variant": "sandstone"
+        "variant": "nether_brick"
       },
       "Name": "minecraft:stone_slab"
     },
     "WINDOW": {
       "Properties": {
         "east": "false",
+        "color": "black",
         "south": "false",
         "north": "false",
         "west": "false"
       },
-      "Name": "minecraft:glass_pane"
+      "Name": "minecraft:stained_glass_pane"
     },
-    "Name": "Desert Village",
+    "Name": "Underworld Hotel",
     "HEAVY_PRIMARY": {
-      "Properties": {
-        "type": "red_sandstone"
-      },
-      "Name": "minecraft:red_sandstone"
+      "Name": "minecraft:cobblestone"
     },
     "FLOOR": {
       "Properties": {
-        "variant": "oak"
+        "variant": "spruce"
       },
       "Name": "minecraft:planks"
     },
     "HEAVY_SECONDARY": {
       "Properties": {
-        "facing": "west"
+        "variant": "smooth_andesite"
       },
-      "Name": "minecraft:yellow_glazed_terracotta"
+      "Name": "minecraft:stone"
     },
     "ROOF_DETAIL": {
       "Properties": {
-        "type": "sandstone"
+        "variant": "smooth_granite"
       },
-      "Name": "minecraft:sandstone"
+      "Name": "minecraft:stone"
     },
     "INNER_SECONDARY": {
-      "Properties": {
-        "variant": "birch"
-      },
-      "Name": "minecraft:planks"
+      "Name": "minecraft:nether_brick"
     },
     "OUTER_SLAB": {
       "Properties": {
         "half": "bottom",
-        "variant": "acacia"
+        "variant": "stone"
       },
-      "Name": "minecraft:wooden_slab"
+      "Name": "minecraft:stone_slab"
     },
     "HEAVY_WINDOW": {
-      "Properties": {
-        "half": "bottom",
-        "shape": "straight",
-        "facing": "north"
-      },
-      "Name": "minecraft:sandstone_stairs"
+      "Name": "minecraft:gravel"
     },
     "CLEAR": {
       "Properties": {
@@ -117,7 +104,7 @@
         "north": "false",
         "west": "false"
       },
-      "Name": "minecraft:birch_fence"
+      "Name": "minecraft:dark_oak_fence"
     }
   }
 }

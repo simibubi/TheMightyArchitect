@@ -6,6 +6,7 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.block.BlockColored;
+import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockOldLog;
 import net.minecraft.block.BlockPlanks;
@@ -113,7 +114,11 @@ public class PaletteDefinition {
 	}
 
 	public IBlockState get(Palette key) {
-		return get(key, BlockOrientation.NONE);
+		IBlockState iBlockState = get(key, BlockOrientation.NONE);
+		if (iBlockState.getBlock() instanceof BlockLeaves) {
+			iBlockState = iBlockState.withProperty(BlockLeaves.DECAYABLE, false);
+		}
+		return iBlockState;
 	}
 
 	private IBlockState get(Palette key, BlockOrientation orientation) {
@@ -165,7 +170,7 @@ public class PaletteDefinition {
 	public IBlockState get(PaletteBlockInfo paletteInfo) {
 		IBlockState state = definition.get(paletteInfo.palette);
 		state = state == null ? Blocks.AIR.getDefaultState()
-				: paletteInfo.orientation.apply(state, paletteInfo.forceAxis);
+				: paletteInfo.apply(state);
 
 		ImmutableMap<IProperty<?>, Comparable<?>> properties = state.getProperties();
 

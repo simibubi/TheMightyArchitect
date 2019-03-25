@@ -78,7 +78,8 @@ public class Sketch {
 			});
 
 			int y = cuboid.height - 1;
-			PaletteBlockInfo paletteBlockInfo = new PaletteBlockInfo(Palette.FLOOR, BlockOrientation.TOP_UP);
+			PaletteBlockInfo paletteBlockInfo = new PaletteBlockInfo(Palette.FLOOR, BlockOrientation.NONE);
+			paletteBlockInfo.afterPosition = BlockOrientation.TOP_UP;
 			Map<BlockPos, PaletteBlockInfo> blocks = cuboid.secondaryPalette ? secondary : primary;
 			
 			for (int x = 0; x < cuboid.width; x++) {

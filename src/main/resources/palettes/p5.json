@@ -14,7 +14,7 @@
     "OUTER_FLAT": {
       "Properties": {
         "half": "bottom",
-        "facing": "north",
+        "facing": "south",
         "open": "true"
       },
       "Name": "minecraft:trapdoor"
@@ -69,6 +69,12 @@
     "HEAVY_PRIMARY": {
       "Name": "minecraft:cobblestone"
     },
+    "FLOOR": {
+      "Properties": {
+        "variant": "oak"
+      },
+      "Name": "minecraft:planks"
+    },
     "HEAVY_SECONDARY": {
       "Properties": {
         "variant": "smooth_andesite"
@@ -78,19 +84,6 @@
     "ROOF_DETAIL": {
       "Properties": {
         "variant": "smooth_granite"
-      },
-      "Name": "minecraft:stone"
-    },
-    "ROOF_SLAB_TOP": {
-      "Properties": {
-        "half": "top",
-        "variant": "brick"
-      },
-      "Name": "minecraft:stone_slab"
-    },
-    "ROOF_SECONDARY": {
-      "Properties": {
-        "variant": "granite"
       },
       "Name": "minecraft:stone"
     },
@@ -116,7 +109,10 @@
       "Name": "minecraft:stone_stairs"
     },
     "CLEAR": {
-      "Name": "minecraft:glass"
+      "Properties": {
+        "color": "red"
+      },
+      "Name": "minecraft:stained_glass"
     },
     "OUTER_THIN": {
       "Properties": {

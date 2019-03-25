@@ -21,34 +21,37 @@
     },
     "INNER_PRIMARY": {
       "Properties": {
-        "variant": "smooth_diorite"
+        "variant": "stone"
       },
       "Name": "minecraft:stone"
     },
     "HEAVY_POST": {
       "Properties": {
-        "check_decay": "false",
-        "decayable": "false",
-        "variant": "jungle"
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "variant": "cobblestone",
+        "west": "false",
+        "up": "false"
       },
-      "Name": "minecraft:leaves"
+      "Name": "minecraft:cobblestone_wall"
     },
     "ROOF_PRIMARY": {
       "Properties": {
-        "color": "blue"
+        "color": "cyan"
       },
       "Name": "minecraft:stained_hardened_clay"
     },
     "INNER_DETAIL": {
       "Properties": {
-        "variant": "stonebrick"
+        "variant": "smooth_andesite"
       },
-      "Name": "minecraft:stonebrick"
+      "Name": "minecraft:stone"
     },
     "ROOF_SLAB": {
       "Properties": {
         "half": "bottom",
-        "variant": "stone"
+        "variant": "stone_brick"
       },
       "Name": "minecraft:stone_slab"
     },
@@ -61,63 +64,59 @@
       },
       "Name": "minecraft:glass_pane"
     },
-    "Name": "Diorite Mansion",
+    "Name": "Mount Rushmore",
     "HEAVY_PRIMARY": {
       "Properties": {
-        "variant": "dark_oak",
-        "axis": "y"
+        "variant": "stonebrick"
       },
-      "Name": "minecraft:log2"
+      "Name": "minecraft:stonebrick"
+    },
+    "FLOOR": {
+      "Properties": {
+        "variant": "oak",
+        "axis": "z"
+      },
+      "Name": "minecraft:log"
     },
     "HEAVY_SECONDARY": {
       "Properties": {
-        "variant": "spruce"
+        "seamless": "false",
+        "variant": "stone"
       },
-      "Name": "minecraft:planks"
+      "Name": "minecraft:double_stone_slab"
     },
     "ROOF_DETAIL": {
       "Properties": {
-        "variant": "smooth_andesite"
+        "variant": "stonebrick"
       },
-      "Name": "minecraft:stone"
-    },
-    "ROOF_SLAB_TOP": {
-      "Properties": {
-        "half": "top",
-        "variant": "stone"
-      },
-      "Name": "minecraft:stone_slab"
-    },
-    "ROOF_SECONDARY": {
-      "Properties": {
-        "color": "purple"
-      },
-      "Name": "minecraft:stained_hardened_clay"
+      "Name": "minecraft:stonebrick"
     },
     "INNER_SECONDARY": {
       "Properties": {
-        "variant": "diorite"
+        "variant": "andesite"
       },
       "Name": "minecraft:stone"
     },
     "OUTER_SLAB": {
       "Properties": {
         "half": "bottom",
-        "variant": "quartz"
+        "variant": "stone"
       },
       "Name": "minecraft:stone_slab"
     },
     "HEAVY_WINDOW": {
       "Properties": {
-        "east": "false",
-        "south": "false",
-        "north": "false",
-        "west": "false"
+        "half": "bottom",
+        "shape": "straight",
+        "facing": "north"
       },
-      "Name": "minecraft:glass_pane"
+      "Name": "minecraft:stone_brick_stairs"
     },
     "CLEAR": {
-      "Name": "minecraft:glass"
+      "Properties": {
+        "color": "red"
+      },
+      "Name": "minecraft:stained_glass"
     },
     "OUTER_THIN": {
       "Properties": {
@@ -126,7 +125,7 @@
         "north": "false",
         "west": "false"
       },
-      "Name": "minecraft:birch_fence"
+      "Name": "minecraft:iron_bars"
     }
   }
 }

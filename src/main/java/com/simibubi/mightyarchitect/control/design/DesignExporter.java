@@ -135,6 +135,8 @@ public class DesignExporter {
 			compound.setInteger("Margin", data);
 			break;
 		case WALL:
+			if (data == -1) 
+				return "Revisit the Design settings.";
 			compound.setString("ExpandBehaviour", Wall.ExpandBehaviour.values()[data].name());
 			break;
 		case TOWER_FLAT_ROOF:

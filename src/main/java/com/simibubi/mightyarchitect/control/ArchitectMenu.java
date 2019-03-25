@@ -47,7 +47,9 @@ public class ArchitectMenu {
 				GuiOpener.open(gui);
 
 			case 'r':
-				ArchitectManager.design();
+				ArchitectManager.reroll();
+				ArchitectManager.getModel().updatePalettePreview();
+				SchematicHologram.getInstance().schematicChanged();
 				return true;
 
 			case 'c':
