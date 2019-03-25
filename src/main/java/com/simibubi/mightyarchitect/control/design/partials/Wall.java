@@ -27,6 +27,7 @@ public class Wall extends Design {
 	public boolean fitsHorizontally(int width) {
 		switch (expandBehaviour) {
 		case MergedRepeat:
+			if (width == 1) return false;
 			return (width % (this.defaultWidth - 1)) == 1;
 		case Repeat:
 			return (width % this.defaultWidth) == 0;

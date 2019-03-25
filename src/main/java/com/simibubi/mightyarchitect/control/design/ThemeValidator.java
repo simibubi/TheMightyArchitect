@@ -1,78 +1,125 @@
 package com.simibubi.mightyarchitect.control.design;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 import com.simibubi.mightyarchitect.control.helpful.DesignHelper;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
 public class ThemeValidator {
 
-	private static final int MIN_RADIUS = 2;
-	private static final int MAX_RADIUS = 5;
-	private static final int MIN_HEIGHT = 1;
-	private static final int MAX_HEIGHT = 10;
+	static List<TextComponentString> complaints;
 
 	public static void check(DesignTheme theme) {
-		status("Validating the " + theme.getDisplayName() + " theme...");
+		EntityPlayerSP player = Minecraft.getMinecraft().player;
+		player.sendMessage(new TextComponentString("Validation on §a" + theme.getDisplayName()));
 		theme.clearDesigns();
-		
+		ThemeStatistics stats = theme.getStatistics();
+		stats.sendToPlayer();
+		complaints = new LinkedList<>();
+
 		for (DesignLayer layer : theme.getLayers()) {
 			for (DesignType type : theme.getTypes()) {
 
-				DesignQuery query = new DesignQuery(theme, layer, type);
-				if (!exists(query))
+				if (theme.getRoomLayers().contains(layer) && DesignType.roofTypes().contains(type))
 					continue;
+				if (!theme.getRoomLayers().contains(layer) && !DesignType.roofTypes().contains(type))
+					continue;
+
+				DesignQuery query = new DesignQuery(theme, layer, type);
+				if (!exists(query)) {
+					if (type == DesignType.FACADE)
+						continue;
+					if (type == DesignType.CORNER && layer == DesignLayer.Open)
+						continue;
+
+					alert(layer.getDisplayName() + " " + type.getDisplayName() + " has no designs!");
+					continue;
+				}
+
+				List<Integer> missingHeights = new ArrayList<>();
 
 				switch (type) {
 				case CORNER:
-					for (int height = MIN_HEIGHT; height <= MAX_HEIGHT; height++) {
+					missingHeights.clear();
+					for (int height = 1; height <= theme.getMaxFloorHeight(); height++) {
 						DesignQuery cornerQuery = new DesignQuery(theme, layer, type).withHeight(height);
 						if (!exists(cornerQuery))
-							alert("No " + layer.getDisplayName() + " " + type.getDisplayName()
-									+ " has a height of " + height + "m.");
+							missingHeights.add(height);
 					}
+					if (!missingHeights.isEmpty())
+						alert(layer.getDisplayName() + " " + type.getDisplayName() + "s are missing heights "
+							+ glue(missingHeights));
 					break;
 				case NONE:
 					alert("Found design with no type in layer " + layer.getDisplayName() + "!");
 					break;
 				case ROOF:
 				case FLAT_ROOF:
-					for (int span = 5; span <= 15; span += 2) {
+					for (int span = stats.MinGableRoof; span <= stats.MaxGableRoof; span += 2) {
 						DesignQuery roofQuery = new DesignQuery(theme, layer, type).withWidth(span);
 						if (!exists(roofQuery))
-							alert("No " + type.getDisplayName()
-									+ " has a span of " + span + "m.");
+							alert("No " + type.getDisplayName() + " has a span of " + span + "m.");
 					}
 					break;
 				case TOWER:
-					for (int radius = MIN_RADIUS; radius <= MAX_RADIUS; radius++) {
-						for (int height = MIN_HEIGHT; height <= MAX_HEIGHT; height++) {
-							DesignQuery towerQuery = new DesignQuery(theme, layer, type).withWidth(radius * 2 + 1)
-									.withHeight(height);
-							if (!exists(towerQuery))
-								alert("No " + layer.getDisplayName() + " " + type.getDisplayName()
-										+ " has radius " + radius + "m and a height of " + height
-										+ "m.");
+					for (int radius = stats.MinTowerRadius; radius <= stats.MaxTowerRadius; radius++) {
+						DesignQuery withWidth = new DesignQuery(theme, layer, type).withWidth(radius * 2 + 1);
+
+						if (!exists(withWidth)) {
+							alert("No " + layer.getDisplayName() + " " + type.getDisplayName() + " has radius " + radius
+									+ "m.");
+							continue;
 						}
+
+						missingHeights.clear();
+						for (int height = 1; height <= theme.getMaxFloorHeight(); height++) {
+							DesignQuery towerQuery = withWidth.withHeight(height);
+							if (!exists(towerQuery))
+								missingHeights.add(height);
+						}
+						if (!missingHeights.isEmpty())
+							alert(layer.getDisplayName() + " " + type.getDisplayName() + "s with radius " + radius + " are missing heights "
+								+ glue(missingHeights));
 					}
 					break;
 				case TOWER_FLAT_ROOF:
-				case TOWER_ROOF:
-					for (int radius = MIN_RADIUS; radius <= MAX_RADIUS; radius++) {
+					for (int radius = stats.MinTowerRadius; radius <= stats.MaxTowerRadius; radius++) {
 						DesignQuery towerQuery = new DesignQuery(theme, layer, type).withWidth(radius * 2 + 1);
 						if (!exists(towerQuery))
-							alert("No " + type.getDisplayName()
-									+ " has a radius of " + radius + "m.");
+							alert("No " + type.getDisplayName() + " has a radius of " + radius + "m.");
+					}
+					break;
+				case TOWER_ROOF:
+					for (int radius = stats.MinTowerRadius; radius <= stats.MaxConicalRoofRadius; radius++) {
+						DesignQuery towerQuery = new DesignQuery(theme, layer, type).withWidth(radius * 2 + 1);
+						if (!exists(towerQuery))
+							alert("No " + type.getDisplayName() + " has a radius of " + radius + "m.");
 					}
 					break;
 				case WALL:
-					for (int width = 3; width <= 15; width += 2) {
-						for (int height = MIN_HEIGHT; height <= MAX_HEIGHT; height++) {
-							DesignQuery wallQuery = new DesignQuery(theme, layer, type).withHeight(height).withWidth(width);
-							if (!exists(wallQuery))
-								alert("No " + layer.getDisplayName() + " " + type.getDisplayName()
-										+ " spans " + width + "x" + height + "m.");
+					for (int width = stats.MinRoomLength - 2; width <= 15; width += 2) {
+						DesignQuery wallQuery = new DesignQuery(theme, layer, type).withWidth(width);
+
+						if (!exists(wallQuery)) {
+							alert("No " + layer.getDisplayName() + " " + type.getDisplayName() + " spans " + width
+									+ "m.");
+							break;
 						}
+
+						missingHeights.clear();
+						for (int height = 1; height <= theme.getMaxFloorHeight(); height++) {
+							if (!exists(wallQuery.withHeight(height)))
+								missingHeights.add(height);
+						}
+						if (!missingHeights.isEmpty())
+							alert(layer.getDisplayName() + " " + type.getDisplayName() + "s which span " + width + " are missing heights "
+								+ glue(missingHeights));
 					}
 					break;
 				default:
@@ -82,8 +129,18 @@ public class ThemeValidator {
 
 			}
 		}
-		
-		status("Done checking!");
+
+		if (complaints.size() > 0) {
+			player.sendMessage(new TextComponentString("§6The Following Designs are missing:"));
+			for (ITextComponent text : complaints) {
+				player.sendMessage(text);
+			}
+			player.sendMessage(new TextComponentString(
+					"§6Try and add these missing designs or exclude their type from your theme."));
+
+		} else {
+			player.sendMessage(new TextComponentString("§aFor prior traits no missing designs have been found."));
+		}
 
 	}
 
@@ -91,12 +148,17 @@ public class ThemeValidator {
 		return DesignHelper.pickRandom(query.withoutFallback()) != null;
 	}
 
-	private static void status(String message) {
-		Minecraft.getMinecraft().player.sendMessage(new TextComponentString("-> " + message));
-	}
-
 	private static void alert(String message) {
-		Minecraft.getMinecraft().player.sendMessage(new TextComponentString("§c!> " + message));
+		complaints.add(new TextComponentString("-> " + message));
+	}
+	
+	private static String glue(List<Integer> heights) {
+		if (heights.isEmpty())
+			return null;
+		String s = "";
+		for (int h : heights)
+			s += ", " + h;
+		return s.substring(2);
 	}
 
 }

@@ -46,17 +46,17 @@ public class ThemeStatistics {
 			stats.MinTowerRadius = stats.MaxRoomLength;
 			stats.MaxTowerRadius = 0;
 			stats.MaxConicalRoofRadius = 0;
+			stats.hasTowers = false;
 
 			for (DesignLayer layer : theme.getRoomLayers()) {
 				DesignQuery towerQuery = new DesignQuery(theme, layer, DesignType.TOWER);
 				DesignQuery conicalRoofQuery = new DesignQuery(theme, DesignLayer.Roofing, DesignType.TOWER_ROOF);
 
 				if (!designExists(towerQuery)) {
-					stats.MinTowerRadius = 0;
-					stats.MaxTowerRadius = 0;
-					stats.hasTowers = false;
 					break;
 				}
+				
+				stats.hasTowers = true;
 
 				for (int radius = 1; radius <= stats.MaxRoomLength; radius += 1) {
 					if (designExists(towerQuery.withWidth(radius * 2 + 1))) {
@@ -139,7 +139,7 @@ public class ThemeStatistics {
 	}
 
 	public void sendToPlayer() {
-		chat("Room size: " + MinRoomLength + " to " + MaxRoomLength);
+		chat("Room size: " + MinRoomLength + " to " + (MaxRoomLength == 97 ? "Infinity" : MaxRoomLength));
 		
 		if (hasFlatRoof)
 			chat("Smallest Flat Roof Spans: " + MinFlatRoof);
