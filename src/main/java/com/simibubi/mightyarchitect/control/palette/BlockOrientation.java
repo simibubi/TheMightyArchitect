@@ -106,6 +106,10 @@ public enum BlockOrientation {
 
 			if (property instanceof PropertyDirection) {
 				facing = (EnumFacing) properties.get(property);
+
+				// Trap doors decided to be the wrong way around
+				if (state.getBlock() instanceof BlockTrapDoor)
+					facing = facing.getOpposite();
 			}
 		}
 
@@ -140,7 +144,10 @@ public enum BlockOrientation {
 			if (hasFacing() && property instanceof PropertyDirection) {
 				if (facing.getAxis() != Axis.Y
 						&& ((EnumFacing) properties.get((PropertyDirection) property)).getHorizontalIndex() == -1)
-					newState = newState.withProperty(((PropertyDirection) property), facing);
+					if (newState.getBlock() instanceof BlockTrapDoor)
+						newState = newState.withProperty(((PropertyDirection) property), facing.getOpposite());
+					else
+						newState = newState.withProperty(((PropertyDirection) property), facing);
 			}
 
 			if (hasFacing() && property == BlockRotatedPillar.AXIS) {
@@ -152,7 +159,8 @@ public enum BlockOrientation {
 			if (hasFacing() && property == BlockLog.LOG_AXIS) {
 				EnumAxis axis = ((EnumAxis) properties.get(BlockLog.LOG_AXIS));
 				if (axis == EnumAxis.Y && forceAxis)
-					newState = newState.withProperty(BlockLog.LOG_AXIS, facing.getAxis() == Axis.X ? EnumAxis.X : facing.getAxis() == Axis.Z ? EnumAxis.Z : axis);
+					newState = newState.withProperty(BlockLog.LOG_AXIS,
+							facing.getAxis() == Axis.X ? EnumAxis.X : facing.getAxis() == Axis.Z ? EnumAxis.Z : axis);
 			}
 		}
 

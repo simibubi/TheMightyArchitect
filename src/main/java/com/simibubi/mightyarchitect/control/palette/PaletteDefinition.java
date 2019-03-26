@@ -228,8 +228,9 @@ public class PaletteDefinition {
 
 			if (property == BlockStairs.HALF)
 				for (EnumHalf half : EnumHalf.values())
-					if (scanMap.containsKey(state.withProperty(BlockStairs.HALF, half)))
-						return scanMap.get(state.withProperty(BlockStairs.HALF, half));
+					for (EnumFacing facing : EnumFacing.HORIZONTALS)
+						if (scanMap.containsKey(state.withProperty(BlockStairs.HALF, half).withProperty(BlockStairs.FACING, facing)))
+							return scanMap.get(state.withProperty(BlockStairs.HALF, half).withProperty(BlockStairs.FACING, facing));
 
 			if (property == BlockTrapDoor.HALF)
 				for (DoorHalf half : DoorHalf.values())

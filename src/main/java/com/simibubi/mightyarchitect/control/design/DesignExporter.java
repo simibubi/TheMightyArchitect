@@ -189,6 +189,7 @@ public class DesignExporter {
 	
 	public static void setTheme(DesignTheme theme) {
 		DesignExporter.theme = theme;
+		scanningPalette = theme.getDefaultPalette();
 		layer = DesignLayer.Regular;
 		type = DesignType.WALL;
 		changed = true;
