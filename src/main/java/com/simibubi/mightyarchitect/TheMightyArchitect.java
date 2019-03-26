@@ -106,6 +106,12 @@ public class TheMightyArchitect {
 
 	@SubscribeEvent
 	public static void onEntityConstructing(EntityConstructing event) {
+		if (event.getEntity() == null)
+			return;
+		
+		if (event.getEntity().world == null)
+			return;
+		
 		if (!event.getEntity().world.isRemote)
 			return;
 
