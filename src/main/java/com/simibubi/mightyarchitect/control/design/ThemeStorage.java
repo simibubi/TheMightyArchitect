@@ -25,7 +25,7 @@ public class ThemeStorage {
 
 	public enum IncludedThemes {
 
-		Medieval("medieval"), Fallback("fallback_theme");
+		Medieval("medieval"), Fallback("fallback_theme"), Modern("modern");
 
 		public DesignTheme theme;
 		public String themeFolder;
@@ -136,8 +136,10 @@ public class ThemeStorage {
 
 		if (compressed) {
 			try {
+				Path path = Paths.get(folderPath + "/" + theme.getFilePath() + ".theme");
+				Files.deleteIfExists(path);
 				OutputStream outputStream = Files.newOutputStream(
-						Paths.get(folderPath + "/" + theme.getFilePath() + ".theme"), StandardOpenOption.CREATE);
+						path, StandardOpenOption.CREATE);
 				CompressedStreamTools.writeCompressed(massiveThemeTag, outputStream);
 				outputStream.close();
 			} catch (IOException e) {
@@ -213,7 +215,7 @@ public class ThemeStorage {
 					theme.setImported(true);
 					theme.setDefaultPalette(PaletteDefinition.fromNBT(paletteCompound));
 					importedThemes.add(theme);
-					if (!themeFolder.endsWith(".theme"))
+					if (!themeFolder.endsWith(".theme") && !themeFolder.endsWith(".json"))
 						createdThemes.add(theme);
 				}
 				newDirectoryStream.close();

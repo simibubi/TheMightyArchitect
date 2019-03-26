@@ -43,7 +43,7 @@ public class ItemWandArchitect extends ItemForMightyArchitects {
 
 				String name = DesignExporter.exportDesign(worldIn, anchor);
 				if (!name.isEmpty()) {
-					player.sendMessage(new TextComponentString(name));
+					player.sendStatusMessage(new TextComponentString(name), true);
 				}
 
 			} else {

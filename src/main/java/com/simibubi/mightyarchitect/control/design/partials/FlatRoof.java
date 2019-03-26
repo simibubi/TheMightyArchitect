@@ -19,7 +19,7 @@ public class FlatRoof extends Design {
 		flatRoof.applyNBT(compound);
 		
 		flatRoof.margin = compound.getInteger("Margin");
-		flatRoof.defaultWidth = (flatRoof.defaultWidth - margin) * 2 - 1;
+		flatRoof.defaultWidth = (flatRoof.defaultWidth - flatRoof.margin) * 2 - 1;
 		
 		return flatRoof;
 	}
@@ -62,7 +62,7 @@ public class FlatRoof extends Design {
 		// Drag roof blocks into width
 		for (int y = 0; y < printedSlices.size(); y++) {
 			for (int x = size.getX(); x <= instance.width - (size.getX() - margin - 1); x++) {
-				for (int z = -(instance.depth - size.getZ() - zShift - 1); z < size.getZ(); z++) {
+				for (int z = -(instance.depth - 2 * size.getZ() + zShift + 1); z < size.getZ(); z++) {
 					PaletteBlockInfo block = printedSlices.get(y).getBlockAt(size.getX() - 1, Math.max(z, 0), instance.rotationY);
 					if (block == null) continue;
 					BlockPos pos = position.add(rotateAroundZero(new BlockPos(x - xShift, y + yShift, z + zShift - size.getZ() + 1), instance.rotationY));

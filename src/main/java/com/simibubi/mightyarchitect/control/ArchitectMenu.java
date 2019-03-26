@@ -75,6 +75,8 @@ public class ArchitectMenu {
 				
 			case 'r':
 				ThemeStorage.reloadExternal();
+				ArchitectManager.status("Reloaded Themes");
+				ArchitectManager.enterPhase(ArchitectPhases.Empty);
 				return false;
 				
 			default:
@@ -151,7 +153,7 @@ public class ArchitectMenu {
 
 			default:
 				int index = c - '1';
-				List<DesignTheme> themes = ThemeStorage.getImported();
+				List<DesignTheme> themes = ThemeStorage.getCreated();
 				if (index < themes.size() && index >= 0) {
 					ArchitectManager.editTheme(themes.get(index));
 					return false;
@@ -187,12 +189,14 @@ public class ArchitectMenu {
 				return true;
 				
 			case 'e':
-				ThemeStorage.exportThemeFullyAsFile(DesignExporter.theme, true);
-				return true;
+				String file = ThemeStorage.exportThemeFullyAsFile(DesignExporter.theme, true);
+				ArchitectManager.status("Exported Theme as " + file);				
+				return false;
 				
 			case 'j':
-				ThemeStorage.exportThemeFullyAsFile(DesignExporter.theme, false);
-				return true;
+				file = ThemeStorage.exportThemeFullyAsFile(DesignExporter.theme, false);
+				ArchitectManager.status("Exported Theme as " + file);
+				return false;
 				
 			case 'r':
 				DesignExporter.theme.clearDesigns();

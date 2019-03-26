@@ -46,7 +46,7 @@ public class TheMightyArchitect {
 
 	public static final String ID = "mightyarchitect";
 	public static final String NAME = "The Mighty Architect";
-	public static final String VERSION = "0.1.3";
+	public static final String VERSION = "0.2.0";
 
 	@Mod.Instance
 	public static TheMightyArchitect instance;
@@ -110,8 +110,8 @@ public class TheMightyArchitect {
 			return;
 
 		if (event.getEntity() instanceof EntityPlayer && Minecraft.getMinecraft().isSingleplayer()) {
-			Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("§aThe Mighty Architect v§2" + VERSION));
-			Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("Press [§b" + Keyboard.getKeyName(CombinedClientProxy.COMPOSE.getKeyCode()) + "§f] to start a Build."));
+			Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("The Mighty Architect v" + VERSION));
+			Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(new TextComponentString("Press [" + Keyboard.getKeyName(CombinedClientProxy.COMPOSE.getKeyCode()) + "] to start a Build."));
 		}
 	}
 

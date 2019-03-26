@@ -1,0 +1,34 @@
+{
+  "Size": {
+    "X": 2,
+    "Y": 5,
+    "Z": 2
+  },
+  "Layers": [
+    {
+      "Facing": "DH,GA",
+      "Blocks": "AA,A ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "DA,AA",
+      "Blocks": "AI,I ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "DH,GA",
+      "Blocks": "AA,A ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "DA,AA",
+      "Blocks": "AI,I ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "DH,GA",
+      "Blocks": "AA,A ",
+      "Trait": "Standard"
+    }
+  ]
+}

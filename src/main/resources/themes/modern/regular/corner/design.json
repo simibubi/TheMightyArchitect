@@ -1,0 +1,14 @@
+{
+  "Size": {
+    "X": 3,
+    "Y": 1,
+    "Z": 3
+  },
+  "Layers": [
+    {
+      "Facing": "AAU,AAU,RRA",
+      "Blocks": "FEL,EEL,LL ",
+      "Trait": "Standard"
+    }
+  ]
+}

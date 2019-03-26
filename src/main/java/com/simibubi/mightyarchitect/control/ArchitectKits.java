@@ -85,7 +85,7 @@ public class ArchitectKits {
 		IBlockState state = DesignExporter.theme.getDefaultPalette().get(palette);
 		@SuppressWarnings("deprecation")
 		ItemStack stack = state.getBlock().getItem(Minecraft.getMinecraft().world, BlockPos.ORIGIN, state);
-		setHotbarItem(slot, stack.setStackDisplayName("§b" + palette.getDisplayName() + " §f(" + stack.getDisplayName() + ")"));
+		setHotbarItem(slot, stack.setStackDisplayName(palette.getDisplayName() + " (" + stack.getDisplayName() + ")"));
 	}
 	
 	

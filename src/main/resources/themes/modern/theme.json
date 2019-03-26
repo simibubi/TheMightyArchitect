@@ -1,0 +1,17 @@
+{
+  "Maximum Room Height": 8,
+  "Designer": "simibubi",
+  "Types": [
+    "WALL",
+    "FACADE",
+    "CORNER",
+    "FLAT_ROOF"
+  ],
+  "Layers": [
+    "Roofing",
+    "Regular",
+    "Foundation",
+    "Special"
+  ],
+  "Name": "Modern"
+}

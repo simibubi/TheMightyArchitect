@@ -12,17 +12,17 @@
       "Trait": "Standard"
     },
     {
-      "Facing": "AAAAAAA,AAMAMAA",
+      "Facing": "AAAAAAA,AALALAA",
       "Blocks": "EEEHEEE,  L L  ",
       "Trait": "Optional"
     },
     {
-      "Facing": "AAAAAAA,AASASAA",
+      "Facing": "AAAAAAA,AARARAA",
       "Blocks": "EEEHEEE,  L L  ",
       "Trait": "CloneThrice"
     },
     {
-      "Facing": "AAAAAAA,AASASAA",
+      "Facing": "AAAAAAA,AARARAA",
       "Blocks": "EEEHEEE,J L L J",
       "Trait": "Standard"
     },

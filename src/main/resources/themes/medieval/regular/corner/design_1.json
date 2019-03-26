@@ -1,7 +1,7 @@
 {
   "Size": {
     "X": 2,
-    "Y": 5,
+    "Y": 4,
     "Z": 2
   },
   "Layers": [
@@ -24,11 +24,6 @@
       "Facing": "DA,AA",
       "Blocks": "GJ,J ",
       "Trait": "CloneOnce"
-    },
-    {
-      "Facing": "DH,GA",
-      "Blocks": "GG,G ",
-      "Trait": "Standard"
     }
   ]
 }

@@ -348,7 +348,9 @@ public class GuiComposer extends GuiScreen {
 			for (int i = 0; i < 3; i++) {
 				final int coordinate = i;
 				final boolean vertical = coordinate == Y;
-				ScrollArea scrollArea = new ScrollArea(vertical ? 1 : 2, vertical ? theme.getMaxFloorHeight() + 1 : 20,
+				int min = vertical ? 1 : (stats.MinRoomLength - 1) / 2;
+				int max = vertical ? theme.getMaxFloorHeight() + 1 : (stats.MaxRoomLength - 1) / 2;
+				ScrollArea scrollArea = new ScrollArea(min, max,
 						new ICancelableScrollAction() {
 							@Override
 							public void onScroll(int position) {

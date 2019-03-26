@@ -1,7 +1,7 @@
 {
   "Size": {
     "X": 2,
-    "Y": 5,
+    "Y": 4,
     "Z": 2
   },
   "Layers": [
@@ -23,11 +23,6 @@
     {
       "Facing": "DA,AA",
       "Blocks": "GI,I ",
-      "Trait": "Standard"
-    },
-    {
-      "Facing": "DD,DA",
-      "Blocks": "GG,G ",
       "Trait": "Standard"
     }
   ]

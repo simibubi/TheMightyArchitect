@@ -92,7 +92,7 @@ public class PaletteDefinition {
 
 	public PaletteDefinition(String name) {
 		definition = new HashMap<>();
-		definition.put(Palette.CLEAR, Blocks.GLASS.getDefaultState());
+		definition.put(Palette.CLEAR, Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.RED));
 		this.name = name;
 	}
 
@@ -189,6 +189,16 @@ public class PaletteDefinition {
 		return state;
 	}
 
+	public String getDuplicates() {
+		for (Palette key : definition.keySet()) {
+			Palette keyIgnoreRotation = getKeyIgnoreRotation(definition.get(key));
+			if (key != keyIgnoreRotation) {
+				return key.getDisplayName() + " = " + keyIgnoreRotation.getDisplayName();
+			}
+		}
+		return "";
+	}
+	
 	public boolean hasDuplicates() {
 		for (Palette key : definition.keySet()) {
 			if (key != getKeyIgnoreRotation(definition.get(key))) {
@@ -209,7 +219,8 @@ public class PaletteDefinition {
 		}
 
 		// contains but rotated
-		return getKeyIgnoreRotation(state);
+		Palette keyIgnoreRotation = getKeyIgnoreRotation(state);
+		return keyIgnoreRotation;
 	}
 
 	protected Palette getKeyIgnoreRotation(IBlockState state) {
@@ -234,8 +245,9 @@ public class PaletteDefinition {
 
 			if (property == BlockTrapDoor.HALF)
 				for (DoorHalf half : DoorHalf.values())
-					if (scanMap.containsKey(state.withProperty(BlockTrapDoor.HALF, half)))
-						return scanMap.get(state.withProperty(BlockTrapDoor.HALF, half));
+					for (EnumFacing facing : EnumFacing.HORIZONTALS)
+						if (scanMap.containsKey(state.withProperty(BlockTrapDoor.HALF, half).withProperty(BlockTrapDoor.FACING, facing)))
+							return scanMap.get(state.withProperty(BlockTrapDoor.HALF, half).withProperty(BlockTrapDoor.FACING, facing));
 
 			if (property == BlockRotatedPillar.AXIS)
 				for (Axis axis : Axis.values())

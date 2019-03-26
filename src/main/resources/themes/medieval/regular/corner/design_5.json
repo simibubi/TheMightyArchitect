@@ -1,34 +1,29 @@
 {
   "Size": {
     "X": 2,
-    "Y": 5,
+    "Y": 4,
     "Z": 2
   },
   "Layers": [
     {
-      "Facing": "DA,AA",
-      "Blocks": "GI,II",
+      "Facing": "DU,RA",
+      "Blocks": "GL,L ",
       "Trait": "Standard"
     },
     {
-      "Facing": "DA,AA",
-      "Blocks": "GJ,JJ",
+      "Facing": "DU,RA",
+      "Blocks": "GL,L ",
       "Trait": "Standard"
     },
     {
-      "Facing": "DA,AA",
-      "Blocks": "GJ,JJ",
+      "Facing": "DU,RA",
+      "Blocks": "GL,L ",
       "Trait": "CloneOnce"
     },
     {
-      "Facing": "DA,AA",
-      "Blocks": "GJ,JJ",
+      "Facing": "DU,RA",
+      "Blocks": "GL,L ",
       "Trait": "Optional"
-    },
-    {
-      "Facing": "DA,AA",
-      "Blocks": "GI,II",
-      "Trait": "Standard"
     }
   ]
 }

@@ -1,0 +1,34 @@
+{
+  "Size": {
+    "X": 2,
+    "Y": 5,
+    "Z": 2
+  },
+  "Layers": [
+    {
+      "Facing": "AA,AA",
+      "Blocks": "AJ,JD",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AA,AA",
+      "Blocks": "AD,DJ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AA,AA",
+      "Blocks": "B ,  ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "AB,BA",
+      "Blocks": "AK,KI",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AA,AC",
+      "Blocks": "  , K",
+      "Trait": "MaskAbove"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "Size": {
+    "X": 2,
+    "Y": 6,
+    "Z": 2
+  },
+  "Layers": [
+    {
+      "Facing": "AG,HA",
+      "Blocks": "GG,GG",
+      "Trait": "MaskBelow"
+    },
+    {
+      "Facing": "AA,AA",
+      "Blocks": "F , G",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AA,AA",
+      "Blocks": "F , G",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "AA,AA",
+      "Blocks": "E , G",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AU,RA",
+      "Blocks": "FL,LG",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AG,HA",
+      "Blocks": "GG,GG",
+      "Trait": "Standard"
+    }
+  ]
+}

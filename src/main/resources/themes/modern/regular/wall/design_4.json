@@ -1,0 +1,30 @@
+{
+  "Size": {
+    "X": 4,
+    "Y": 4,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Facing": "AAAA,AAAA",
+      "Blocks": "FHHF,    ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAA,AAAA",
+      "Blocks": "FHHF,    ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "AAAA,AAAA",
+      "Blocks": "FHHF,    ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAA,RAAR",
+      "Blocks": "EEEE,L  L",
+      "Trait": "Standard"
+    }
+  ]
+}

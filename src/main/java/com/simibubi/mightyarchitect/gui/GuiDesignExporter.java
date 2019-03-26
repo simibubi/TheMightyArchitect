@@ -150,8 +150,10 @@ public class GuiDesignExporter extends GuiScreen {
 
 			if (type.hasSizeData()) {
 				
-				if (additionalDataValue % 2 == 0)
-					additionalDataValue++;
+				if (type == DesignType.ROOF) {
+					if (additionalDataValue % 2 == 0)
+						additionalDataValue++;
+				}
 				if (additionalDataValue < type.getMinSize())
 					additionalDataValue = type.getMinSize();
 				if (additionalDataValue > type.getMaxSize())
@@ -225,7 +227,18 @@ public class GuiDesignExporter extends GuiScreen {
 		drawDefaultBackground();
 		GuiResources.EXPORTER.draw(this, xTopLeft, yTopLeft);
 		super.drawScreen(mouseX, mouseY, partialTicks);
-
+		
+		RenderHelper.enableStandardItemLighting();
+        GlStateManager.pushMatrix();
+		GlStateManager.translate((this.width - this.xSize) / 2 + 250, 280, 100);
+		GlStateManager.rotate(-30, .4f, 0, -.2f);
+		GlStateManager.rotate(90 + 0.2f * animationProgress, 0, 1, 0);
+		GlStateManager.scale(300, -300, 300);
+		itemRender.renderItem(mc.player.getHeldItemMainhand(), TransformType.GROUND);
+		GlStateManager.popMatrix();
+		RenderHelper.disableStandardItemLighting();
+		animationProgress++;
+		
 		int color = GuiResources.FONT_COLOR;
 		fontRenderer.drawString("Export custom Designs", xTopLeft + 10, yTopLeft + 10, color, false);
 
@@ -242,17 +255,7 @@ public class GuiDesignExporter extends GuiScreen {
 		scrollAreas.forEach(area -> area.draw(this, mouseX, mouseY));
 		if (scrollAreaAdditionalData != null)
 			scrollAreaAdditionalData.draw(this, mouseX, mouseY);
-		
-		RenderHelper.disableStandardItemLighting();
-        GlStateManager.pushMatrix();
-		GlStateManager.translate((this.width - this.xSize) / 2 + 250, 280, 100);
-		GlStateManager.rotate(-30, .4f, 0, -.2f);
-		GlStateManager.rotate(90 + 0.2f * animationProgress, 0, 1, 0);
-		GlStateManager.scale(300, -300, 300);
-		itemRender.renderItem(mc.player.getHeldItemMainhand(), TransformType.GROUND);
-		GlStateManager.popMatrix();
-		RenderHelper.enableStandardItemLighting();
-		animationProgress++;
+
 	}
 
 	@Override

@@ -1,0 +1,14 @@
+{
+  "Size": {
+    "X": 2,
+    "Y": 1,
+    "Z": 2
+  },
+  "Layers": [
+    {
+      "Facing": "AG,HA",
+      "Blocks": "GG,GG",
+      "Trait": "Standard"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "Size": {
+    "X": 5,
+    "Y": 2,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": "IOM  ,GOM  ,IOMMM,IOOOO,GIIGI",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "CABAA,AABAA,CABBB,CAAAA,ACCAC",
+      "Blocks": "P PMM,O PMM,P PPP,P    ,OPPOP",
+      "Trait": "Standard"
+    }
+  ],
+  "Margin": 0
+}

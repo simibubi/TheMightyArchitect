@@ -1,0 +1,30 @@
+{
+  "Size": {
+    "X": 5,
+    "Y": 4,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Facing": "BAAGA,BAAAH,BAAAA,BAAAA,BBBBB",
+      "Blocks": "POOG ,POOGG,POOOO,POOOO,PPPPP",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": "J  I ,J  GI,J    ,J    ,JJJJJ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AABAA,AABAA,AABBB,AAAAA,AAAAA",
+      "Blocks": "  PIM,  PGI,  PPP,     ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAACA,AAACC,AAAAA,AAAAA,AAAAA",
+      "Blocks": "   P ,   PP,     ,     ,     ",
+      "Trait": "Standard"
+    }
+  ],
+  "Margin": 1
+}

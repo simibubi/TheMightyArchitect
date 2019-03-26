@@ -1,0 +1,30 @@
+{
+  "Size": {
+    "X": 3,
+    "Y": 4,
+    "Z": 1
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Facing": "AAA",
+      "Blocks": "EHE",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAA",
+      "Blocks": "EHE",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAA",
+      "Blocks": "EHE",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAA",
+      "Blocks": "EHE",
+      "Trait": "CloneThrice"
+    }
+  ]
+}

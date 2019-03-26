@@ -1,0 +1,20 @@
+{
+  "Size": {
+    "X": 3,
+    "Y": 2,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Facing": "AAA,ARA",
+      "Blocks": "FIF, L ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAA,RAR",
+      "Blocks": "IFI,L L",
+      "Trait": "Standard"
+    }
+  ]
+}

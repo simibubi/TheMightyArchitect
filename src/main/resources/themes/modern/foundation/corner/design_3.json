@@ -1,0 +1,34 @@
+{
+  "Size": {
+    "X": 2,
+    "Y": 5,
+    "Z": 2
+  },
+  "Layers": [
+    {
+      "Facing": "DA,AA",
+      "Blocks": "AJ,JD",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "DA,AA",
+      "Blocks": "AD,D ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "DA,AA",
+      "Blocks": "A ,  ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "DO,LA",
+      "Blocks": "AL,L ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "DA,AA",
+      "Blocks": "A ,  ",
+      "Trait": "Standard"
+    }
+  ]
+}

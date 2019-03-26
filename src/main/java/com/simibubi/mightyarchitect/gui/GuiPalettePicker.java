@@ -83,12 +83,11 @@ public class GuiPalettePicker extends GuiScreen {
 	public void onGuiClosed() {
 		super.onGuiClosed();
 		
-		if (scanPicker && primary.palette.hasDuplicates()) {
-			mc.player.sendMessage(new TextComponentString("WARNING: The scanner palette you chose contains the same block type for several palette entries!"));
-			mc.player.sendMessage(new TextComponentString("The exporter will not be able to distinguish the palette entries and always choose the first one."));
-		}
-		
 		if (scanPicker) {
+			if (primary.palette.hasDuplicates())
+				mc.player.sendStatusMessage(new TextComponentString("Warning: Ambiguous Scanner Palette ( " + primary.palette.getDuplicates() + " )"), false);
+			
+			mc.player.sendStatusMessage(new TextComponentString("Updated Default Palette"), true);
 			DesignExporter.theme.setDefaultPalette(primary.palette);
 		}
 	}
