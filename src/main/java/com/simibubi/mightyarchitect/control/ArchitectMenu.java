@@ -15,8 +15,6 @@ import com.simibubi.mightyarchitect.gui.GuiEditTheme;
 import com.simibubi.mightyarchitect.gui.GuiOpener;
 import com.simibubi.mightyarchitect.gui.GuiTextPrompt;
 
-import net.minecraft.client.Minecraft;
-
 public class ArchitectMenu {
 
 	public static boolean handleMenuInput(int key, char c) {
@@ -119,8 +117,6 @@ public class ArchitectMenu {
 
 			case 'p':
 				if (test) return false;
-				if (!Minecraft.getMinecraft().isSingleplayer())
-					return false;
 				ArchitectManager.print();
 				return true;
 
@@ -261,8 +257,7 @@ public class ArchitectMenu {
 			
 			if (!ArchitectManager.testRun) {
 				keybinds.put("S", "Save as Schematic");
-				if (Minecraft.getMinecraft().isSingleplayer())
-					keybinds.put("P", "Print blocks into world");
+				keybinds.put("P", "Print blocks into world");
 				keybinds.lineBreak();
 				keybinds.put("U", "Unload");				
 			} else {

@@ -26,7 +26,8 @@ public enum ArchitectPhases {
 	
 	ManagingThemes(new PhaseManageThemes(), "Manage Themes"),
 	ListForEdit(new PhaseListThemesForEditing(), "Edit a Theme"),
-	EditingThemes(new PhaseEditTheme(), "Editing ");
+	EditingThemes(new PhaseEditTheme(), "Editing "),
+	PrintingToMultiplayer(new PrintingToMultiplayer(), "Printing Blocks...");
 	
 	private IArchitectPhase handler;
 	private String displayTitle;

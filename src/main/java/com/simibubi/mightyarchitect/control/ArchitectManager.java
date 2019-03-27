@@ -61,7 +61,7 @@ public class ArchitectManager {
 	private static GuiArchitectMenu menu = new GuiArchitectMenu();
 
 	public static boolean testRun = false;
-	
+
 	// Commands
 
 	public static void compose() {
@@ -82,7 +82,7 @@ public class ArchitectManager {
 	public static void unload() {
 		enterPhase(ArchitectPhases.Empty);
 		resetSchematic();
-		
+
 		if (testRun) {
 			testRun = false;
 			editTheme(DesignExporter.theme);
@@ -98,11 +98,11 @@ public class ArchitectManager {
 			status("Draw some rooms before going to the next step!");
 			return;
 		}
-		
+
 		model.setSketch(groundPlan.theme.getDesignPicker().assembleSketch(groundPlan));
 		enterPhase(ArchitectPhases.Previewing);
 	}
-	
+
 	public static void reroll() {
 		GroundPlan groundPlan = model.getGroundPlan();
 		model.setSketch(groundPlan.theme.getDesignPicker().assembleSketch(groundPlan));
@@ -131,13 +131,19 @@ public class ArchitectManager {
 		if (getModel().getSketch() == null)
 			return;
 
-		for (PacketInstantPrint packet : getModel().getPackets()) {
-			PacketSender.INSTANCE.sendToServer(packet);
-		}
+		Minecraft mc = Minecraft.getMinecraft();
 
-		SchematicHologram.reset();
-		status("Printed result into world.");
-		unload();
+		if (mc.isSingleplayer()) {
+			for (PacketInstantPrint packet : getModel().getPackets()) {
+				PacketSender.INSTANCE.sendToServer(packet);
+			}
+			SchematicHologram.reset();
+			status("Printed result into world.");
+			unload();
+
+		} else {
+			enterPhase(ArchitectPhases.PrintingToMultiplayer);
+		}
 	}
 
 	public static void writeToFile(String name) {
