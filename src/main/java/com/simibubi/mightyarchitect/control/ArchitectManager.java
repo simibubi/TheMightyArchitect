@@ -284,6 +284,14 @@ public class ArchitectManager {
 
 		phase.getPhaseHandler().onKey(Keyboard.getEventKey());
 	}
+	
+	@SubscribeEvent
+	public static void onMouseScrolled(MouseEvent event) {
+		if (event.getDwheel() != 0 && phase == ArchitectPhases.Composing) {
+			phase.getPhaseHandler().onScroll(event.getDwheel() / 120);
+			event.setCanceled(true);
+		}
+	}
 
 	@SubscribeEvent
 	public static void onBlockPlaced(PlayerInteractEvent.RightClickBlock event) {

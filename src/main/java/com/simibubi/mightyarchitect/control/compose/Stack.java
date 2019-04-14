@@ -54,8 +54,12 @@ public class Stack {
 	}
 
 	public void decrease() {
-		if (!rooms.isEmpty())
+		if (!rooms.isEmpty()) {
+			if (rooms.size() > 1) {
+				rooms.get(rooms.size() - 2).roofType = highest().roofType;
+			}
 			rooms.remove(highest());
+		}
 	}
 
 	public void forEachAbove(Room anchor, Consumer<? super Room> action) {

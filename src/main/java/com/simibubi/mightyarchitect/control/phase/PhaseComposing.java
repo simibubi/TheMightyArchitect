@@ -64,8 +64,11 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 			activeTool.getTool().init();
 			return;
 		}
-
-		activeTool.getTool().handleKey(key);
+	}
+	
+	@Override
+	public void onScroll(int amount) {
+		activeTool.getTool().handleMouseWheel(amount);
 	}
 
 	@Override

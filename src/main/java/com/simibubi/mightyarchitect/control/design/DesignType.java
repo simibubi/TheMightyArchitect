@@ -23,10 +23,10 @@ public enum DesignType {
 	CORNER("corner", "Corner", new Corner()), 
 	TOWER("tower", "Tower", new Tower()), 
 	TRIM("trim", "Trim", new Trim()), 
-	ROOF("roof", "Roof", new Roof()), 
+	ROOF("roof", "Gable Roof", new Roof()), 
 	FLAT_ROOF("flatroof", "Flat Roof", new FlatRoof()), 
-	TOWER_ROOF("towerroof", "Round Roof", new TowerRoof()), 
-	TOWER_FLAT_ROOF("towerflatroof", "Flat Round Roof", new TowerFlatRoof()), 
+	TOWER_ROOF("towerroof", "Conical Roof", new TowerRoof()), 
+	TOWER_FLAT_ROOF("towerflatroof", "Flat Tower Roof", new TowerFlatRoof()), 
 	
 	NONE("none", "Don't use", null);
 

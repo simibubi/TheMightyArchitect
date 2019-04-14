@@ -46,7 +46,8 @@ public abstract class GroundPlanningToolBase implements ImAToolForGroundPlanning
 			BlockPos hit = trace.getBlockPos();
 			makeStacksTransparent(player, hit);
 			
-			if (trace.sideHit.getAxis() == Axis.Y)
+			boolean replaceable = player.world.getBlockState(hit).getBlock().isReplaceable(player.world, hit);
+			if (trace.sideHit.getAxis() == Axis.Y && !replaceable)
 				hit = hit.offset(trace.sideHit);
 
 			if (model.getAnchor() == null)
@@ -90,7 +91,7 @@ public abstract class GroundPlanningToolBase implements ImAToolForGroundPlanning
 	}
 
 	@Override
-	public void handleKey(int key) {
+	public void handleMouseWheel(int scroll) {
 	}
 
 	@Override

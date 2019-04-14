@@ -1,6 +1,5 @@
 package com.simibubi.mightyarchitect.control.compose.planner;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import com.simibubi.mightyarchitect.control.ArchitectManager;
@@ -88,21 +87,18 @@ public class RoomTool extends GroundPlanningToolBase {
 	}
 	
 	@Override
-	public void handleKey(int key) {
+	public void handleMouseWheel(int scroll) {
 		if (lastAddedStack == null)
 			return;
 		
-		switch(key) {
-		case Keyboard.KEY_UP:
+		if (scroll > 0) {
 			lastAddedStack.increase();
-			break;
-		case Keyboard.KEY_DOWN:
+		} else {
 			lastAddedStack.decrease();
 			if (lastAddedStack.floors() == 0) {
 				ArchitectManager.getModel().getGroundPlan().remove(lastAddedStack);
 				lastAddedStack = null;
 			}
-			break;
 		}
 	}
 

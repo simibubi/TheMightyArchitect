@@ -148,4 +148,8 @@ public class ScrollArea extends Gui {
 		}
 	}
 
+	public boolean isNumeric() {
+		return numeric;
+	}
+
 }

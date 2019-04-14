@@ -13,6 +13,7 @@ import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.compose.CylinderStack;
 import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.control.compose.Stack;
+import com.simibubi.mightyarchitect.control.compose.planner.SelectionTool;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.DesignType;
@@ -56,11 +57,14 @@ public class GuiComposer extends GuiScreen {
 	private ThemeStatistics stats;
 	private boolean tower;
 
+	private float alpha;
+
 	public GuiComposer(Stack stack) {
 		this.stack = stack;
 		theme = ArchitectManager.getModel().getGroundPlan().theme;
 		stats = theme.getStatistics();
 		tower = stack instanceof CylinderStack;
+		alpha = 1;
 	}
 
 	private void init(Stack stack) {
@@ -154,6 +158,9 @@ public class GuiComposer extends GuiScreen {
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
 
+		if (alpha < 1f)
+			alpha += (1 - alpha) * .2f;
+
 		mouseY -= scrollBar.getYShift();
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0, scrollBar.getYShift(), 0);
@@ -173,14 +180,24 @@ public class GuiComposer extends GuiScreen {
 		indicatorNoRoof.render(mc, mouseX, mouseY);
 
 		GlStateManager.popMatrix();
-		
+
 		scrollBar.render(this);
-		
+
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0, scrollBar.getYShift(), 0);
-		
-		for (GuiComposerPartial partial : partials) {
+
+		SelectionTool.hoveredRoom = null;
+		for (int layer = 0; layer < partials.size(); layer++) {
+			GuiComposerPartial partial = partials.get(layer);
+			int offset = (partials.size() - layer - 1) * 52 + 20;
+			
+			if (partial.isHovered(offset, mouseX, mouseY))
+				SelectionTool.hoveredRoom = partial.cuboid;
+			
 			for (ScrollArea area : partial.scrollAreas) {
+				if ((partial.scrollAreaPosition.contains(area) || partial.scrollAreaSize.contains(area)) && area.isHovered(mouseX, mouseY)) {
+					alpha += (-alpha) * .8f;
+				}
 				area.draw(this, mouseX, mouseY);
 			}
 		}
@@ -338,8 +355,18 @@ public class GuiComposer extends GuiScreen {
 						});
 				scrollArea.setBounds(x + 176 + 24 * i, y + 12, 22, 14);
 				scrollArea.setState(pos.elementAt(i));
-				scrollArea.setTitle("Change Position");
-				scrollArea.setNumeric(true);
+				scrollArea.setTitle("Move Rooms");
+
+				float angle = mc.player.rotationYawHead % 360;
+				if (angle < -180)
+					angle += 360;
+				if (angle > 180)
+					angle -= 360;
+
+				boolean numeric = (coordinate == x) ? (angle < 0) : (Math.abs(angle) < 90);
+
+				scrollArea.setNumeric(numeric || coordinate == Y);
+
 				labelPosition.elementAt(i).text = pos.elementAt(i).toString();
 				scrollAreas.add(scrollArea);
 				scrollAreaPosition.addElement(scrollArea);
@@ -350,90 +377,87 @@ public class GuiComposer extends GuiScreen {
 				final boolean vertical = coordinate == Y;
 				int min = vertical ? 1 : (stats.MinRoomLength - 1) / 2;
 				int max = vertical ? theme.getMaxFloorHeight() + 1 : (stats.MaxRoomLength - 1) / 2;
-				ScrollArea scrollArea = new ScrollArea(min, max,
-						new ICancelableScrollAction() {
-							@Override
-							public void onScroll(int position) {
-								int diff;
-								switch (coordinate) {
+				ScrollArea scrollArea = new ScrollArea(min, max, new ICancelableScrollAction() {
+					@Override
+					public void onScroll(int position) {
+						int diff;
+						switch (coordinate) {
 
-								case X:
-									diff = (position * 2 + 1) - cuboid.width;
-									stack.forRoomAndEachAbove(cuboid, room -> {
-										if (Math.min(room.width + diff, room.length) > stack.getMaxFacadeWidth())
-											return;
-										if (Math.min(room.width + diff, room.length) < stack.getMinWidth())
-											return;
-										if (stack instanceof CylinderStack
-												&& room.width + diff > stack.getMaxFacadeWidth())
-											return;
-										if (stack instanceof CylinderStack && room.width + diff < stack.getMinWidth())
-											return;
+						case X:
+							diff = (position * 2 + 1) - cuboid.width;
+							stack.forRoomAndEachAbove(cuboid, room -> {
+								if (Math.min(room.width + diff, room.length) > stack.getMaxFacadeWidth())
+									return;
+								if (Math.min(room.width + diff, room.length) < stack.getMinWidth())
+									return;
+								if (stack instanceof CylinderStack && room.width + diff > stack.getMaxFacadeWidth())
+									return;
+								if (stack instanceof CylinderStack && room.width + diff < stack.getMinWidth())
+									return;
 
-										room.width += diff;
-										room.x += diff / -2;
+								room.width += diff;
+								room.x += diff / -2;
 
-										if (stack instanceof CylinderStack) {
-											room.length += diff;
-											room.z += diff / -2;
-										}
-									});
-									swapRoofTypeIfNecessary();
-									break;
-
-								case Y:
-									diff = position - cuboid.height;
-									cuboid.height += diff;
-									stack.forEachAbove(cuboid, room -> {
-										room.y += diff;
-									});
-									break;
-
-								case Z:
-									diff = (position * 2 + 1) - cuboid.length;
-									stack.forRoomAndEachAbove(cuboid, room -> {
-										if (Math.min(room.width, room.length + diff) > stack.getMaxFacadeWidth())
-											return;
-										if (Math.min(room.width, room.length + diff) < stack.getMinWidth())
-											return;
-										if (stack instanceof CylinderStack
-												&& room.width + diff > stack.getMaxFacadeWidth())
-											return;
-										if (stack instanceof CylinderStack && room.width + diff < stack.getMinWidth())
-											return;
-
-										room.length += diff;
-										room.z += diff / -2;
-
-										if (stack instanceof CylinderStack) {
-											room.width += diff;
-											room.x += diff / -2;
-										}
-									});
-									swapRoofTypeIfNecessary();
-									break;
-
+								if (stack instanceof CylinderStack) {
+									room.length += diff;
+									room.z += diff / -2;
 								}
-								parent.updateAllPositioningLabels();
-							}
+							});
+							swapRoofTypeIfNecessary();
+							break;
 
-							@Override
-							public boolean canScroll(int position) {
-								switch (coordinate) {
-								case 0:
-									if (Math.min(position * 2 + 1, cuboid.length) > stack.getMaxFacadeWidth())
-										return false;
-									break;
-								case 2:
-									if (Math.min(cuboid.width, position * 2 + 1) > stack.getMaxFacadeWidth())
-										return false;
-									break;
+						case Y:
+							diff = position - cuboid.height;
+							cuboid.height += diff;
+							stack.forEachAbove(cuboid, room -> {
+								room.y += diff;
+							});
+							break;
+
+						case Z:
+							diff = (position * 2 + 1) - cuboid.length;
+							stack.forRoomAndEachAbove(cuboid, room -> {
+								if (Math.min(room.width, room.length + diff) > stack.getMaxFacadeWidth())
+									return;
+								if (Math.min(room.width, room.length + diff) < stack.getMinWidth())
+									return;
+								if (stack instanceof CylinderStack && room.width + diff > stack.getMaxFacadeWidth())
+									return;
+								if (stack instanceof CylinderStack && room.width + diff < stack.getMinWidth())
+									return;
+
+								room.length += diff;
+								room.z += diff / -2;
+
+								if (stack instanceof CylinderStack) {
+									room.width += diff;
+									room.x += diff / -2;
 								}
-								return true;
-							}
-						});
+							});
+							swapRoofTypeIfNecessary();
+							break;
+
+						}
+						parent.updateAllPositioningLabels();
+					}
+
+					@Override
+					public boolean canScroll(int position) {
+						switch (coordinate) {
+						case 0:
+							if (Math.min(position * 2 + 1, cuboid.length) > stack.getMaxFacadeWidth())
+								return false;
+							break;
+						case 2:
+							if (Math.min(cuboid.width, position * 2 + 1) > stack.getMaxFacadeWidth())
+								return false;
+							break;
+						}
+						return true;
+					}
+				});
 				scrollArea.setBounds(x + 176 + 24 * i, y + 32, 22, 14);
-				scrollArea.setTitle("Change Size");
+				scrollArea.setTitle("Resize Rooms");
 				scrollArea.setState(i == 1 ? size.elementAt(i) : (size.elementAt(i) - 1) / 2);
 				scrollArea.setNumeric(true);
 				labelSize.elementAt(i).text = size.elementAt(i).toString();
@@ -465,7 +489,13 @@ public class GuiComposer extends GuiScreen {
 		public void drawScreen(int yOffset, int mouseX, int mouseY, float partialTicks) {
 			int x = parent.xTopLeft;
 			int y = parent.yTopLeft + yOffset;
+
+			GlStateManager.enableAlpha();
+			GlStateManager.enableBlend();
+			GlStateManager.color(1, 1, 1, parent.alpha);
 			GuiResources.COMPOSER.draw(parent, x, y);
+			GlStateManager.disableAlpha();
+			GlStateManager.disableBlend();
 
 			drawCenteredString(fontRenderer, "" + (layer + 1), x + 13, y + 15, 0xCCDDFF);
 
@@ -475,10 +505,20 @@ public class GuiComposer extends GuiScreen {
 			style.draw(parent);
 			styleGroup.draw(parent);
 			paletteGroup.draw(parent);
+
 			for (int i = 0; i < 3; i++) {
 				labelPosition.elementAt(i).draw(parent);
 				labelSize.elementAt(i).draw(parent);
 			}
+		}
+
+		public boolean isHovered(int yOffset, int mouseX, int mouseY) {
+			int x = parent.xTopLeft;
+			int y = parent.yTopLeft + yOffset;
+			int width = GuiResources.COMPOSER.width;
+			int height = GuiResources.COMPOSER.height;
+
+			return (!(mouseX < x || mouseX > x + width || mouseY < y || mouseY > y + height));
 		}
 
 	}
@@ -535,6 +575,12 @@ public class GuiComposer extends GuiScreen {
 	}
 
 	@Override
+	public void onGuiClosed() {
+		SelectionTool.hoveredRoom = null;
+		super.onGuiClosed();
+	}
+	
+	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		mouseY = (int) (mouseY - scrollBar.getYShift());
 		super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -554,8 +600,7 @@ public class GuiComposer extends GuiScreen {
 
 		int i = Mouse.getEventX() * this.width / this.mc.displayWidth;
 		float jBeforeShift = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
-		int j = (int) (jBeforeShift
-				- scrollBar.getYShift());
+		int j = (int) (jBeforeShift - scrollBar.getYShift());
 		int scroll = Mouse.getEventDWheel();
 
 		if (scroll != 0) {

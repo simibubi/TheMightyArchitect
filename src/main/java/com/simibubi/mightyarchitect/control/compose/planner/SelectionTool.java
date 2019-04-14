@@ -4,11 +4,12 @@ import org.lwjgl.opengl.GL11;
 
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.compose.GroundPlan;
+import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.control.compose.Stack;
 import com.simibubi.mightyarchitect.control.helpful.RaycastHelper;
+import com.simibubi.mightyarchitect.control.helpful.RaycastHelper.PredicateTraceResult;
 import com.simibubi.mightyarchitect.control.helpful.TesselatorTextures;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
-import com.simibubi.mightyarchitect.control.helpful.RaycastHelper.PredicateTraceResult;
 import com.simibubi.mightyarchitect.gui.GuiComposer;
 import com.simibubi.mightyarchitect.gui.GuiOpener;
 
@@ -22,6 +23,7 @@ import net.minecraft.util.math.BlockPos;
 public class SelectionTool extends GroundPlanningToolBase {
 
 	private Stack selectedStack;
+	public static Room hoveredRoom;
 
 	@Override
 	public void init() {
@@ -72,11 +74,24 @@ public class SelectionTool extends GroundPlanningToolBase {
 		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
 		selectedStack.forEach(room -> {
+			if (room == hoveredRoom)
+				return;
 			BlockPos pos = room.getOrigin().add(ArchitectManager.getModel().getAnchor());
 			TessellatorHelper.cube(bufferBuilder, pos, room.getSize(), 1 / 16d, true, true);
 		});
 
 		Tessellator.getInstance().draw();
+		
+		if (hoveredRoom != null) {
+			TesselatorTextures.SuperSelectedRoom.bind();
+			bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+			
+			BlockPos pos = hoveredRoom.getOrigin().add(ArchitectManager.getModel().getAnchor());
+			TessellatorHelper.cube(bufferBuilder, pos, hoveredRoom.getSize(), 1 / 16d, true, true);
+			
+			Tessellator.getInstance().draw();
+		}
+		
 	}
 
 }

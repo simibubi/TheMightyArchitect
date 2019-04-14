@@ -22,6 +22,10 @@ public abstract class PhaseBase implements IArchitectPhase {
 	public void onKey(int key) {
 	}
 	
+	@Override
+	public void onScroll(int amount) {
+	}
+	
 	protected Schematic getModel() {
 		return ArchitectManager.getModel();
 	}

@@ -10,6 +10,7 @@ public enum TesselatorTextures {
 	Room("inner.png"),
 	RoomTransparent("inner_transparent.png"),
 	SelectedRoom("inner_selected.png"),
+	SuperSelectedRoom("inner_super_selected.png"),
 	Selection("select.png"),
 	Exporter("exporter.png"),
 	Trim("trim.png");

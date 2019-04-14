@@ -6,15 +6,20 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
 
+import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockLog.EnumAxis;
+import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.block.BlockSlab.EnumBlockHalf;
 import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagFloat;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.math.BlockPos;
@@ -164,6 +169,21 @@ public abstract class SymmetryElement {
 	protected IBlockState flipD1(IBlockState in) {
 		for (IProperty<?> property : in.getPropertyKeys()) {
 
+			if (property instanceof PropertyEnum<?>) {
+				if (property == BlockRotatedPillar.AXIS) {
+					Axis axis = ((Axis) in.getProperties().get(property));
+					if (axis.isVertical())
+						return in;
+					return in.withProperty(BlockRotatedPillar.AXIS, (axis == Axis.X ? Axis.Z : Axis.X));
+				} 
+				if (property == BlockLog.LOG_AXIS) {
+					EnumAxis axis = ((EnumAxis) in.getProperties().get(property));
+					if (axis == EnumAxis.Y || axis == EnumAxis.NONE)
+						return in;
+					return in.withProperty(BlockLog.LOG_AXIS, (axis == EnumAxis.X ? EnumAxis.Z : EnumAxis.X));					
+				}
+			}
+			
 			if (property instanceof PropertyDirection) {
 				switch ((EnumFacing) in.getProperties().get(property)) {
 				case EAST:
@@ -186,6 +206,21 @@ public abstract class SymmetryElement {
 	protected IBlockState flipD2(IBlockState in) {
 		for (IProperty<?> property : in.getPropertyKeys()) {
 
+			if (property instanceof PropertyEnum<?>) {
+				if (property == BlockRotatedPillar.AXIS) {
+					Axis axis = ((Axis) in.getProperties().get(property));
+					if (axis.isVertical())
+						return in;
+					return in.withProperty(BlockRotatedPillar.AXIS, (axis == Axis.X ? Axis.Z : Axis.X));
+				} 
+				if (property == BlockLog.LOG_AXIS) {
+					EnumAxis axis = ((EnumAxis) in.getProperties().get(property));
+					if (axis == EnumAxis.Y || axis == EnumAxis.NONE)
+						return in;
+					return in.withProperty(BlockLog.LOG_AXIS, (axis == EnumAxis.X ? EnumAxis.Z : EnumAxis.X));					
+				}
+			}
+			
 			if (property instanceof PropertyDirection) {
 				switch ((EnumFacing) in.getProperties().get(property)) {
 				case EAST:
