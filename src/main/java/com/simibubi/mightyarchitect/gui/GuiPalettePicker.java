@@ -2,8 +2,6 @@ package com.simibubi.mightyarchitect.gui;
 
 import java.io.IOException;
 
-import org.lwjgl.opengl.GL11;
-
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.SchematicHologram;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
@@ -18,8 +16,8 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 
@@ -193,6 +191,11 @@ public class GuiPalettePicker extends GuiScreen {
 			SchematicHologram.getInstance().schematicChanged();
 		}
 	}
+	
+	@Override
+	public boolean doesGuiPauseGame() {
+		return false;
+	}
 
 	class PaletteButton extends GuiButton {
 		GuiScreen parent;
@@ -208,7 +211,7 @@ public class GuiPalettePicker extends GuiScreen {
 
 		@Override
 		public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-			GuiResources.PALETTE_BUTTON.draw(parent, x, y);
+//			GuiResources.PALETTE_BUTTON.draw(parent, x, y);
 			drawPreview(mc);
 		}
 
@@ -218,18 +221,26 @@ public class GuiPalettePicker extends GuiScreen {
 			GlStateManager.enableBlend();
 			
 			BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-			GlStateManager.translate(x + 4.5f, y + 16.5f, 20);
-			GlStateManager.rotate(-22.5f, .3f, 1f, 0f);
-			GlStateManager.scale(7, -7, 7);
-			GlStateManager.shadeModel(GL11.GL_SMOOTH);
-			mc.getBlockRendererDispatcher().renderBlock(palette.get(Palette.INNER_PRIMARY), new BlockPos(0,0,0), mc.world, buffer);
-			mc.getBlockRendererDispatcher().renderBlock(palette.get(Palette.INNER_DETAIL), new BlockPos(1,0,0), mc.world, buffer);
-			mc.getBlockRendererDispatcher().renderBlock(palette.get(Palette.HEAVY_PRIMARY), new BlockPos(0,1,0), mc.world, buffer);
-			mc.getBlockRendererDispatcher().renderBlock(palette.get(Palette.ROOF_PRIMARY), new BlockPos(1,1,0), mc.world, buffer);
+			GlStateManager.translate(x + 11f, y + 10f, 10);
+			GlStateManager.rotate(90f, 1f, 0f, 0f);
+			GlStateManager.rotate(90f, 0f, 1f, 0f);
+			GlStateManager.rotate(20f, 1f, 0f, 0f);
+			GlStateManager.rotate(-10f, 0f, 0f, 1f);
+			GlStateManager.scale(8, -8, 8);
 			
-			Tessellator.getInstance().draw();
+			renderBlock(mc, buffer, new BlockPos(0,0,0), Palette.INNER_PRIMARY);
+			renderBlock(mc, buffer, new BlockPos(1,0,0), Palette.INNER_DETAIL);
+			renderBlock(mc, buffer, new BlockPos(0,1,0), Palette.HEAVY_PRIMARY);
+			renderBlock(mc, buffer, new BlockPos(1,1,0), Palette.ROOF_PRIMARY);
+			
 			GlStateManager.popMatrix();
+		}
+
+		protected void renderBlock(Minecraft mc, BufferBuilder buffer, BlockPos pos, Palette key) {
+			IBakedModel model = mc.getBlockRendererDispatcher().getModelForState(palette.get(key));
+//			mc.getBlockRendererDispatcher().getBlockModelRenderer().renderModel(mc.world, model, palette.get(key), pos, buffer, false);
+			mc.getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightness(model, palette.get(key), 1, true);
+//			
 		}
 
 		@Override

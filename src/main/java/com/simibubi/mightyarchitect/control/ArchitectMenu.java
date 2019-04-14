@@ -43,12 +43,13 @@ public class ArchitectMenu {
 				gui.setButtonTextAbort("Cancel");
 				gui.setTitle("Enter a name for your Palette:");
 				GuiOpener.open(gui);
+				return false;
 
 			case 'r':
 				ArchitectManager.reroll();
 				ArchitectManager.getModel().updatePalettePreview();
 				SchematicHologram.getInstance().schematicChanged();
-				return true;
+				return false;
 
 			case 'c':
 				ArchitectManager.pickPalette();
