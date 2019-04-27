@@ -1,0 +1,15 @@
+{
+  "Size": {
+    "X": 3,
+    "Y": 1,
+    "Z": 1
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Facing": "AHA",
+      "Blocks": "GGG",
+      "Trait": "Standard"
+    }
+  ]
+}

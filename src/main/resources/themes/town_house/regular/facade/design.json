@@ -1,0 +1,34 @@
+{
+  "Size": {
+    "X": 5,
+    "Y": 5,
+    "Z": 3
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAA,ABBBA,AAAAA",
+      "Blocks": "EEEEE, KKK ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,TAAAU,ARRRA",
+      "Blocks": "EEHEE,LJ JL, LLL ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA",
+      "Blocks": "EEHEE, J J ,     ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA",
+      "Blocks": "FFHFF, J J ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AHHHA,ACCCA,AAAAA",
+      "Blocks": "GGGGG, KKK ,     ",
+      "Trait": "Standard"
+    }
+  ]
+}

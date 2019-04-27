@@ -1,0 +1,35 @@
+{
+  "Size": {
+    "X": 5,
+    "Y": 5,
+    "Z": 3
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA",
+      "Blocks": "GACAG,     ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA",
+      "Blocks": "AACAA,     ,     ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA",
+      "Blocks": "GACAG,     ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA",
+      "Blocks": "AAAAA,     ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AHHHA,LLLLL,AAAAA",
+      "Blocks": "GGGGG,LLLLL,     ",
+      "Trait": "Standard"
+    }
+  ]
+}

@@ -25,7 +25,7 @@ public class ThemeStorage {
 
 	public enum IncludedThemes {
 
-		Medieval("medieval"), Fallback("fallback_theme"), Modern("modern");
+		Medieval("medieval"), Fallback("fallback_theme"), Modern("modern"), TownHouse("town_house");
 
 		public DesignTheme theme;
 		public String themeFolder;

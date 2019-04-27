@@ -1,0 +1,40 @@
+{
+  "Radius": 2,
+  "Size": {
+    "X": 7,
+    "Y": 6,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,  EEE  , EQQQE , EQQQE , EQQQE ,  EEE  ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,  GHG  , GQQQG , HQQQH , GQQQG ,  GHG  ,       ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,  GHG  , GQQQG , HQQQH , GQQQG ,  GHG  ,       ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "  J J  ,  GHG  ,JGQQQGJ, HQQQH ,JGQQQGJ,  GHG  ,  J J  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "  I I  , JEEEJ ,IEQQQEI, EQQQE ,IEQQQEI, JEEEJ ,  I I  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AACACAA,ACAAACA,CAAAAAC,AAAAAAA,CAAAAAC,ACAAACA,AACACAA",
+      "Blocks": "  KBK  , KFFFK ,KFNNNFK,BFNNNFB,KFNNNFK, KFFFK ,  KBK  ",
+      "Trait": "Standard"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "Radius": 1,
+  "Size": {
+    "X": 5,
+    "Y": 5,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Facing": "ASASA,TAAAU,AAAAA,TAAAU,ARARA",
+      "Blocks": " D D ,DAAAD, AAA ,DAAAD, D D ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AASAA,ATAUA,AARAA,AAAAA",
+      "Blocks": " J J ,JADAJ, DAD ,JADAJ, J J ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AASAA,ATAUA,AARAA,AAAAA",
+      "Blocks": " I I ,IADAI, DAD ,IADAI, I I ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AMAMA,NAAAO,AAAAA,NAAAO,ALALA",
+      "Blocks": " D D ,DAAAD, AAA ,DAAAD, D D ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAHAA,AAAAA,GAAAG,AAAAA,AAHAA",
+      "Blocks": " GGG ,GNNNG,GNNNG,GNNNG, GGG ",
+      "Trait": "Standard"
+    }
+  ]
+}

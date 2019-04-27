@@ -1,0 +1,125 @@
+{
+  "Palette": {
+    "OUTER_THICK": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "variant": "cobblestone",
+        "west": "false",
+        "up": "false"
+      },
+      "Name": "minecraft:cobblestone_wall"
+    },
+    "OUTER_FLAT": {
+      "Properties": {
+        "half": "bottom",
+        "facing": "south",
+        "open": "true"
+      },
+      "Name": "minecraft:trapdoor"
+    },
+    "INNER_PRIMARY": {
+      "Properties": {
+        "variant": "smooth_granite"
+      },
+      "Name": "minecraft:stone"
+    },
+    "HEAVY_POST": {
+      "Properties": {
+        "half": "bottom",
+        "shape": "straight",
+        "facing": "north"
+      },
+      "Name": "minecraft:sandstone_stairs"
+    },
+    "ROOF_PRIMARY": {
+      "Name": "minecraft:cobblestone"
+    },
+    "INNER_DETAIL": {
+      "Properties": {
+        "axis": "y"
+      },
+      "Name": "minecraft:bone_block"
+    },
+    "ROOF_SLAB": {
+      "Properties": {
+        "half": "bottom",
+        "variant": "stone_brick"
+      },
+      "Name": "minecraft:stone_slab"
+    },
+    "WINDOW": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:glass_pane"
+    },
+    "Name": "Standard Town House",
+    "HEAVY_PRIMARY": {
+      "Properties": {
+        "type": "sandstone"
+      },
+      "Name": "minecraft:sandstone"
+    },
+    "FLOOR": {
+      "Properties": {
+        "variant": "oak"
+      },
+      "Name": "minecraft:planks"
+    },
+    "HEAVY_SECONDARY": {
+      "Properties": {
+        "variant": "spruce"
+      },
+      "Name": "minecraft:planks"
+    },
+    "ROOF_DETAIL": {
+      "Properties": {
+        "variant": "stonebrick"
+      },
+      "Name": "minecraft:stonebrick"
+    },
+    "INNER_SECONDARY": {
+      "Properties": {
+        "variant": "granite"
+      },
+      "Name": "minecraft:stone"
+    },
+    "OUTER_SLAB": {
+      "Properties": {
+        "half": "bottom",
+        "variant": "spruce"
+      },
+      "Name": "minecraft:wooden_slab"
+    },
+    "HEAVY_WINDOW": {
+      "Properties": {
+        "east": "false",
+        "color": "black",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:stained_glass_pane"
+    },
+    "CLEAR": {
+      "Properties": {
+        "color": "red"
+      },
+      "Name": "minecraft:stained_glass"
+    },
+    "OUTER_THIN": {
+      "Properties": {
+        "east": "false",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:spruce_fence"
+    }
+  }
+}

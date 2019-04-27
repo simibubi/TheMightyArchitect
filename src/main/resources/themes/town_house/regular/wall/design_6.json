@@ -1,0 +1,20 @@
+{
+  "Size": {
+    "X": 1,
+    "Y": 2,
+    "Z": 2
+  },
+  "ExpandBehaviour": "Repeat",
+  "Layers": [
+    {
+      "Facing": "A,L",
+      "Blocks": "F,L",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "A,A",
+      "Blocks": "G, ",
+      "Trait": "Standard"
+    }
+  ]
+}

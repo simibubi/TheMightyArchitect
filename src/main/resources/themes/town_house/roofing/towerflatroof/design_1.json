@@ -1,0 +1,20 @@
+{
+  "Radius": 1,
+  "Size": {
+    "X": 5,
+    "Y": 2,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Facing": "AABAA,AAAAA,BAAAB,AAAAA,AABAA",
+      "Blocks": " IPI ,IMMMI,PMMMP,IMMMI, IPI ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "ACACA,CAAAC,AAAAA,CAAAC,ACACA",
+      "Blocks": " P P ,P   P,     ,P   P, P P ",
+      "Trait": "Standard"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "Size": {
+    "X": 5,
+    "Y": 8,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Facing": "AAAAA,ABBBA",
+      "Blocks": "EEEEE, KKK ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA",
+      "Blocks": "EFHFE, J J ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA",
+      "Blocks": "EFHFE, J J ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA",
+      "Blocks": "EFHFE, J J ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAA,RAAAR",
+      "Blocks": "EFEFE,LI IL",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAA,AAAAA",
+      "Blocks": "EFHFE, J J ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,ACACA",
+      "Blocks": "EEEEE, KBK ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA",
+      "Blocks": "EEEEE,     ",
+      "Trait": "Standard"
+    }
+  ]
+}

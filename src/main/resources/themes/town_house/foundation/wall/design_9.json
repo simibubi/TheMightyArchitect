@@ -1,0 +1,40 @@
+{
+  "Size": {
+    "X": 3,
+    "Y": 6,
+    "Z": 1
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Facing": "ARA",
+      "Blocks": "GDG",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "ARA",
+      "Blocks": "GDG",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAA",
+      "Blocks": "GCG",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAA",
+      "Blocks": "GCG",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "AAA",
+      "Blocks": "GAG",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAA",
+      "Blocks": "BBB",
+      "Trait": "Standard"
+    }
+  ]
+}

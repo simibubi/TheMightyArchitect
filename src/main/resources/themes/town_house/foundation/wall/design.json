@@ -1,0 +1,40 @@
+{
+  "Size": {
+    "X": 7,
+    "Y": 6,
+    "Z": 2
+  },
+  "ExpandBehaviour": "None",
+  "Layers": [
+    {
+      "Facing": "RTAAAUR,AAAAAAA",
+      "Blocks": "DDCCCDD,I     I",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "RAAAAAR,AAAAAAA",
+      "Blocks": "DACCCAD,J     J",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "RTAAAUR,AAAAAAA",
+      "Blocks": "DDCCCDD,J     J",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "RAAAAAR,AAAAAAA",
+      "Blocks": "DAACAAD,I     I",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAAAA,ABAAABA",
+      "Blocks": "BBBBBBB,BK   KB",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AHHHHHA,RACCCAR",
+      "Blocks": "GGGGGGG,L KKK L",
+      "Trait": "Standard"
+    }
+  ]
+}

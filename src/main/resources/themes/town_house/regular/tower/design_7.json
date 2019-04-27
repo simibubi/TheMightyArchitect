@@ -1,0 +1,45 @@
+{
+  "Radius": 1,
+  "Size": {
+    "X": 5,
+    "Y": 7,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": "     , EFE , FQF , EFE ,     ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": " I I ,IEEEI, EQE ,IEEEI, I I ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": " J J ,JEHEJ, HQH ,JEHEJ, J J ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": " J J ,JEHEJ, HQH ,JEHEJ, J J ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": " J J ,JEHEJ, HQH ,JEHEJ, J J ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAMAA,AAAAA,NAAAO,AAAAA,AALAA",
+      "Blocks": " ILI ,IEEEI,LEQEL,IEEEI, ILI ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "ACCCA,CAHAC,CGAGC,CAHAC,ACCCA",
+      "Blocks": " KKK ,KGGGK,KGNGK,KGGGK, KKK ",
+      "Trait": "Standard"
+    }
+  ]
+}

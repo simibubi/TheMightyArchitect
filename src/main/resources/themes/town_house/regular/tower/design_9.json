@@ -1,0 +1,30 @@
+{
+  "Radius": 2,
+  "Size": {
+    "X": 5,
+    "Y": 4,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": " FHF ,FQQQF,HQQQH,FQQQF, FHF ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": " FHF ,FQQQF,HQQQH,FQQQF, FHF ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": " FHF ,FQQQF,HQQQH,FQQQF, FHF ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": " EEE ,ENNNE,ENNNE,ENNNE, EEE ",
+      "Trait": "Standard"
+    }
+  ]
+}

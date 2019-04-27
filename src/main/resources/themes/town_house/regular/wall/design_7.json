@@ -1,0 +1,20 @@
+{
+  "Size": {
+    "X": 3,
+    "Y": 2,
+    "Z": 3
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Facing": "AHA,BBB,AAA",
+      "Blocks": "GGG,KKK,   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAA,ASA,RAR",
+      "Blocks": "   , L ,L L",
+      "Trait": "MaskAbove"
+    }
+  ]
+}

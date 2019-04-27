@@ -1,0 +1,25 @@
+{
+  "Radius": 1,
+  "Size": {
+    "X": 5,
+    "Y": 3,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": " I I ,IAAAI, AQA ,IAAAI, I I ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "ASASA,TAAAU,AAAAA,TAAAU,ARARA",
+      "Blocks": " D D ,DACAD, CQC ,DACAD, D D ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "ACCCA,CAHAC,CGAGC,CAHAC,ACCCA",
+      "Blocks": " KKK ,KGGGK,KGNGK,KGGGK, KKK ",
+      "Trait": "Standard"
+    }
+  ]
+}

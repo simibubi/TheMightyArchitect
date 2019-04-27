@@ -1,0 +1,39 @@
+{
+  "Size": {
+    "X": 2,
+    "Y": 6,
+    "Z": 2
+  },
+  "Layers": [
+    {
+      "Facing": "AA,AA",
+      "Blocks": "G ,  ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AA,AA",
+      "Blocks": "G ,  ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AA,AA",
+      "Blocks": "G ,I ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AA,AA",
+      "Blocks": "G ,I ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AA,GA",
+      "Blocks": "G ,G ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AA,CA",
+      "Blocks": "  ,K ",
+      "Trait": "MaskAbove"
+    }
+  ]
+}

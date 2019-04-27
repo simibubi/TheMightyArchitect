@@ -1,0 +1,20 @@
+{
+  "Radius": 2,
+  "Size": {
+    "X": 7,
+    "Y": 2,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Facing": "AABABAA,ACAAACA,BAAAAAB,AAAAAAA,BAAAAAB,ACAAACA,AABABAA",
+      "Blocks": "  P P  , PMOMP ,PMMMMMP, OM MO ,PMMMMMP, PMOMP ,  P P  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAACAAA,AAACAAA,AAACAAA,CCCCCCC,AAACAAA,AAACAAA,AAACAAA",
+      "Blocks": "   P   ,   P   ,   P   ,PPPPPPP,   P   ,   P   ,   P   ",
+      "Trait": "Standard"
+    }
+  ]
+}

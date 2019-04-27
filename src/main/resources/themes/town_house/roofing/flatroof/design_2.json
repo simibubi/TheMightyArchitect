@@ -1,0 +1,20 @@
+{
+  "Size": {
+    "X": 3,
+    "Y": 2,
+    "Z": 3
+  },
+  "Layers": [
+    {
+      "Facing": "AAA,BAA,ABA",
+      "Blocks": " E ,PEE,IP ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "CCA,CCC,ACC",
+      "Blocks": "PPM,PPP,OPP",
+      "Trait": "Standard"
+    }
+  ],
+  "Margin": 1
+}

@@ -1,0 +1,45 @@
+{
+  "Size": {
+    "X": 6,
+    "Y": 7,
+    "Z": 6
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAAA,AAAAAA,AAAAAA,BAAAAA,AAAAAA,AABAAA",
+      "Blocks": " EEQQQ, EEQQQ, EEQQQ,PEEEEE,IEEEEE, IPI  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "CAAAAA,AAAAAA,CAAAAA,CAAAAA,CAAAAA,BCCCAC",
+      "Blocks": "PMQQQQ,OMQQQQ,PMQQQQ,PMEQQQ,PMMMMM,PPPPOP",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "CAAAAA,AAAAAA,CAAAAA,CAAAAA,CAAAAA,ACCCAC",
+      "Blocks": "PMQQQQ,OMQQQQ,PMQQQQ,PMEQQQ,PMMMMM,OPPPOP",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AABAAA,AABAAA,AABAAA,AAABBB,AAAAAA,AAAAAA",
+      "Blocks": " MPQQQ, MPQQQ, MPIQQ, MEPPP, IMMMM,      ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAA,AAAAAA,AAAAAA,AAAAAA,ACAAAA,AAAAAA",
+      "Blocks": "  MQQQ,  MQQQ,  MEQQ,  MMMM, P    ,      ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAABAA,AAABAA,AAAABB,AAAAAA,AAAAAA,AAAAAA",
+      "Blocks": "  MPQQ,  MPQQ,  MEPP,  IMMM,      ,      ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAACAA,AAACAA,AAACCC,AACAAA,AAAAAA,AAAAAA",
+      "Blocks": "   POO,   POO,   PPP,  P   ,      ,      ",
+      "Trait": "Standard"
+    }
+  ],
+  "Margin": 1
+}

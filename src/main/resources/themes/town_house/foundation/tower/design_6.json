@@ -1,0 +1,50 @@
+{
+  "Radius": 2,
+  "Size": {
+    "X": 7,
+    "Y": 8,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       , IAAAI , AQQQA , AQQQA , AQQQA , IAAAI ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAASAAA,AAAAAAA,ATAAAUA,AAAAAAA,AAARAAA,AAAAAAA",
+      "Blocks": "       , JADAJ , AQQQA , DQQQD , AQQQA , JADAJ ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAASAAA,AAAAAAA,ATAAAUA,AAAAAAA,AAARAAA,AAAAAAA",
+      "Blocks": "       ,  ADA  , AQQQA , DQQQD , AQQQA ,  ADA  ,       ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,  AAA  , AQQQA , AQQQA , AQQQA ,  AAA  ,       ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "  J J  ,  ACA  ,JAQQQAJ, CQQQC ,JAQQQAJ,  ACA  ,  J J  ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "  J J  , JACAJ ,JAQQQAJ, CQQQC ,JAQQQAJ, JACAJ ,  J J  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAMAMAA,AAAAAAA,NAAAAAO,AAAAAAA,NAAAAAO,AAAAAAA,AALALAA",
+      "Blocks": "  D D  , IAAAI ,DAQQQAD, AQQQA ,DAQQQAD, IAAAI ,  D D  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AACCCAA,ACAHACA,CAAAAAC,CGAAAGC,CAAAAAC,ACAHACA,AACCCAA",
+      "Blocks": "  KKK  , KGGGK ,KGNNNGK,KGNNNGK,KGNNNGK, KGGGK ,  KKK  ",
+      "Trait": "Standard"
+    }
+  ]
+}

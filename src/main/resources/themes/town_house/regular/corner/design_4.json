@@ -1,0 +1,39 @@
+{
+  "Size": {
+    "X": 1,
+    "Y": 6,
+    "Z": 2
+  },
+  "Layers": [
+    {
+      "Facing": "R,A",
+      "Blocks": "D, ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "L,A",
+      "Blocks": "D, ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "A,A",
+      "Blocks": "A, ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "R,A",
+      "Blocks": "D, ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "L,A",
+      "Blocks": "D, ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "A,A",
+      "Blocks": "A, ",
+      "Trait": "Optional"
+    }
+  ]
+}

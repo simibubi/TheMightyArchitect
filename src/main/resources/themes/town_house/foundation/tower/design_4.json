@@ -1,0 +1,45 @@
+{
+  "Radius": 2,
+  "Size": {
+    "X": 7,
+    "Y": 7,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Facing": "AASASAA,AAAAAAA,TAAAAAU,AAAAAAA,TAAAAAU,AAAAAAA,AARARAA",
+      "Blocks": "  D D  , IAAAI ,DAQQQAD, AQQQA ,DAQQQAD, IAAAI ,  D D  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       , JACAJ , AQQQA , CQQQC , AQQQA , JACAJ ,       ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       , JACAJ , AQQQA , CQQQC , AQQQA , JACAJ ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       , JAAAJ , AQQQA , AQQQA , AQQQA , JAAAJ ,       ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAMAMAA,AAAAAAA,NAAAAAO,AAAAAAA,NAAAAAO,AAAAAAA,AALALAA",
+      "Blocks": "  D D  , IACAI ,DAQQQAD, CQQQC ,DAQQQAD, IACAI ,  D D  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AACBCAA,AAAAAAA,CAAAAAC,BAAAAAB,CAAAAAC,AAAAAAA,AACBCAA",
+      "Blocks": "  KKK  , GAAAG ,KAQQQAK,KAQQQAK,KAQQQAK, GAAAG ,  KKK  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,  GGG  , GNNNG , GNNNG , GNNNG ,  GGG  ,       ",
+      "Trait": "Standard"
+    }
+  ]
+}

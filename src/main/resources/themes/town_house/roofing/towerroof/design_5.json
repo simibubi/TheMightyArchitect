@@ -1,0 +1,25 @@
+{
+  "Radius": 1,
+  "Size": {
+    "X": 5,
+    "Y": 3,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Facing": "ABABA,BAAAB,AAAAA,BAAAB,ABABA",
+      "Blocks": " P P ,POOOP, O O ,POOOP, P P ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AACAA,AAAAA,CAAAC,AAAAA,AACAA",
+      "Blocks": "  P  , MMM ,PM MP, MMM ,  P  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AACAA,ACACA,AACAA,AAAAA",
+      "Blocks": "     ,  P  , POP ,  P  ,     ",
+      "Trait": "Standard"
+    }
+  ]
+}

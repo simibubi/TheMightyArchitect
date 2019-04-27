@@ -1,0 +1,29 @@
+{
+  "Size": {
+    "X": 1,
+    "Y": 4,
+    "Z": 1
+  },
+  "Layers": [
+    {
+      "Facing": "A",
+      "Blocks": "G",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "A",
+      "Blocks": "G",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "A",
+      "Blocks": "G",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "A",
+      "Blocks": "G",
+      "Trait": "Optional"
+    }
+  ]
+}

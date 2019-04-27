@@ -1,0 +1,60 @@
+{
+  "Radius": 2,
+  "Size": {
+    "X": 7,
+    "Y": 10,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Facing": "AABABAA,ABAAABA,BAAAAAB,AAAAAAA,BAAAAAB,ABAAABA,AABABAA",
+      "Blocks": "  P P  , POOOP ,PO   OP, O   O ,PO   OP, POOOP ,  P P  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAACAAA,AAAAAAA,AAAAAAA,CAAAAAC,AAAAAAA,AAAAAAA,AAACAAA",
+      "Blocks": "   P   ,  MMM  , M   M ,PM   MP, M   M ,  MMM  ,   P   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,  MMM  , MMMMM , MM MM , MMMMM ,  MMM  ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAACAAA,AAAAAAA,ACAAACA,AAAAAAA,AAACAAA,AAAAAAA",
+      "Blocks": "       ,   P   ,  MMM  , PM MP ,  MMM  ,   P   ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,       ,   M   ,  M M  ,   M   ,       ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAACAAA,AACACAA,AAACAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,       ,   P   ,  PMP  ,   P   ,       ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,       ,       ,   M   ,       ,       ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,       ,       ,   O   ,       ,       ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,       ,       ,   I   ,       ,       ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,       ,       ,   I   ,       ,       ,       ",
+      "Trait": "Standard"
+    }
+  ]
+}

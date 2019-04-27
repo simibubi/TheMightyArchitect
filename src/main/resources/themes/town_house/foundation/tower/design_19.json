@@ -1,0 +1,50 @@
+{
+  "Radius": 1,
+  "Size": {
+    "X": 5,
+    "Y": 8,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Facing": "ASASA,TAAAU,AAAAA,TAAAU,ARARA",
+      "Blocks": " D D ,DAAAD, AAA ,DAAAD, D D ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AASAA,ATAUA,AARAA,AAAAA",
+      "Blocks": "     , ADA , DAD , ADA ,     ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAA,AASAA,ATAUA,AARAA,AAAAA",
+      "Blocks": "     , ADA , DAD , ADA ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AASAA,ATAUA,AARAA,AAAAA",
+      "Blocks": " J J ,JADAJ, DAD ,JADAJ, J J ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AMAMA,NAAAO,AAAAA,NAAAO,ALALA",
+      "Blocks": " D D ,DAAAD, AAA ,DAAAD, D D ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAA,AAHAA,AGAGA,AAHAA,AAAAA",
+      "Blocks": " I I ,IGGGI, GAG ,IGGGI, I I ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAA,AAHAA,AGAGA,AAHAA,AAAAA",
+      "Blocks": " I I ,IGGGI, GAG ,IGGGI, I I ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "ACCCA,CAHAC,CGAGC,CAHAC,ACCCA",
+      "Blocks": " KKK ,KGGGK,KGNGK,KGGGK, KKK ",
+      "Trait": "Standard"
+    }
+  ]
+}

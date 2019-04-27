@@ -1,0 +1,19 @@
+{
+  "Size": {
+    "X": 1,
+    "Y": 2,
+    "Z": 2
+  },
+  "Layers": [
+    {
+      "Facing": "A,C",
+      "Blocks": "B,K",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "A,A",
+      "Blocks": "I, ",
+      "Trait": "Optional"
+    }
+  ]
+}

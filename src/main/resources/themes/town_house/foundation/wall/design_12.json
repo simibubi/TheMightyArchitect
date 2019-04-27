@@ -1,0 +1,35 @@
+{
+  "Size": {
+    "X": 5,
+    "Y": 5,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Facing": "AAAAA,AAAAA",
+      "Blocks": "BACAB,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA",
+      "Blocks": "BACAB,     ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAA,AAAAA",
+      "Blocks": "BACAB,J   J",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAAA,AAAAA",
+      "Blocks": "BAAAB,I   I",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AHHHA,GLLLG",
+      "Blocks": "GGGGG,GLLLG",
+      "Trait": "Standard"
+    }
+  ]
+}

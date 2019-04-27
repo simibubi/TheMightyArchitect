@@ -1,0 +1,35 @@
+{
+  "Size": {
+    "X": 3,
+    "Y": 5,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Facing": "AHA,AAA",
+      "Blocks": "GGG,   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAA,AAA",
+      "Blocks": "GHG,   ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAA,AAA",
+      "Blocks": "GHG,   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AHA,AAA",
+      "Blocks": "GGG,   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAA,RRR",
+      "Blocks": "FFF,LLL",
+      "Trait": "Standard"
+    }
+  ]
+}

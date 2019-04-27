@@ -1,0 +1,29 @@
+{
+  "Size": {
+    "X": 2,
+    "Y": 4,
+    "Z": 2
+  },
+  "Layers": [
+    {
+      "Facing": "AO,LA",
+      "Blocks": "EL,L ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AA,AA",
+      "Blocks": "E ,  ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AO,LA",
+      "Blocks": "EL,L ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AA,AA",
+      "Blocks": "E ,  ",
+      "Trait": "CloneOnce"
+    }
+  ]
+}
