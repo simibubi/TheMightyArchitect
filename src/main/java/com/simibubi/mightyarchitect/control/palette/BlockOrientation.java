@@ -105,7 +105,11 @@ public enum BlockOrientation {
 			}
 
 			if (property instanceof PropertyDirection) {
-				facing = ((EnumFacing) properties.get(property)).getOpposite();
+				facing = (EnumFacing) properties.get(property);
+
+				// Trap doors decided to be the wrong way around
+				if (state.getBlock() instanceof BlockTrapDoor)
+					facing = facing.getOpposite();
 			}
 		}
 

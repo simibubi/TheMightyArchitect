@@ -29,7 +29,7 @@
       "Properties": {
         "half": "bottom",
         "shape": "straight",
-        "facing": "south"
+        "facing": "north"
       },
       "Name": "minecraft:sandstone_stairs"
     },
@@ -107,7 +107,10 @@
       "Name": "minecraft:stained_glass_pane"
     },
     "CLEAR": {
-      "Name": "minecraft:glass"
+      "Properties": {
+        "color": "red"
+      },
+      "Name": "minecraft:stained_glass"
     },
     "OUTER_THIN": {
       "Properties": {

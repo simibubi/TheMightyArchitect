@@ -32,7 +32,6 @@ import com.simibubi.mightyarchitect.networking.PacketInstantPrint;
 import com.simibubi.mightyarchitect.networking.PacketSender;
 import com.simibubi.mightyarchitect.proxy.CombinedClientProxy;
 
-import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
