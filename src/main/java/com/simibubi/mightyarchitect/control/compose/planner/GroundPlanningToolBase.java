@@ -91,7 +91,8 @@ public abstract class GroundPlanningToolBase implements ImAToolForGroundPlanning
 	}
 
 	@Override
-	public void handleMouseWheel(int scroll) {
+	public boolean handleMouseWheel(int scroll) {
+		return false;
 	}
 
 	@Override

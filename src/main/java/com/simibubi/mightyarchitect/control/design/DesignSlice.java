@@ -94,7 +94,7 @@ public class DesignSlice {
 		
 		BlockOrientation blockOrientation = orientations[z][x];
 		if (!blockOrientation.hasFacing())
-			blockOrientation = BlockOrientation.valueOf(blockOrientation.getHalf(), EnumFacing.SOUTH);		
+			blockOrientation = BlockOrientation.valueOf(blockOrientation.getHalf(), EnumFacing.NORTH);		
 		
 		PaletteBlockInfo paletteBlockInfo = new PaletteBlockInfo(palette, blockOrientation);			
 		paletteBlockInfo.afterPosition = BlockOrientation.NORTH.withRotation(rotation);

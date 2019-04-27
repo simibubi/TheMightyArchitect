@@ -13,6 +13,6 @@ public interface IArchitectPhase {
 	
 	public void onClick(int button);
 	public void onKey(int key);
-	public void onScroll(int amount);
+	public boolean onScroll(int amount);
 	
 }

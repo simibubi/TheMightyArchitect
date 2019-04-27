@@ -3,7 +3,7 @@ package com.simibubi.mightyarchitect.control.compose.planner;
 public interface ImAToolForGroundPlanning {
 
 	public String handleRightClick();
-	public void handleMouseWheel(int scroll);
+	public boolean handleMouseWheel(int scroll);
 	
 	public void updateSelection();
 	

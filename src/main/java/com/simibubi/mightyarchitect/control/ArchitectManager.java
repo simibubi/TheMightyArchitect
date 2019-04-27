@@ -32,13 +32,17 @@ import com.simibubi.mightyarchitect.networking.PacketInstantPrint;
 import com.simibubi.mightyarchitect.networking.PacketSender;
 import com.simibubi.mightyarchitect.proxy.CombinedClientProxy;
 
+import net.minecraft.block.BlockSlab;
+import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
@@ -284,12 +288,12 @@ public class ArchitectManager {
 
 		phase.getPhaseHandler().onKey(Keyboard.getEventKey());
 	}
-	
+
 	@SubscribeEvent
 	public static void onMouseScrolled(MouseEvent event) {
 		if (event.getDwheel() != 0 && phase == ArchitectPhases.Composing) {
-			phase.getPhaseHandler().onScroll(event.getDwheel() / 120);
-			event.setCanceled(true);
+			boolean cancel = phase.getPhaseHandler().onScroll(event.getDwheel() / 120);
+			event.setCanceled(cancel);
 		}
 	}
 
@@ -307,8 +311,17 @@ public class ArchitectManager {
 				IBlockState stateForPlacement = ((ItemBlock) item).getBlock().getStateForPlacement(event.getWorld(),
 						event.getPos(), event.getFace(), (float) hitVec.x, (float) hitVec.y, (float) hitVec.z,
 						event.getItemStack().getMetadata(), event.getEntityPlayer(), event.getHand());
-				((IListenForBlockEvents) phaseHandler).onBlockPlaced(event.getPos().offset(event.getFace()),
-						stateForPlacement);
+				BlockPos offset = event.getPos().offset(event.getFace());
+
+				if (stateForPlacement.getBlock() == Blocks.STONE_SLAB) {
+					if (event.getWorld().getBlockState(event.getPos()).equals(stateForPlacement)) {
+						stateForPlacement = Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(
+								BlockStoneSlab.VARIANT, stateForPlacement.getValue(BlockStoneSlab.VARIANT));
+						offset = event.getPos();
+					}
+				}
+
+				((IListenForBlockEvents) phaseHandler).onBlockPlaced(offset, stateForPlacement);
 			}
 		}
 

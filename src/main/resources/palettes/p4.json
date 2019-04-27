@@ -108,7 +108,7 @@
       "Properties": {
         "half": "bottom",
         "shape": "straight",
-        "facing": "north"
+        "facing": "south"
       },
       "Name": "minecraft:stone_brick_stairs"
     },

@@ -23,7 +23,8 @@ public abstract class PhaseBase implements IArchitectPhase {
 	}
 	
 	@Override
-	public void onScroll(int amount) {
+	public boolean onScroll(int amount) {
+		return false;
 	}
 	
 	protected Schematic getModel() {

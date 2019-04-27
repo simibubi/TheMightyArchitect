@@ -109,9 +109,9 @@ public class DesignExporter {
 					Palette block = scanningPalette.scan(blockState);
 
 					if (block == null && blockState.getBlock() != Blocks.AIR) {
-						Minecraft.getMinecraft().player
-						.sendMessage(new TextComponentString(blockState.getBlock().getLocalizedName() + " @"
-								+ pos.getX() + "," + pos.getY() + "," + pos.getZ() + " does not belong to the Scanner Palette"));
+						Minecraft.getMinecraft().player.sendMessage(new TextComponentString(
+								blockState.getBlock().getLocalizedName() + " @" + pos.getX() + "," + pos.getY() + ","
+										+ pos.getZ() + " does not belong to the Scanner Palette"));
 						return "Export failed";
 					}
 
@@ -197,7 +197,8 @@ public class DesignExporter {
 			}
 		}
 
-		PacketSender.INSTANCE.sendToServer(new PacketPlaceSign(filename, signPos));
+		PacketSender.INSTANCE.sendToServer(
+				new PacketPlaceSign(layer.getDisplayName().substring(0, 1) + ". " + type.getDisplayName(), filename, signPos));
 		FilesHelper.saveTagCompoundAsJson(compound, designPath);
 		return designPath;
 		//

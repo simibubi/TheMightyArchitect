@@ -87,9 +87,9 @@ public class RoomTool extends GroundPlanningToolBase {
 	}
 	
 	@Override
-	public void handleMouseWheel(int scroll) {
+	public boolean handleMouseWheel(int scroll) {
 		if (lastAddedStack == null)
-			return;
+			return false;
 		
 		if (scroll > 0) {
 			lastAddedStack.increase();
@@ -100,6 +100,8 @@ public class RoomTool extends GroundPlanningToolBase {
 				lastAddedStack = null;
 			}
 		}
+		
+		return true;
 	}
 
 	@Override
