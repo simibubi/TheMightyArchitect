@@ -1,18 +1,16 @@
 package com.simibubi.mightyarchitect.networking;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import java.util.function.Supplier;
 
-public class PacketPlaceSign implements IMessage {
+import net.minecraft.block.Blocks;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.SignTileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkEvent.Context;
+
+public class PacketPlaceSign {
 	
 	public String text1;
 	public String text2;
@@ -27,37 +25,24 @@ public class PacketPlaceSign implements IMessage {
 		this.position = position;
 	}
 	
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		text1 = ByteBufUtils.readUTF8String(buf);
-		text2 = ByteBufUtils.readUTF8String(buf);
-		position = NBTUtil.getPosFromTag(ByteBufUtils.readTag(buf));
+	public PacketPlaceSign(PacketBuffer buffer) {
+		this(buffer.readString(), buffer.readString(), buffer.readBlockPos());
 	}
 
-	@Override
-	public void toBytes(ByteBuf buf) {
-		ByteBufUtils.writeUTF8String(buf, text1);
-		ByteBufUtils.writeUTF8String(buf, text2);
-		ByteBufUtils.writeTag(buf, NBTUtil.createPosTag(position));
+	public void toBytes(PacketBuffer buffer) {
+		buffer.writeString(text1);
+		buffer.writeString(text2);
+		buffer.writeBlockPos(position);
 	}
-
-	public static class PacketHandlerPlaceSign implements IMessageHandler<PacketPlaceSign, IMessage>{
-
-		@Override
-		public IMessage onMessage(PacketPlaceSign message, MessageContext ctx) {
-			EntityPlayerMP player = ctx.getServerHandler().player;
-			
-			player.getServerWorld().addScheduledTask(() -> {
-				player.world.setBlockState(message.position, Blocks.STANDING_SIGN.getDefaultState());
-				TileEntitySign sign = (TileEntitySign) player.world.getTileEntity(message.position);
-				sign.signText[0] = new TextComponentString(message.text1);
-				sign.signText[1] = new TextComponentString(message.text2);
-			});
-			
-			//no response
-			return null;
-		}
-		
+	
+	public void handle(Supplier<Context> context) {
+		context.get().enqueueWork(() -> {
+			World entityWorld = context.get().getSender().getEntityWorld();
+			entityWorld.setBlockState(position, Blocks.SPRUCE_SIGN.getDefaultState());
+			SignTileEntity sign = (SignTileEntity) entityWorld.getTileEntity(position);
+			sign.signText[0] = new StringTextComponent(text1);
+			sign.signText[1] = new StringTextComponent(text2);
+		});
 	}
 	
 }
