@@ -1,11 +1,7 @@
 package com.simibubi.mightyarchitect.gui;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
@@ -20,22 +16,22 @@ import com.simibubi.mightyarchitect.gui.widgets.ScrollArea;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollArea.IScrollAction;
 import com.simibubi.mightyarchitect.gui.widgets.SimiButton;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.button.AbstractButton;
+import net.minecraft.util.text.StringTextComponent;
 
-public class GuiEditTheme extends GuiScreen {
+public class GuiEditTheme extends Screen {
 
 	private int xSize, ySize;
 	private int xTopLeft, yTopLeft;
 	private DesignTheme theme;
 
-	private GuiTextField inputName;
-	private GuiTextField inputAuthor;
+	private TextFieldWidget inputName;
+	private TextFieldWidget inputAuthor;
 
 	private List<GuiIndicator> indicators;
-	private List<GuiTextField> inputs;
+	private List<TextFieldWidget> inputs;
 	
 	private SimiButton confirm;
 	
@@ -47,12 +43,13 @@ public class GuiEditTheme extends GuiScreen {
 	private DynamicLabel labelRoomHeight;
 
 	public GuiEditTheme() {
+		super(new StringTextComponent("Edit Theme"));
 		this.theme = DesignExporter.theme;
 	}
 
 	@Override
-	public void initGui() {
-		super.initGui();
+	public void init() {
+		super.init();
 		xSize = GuiResources.THEME_EDITOR.width;
 		ySize = GuiResources.THEME_EDITOR.height;
 		xTopLeft = (this.width - this.xSize) / 2;
@@ -65,11 +62,11 @@ public class GuiEditTheme extends GuiScreen {
 		int y = yTopLeft + 14;
 		int id = 0;
 
-		inputName = new GuiTextField(id++, fontRenderer, x, y, 104, 8);
+		inputName = new TextFieldWidget(font, x, y, 104, 8, "");
 		inputName.setText(theme.getDisplayName());
 		inputs.add(inputName);
 
-		inputAuthor = new GuiTextField(id++, fontRenderer, x, y + 20, 104, 8);
+		inputAuthor = new TextFieldWidget(font, x, y + 20, 104, 8, "");
 		inputAuthor.setText(theme.getDesigner());
 		inputs.add(inputAuthor);
 
@@ -78,7 +75,7 @@ public class GuiEditTheme extends GuiScreen {
 			input.setDisabledTextColour(-1);
 			input.setEnableBackgroundDrawing(false);
 			input.setMaxStringLength(35);
-			input.setFocused(false);
+			input.changeFocus(false);
 		});
 
 		// init buttons and indicators
@@ -91,7 +88,7 @@ public class GuiEditTheme extends GuiScreen {
 		regular = id + indexShift;
 		SimiButton button = new SimiButton(id++, x, y, GuiResources.ICON_LAYER_REGULAR);
 		button.tooltip = "Regular Style [Always enabled]";
-		buttonList.add(button);
+		buttons.add(button);
 		GuiIndicator guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = State.YELLOW;
 		indicators.add(guiIndicator);
@@ -100,7 +97,7 @@ public class GuiEditTheme extends GuiScreen {
 		foundation = id + indexShift;
 		button = new SimiButton(id++, x, y, GuiResources.ICON_LAYER_FOUNDATION);
 		button.tooltip = "Foundation Style";
-		buttonList.add(button);
+		buttons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getLayers().contains(DesignLayer.Foundation) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
@@ -109,7 +106,7 @@ public class GuiEditTheme extends GuiScreen {
 		open = id + indexShift;
 		button = new SimiButton(id++, x, y, GuiResources.ICON_LAYER_OPEN);
 		button.tooltip = "Open Arcs Style";
-		buttonList.add(button);
+		buttons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getLayers().contains(DesignLayer.Open) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
@@ -118,7 +115,7 @@ public class GuiEditTheme extends GuiScreen {
 		special = id + indexShift;
 		button = new SimiButton(id++, x, y, GuiResources.ICON_LAYER_SPECIAL);
 		button.tooltip = "Special Layer";
-		buttonList.add(button);
+		buttons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getLayers().contains(DesignLayer.Special) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
@@ -128,7 +125,7 @@ public class GuiEditTheme extends GuiScreen {
 
 		button = new SimiButton(id++, x, y, GuiResources.ICON_NO_ROOF);
 		button.tooltip = "Enable Rooms [Always Enabled]";
-		buttonList.add(button);
+		buttons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = State.YELLOW;
 		indicators.add(guiIndicator);
@@ -137,7 +134,7 @@ public class GuiEditTheme extends GuiScreen {
 		flatRoof = id + indexShift;
 		button = new SimiButton(id++, x, y, GuiResources.ICON_FLAT_ROOF);
 		button.tooltip = "Flat Roofs";
-		buttonList.add(button);
+		buttons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getTypes().contains(DesignType.FLAT_ROOF) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
@@ -146,7 +143,7 @@ public class GuiEditTheme extends GuiScreen {
 		roof = id + indexShift;
 		button = new SimiButton(id++, x, y, GuiResources.ICON_NORMAL_ROOF);
 		button.tooltip = "Gable Roofs";
-		buttonList.add(button);
+		buttons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getTypes().contains(DesignType.ROOF) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
@@ -156,7 +153,7 @@ public class GuiEditTheme extends GuiScreen {
 		tower = id + indexShift;
 		button = new SimiButton(id++, x, y, GuiResources.ICON_TOWER_NO_ROOF);
 		button.tooltip = "Enable Towers";
-		buttonList.add(button);
+		buttons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getTypes().contains(DesignType.TOWER) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
@@ -165,7 +162,7 @@ public class GuiEditTheme extends GuiScreen {
 		towerFlatRoof = id + indexShift;
 		button = new SimiButton(id++, x, y, GuiResources.ICON_TOWER_FLAT_ROOF);
 		button.tooltip = "Flat Tower Roofs";
-		buttonList.add(button);
+		buttons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getTypes().contains(DesignType.TOWER_FLAT_ROOF) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
@@ -174,7 +171,7 @@ public class GuiEditTheme extends GuiScreen {
 		towerRoof = id + indexShift;
 		button = new SimiButton(id++, x, y, GuiResources.ICON_TOWER_ROOF);
 		button.tooltip = "Conical Tower Roofs";
-		buttonList.add(button);
+		buttons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getTypes().contains(DesignType.TOWER_ROOF) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
@@ -194,19 +191,17 @@ public class GuiEditTheme extends GuiScreen {
 		areaRoomHeight.setNumeric(true);	
 		
 		confirm = new SimiButton(id, xTopLeft + 172, yTopLeft + 157, GuiResources.ICON_CONFIRM);
-		buttonList.add(confirm);
+		buttons.add(confirm);
 	}
 
-	@Override
-	protected void actionPerformed(GuiButton button) throws IOException {
-		super.actionPerformed(button);
+	protected void actionPerformed(AbstractButton button) {
 		
 		if (button == confirm) {
-			mc.displayGuiScreen(null);
+			minecraft.displayGuiScreen(null);
 			return;
 		}
 		
-		int index = buttonList.indexOf(button);
+		int index = buttons.indexOf(button);
 		
 		// not modifiable
 		GuiIndicator indicator = indicators.get(index);
@@ -249,50 +244,52 @@ public class GuiEditTheme extends GuiScreen {
 	}
 	
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		drawDefaultBackground();
+	public void render(int mouseX, int mouseY, float partialTicks) {
+		renderBackground();
 
 		GuiResources.THEME_EDITOR.draw(this, xTopLeft, yTopLeft);
 
 		int x = xTopLeft + 10;
 		int y = yTopLeft + 14;
 
-		fontRenderer.drawString("Theme name", x, y, GuiResources.FONT_COLOR, false);
-		fontRenderer.drawString("Designer", x, y + 20, GuiResources.FONT_COLOR, false);
+		font.drawString("Theme name", x, y, GuiResources.FONT_COLOR);
+		font.drawString("Designer", x, y + 20, GuiResources.FONT_COLOR);
 
 		y = yTopLeft + 75;
 
-		fontRenderer.drawString("Styles included", x, y - 17, GuiResources.FONT_COLOR, false);
-		fontRenderer.drawString("Shapes and Roof Types included", x, y + 32, GuiResources.FONT_COLOR, false);
-		fontRenderer.drawString("Max. Room Height", x, y + 87, GuiResources.FONT_COLOR, false);
+		font.drawString("Styles included", x, y - 17, GuiResources.FONT_COLOR);
+		font.drawString("Shapes and Roof Types included", x, y + 32, GuiResources.FONT_COLOR);
+		font.drawString("Max. Room Height", x, y + 87, GuiResources.FONT_COLOR);
 
-		super.drawScreen(mouseX, mouseY, partialTicks);
+		super.render(mouseX, mouseY, partialTicks);
 
-		inputs.forEach(input -> input.drawTextBox());
-		indicators.forEach(e -> e.render(mc, mouseX, mouseY));
+		inputs.forEach(input -> input.render(mouseX, mouseY, partialTicks));
+		indicators.forEach(e -> e.render(minecraft, mouseX, mouseY));
 		
 		labelRoomHeight.draw(this);
 		areaRoomHeight.draw(this, mouseX, mouseY);
 		
-		buttonList.forEach(button -> {
-			if (((SimiButton) button).tooltip != null && button.isMouseOver()) {
-				drawHoveringText(((SimiButton) button).tooltip, mouseX, mouseY);
+		buttons.forEach(button -> {
+			if (((SimiButton) button).tooltip != null && button.isHovered()) {
+				renderTooltip(((SimiButton) button).tooltip, mouseX, mouseY);
 			}
 		});
 	}
 	
 	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 		inputs.forEach(input -> input.mouseClicked(mouseX, mouseY, mouseButton));
 		
-		int scrollAmount = ((mouseButton == 0) ? -1 : 1) * ((Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) ? 5 : 1);
+		int scrollAmount = ((mouseButton == 0) ? -1 : 1) * ((Keyboard.isKeyDown(Keyboard.LSHIFT)) ? 5 : 1);
 		areaRoomHeight.tryScroll(mouseX, mouseY, scrollAmount);
+		
+		return false;
 	}
 
 	@Override
-	public void onGuiClosed() {
-		super.onGuiClosed();
+	public void onClose() {
+		super.onClose();
 		if (!inputName.getText().isEmpty())
 			theme.setDisplayName(inputName.getText());
 		if (!inputAuthor.getText().isEmpty())
@@ -336,30 +333,27 @@ public class GuiEditTheme extends GuiScreen {
 		ThemeStorage.exportTheme(theme);
 		ThemeStorage.reloadExternal();
 		ArchitectManager.editTheme(theme);
-		mc.player.sendStatusMessage(new TextComponentString("Theme settings have been updated."), true);
+		minecraft.player.sendStatusMessage(new StringTextComponent("Theme settings have been updated."), true);
 	}
 	
 	private boolean roofLayerExists() {
 		return activated(roof) || activated(flatRoof) || activated(towerFlatRoof) || activated(towerRoof);
 	}
 
-	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		if (!this.inputName.textboxKeyTyped(typedChar, keyCode) & !this.inputAuthor.textboxKeyTyped(typedChar, keyCode))
-			super.keyTyped(typedChar, keyCode);
+	public boolean charTyped(char typedChar, int keyCode) {
+		if (!this.inputName.charTyped(typedChar, keyCode) & !this.inputAuthor.charTyped(typedChar, keyCode))
+			return super.charTyped(typedChar, keyCode);
+		return true;
 	}
 	
 	@Override
-	public void handleMouseInput() throws IOException {
-		super.handleMouseInput();
-
-		int i = Mouse.getEventX() * this.width / this.mc.displayWidth;
-		int j = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
-
-		int scroll = Mouse.getEventDWheel();
+	public boolean mouseScrolled(double x, double y, double scroll) {
 		if (scroll != 0) {
 			int amount = (int) (scroll / -120f);
-			areaRoomHeight.tryScroll(i, j, amount);
+			areaRoomHeight.tryScroll(x, y, amount);
+			return true;
 		}
+		return false;
 	}
-
+	
 }

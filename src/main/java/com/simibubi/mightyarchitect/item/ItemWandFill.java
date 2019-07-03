@@ -5,69 +5,59 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraft.block.BlockColored;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
-public class ItemWandFill extends ItemForMightyArchitects {
+public class ItemWandFill extends Item {
 
-	public ItemWandFill(String name) {
-		super(name);
+	public ItemWandFill(Properties properties) {
+		super(properties.maxStackSize(1));
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
-			EnumFacing facing, float hitX, float hitY, float hitZ) {
-
-//		if (worldIn.isRemote) {
-//			return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
-//		}
-
-		BlockPos start = pos.offset(facing);
+	public ActionResultType onItemUse(ItemUseContext context) {
+		BlockPos start = context.getPos().offset(context.getFace());
 		Set<BlockPos> filledBlocks = new HashSet<>();
 		Set<BlockPos> checked = new HashSet<>();
 		List<BlockPos> toCheck = new LinkedList<>();
 		toCheck.add(start);
 		int limit = 10000;
-		
-		checked.add(start);						
+
+		checked.add(start);
 		for (int i = 0; i <= limit; i++) {
 			if (i == limit)
-				return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+				return super.onItemUse(context);
 			if (toCheck.isEmpty())
 				break;
-			
+
 			BlockPos checkedPos = toCheck.get(0);
-			
-			if (worldIn.getBlockState(checkedPos).getBlock().isReplaceable(worldIn, checkedPos)) {
-				for (EnumFacing offset : EnumFacing.values()) {
-					if (facing.getAxis() == offset.getAxis())
+
+			if (context.getWorld().getBlockState(checkedPos).isReplaceable(new BlockItemUseContext(context))) {
+				for (Direction offset : Direction.values()) {
+					if (context.getFace().getAxis() == offset.getAxis())
 						continue;
 					BlockPos newCheckedPos = checkedPos.offset(offset);
 					if (!checked.contains(newCheckedPos)) {
 						toCheck.add(newCheckedPos);
-						checked.add(newCheckedPos);						
+						checked.add(newCheckedPos);
 					}
 				}
-				
+
 				filledBlocks.add(checkedPos);
 			}
-			
+
 			toCheck.remove(checkedPos);
-			
+
 		}
 
 		for (BlockPos position : filledBlocks)
-			worldIn.setBlockState(position,
-					Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.RED));
-
-		return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+			context.getWorld().setBlockState(position, Blocks.RED_STAINED_GLASS.getDefaultState());
+		return super.onItemUse(context);
 	}
 
 }

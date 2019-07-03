@@ -17,7 +17,7 @@ import com.simibubi.mightyarchitect.gui.GuiTextPrompt;
 
 public class ArchitectMenu {
 
-	public static boolean handleMenuInput(int key, char c) {
+	public static boolean handleMenuInput(char c) {
 		switch (ArchitectManager.getPhase()) {
 
 		case Composing:

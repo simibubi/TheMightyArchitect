@@ -1,6 +1,6 @@
 package com.simibubi.mightyarchitect.control.compose;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 
 public class Cuboid {
@@ -63,11 +63,11 @@ public class Cuboid {
 		return getOrigin().add(width / 2, height / 2, length / 2);
 	}
 
-	public void moveToAttach(Room other, EnumFacing side, int shift) {
-		if (side != EnumFacing.EAST && side != EnumFacing.WEST)
+	public void moveToAttach(Room other, Direction side, int shift) {
+		if (side != Direction.EAST && side != Direction.WEST)
 			centerOnOthersX(other, shift);
 
-		if (side != EnumFacing.NORTH && side != EnumFacing.SOUTH)
+		if (side != Direction.NORTH && side != Direction.SOUTH)
 			centerOnOthersZ(other, shift);
 
 		switch (side) {

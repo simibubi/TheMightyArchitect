@@ -17,7 +17,7 @@ import com.simibubi.mightyarchitect.TheMightyArchitect;
 
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 public class FilesHelper {
 
@@ -47,7 +47,7 @@ public class FilesHelper {
 		return name.toLowerCase().replace(' ', '_');
 	}
 
-	public static boolean saveTagCompoundAsJson(NBTTagCompound compound, String path) {
+	public static boolean saveTagCompoundAsJson(CompoundNBT compound, String path) {
 		try {
 			Files.deleteIfExists(Paths.get(path));
 			JsonWriter writer = new JsonWriter(Files.newBufferedWriter(Paths.get(path), StandardOpenOption.CREATE));
@@ -62,7 +62,7 @@ public class FilesHelper {
 	}
 	
 
-	public static boolean saveTagCompoundAsJsonCompact(NBTTagCompound compound, String path) {
+	public static boolean saveTagCompoundAsJsonCompact(CompoundNBT compound, String path) {
 		try {
 			Files.deleteIfExists(Paths.get(path));
 			JsonWriter writer = new JsonWriter(Files.newBufferedWriter(Paths.get(path), StandardOpenOption.CREATE));
@@ -76,7 +76,7 @@ public class FilesHelper {
 		
 	}
 
-	public static NBTTagCompound loadJsonNBT(InputStream inputStream) {
+	public static CompoundNBT loadJsonNBT(InputStream inputStream) {
 		try {
 			JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(inputStream)));
 			reader.setLenient(true);
@@ -92,11 +92,11 @@ public class FilesHelper {
 		return null;
 	}
 
-	public static NBTTagCompound loadJsonResourceAsNBT(String filepath) {
+	public static CompoundNBT loadJsonResourceAsNBT(String filepath) {
 		return loadJsonNBT(TheMightyArchitect.class.getClassLoader().getResourceAsStream(filepath));
 	}
 
-	public static NBTTagCompound loadJsonAsNBT(String filepath) {
+	public static CompoundNBT loadJsonAsNBT(String filepath) {
 		try {
 			return loadJsonNBT(Files.newInputStream(Paths.get(filepath), StandardOpenOption.READ));
 		} catch (IOException e) {

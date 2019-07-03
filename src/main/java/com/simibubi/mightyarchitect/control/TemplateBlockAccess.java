@@ -5,11 +5,11 @@ import java.util.Set;
 
 import com.simibubi.mightyarchitect.control.compose.Cuboid;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.WorldType;
@@ -17,11 +17,11 @@ import net.minecraft.world.biome.Biome;
 
 public class TemplateBlockAccess implements IBlockAccess {
 
-	private Map<BlockPos, IBlockState> blocks;
+	private Map<BlockPos, BlockState> blocks;
 	private Cuboid bounds;
 	private BlockPos anchor;
 	
-	public TemplateBlockAccess(Map<BlockPos, IBlockState> blocks, Cuboid bounds, BlockPos anchor) {
+	public TemplateBlockAccess(Map<BlockPos, BlockState> blocks, Cuboid bounds, BlockPos anchor) {
 		this.blocks = blocks;
 		this.bounds = bounds;
 		this.anchor = anchor;
@@ -42,7 +42,7 @@ public class TemplateBlockAccess implements IBlockAccess {
 	}
 
 	@Override
-	public IBlockState getBlockState(BlockPos globalPos) {
+	public BlockState getBlockState(BlockPos globalPos) {
 		BlockPos pos = globalPos.subtract(anchor);
 		if (bounds.contains(pos) && blocks.containsKey(pos)) {
 			return blocks.get(pos);
@@ -62,7 +62,7 @@ public class TemplateBlockAccess implements IBlockAccess {
 	}
 
 	@Override
-	public int getStrongPower(BlockPos pos, EnumFacing direction) {
+	public int getStrongPower(BlockPos pos, Direction direction) {
 		return 0;
 	}
 
@@ -72,14 +72,14 @@ public class TemplateBlockAccess implements IBlockAccess {
 	}
 
 	@Override
-	public boolean isSideSolid(BlockPos pos, EnumFacing side, boolean _default) {
+	public boolean isSideSolid(BlockPos pos, Direction side, boolean _default) {
 		if (bounds.contains(anchor.subtract(pos)))
 			return getBlockState(pos).isSideSolid(this, pos, side);
 		else 
 			return _default;
 	}
 
-	public Map<BlockPos, IBlockState> getBlockMap() {
+	public Map<BlockPos, BlockState> getBlockMap() {
 		return blocks;
 	}
 

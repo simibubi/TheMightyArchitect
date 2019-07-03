@@ -1,25 +1,25 @@
 package com.simibubi.mightyarchitect.gui;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 
 @EventBusSubscriber
 public class GuiOpener {
 
-	private static GuiScreen openedGuiNextTick;
+	private static Screen openedGuiNextTick;
 
 	@SubscribeEvent
 	public static void onClientTick(ClientTickEvent event) {
 		if (openedGuiNextTick != null) {
-			Minecraft.getMinecraft().displayGuiScreen(openedGuiNextTick);
+			Minecraft.getInstance().displayGuiScreen(openedGuiNextTick);
 			openedGuiNextTick = null;
 		}
 	}
 	
-	public static void open(GuiScreen gui) {
+	public static void open(Screen gui) {
 		openedGuiNextTick = gui;
 	}
 	

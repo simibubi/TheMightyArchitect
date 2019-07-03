@@ -1,29 +1,28 @@
 package com.simibubi.mightyarchitect.block;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer.Builder;
 
-public class BlockDesignAnchor extends BlockForMightyArchitects {
+public class BlockDesignAnchor extends Block {
 
-	public static final PropertyBool compass = PropertyBool.create("compass");
+	public static final BooleanProperty compass = BooleanProperty.create("compass");
 	
-	public BlockDesignAnchor(String name) {
-		super(name, Material.ROCK);
-		this.setHardness(2.0f);
+	public BlockDesignAnchor() {
+		super(Properties.create(Material.ROCK));
 	}
 	
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		return getDefaultState().withProperty(compass, true);
+	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+		builder.add(compass);
+		super.fillStateContainer(builder);
 	}
 	
 	@Override
-	protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[] {compass});
-    }
+	public BlockState getStateForPlacement(BlockItemUseContext context) {
+		return getDefaultState().with(compass, true);
+	}
 }

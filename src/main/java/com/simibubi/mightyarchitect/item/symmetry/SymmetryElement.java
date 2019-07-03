@@ -6,20 +6,15 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
 
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockLog.EnumAxis;
-import net.minecraft.block.BlockRotatedPillar;
-import net.minecraft.block.BlockSlab.EnumBlockHalf;
-import net.minecraft.block.BlockStairs.EnumHalf;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagFloat;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumFacing.Axis;
+import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.FloatNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.IProperty;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.math.BlockPos;
@@ -62,15 +57,15 @@ public abstract class SymmetryElement {
 		setOrientation();
 	}
 
-	public void process(Map<BlockPos, IBlockState> blocks) {
-		Map<BlockPos, IBlockState> result = new HashMap<>();
+	public void process(Map<BlockPos, BlockState> blocks) {
+		Map<BlockPos, BlockState> result = new HashMap<>();
 		for (BlockPos pos : blocks.keySet()) {
 			result.putAll(process(pos, blocks.get(pos)));
 		}
 		blocks.putAll(result);
 	}
 
-	public abstract Map<BlockPos, IBlockState> process(BlockPos position, IBlockState block);
+	public abstract Map<BlockPos, BlockState> process(BlockPos position, BlockState block);
 
 	protected abstract void setOrientation();
 
@@ -78,31 +73,31 @@ public abstract class SymmetryElement {
 
 	public abstract String typeName();
 
-	public abstract IBlockState getModel();
+	public abstract BlockState getModel();
 
 	private static final String $ORIENTATION = "direction";
 	private static final String $POSITION = "pos";
 	private static final String $TYPE = "type";
 	private static final String $ENABLE = "enable";
 
-	public NBTTagCompound writeToNbt() {
-		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setInteger($ORIENTATION, orientationIndex);
+	public CompoundNBT writeToNbt() {
+		CompoundNBT nbt = new CompoundNBT();
+		nbt.putInt($ORIENTATION, orientationIndex);
 
-		NBTTagList floatList = new NBTTagList();
-		floatList.appendTag(new NBTTagFloat((float) position.x));
-		floatList.appendTag(new NBTTagFloat((float) position.y));
-		floatList.appendTag(new NBTTagFloat((float) position.z));
-		nbt.setTag($POSITION, floatList);
-		nbt.setString($TYPE, typeName());
-		nbt.setBoolean($ENABLE, enable);
+		ListNBT floatList = new ListNBT();
+		floatList.add(new FloatNBT((float) position.x));
+		floatList.add(new FloatNBT((float) position.y));
+		floatList.add(new FloatNBT((float) position.z));
+		nbt.put($POSITION, floatList);
+		nbt.putString($TYPE, typeName());
+		nbt.putBoolean($ENABLE, enable);
 
 		return nbt;
 	}
 
-	public static SymmetryElement fromNBT(NBTTagCompound nbt) {
-		NBTTagList floatList = nbt.getTagList($POSITION, 5);
-		Vec3d pos = new Vec3d(floatList.getFloatAt(0), floatList.getFloatAt(1), floatList.getFloatAt(2));
+	public static SymmetryElement fromNBT(CompoundNBT nbt) {
+		ListNBT floatList = nbt.getList($POSITION, 5);
+		Vec3d pos = new Vec3d(floatList.getFloat(0), floatList.getFloat(1), floatList.getFloat(2));
 		SymmetryElement element;
 
 		switch (nbt.getString($TYPE)) {
@@ -120,14 +115,14 @@ public abstract class SymmetryElement {
 			break;
 		}
 
-		element.setOrientation(nbt.getInteger($ORIENTATION));
+		element.setOrientation(nbt.getInt($ORIENTATION));
 		element.enable = nbt.getBoolean($ENABLE);
 
 		return element;
 	}
 
 	protected Vec3d getDiff(BlockPos position) {
-		return this.position.scale(-1).addVector(position.getX(), position.getY(), position.getZ());
+		return this.position.scale(-1).add(position.getX(), position.getY(), position.getZ());
 	}
 
 	protected BlockPos getIDiff(BlockPos position) {
@@ -135,65 +130,54 @@ public abstract class SymmetryElement {
 		return new BlockPos((int) diff.x, (int) diff.y, (int) diff.z);
 	}
 
-	protected IBlockState flipX(IBlockState in) {
-		return in.withMirror(Mirror.FRONT_BACK);
+	protected BlockState flipX(BlockState in) {
+		return in.mirror(Mirror.FRONT_BACK);
 	}
 
-	protected IBlockState flipY(IBlockState in) {
-		for (IProperty<?> property : in.getPropertyKeys()) {
+	protected BlockState flipY(BlockState in) {
+		for (IProperty<?> property : in.getProperties()) {
 
-			// Stairs
-			if (property.getValueClass().equals(EnumHalf.class)) {
-				return in.cycleProperty(property);
-
-				// Slabs
-			} else if (property.getValueClass().equals(EnumBlockHalf.class)) {
-				return in.cycleProperty(property);
-
-				// Directional Blocks
-			} else if (property instanceof PropertyDirection) {
-				if (in.getProperties().get(property) == EnumFacing.DOWN) {
-					return in.withProperty((PropertyDirection) property, EnumFacing.UP);
-				} else if (in.getProperties().get(property) == EnumFacing.UP) {
-					return in.withProperty((PropertyDirection) property, EnumFacing.DOWN);
+			if (property == BlockStateProperties.HALF)
+				return in.cycle(property);
+			// Directional Blocks
+			if (property instanceof DirectionProperty) {
+				if (in.get(property) == Direction.DOWN) {
+					return in.with((DirectionProperty) property, Direction.UP);
+				} else if (in.get(property) == Direction.UP) {
+					return in.with((DirectionProperty) property, Direction.DOWN);
 				}
 			}
 		}
 		return in;
 	}
 
-	protected IBlockState flipZ(IBlockState in) {
-		return in.withMirror(Mirror.LEFT_RIGHT);
+	protected BlockState flipZ(BlockState in) {
+		return in.mirror(Mirror.LEFT_RIGHT);
 	}
 
-	protected IBlockState flipD1(IBlockState in) {
-		for (IProperty<?> property : in.getPropertyKeys()) {
+	protected BlockState flipD1(BlockState in) {
+		for (IProperty<?> property : in.getProperties()) {
 
-			if (property instanceof PropertyEnum<?>) {
-				if (property == BlockRotatedPillar.AXIS) {
-					Axis axis = ((Axis) in.getProperties().get(property));
-					if (axis.isVertical())
-						return in;
-					return in.withProperty(BlockRotatedPillar.AXIS, (axis == Axis.X ? Axis.Z : Axis.X));
-				} 
-				if (property == BlockLog.LOG_AXIS) {
-					EnumAxis axis = ((EnumAxis) in.getProperties().get(property));
-					if (axis == EnumAxis.Y || axis == EnumAxis.NONE)
-						return in;
-					return in.withProperty(BlockLog.LOG_AXIS, (axis == EnumAxis.X ? EnumAxis.Z : EnumAxis.X));					
-				}
+			if (property == BlockStateProperties.AXIS || property == BlockStateProperties.HORIZONTAL_AXIS) {
+				Axis axis = ((Axis) in.get(property));
+				if (axis.isVertical())
+					return in;
+				Axis value = axis == Axis.X ? Axis.Z : Axis.X;
+				if (property == BlockStateProperties.AXIS) 
+					return in.with(BlockStateProperties.AXIS, value);
+				return in.with(BlockStateProperties.HORIZONTAL_AXIS, value);
 			}
-			
-			if (property instanceof PropertyDirection) {
-				switch ((EnumFacing) in.getProperties().get(property)) {
+
+			if (property instanceof DirectionProperty) {
+				switch ((Direction) in.get(property)) {
 				case EAST:
-					return in.withProperty((PropertyDirection) property, EnumFacing.NORTH);
+					return in.with((DirectionProperty) property, Direction.NORTH);
 				case NORTH:
-					return in.withProperty((PropertyDirection) property, EnumFacing.EAST);
+					return in.with((DirectionProperty) property, Direction.EAST);
 				case SOUTH:
-					return in.withProperty((PropertyDirection) property, EnumFacing.WEST);
+					return in.with((DirectionProperty) property, Direction.WEST);
 				case WEST:
-					return in.withProperty((PropertyDirection) property, EnumFacing.SOUTH);
+					return in.with((DirectionProperty) property, Direction.SOUTH);
 				default:
 					break;
 				}
@@ -203,34 +187,29 @@ public abstract class SymmetryElement {
 		return in;
 	}
 
-	protected IBlockState flipD2(IBlockState in) {
-		for (IProperty<?> property : in.getPropertyKeys()) {
+	protected BlockState flipD2(BlockState in) {
+		for (IProperty<?> property : in.getProperties()) {
 
-			if (property instanceof PropertyEnum<?>) {
-				if (property == BlockRotatedPillar.AXIS) {
-					Axis axis = ((Axis) in.getProperties().get(property));
-					if (axis.isVertical())
-						return in;
-					return in.withProperty(BlockRotatedPillar.AXIS, (axis == Axis.X ? Axis.Z : Axis.X));
-				} 
-				if (property == BlockLog.LOG_AXIS) {
-					EnumAxis axis = ((EnumAxis) in.getProperties().get(property));
-					if (axis == EnumAxis.Y || axis == EnumAxis.NONE)
-						return in;
-					return in.withProperty(BlockLog.LOG_AXIS, (axis == EnumAxis.X ? EnumAxis.Z : EnumAxis.X));					
-				}
+			if (property == BlockStateProperties.AXIS || property == BlockStateProperties.HORIZONTAL_AXIS) {
+				Axis axis = ((Axis) in.get(property));
+				if (axis.isVertical())
+					return in;
+				Axis value = axis == Axis.X ? Axis.Z : Axis.X;
+				if (property == BlockStateProperties.AXIS) 
+					return in.with(BlockStateProperties.AXIS, value);
+				return in.with(BlockStateProperties.HORIZONTAL_AXIS, value);
 			}
-			
-			if (property instanceof PropertyDirection) {
-				switch ((EnumFacing) in.getProperties().get(property)) {
+
+			if (property instanceof DirectionProperty) {
+				switch ((Direction) in.get(property)) {
 				case EAST:
-					return in.withProperty((PropertyDirection) property, EnumFacing.SOUTH);
+					return in.with((DirectionProperty) property, Direction.SOUTH);
 				case NORTH:
-					return in.withProperty((PropertyDirection) property, EnumFacing.WEST);
+					return in.with((DirectionProperty) property, Direction.WEST);
 				case SOUTH:
-					return in.withProperty((PropertyDirection) property, EnumFacing.EAST);
+					return in.with((DirectionProperty) property, Direction.EAST);
 				case WEST:
-					return in.withProperty((PropertyDirection) property, EnumFacing.NORTH);
+					return in.with((DirectionProperty) property, Direction.NORTH);
 				default:
 					break;
 				}
@@ -270,7 +249,7 @@ public abstract class SymmetryElement {
 	public void setPosition(Vec3d pos3d) {
 		this.position = pos3d;
 	}
-	
+
 	public abstract List<String> getAlignToolTips();
 
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -78,7 +78,7 @@ public class SchematicHologram {
 	@SubscribeEvent
 	public static void onClientTickEvent(final ClientTickEvent event) {
 		if (instance != null && instance.active) {
-			final Minecraft minecraft = Minecraft.getMinecraft();
+			final Minecraft minecraft = Minecraft.getInstance();
 			if (event.phase != TickEvent.Phase.END)
 				return;
 			if (minecraft.world == null)
@@ -102,11 +102,11 @@ public class SchematicHologram {
 		final IBlockAccess blockAccess = materializedSketch;
 		final BlockRendererDispatcher blockRendererDispatcher = minecraft.getBlockRendererDispatcher();
 
-		List<IBlockState> blockstates = new LinkedList<>();
+		List<BlockState> blockstates = new LinkedList<>();
 		
 		for (BlockPos localPos : materializedSketch.getAllPositions()) {
 			BlockPos pos = localPos.add(schematic.getAnchor());
-			final IBlockState state = blockAccess.getBlockState(pos);
+			final BlockState state = blockAccess.getBlockState(pos);
 			for (BlockRenderLayer blockRenderLayer : BlockRenderLayer.values()) {
 				if (!state.getBlock().canRenderInLayer(state, blockRenderLayer)) {
 					continue;
@@ -145,7 +145,7 @@ public class SchematicHologram {
 	@SubscribeEvent
 	public static void onRenderWorldLastEvent(final RenderWorldLastEvent event) {
 		if (instance != null && instance.active) {
-			final Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
+			final Entity entity = Minecraft.getInstance().getRenderViewEntity();
 			
 			if (entity == null) {
 				return;
@@ -161,7 +161,7 @@ public class SchematicHologram {
 
 			GlStateManager.enableAlpha();
 			GlStateManager.enableBlend();
-			Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+			Minecraft.getInstance().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 	
 			for (int blockRenderLayerId = 0; blockRenderLayerId < usedBlockRenderLayers.length; blockRenderLayerId++) {
 				if (!usedBlockRenderLayers[blockRenderLayerId]) {

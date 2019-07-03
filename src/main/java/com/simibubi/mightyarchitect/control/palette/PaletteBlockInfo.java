@@ -1,6 +1,6 @@
 package com.simibubi.mightyarchitect.control.palette;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 
 public class PaletteBlockInfo {
 	
@@ -17,7 +17,7 @@ public class PaletteBlockInfo {
 		this.initial = orientation;
 	}
 
-	public IBlockState apply(IBlockState state) {
+	public BlockState apply(BlockState state) {
 		return afterPosition.apply(initial.apply(state, forceAxis), false);
 	}
 	

@@ -13,9 +13,9 @@ import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.BlockTrapDoor.DoorHalf;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumFacing.Axis;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.Rotation;
 
 public enum BlockOrientation {
@@ -24,26 +24,26 @@ public enum BlockOrientation {
 
 	TOP(EnumBlockHalf.TOP, null), BOTTOM(EnumBlockHalf.BOTTOM, null),
 
-	UP(null, EnumFacing.UP), DOWN(null, EnumFacing.DOWN), NORTH(null, EnumFacing.NORTH), SOUTH(null,
-			EnumFacing.SOUTH), EAST(null, EnumFacing.EAST), WEST(null, EnumFacing.WEST),
+	UP(null, Direction.UP), DOWN(null, Direction.DOWN), NORTH(null, Direction.NORTH), SOUTH(null,
+			Direction.SOUTH), EAST(null, Direction.EAST), WEST(null, Direction.WEST),
 
-	TOP_UP(EnumBlockHalf.TOP, EnumFacing.UP), TOP_DOWN(EnumBlockHalf.TOP, EnumFacing.DOWN), TOP_NORTH(EnumBlockHalf.TOP,
-			EnumFacing.NORTH), TOP_SOUTH(EnumBlockHalf.TOP, EnumFacing.SOUTH), TOP_EAST(EnumBlockHalf.TOP,
-					EnumFacing.EAST), TOP_WEST(EnumBlockHalf.TOP, EnumFacing.WEST),
+	TOP_UP(EnumBlockHalf.TOP, Direction.UP), TOP_DOWN(EnumBlockHalf.TOP, Direction.DOWN), TOP_NORTH(EnumBlockHalf.TOP,
+			Direction.NORTH), TOP_SOUTH(EnumBlockHalf.TOP, Direction.SOUTH), TOP_EAST(EnumBlockHalf.TOP,
+					Direction.EAST), TOP_WEST(EnumBlockHalf.TOP, Direction.WEST),
 
-	BOTTOM_UP(EnumBlockHalf.BOTTOM, EnumFacing.UP), BOTTOM_DOWN(EnumBlockHalf.BOTTOM, EnumFacing.DOWN), BOTTOM_NORTH(
-			EnumBlockHalf.BOTTOM, EnumFacing.NORTH), BOTTOM_SOUTH(EnumBlockHalf.BOTTOM, EnumFacing.SOUTH), BOTTOM_EAST(
-					EnumBlockHalf.BOTTOM, EnumFacing.EAST), BOTTOM_WEST(EnumBlockHalf.BOTTOM, EnumFacing.WEST);
+	BOTTOM_UP(EnumBlockHalf.BOTTOM, Direction.UP), BOTTOM_DOWN(EnumBlockHalf.BOTTOM, Direction.DOWN), BOTTOM_NORTH(
+			EnumBlockHalf.BOTTOM, Direction.NORTH), BOTTOM_SOUTH(EnumBlockHalf.BOTTOM, Direction.SOUTH), BOTTOM_EAST(
+					EnumBlockHalf.BOTTOM, Direction.EAST), BOTTOM_WEST(EnumBlockHalf.BOTTOM, Direction.WEST);
 
 	private EnumBlockHalf half;
-	private EnumFacing facing;
+	private Direction facing;
 
-	private BlockOrientation(EnumBlockHalf half, EnumFacing facing) {
+	private BlockOrientation(EnumBlockHalf half, Direction facing) {
 		this.half = half;
 		this.facing = facing;
 	}
 
-	public static BlockOrientation valueOf(EnumBlockHalf half, EnumFacing facing) {
+	public static BlockOrientation valueOf(EnumBlockHalf half, Direction facing) {
 		for (BlockOrientation e : values()) {
 			if (e.half == half && e.facing == facing)
 				return e;
@@ -58,7 +58,7 @@ public enum BlockOrientation {
 		if (facing.getHorizontalIndex() == -1)
 			return this;
 
-		EnumFacing facing2 = facing;
+		Direction facing2 = facing;
 
 		for (; angle > -360; angle -= 90) {
 			facing2 = facing2.rotateY();
@@ -74,11 +74,11 @@ public enum BlockOrientation {
 		return valueOf(half, facing.getOpposite());
 	}
 
-	public static BlockOrientation byState(IBlockState state) {
+	public static BlockOrientation byState(BlockState state) {
 		ImmutableMap<IProperty<?>, Comparable<?>> properties = state.getProperties();
 
 		EnumBlockHalf half = null;
-		EnumFacing facing = null;
+		Direction facing = null;
 
 		// This sucks
 		for (IProperty<?> property : properties.keySet()) {
@@ -95,17 +95,17 @@ public enum BlockOrientation {
 
 			if (property == BlockRotatedPillar.AXIS) {
 				Axis axis = ((Axis) properties.get(BlockRotatedPillar.AXIS));
-				facing = axis == Axis.X ? EnumFacing.EAST : axis == Axis.Z ? EnumFacing.SOUTH : facing;
+				facing = axis == Axis.X ? Direction.EAST : axis == Axis.Z ? Direction.SOUTH : facing;
 			}
 
 			if (property == BlockLog.LOG_AXIS) {
 				EnumAxis axis = ((EnumAxis) properties.get(BlockLog.LOG_AXIS));
-				facing = axis == EnumAxis.X ? EnumFacing.EAST
-						: axis == EnumAxis.Y ? EnumFacing.UP : axis == EnumAxis.Z ? EnumFacing.SOUTH : facing;
+				facing = axis == EnumAxis.X ? Direction.EAST
+						: axis == EnumAxis.Y ? Direction.UP : axis == EnumAxis.Z ? Direction.SOUTH : facing;
 			}
 
 			if (property instanceof PropertyDirection) {
-				facing = (EnumFacing) properties.get(property);
+				facing = (Direction) properties.get(property);
 
 				// Trap doors decided to be the wrong way around
 				if (state.getBlock() instanceof BlockTrapDoor)
@@ -124,8 +124,8 @@ public enum BlockOrientation {
 		return (char) ('A' + ordinal());
 	}
 
-	public IBlockState apply(IBlockState state, boolean forceAxis) {
-		IBlockState newState = state;
+	public BlockState apply(BlockState state, boolean forceAxis) {
+		BlockState newState = state;
 		ImmutableMap<IProperty<?>, Comparable<?>> properties = state.getProperties();
 		newState = newState.withRotation(getRotation());
 
@@ -143,7 +143,7 @@ public enum BlockOrientation {
 
 			if (hasFacing() && property instanceof PropertyDirection) {
 				if (facing.getAxis() != Axis.Y
-						&& ((EnumFacing) properties.get((PropertyDirection) property)).getHorizontalIndex() == -1)
+						&& ((Direction) properties.get((PropertyDirection) property)).getHorizontalIndex() == -1)
 					if (newState.getBlock() instanceof BlockTrapDoor)
 						newState = newState.withProperty(((PropertyDirection) property), facing.getOpposite());
 					else
@@ -191,7 +191,7 @@ public enum BlockOrientation {
 		return half != null;
 	}
 
-	public EnumFacing getFacing() {
+	public Direction getFacing() {
 		return facing;
 	}
 
@@ -204,7 +204,7 @@ public enum BlockOrientation {
 		return "Orientation: " + (hasHalf() ? half.getName() + " " : "Solid ") + (hasFacing() ? facing.getName() : "");
 	}
 
-	public IBlockState apply(IBlockState iBlockState) {
+	public BlockState apply(BlockState iBlockState) {
 		return apply(iBlockState, false);
 	}
 

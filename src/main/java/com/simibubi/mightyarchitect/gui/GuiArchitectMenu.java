@@ -1,23 +1,21 @@
 package com.simibubi.mightyarchitect.gui;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.input.Keyboard;
-
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.simibubi.mightyarchitect.TheMightyArchitect;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.ArchitectMenu;
 import com.simibubi.mightyarchitect.control.ArchitectMenu.KeyBindList;
-import com.simibubi.mightyarchitect.proxy.CombinedClientProxy;
 
+import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.text.StringTextComponent;
 
-public class GuiArchitectMenu extends GuiScreen {
+public class GuiArchitectMenu extends Screen {
 
 	private KeyBindList keybinds;
 	private String title;
@@ -32,6 +30,7 @@ public class GuiArchitectMenu extends GuiScreen {
 	private float movingY;
 
 	public GuiArchitectMenu() {
+		super(new StringTextComponent("Architect Menu"));
 		keybinds = new KeyBindList();
 		tooltip = new ArrayList<>();
 		title = "";
@@ -43,7 +42,7 @@ public class GuiArchitectMenu extends GuiScreen {
 	}
 
 	public void updateContents() {
-		int fontheight = Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT;
+		int fontheight = Minecraft.getInstance().fontRenderer.FONT_HEIGHT;
 
 		// update tooltips and keybinds
 		tooltip = ArchitectManager.getPhase().getPhaseHandler().getToolTip();
@@ -58,7 +57,7 @@ public class GuiArchitectMenu extends GuiScreen {
 
 		menuHeight += 4;
 		for (String s : tooltip) {
-			int lines = Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(s, menuWidth - 8).size();
+			int lines = Minecraft.getInstance().fontRenderer.listFormattedStringToWidth(s, menuWidth - 8).size();
 			menuHeight += lines * fontheight + 2;
 		}
 
@@ -66,9 +65,9 @@ public class GuiArchitectMenu extends GuiScreen {
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+	public void render(int mouseX, int mouseY, float partialTicks) {
 		// FOCUSED
-		super.drawScreen(mouseX, mouseY, partialTicks);
+		super.render(mouseX, mouseY, partialTicks);
 		draw(partialTicks);
 	}
 
@@ -77,49 +76,55 @@ public class GuiArchitectMenu extends GuiScreen {
 			return;
 
 		// NOT FOCUSED
-		draw(Minecraft.getMinecraft().getRenderPartialTicks());
+		draw(Minecraft.getInstance().getRenderPartialTicks());
 	}
 
 	@Override
-	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		super.keyTyped(typedChar, keyCode);
+	public boolean keyPressed(int keyCode, int p_keyPressed_2_, int p_keyPressed_3_) {
+		super.keyPressed(keyCode, p_keyPressed_2_, p_keyPressed_3_);
 		
-		if (keyCode == CombinedClientProxy.COMPOSE.getKeyCode()) {
-			mc.displayGuiScreen(null);
-			return;
+		if (keyCode == TheMightyArchitect.COMPOSE.getKey().getKeyCode()) {
+			minecraft.displayGuiScreen(null);
+			return true;
 		}
-		
-		if (ArchitectMenu.handleMenuInput(keyCode, typedChar))
-			mc.displayGuiScreen(null);
+		return false;
 	}
-
+	
+	@Override
+	public boolean charTyped(char p_charTyped_1_, int p_charTyped_2_) {
+		if (ArchitectMenu.handleMenuInput(p_charTyped_1_)) {
+			minecraft.displayGuiScreen(null);
+			return true;			
+		}
+		return super.charTyped(p_charTyped_1_, p_charTyped_2_);
+	}
+	
 	private void draw(float partialTicks) {
-		ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
+		MainWindow mainWindow = Minecraft.getInstance().mainWindow;
 
-		int x = res.getScaledWidth() - menuWidth - 10;
-		int y = res.getScaledHeight() - menuHeight;
+		int x = mainWindow.getScaledWidth() - menuWidth - 10;
+		int y = mainWindow.getScaledHeight() - menuHeight;
 
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(0, yShift(partialTicks), 0);
+		GlStateManager.translatef(0, yShift(partialTicks), 0);
 		
 		GuiResources gray = GuiResources.GRAY;
-		GlStateManager.enableAlpha();
 		GlStateManager.enableBlend();
-		GlStateManager.color(1, 1, 1, 3 / 4f);
+		GlStateManager.color4f(1, 1, 1, 3 / 4f);
 
-		Minecraft.getMinecraft().getTextureManager().bindTexture(gray.location);
-		drawModalRectWithCustomSizedTexture(x, y, gray.startX, gray.startY, menuWidth, menuHeight, gray.width,
+		Minecraft.getInstance().getTextureManager().bindTexture(gray.location);
+		blit(x, y, gray.startX, gray.startY, menuWidth, menuHeight, gray.width,
 				gray.height);
-		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.color4f(1, 1, 1, 1);
 
 		int yPos = y + 4;
 		int xPos = x + 4;
 
-		FontRenderer font = Minecraft.getMinecraft().fontRenderer;
+		FontRenderer font = Minecraft.getInstance().fontRenderer;
 		if (!focused)
-		font.drawString("Press " + Keyboard.getKeyName(CombinedClientProxy.COMPOSE.getKeyCode()) + " to focus", xPos,
-				yPos - 14, 0xEEEEEE, true);
-		font.drawString(title, xPos, yPos, 0xEEEEEE, false);
+		font.drawString("Press " + TheMightyArchitect.COMPOSE.getTranslationKey() + " to focus", xPos,
+				yPos - 14, 0xEEEEEE);
+		font.drawString(title, xPos, yPos, 0xEEEEEE);
 
 		yPos += 4;
 		for (String key : keybinds.getKeys()) {
@@ -129,14 +134,14 @@ public class GuiArchitectMenu extends GuiScreen {
 			}
 			
 			yPos += font.FONT_HEIGHT;
-			font.drawString("[" + key + "] " + keybinds.get(key), xPos, yPos, 0xEEEEEE, false);
-			font.drawString(">", xPos - 12, yPos, 0xCCDDFF, true);
+			font.drawString("[" + key + "] " + keybinds.get(key), xPos, yPos, 0xEEEEEE);
+			font.drawString(">", xPos - 12, yPos, 0xCCDDFF);
 		}
 
 		yPos += 4;
 		yPos += font.FONT_HEIGHT;
 		for (String text : tooltip) {
-			int lines = Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(text, menuWidth -8).size();
+			int lines = Minecraft.getInstance().fontRenderer.listFormattedStringToWidth(text, menuWidth -8).size();
 			font.drawSplitString(text, xPos, yPos, menuWidth - 8, 0xEEEEEE);
 			yPos += font.FONT_HEIGHT * lines + 2;
 		}
@@ -145,7 +150,7 @@ public class GuiArchitectMenu extends GuiScreen {
 	}
 
 	@Override
-	public boolean doesGuiPauseGame() {
+	public boolean isPauseScreen() {
 		return false;
 	}
 
@@ -168,8 +173,8 @@ public class GuiArchitectMenu extends GuiScreen {
 	}
 
 	@Override
-	public void onGuiClosed() {
-		super.onGuiClosed();
+	public void onClose() {
+		super.onClose();
 		setFocused(false);
 	}
 

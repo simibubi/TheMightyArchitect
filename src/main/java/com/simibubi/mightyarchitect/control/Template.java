@@ -8,10 +8,10 @@ import javax.annotation.Nullable;
 import com.google.common.collect.Lists;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
@@ -51,7 +51,7 @@ public class Template {
 		return this.author;
 	}
 
-	public void putBlock(BlockPos pos, IBlockState state) {
+	public void putBlock(BlockPos pos, BlockState state) {
 		blocks.add(new BlockInfo(pos, state, null));
 	}
 
@@ -59,12 +59,12 @@ public class Template {
 		return blocks;
 	}
 
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public CompoundNBT writeToNBT(CompoundNBT nbt) {
 		Template.BasicPalette template$basicpalette = new Template.BasicPalette();
 		NBTTagList nbttaglist = new NBTTagList();
 
 		for (Template.BlockInfo template$blockinfo : this.blocks) {
-			NBTTagCompound nbttagcompound = new NBTTagCompound();
+			CompoundNBT nbttagcompound = new CompoundNBT();
 			nbttagcompound.setTag("pos", this.writeInts(template$blockinfo.pos.getX(), template$blockinfo.pos.getY(),
 					template$blockinfo.pos.getZ()));
 			nbttagcompound.setInteger("state", template$basicpalette.idFor(template$blockinfo.blockState));
@@ -78,8 +78,8 @@ public class Template {
 
 		NBTTagList nbttaglist2 = new NBTTagList();
 
-		for (IBlockState iblockstate : template$basicpalette) {
-			nbttaglist2.appendTag(NBTUtil.writeBlockState(new NBTTagCompound(), iblockstate));
+		for (BlockState iblockstate : template$basicpalette) {
+			nbttaglist2.appendTag(NBTUtil.writeBlockState(new CompoundNBT(), iblockstate));
 		}
 
 		net.minecraftforge.fml.common.FMLCommonHandler.instance().getDataFixer().writeVersionData(nbt); // Moved
@@ -96,7 +96,7 @@ public class Template {
 		return nbt;
 	}
 
-	public void read(NBTTagCompound compound) {
+	public void read(CompoundNBT compound) {
 		this.blocks.clear();
 		NBTTagList nbttaglist = compound.getTagList("size", 3);
 		this.size = new BlockPos(nbttaglist.getIntAt(0), nbttaglist.getIntAt(1), nbttaglist.getIntAt(2));
@@ -111,11 +111,11 @@ public class Template {
 		NBTTagList nbttaglist3 = compound.getTagList("blocks", 10);
 
 		for (int j = 0; j < nbttaglist3.tagCount(); ++j) {
-			NBTTagCompound nbttagcompound = nbttaglist3.getCompoundTagAt(j);
+			CompoundNBT nbttagcompound = nbttaglist3.getCompoundTagAt(j);
 			NBTTagList nbttaglist2 = nbttagcompound.getTagList("pos", 3);
 			BlockPos blockpos = new BlockPos(nbttaglist2.getIntAt(0), nbttaglist2.getIntAt(1), nbttaglist2.getIntAt(2));
-			IBlockState iblockstate = template$basicpalette.stateFor(nbttagcompound.getInteger("state"));
-			NBTTagCompound nbttagcompound1;
+			BlockState iblockstate = template$basicpalette.stateFor(nbttagcompound.getInteger("state"));
+			CompoundNBT nbttagcompound1;
 
 			if (nbttagcompound.hasKey("nbt")) {
 				nbttagcompound1 = nbttagcompound.getCompoundTag("nbt");
@@ -128,16 +128,16 @@ public class Template {
 
 	}
 
-	static class BasicPalette implements Iterable<IBlockState> {
-		public static final IBlockState DEFAULT_BLOCK_STATE = Blocks.AIR.getDefaultState();
-		final ObjectIntIdentityMap<IBlockState> ids;
+	static class BasicPalette implements Iterable<BlockState> {
+		public static final BlockState DEFAULT_BLOCK_STATE = Blocks.AIR.getDefaultState();
+		final ObjectIntIdentityMap<BlockState> ids;
 		private int lastId;
 
 		private BasicPalette() {
-			this.ids = new ObjectIntIdentityMap<IBlockState>(16);
+			this.ids = new ObjectIntIdentityMap<BlockState>(16);
 		}
 
-		public int idFor(IBlockState state) {
+		public int idFor(BlockState state) {
 			int i = this.ids.get(state);
 
 			if (i == -1) {
@@ -149,16 +149,16 @@ public class Template {
 		}
 
 		@Nullable
-		public IBlockState stateFor(int id) {
-			IBlockState iblockstate = this.ids.getByValue(id);
+		public BlockState stateFor(int id) {
+			BlockState iblockstate = this.ids.getByValue(id);
 			return iblockstate == null ? DEFAULT_BLOCK_STATE : iblockstate;
 		}
 
-		public Iterator<IBlockState> iterator() {
+		public Iterator<BlockState> iterator() {
 			return this.ids.iterator();
 		}
 
-		public void addMapping(IBlockState p_189956_1_, int p_189956_2_) {
+		public void addMapping(BlockState p_189956_1_, int p_189956_2_) {
 			this.ids.put(p_189956_1_, p_189956_2_);
 		}
 	}
@@ -167,11 +167,11 @@ public class Template {
 		/** the position the block is to be generated to */
 		public final BlockPos pos;
 		/** The type of block in this particular spot in the structure. */
-		public final IBlockState blockState;
+		public final BlockState blockState;
 		/** NBT data for the tileentity */
-		public final NBTTagCompound tileentityData;
+		public final CompoundNBT tileentityData;
 
-		public BlockInfo(BlockPos posIn, IBlockState stateIn, @Nullable NBTTagCompound compoundIn) {
+		public BlockInfo(BlockPos posIn, BlockState stateIn, @Nullable CompoundNBT compoundIn) {
 			this.pos = posIn;
 			this.blockState = stateIn;
 			this.tileentityData = compoundIn;
@@ -226,8 +226,8 @@ public class Template {
 					if ((block == null || block != block1)
 							&& (!placementIn.getIgnoreStructureBlock() || block1 != Blocks.STRUCTURE_BLOCK)
 							&& (structureboundingbox == null || structureboundingbox.isVecInside(blockpos))) {
-						IBlockState iblockstate = template$blockinfo1.blockState.withMirror(placementIn.getMirror());
-						IBlockState iblockstate1 = iblockstate.withRotation(placementIn.getRotation());
+						BlockState iblockstate = template$blockinfo1.blockState.withMirror(placementIn.getMirror());
+						BlockState iblockstate1 = iblockstate.withRotation(placementIn.getRotation());
 
 						if (template$blockinfo1.tileentityData != null) {
 							TileEntity tileentity = worldIn.getTileEntity(blockpos);

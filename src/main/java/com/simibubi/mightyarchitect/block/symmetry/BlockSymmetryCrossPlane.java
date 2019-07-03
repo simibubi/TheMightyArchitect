@@ -2,34 +2,26 @@ package com.simibubi.mightyarchitect.block.symmetry;
 
 import com.simibubi.mightyarchitect.item.symmetry.SymmetryCrossPlane;
 
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.material.Material;
+import net.minecraft.state.EnumProperty;
+import net.minecraft.state.StateContainer.Builder;
 
 public class BlockSymmetryCrossPlane extends BlockSymmetry {
 
-public static final PropertyEnum<SymmetryCrossPlane.Align> align = PropertyEnum.create("align", SymmetryCrossPlane.Align.class);
-	
-	public BlockSymmetryCrossPlane(String name) {
-		super(name);
-		this.setDefaultState(this.getBlockState().getBaseState().withProperty(align, SymmetryCrossPlane.Align.Y));	
+	public static final EnumProperty<SymmetryCrossPlane.Align> align = EnumProperty.create("align",
+			SymmetryCrossPlane.Align.class);
+
+	public BlockSymmetryCrossPlane() {
+		super(Properties.create(Material.AIR));
+		this.setDefaultState(getDefaultState().with(align, SymmetryCrossPlane.Align.Y));
 	}
 	
 	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, align);
+	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+		builder.add(align);
+		super.fillStateContainer(builder);
 	}
 
-	@Override
-	public int getMetaFromState(IBlockState state) {
-		return ((SymmetryCrossPlane.Align) state.getProperties().get(align)).ordinal();
-	}
-	
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		if (meta >= SymmetryCrossPlane.Align.values().length) 
-			return this.getDefaultState();
-		return this.getDefaultState().withProperty(align, SymmetryCrossPlane.Align.values()[meta]);
-	}
-	
 }

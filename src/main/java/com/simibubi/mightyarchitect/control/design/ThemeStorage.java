@@ -18,7 +18,7 @@ import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 
 public class ThemeStorage {
@@ -81,7 +81,7 @@ public class ThemeStorage {
 	public static DesignTheme createTheme(String name) {
 		if (name.isEmpty())
 			name = "My Theme";
-		DesignTheme theme = new DesignTheme(name, Minecraft.getMinecraft().player.getName(),
+		DesignTheme theme = new DesignTheme(name, Minecraft.getInstance().player.getName(),
 				new StandardDesignPicker());
 		theme.setFilePath(FilesHelper.slug(name));
 		theme.setImported(true);
@@ -101,32 +101,32 @@ public class ThemeStorage {
 		FilesHelper.saveTagCompoundAsJson(theme.asTagCompound(), filepath);
 
 		String palettePath = folderPath + "/" + foldername + "/palette.json";
-		FilesHelper.saveTagCompoundAsJson(theme.getDefaultPalette().writeToNBT(new NBTTagCompound()), palettePath);
+		FilesHelper.saveTagCompoundAsJson(theme.getDefaultPalette().writeToNBT(new CompoundNBT()), palettePath);
 	}
 
 	public static String exportThemeFullyAsFile(DesignTheme theme, boolean compressed) {
 		String folderPath = "themes/export";
 		FilesHelper.createFolderIfMissing(folderPath);
-		NBTTagCompound massiveThemeTag = new NBTTagCompound();
+		CompoundNBT massiveThemeTag = new CompoundNBT();
 
 		massiveThemeTag.setTag("Theme", theme.asTagCompound());
-		massiveThemeTag.setTag("Palette", theme.getDefaultPalette().writeToNBT(new NBTTagCompound()));
+		massiveThemeTag.setTag("Palette", theme.getDefaultPalette().writeToNBT(new CompoundNBT()));
 
-		Map<DesignLayer, Map<DesignType, Set<NBTTagCompound>>> designFiles = DesignResourceLoader
+		Map<DesignLayer, Map<DesignType, Set<CompoundNBT>>> designFiles = DesignResourceLoader
 				.loadThemeFromFolder(theme);
 
-		NBTTagCompound layers = new NBTTagCompound();
+		CompoundNBT layers = new CompoundNBT();
 		for (DesignLayer layer : theme.getLayers()) {
 			if (!designFiles.containsKey(layer))
 				continue;
 
-			NBTTagCompound types = new NBTTagCompound();
+			CompoundNBT types = new CompoundNBT();
 			for (DesignType type : theme.getTypes()) {
 				if (!designFiles.get(layer).containsKey(type))
 					continue;
 
 				NBTTagList designs = new NBTTagList();
-				for (NBTTagCompound tag : designFiles.get(layer).get(type))
+				for (CompoundNBT tag : designFiles.get(layer).get(type))
 					designs.appendTag(tag);
 				types.setTag(type.name(), designs);
 			}
@@ -157,8 +157,8 @@ public class ThemeStorage {
 	}
 
 	private static DesignTheme loadInternalTheme(String themeFolder) {
-		NBTTagCompound themeCompound = FilesHelper.loadJsonResourceAsNBT("themes/" + themeFolder + "/theme.json");
-		NBTTagCompound paletteCompound = FilesHelper.loadJsonResourceAsNBT("themes/" + themeFolder + "/palette.json");
+		CompoundNBT themeCompound = FilesHelper.loadJsonResourceAsNBT("themes/" + themeFolder + "/theme.json");
+		CompoundNBT paletteCompound = FilesHelper.loadJsonResourceAsNBT("themes/" + themeFolder + "/palette.json");
 		DesignTheme theme = DesignTheme.fromNBT(themeCompound);
 		theme.setFilePath(themeFolder);
 		theme.setImported(false);
@@ -177,14 +177,14 @@ public class ThemeStorage {
 				for (Path path : newDirectoryStream) {
 					String themeFolder = path.getFileName().toString();
 
-					NBTTagCompound themeCompound;
-					NBTTagCompound paletteCompound;
+					CompoundNBT themeCompound;
+					CompoundNBT paletteCompound;
 					
 					if (themeFolder.equals("export"))
 						continue;
 
 					if (themeFolder.endsWith(".theme") || themeFolder.endsWith(".json")) {
-						NBTTagCompound themeFile = new NBTTagCompound();
+						CompoundNBT themeFile = new CompoundNBT();
 						
 						if (themeFolder.endsWith(".theme")) {
 							try {

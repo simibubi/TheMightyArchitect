@@ -19,7 +19,7 @@ import com.simibubi.mightyarchitect.control.helpful.FilesHelper;
 
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 public class PaletteStorage {
 
@@ -61,7 +61,7 @@ public class PaletteStorage {
 		FilesHelper.createFolderIfMissing(folderPath);
 		String filename = FilesHelper.findFirstValidFilename(palette.getName(), folderPath, "json");
 		String filepath = folderPath + "/" + filename;
-		FilesHelper.saveTagCompoundAsJson(palette.writeToNBT(new NBTTagCompound()), filepath);
+		FilesHelper.saveTagCompoundAsJson(palette.writeToNBT(new CompoundNBT()), filepath);
 	}
 
 	public static PaletteDefinition importPalette(Path path) {
@@ -100,7 +100,7 @@ public class PaletteStorage {
 			String path = "palettes/p" + index + ".json";
 			if (TheMightyArchitect.class.getClassLoader().getResource(path) == null)
 				break;
-			NBTTagCompound tag = FilesHelper.loadJsonResourceAsNBT(path);
+			CompoundNBT tag = FilesHelper.loadJsonResourceAsNBT(path);
 			PaletteDefinition paletteDefinition = PaletteDefinition.fromNBT(tag);
 			resourcePalettes.put(paletteDefinition.getName(), paletteDefinition);			
 			index++;

@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
-import com.simibubi.mightyarchitect.block.AllBlocks;
+import com.simibubi.mightyarchitect.AllBlocks;
 import com.simibubi.mightyarchitect.block.symmetry.BlockSymmetryCrossPlane;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -16,13 +16,23 @@ import net.minecraft.util.math.Vec3d;
 public class SymmetryCrossPlane extends SymmetryElement {
 
 	public static enum Align implements IStringSerializable {
-		Y("y"),
-		D("d");
-		
+		Y("y"), D("d");
+
 		private final String name;
-		private Align(String name) { this.name = name; }
-		@Override public String getName() { return name; }
-		@Override public String toString() { return name; }
+
+		private Align(String name) {
+			this.name = name;
+		}
+
+		@Override
+		public String getName() {
+			return name;
+		}
+
+		@Override
+		public String toString() {
+			return name;
+		}
 	}
 
 	public SymmetryCrossPlane(Vec3d pos) {
@@ -32,8 +42,10 @@ public class SymmetryCrossPlane extends SymmetryElement {
 
 	@Override
 	protected void setOrientation() {
-		if (orientationIndex < 0) orientationIndex += Align.values().length;
-		if (orientationIndex >= Align.values().length) orientationIndex -= Align.values().length;
+		if (orientationIndex < 0)
+			orientationIndex += Align.values().length;
+		if (orientationIndex >= Align.values().length)
+			orientationIndex -= Align.values().length;
 		orientation = Align.values()[orientationIndex];
 	}
 
@@ -44,8 +56,8 @@ public class SymmetryCrossPlane extends SymmetryElement {
 	}
 
 	@Override
-	public Map<BlockPos, IBlockState> process(BlockPos position, IBlockState block) {
-		Map<BlockPos, IBlockState> result = new HashMap<>();
+	public Map<BlockPos, BlockState> process(BlockPos position, BlockState block) {
+		Map<BlockPos, BlockState> result = new HashMap<>();
 
 		switch ((Align) orientation) {
 		case D:
@@ -61,7 +73,7 @@ public class SymmetryCrossPlane extends SymmetryElement {
 		default:
 			break;
 		}
-		
+
 		return result;
 	}
 
@@ -71,15 +83,14 @@ public class SymmetryCrossPlane extends SymmetryElement {
 	}
 
 	@Override
-	public IBlockState getModel() {
-		return AllBlocks.symmetry_crossplane.getDefaultState().withProperty(BlockSymmetryCrossPlane.align, (Align) orientation);
+	public BlockState getModel() {
+		return AllBlocks.SYMMETRY_CROSSPLANE.block.getDefaultState().with(BlockSymmetryCrossPlane.align,
+				(Align) orientation);
 	}
 
 	@Override
 	public List<String> getAlignToolTips() {
 		return ImmutableList.of("Orthogonal", "Diagonal");
 	}
-	
-	
 
 }

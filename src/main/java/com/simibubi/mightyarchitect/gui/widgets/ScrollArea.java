@@ -4,13 +4,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.google.common.base.Optional;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import com.mojang.blaze3d.platform.GlStateManager;
 
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.text.TextFormatting;
 
-public class ScrollArea extends Gui {
+public class ScrollArea extends AbstractGui {
 
 	public interface IScrollAction {
 		public void onScroll(int position);
@@ -70,11 +70,11 @@ public class ScrollArea extends Gui {
 		return currentState;
 	}
 
-	public boolean isHovered(int x, int y) {
+	public boolean isHovered(double x, double y) {
 		return (x > this.x && x < this.x + this.width && y > this.y && y < this.y + this.height);
 	}
 
-	public void tryScroll(int mouseX, int mouseY, int amount) {
+	public void tryScroll(double mouseX, double mouseY, int amount) {
 		if (enabled && isHovered(mouseX, mouseY)) {
 			scroll(numeric? -amount : amount);
 		}
@@ -107,19 +107,19 @@ public class ScrollArea extends Gui {
 		}
 	}
 
-	public void draw(GuiScreen screen, int mouseX, int mouseY) {
-		GlStateManager.pushAttrib();
+	public void draw(Screen screen, int mouseX, int mouseY) {
+		GlStateManager.pushLightingAttributes();
 		if (enabled && isHovered(mouseX, mouseY)) {
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(mouseX, mouseY,0);
+			GlStateManager.translated(mouseX, mouseY,0);
 			if (tooltipContent.isPresent())
-				screen.drawHoveringText(getToolTip(), 0, 0);
+				screen.renderTooltip(getToolTip(), 0, 0);
 			else
-				screen.drawHoveringText(ChatFormatting.BLUE + title, 0, 0);
+				screen.renderTooltip(TextFormatting.BLUE + title, 0, 0);
 			GlStateManager.popMatrix();
 		}
 
-		GlStateManager.popAttrib();
+		GlStateManager.popAttributes();
 	}
 
 	public List<String> getToolTip() {
@@ -133,15 +133,15 @@ public class ScrollArea extends Gui {
 
 	private void updateTooltip() {
 		tooltip = new LinkedList<>();
-		tooltip.add(ChatFormatting.BLUE + title);
+		tooltip.add(TextFormatting.BLUE + title);
 
 		if (tooltipContent.isPresent()) {
 			for (int i = min; i < max; i++) {
 				StringBuilder result = new StringBuilder();
 				if (i == currentState)
-					result.append(ChatFormatting.WHITE).append("-> ").append(tooltipContent.get().get(i));
+					result.append(TextFormatting.WHITE).append("-> ").append(tooltipContent.get().get(i));
 				else
-					result.append(ChatFormatting.GRAY).append("> ").append(tooltipContent.get().get(i));
+					result.append(TextFormatting.GRAY).append("> ").append(tooltipContent.get().get(i));
 				tooltip.add(result.toString());
 			}
 

@@ -22,7 +22,7 @@ public enum TesselatorTextures {
 	}
 	
 	public void bind() {
-		Minecraft.getMinecraft().getTextureManager().bindTexture(location);
+		Minecraft.getInstance().getTextureManager().bindTexture(location);
 	}
 	
 }

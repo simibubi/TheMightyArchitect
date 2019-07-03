@@ -14,7 +14,7 @@ import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
 import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -75,7 +75,7 @@ public class PhaseCreatingPalette extends PhaseBase implements IListenForBlockEv
 		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 
 		for (int i = 0; i < 16; i++) {
-			IBlockState state = palette.get(Palette.values()[i]);
+			BlockState state = palette.get(Palette.values()[i]);
 			PaletteDefinition paletteDef = getModel().isEditingPrimary() ? getModel().getPrimary()
 					: getModel().getSecondary();
 			
@@ -94,7 +94,7 @@ public class PhaseCreatingPalette extends PhaseBase implements IListenForBlockEv
 		Tessellator.getInstance().draw();
 		
 		TessellatorHelper.cleanUpAfterDrawing();
-		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		Minecraft.getInstance().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public class PhaseCreatingPalette extends PhaseBase implements IListenForBlockEv
 	}
 	
 	@Override
-	public void onBlockPlaced(BlockPos pos, IBlockState state) {
+	public void onBlockPlaced(BlockPos pos, BlockState state) {
 		if (grid.containsKey(pos)) {
 			palette.put(grid.get(pos), state);
 			notifyChange();

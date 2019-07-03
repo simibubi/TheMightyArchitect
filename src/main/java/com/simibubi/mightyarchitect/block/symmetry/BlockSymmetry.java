@@ -1,13 +1,13 @@
 package com.simibubi.mightyarchitect.block.symmetry;
 
-import com.simibubi.mightyarchitect.block.BlockForMightyArchitects;
+import com.simibubi.mightyarchitect.block.IJustForRendering;
 
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Block;
 
-public class BlockSymmetry extends BlockForMightyArchitects {
+public class BlockSymmetry extends Block implements IJustForRendering {
 
-	public BlockSymmetry(String name) {
-		super(name, Material.AIR);
+	public BlockSymmetry(Properties properties) {
+		super(properties);
 	}
 
 }

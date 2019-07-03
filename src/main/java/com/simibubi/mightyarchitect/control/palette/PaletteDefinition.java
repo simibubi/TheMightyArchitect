@@ -8,36 +8,36 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockLog.EnumAxis;
 import net.minecraft.block.BlockOldLog;
 import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.block.BlockPlanks.EnumType;
+import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockSlab.EnumBlockHalf;
-import net.minecraft.block.BlockStairs.EnumHalf;
-import net.minecraft.block.BlockTrapDoor.DoorHalf;
 import net.minecraft.block.BlockStainedGlassPane;
 import net.minecraft.block.BlockStairs;
+import net.minecraft.block.BlockStairs.EnumHalf;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockStone;
 import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.block.BlockTrapDoor;
+import net.minecraft.block.BlockTrapDoor.DoorHalf;
 import net.minecraft.block.BlockWall;
-import net.minecraft.block.BlockLog.EnumAxis;
-import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumFacing.Axis;
+import net.minecraft.state.IProperty;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Direction.Axis;
 
 public class PaletteDefinition {
 
-	private Map<Palette, IBlockState> definition;
+	private Map<Palette, BlockState> definition;
 	private String name;
-	private IBlockState clear;
+	private BlockState clear;
 	private static PaletteDefinition defaultPalette;
 
 	public static PaletteDefinition defaultPalette() {
@@ -61,7 +61,7 @@ public class PaletteDefinition {
 					.put(Palette.INNER_SECONDARY,
 							Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, EnumType.DARK_OAK))
 					.put(Palette.OUTER_FLAT,
-							Blocks.TRAPDOOR.getDefaultState().withProperty(BlockTrapDoor.FACING, EnumFacing.SOUTH)
+							Blocks.TRAPDOOR.getDefaultState().withProperty(BlockTrapDoor.FACING, Direction.SOUTH)
 									.withProperty(BlockTrapDoor.OPEN, true))
 					.put(Palette.OUTER_SLAB,
 							Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT,
@@ -98,33 +98,33 @@ public class PaletteDefinition {
 		this.name = name;
 	}
 
-	public PaletteDefinition put(Palette key, IBlockState block) {
+	public PaletteDefinition put(Palette key, BlockState block) {
 		if (block.getBlock() instanceof BlockTrapDoor)
 			block = block.withProperty(BlockTrapDoor.OPEN, true);
 		definition.put(key, block);
 		return this;
 	}
 
-	public Map<Palette, IBlockState> getDefinition() {
+	public Map<Palette, BlockState> getDefinition() {
 		return definition;
 	}
 
-	public IBlockState clear() {
+	public BlockState clear() {
 		if (clear == null)
 			clear = get(Palette.CLEAR);
 		return clear;
 	}
 
-	public IBlockState get(Palette key) {
-		IBlockState iBlockState = get(key, BlockOrientation.NONE);
+	public BlockState get(Palette key) {
+		BlockState iBlockState = get(key, BlockOrientation.NONE);
 		if (iBlockState.getBlock() instanceof BlockLeaves) {
 			iBlockState = iBlockState.withProperty(BlockLeaves.DECAYABLE, false);
 		}
 		return iBlockState;
 	}
 
-	private IBlockState get(Palette key, BlockOrientation orientation) {
-		IBlockState iBlockState = definition.get(key);
+	private BlockState get(Palette key, BlockOrientation orientation) {
+		BlockState iBlockState = definition.get(key);
 		return iBlockState == null ? Blocks.AIR.getDefaultState() : orientation.apply(iBlockState);
 	}
 
@@ -136,14 +136,14 @@ public class PaletteDefinition {
 		return name;
 	}
 
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound = (compound == null) ? new NBTTagCompound() : compound;
-		NBTTagCompound palette = new NBTTagCompound();
+	public CompoundNBT writeToNBT(CompoundNBT compound) {
+		compound = (compound == null) ? new CompoundNBT() : compound;
+		CompoundNBT palette = new CompoundNBT();
 		palette.setString("Name", getName());
 		Palette[] values = Palette.values();
 
 		for (int i = 0; i < values.length; i++) {
-			NBTTagCompound state = new NBTTagCompound();
+			CompoundNBT state = new CompoundNBT();
 			NBTUtil.writeBlockState(state, get(values[i]));
 			palette.setTag(values[i].name(), state);
 		}
@@ -152,12 +152,12 @@ public class PaletteDefinition {
 		return compound;
 	}
 
-	public static PaletteDefinition fromNBT(NBTTagCompound compound) {
+	public static PaletteDefinition fromNBT(CompoundNBT compound) {
 		PaletteDefinition palette = defaultPalette().clone();
 
 		if (compound != null) {
 			if (compound.hasKey("Palette")) {
-				NBTTagCompound paletteTag = compound.getCompoundTag("Palette");
+				CompoundNBT paletteTag = compound.getCompoundTag("Palette");
 				palette.name = paletteTag.getString("Name");
 				for (Palette key : Palette.values()) {
 					if (paletteTag.hasKey(key.name())) {
@@ -169,15 +169,15 @@ public class PaletteDefinition {
 		return palette;
 	}
 
-	public IBlockState get(PaletteBlockInfo paletteInfo) {
-		IBlockState state = definition.get(paletteInfo.palette);
+	public BlockState get(PaletteBlockInfo paletteInfo) {
+		BlockState state = definition.get(paletteInfo.palette);
 		state = state == null ? Blocks.AIR.getDefaultState() : paletteInfo.apply(state);
 
 		ImmutableMap<IProperty<?>, Comparable<?>> properties = state.getProperties();
 
 		for (IProperty<?> property : properties.keySet()) {
 			if (property instanceof PropertyDirection) {
-				EnumFacing facing = (EnumFacing) properties.get(property);
+				Direction facing = (Direction) properties.get(property);
 				if (facing.getAxis() == Axis.Y)
 					continue;
 
@@ -209,7 +209,7 @@ public class PaletteDefinition {
 		return false;
 	}
 
-	public Palette scan(IBlockState state) {
+	public Palette scan(BlockState state) {
 		if (state.getBlock() == Blocks.AIR)
 			return null;
 
@@ -224,8 +224,8 @@ public class PaletteDefinition {
 		return keyIgnoreRotation;
 	}
 
-	protected Palette getKeyIgnoreRotation(IBlockState state) {
-		Map<IBlockState, Palette> scanMap = new HashMap<>();
+	protected Palette getKeyIgnoreRotation(BlockState state) {
+		Map<BlockState, Palette> scanMap = new HashMap<>();
 		definition.forEach((palette, block) -> {
 			scanMap.put(block, palette);
 		});
@@ -240,7 +240,7 @@ public class PaletteDefinition {
 
 			if (property == BlockStairs.HALF)
 				for (EnumHalf half : EnumHalf.values())
-					for (EnumFacing facing : EnumFacing.HORIZONTALS)
+					for (Direction facing : Direction.HORIZONTALS)
 						if (scanMap.containsKey(
 								state.withProperty(BlockStairs.HALF, half).withProperty(BlockStairs.FACING, facing)))
 							return scanMap.get(state.withProperty(BlockStairs.HALF, half)
@@ -248,7 +248,7 @@ public class PaletteDefinition {
 
 			if (property == BlockTrapDoor.HALF)
 				for (DoorHalf half : DoorHalf.values())
-					for (EnumFacing facing : EnumFacing.HORIZONTALS)
+					for (Direction facing : Direction.HORIZONTALS)
 						if (scanMap.containsKey(state.withProperty(BlockTrapDoor.HALF, half)
 								.withProperty(BlockTrapDoor.FACING, facing)))
 							return scanMap.get(state.withProperty(BlockTrapDoor.HALF, half)
@@ -266,8 +266,8 @@ public class PaletteDefinition {
 
 			if (property instanceof PropertyDirection)
 				for (Comparable<?> facing : property.getAllowedValues())
-					if (scanMap.containsKey(state.withProperty((PropertyDirection) property, (EnumFacing) facing)))
-						return scanMap.get(state.withProperty((PropertyDirection) property, (EnumFacing) facing));
+					if (scanMap.containsKey(state.withProperty((PropertyDirection) property, (Direction) facing)))
+						return scanMap.get(state.withProperty((PropertyDirection) property, (Direction) facing));
 		}
 
 		if (definition.containsValue(state)) {

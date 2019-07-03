@@ -13,7 +13,7 @@ import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 import com.simibubi.mightyarchitect.networking.PacketInstantPrint;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -140,16 +140,16 @@ public class Schematic {
 	private void materializeSketch(PaletteDefinition primary, PaletteDefinition secondary) {
 		bounds = null;
 
-		HashMap<BlockPos, IBlockState> blockMap = new HashMap<>();
+		HashMap<BlockPos, BlockState> blockMap = new HashMap<>();
 		assembledSketch.get(0).forEach((pos, paletteInfo) -> {
-			IBlockState state = primary.get(paletteInfo);
+			BlockState state = primary.get(paletteInfo);
 			blockMap.put(pos, state);
 			checkBounds(pos);
 		});
 		assembledSketch.get(1).forEach((pos, paletteInfo) -> {
 			if (!assembledSketch.get(0).containsKey(pos)
 					|| !assembledSketch.get(0).get(pos).palette.isPrefferedOver(paletteInfo.palette)) {
-				IBlockState state = secondary.get(paletteInfo);
+				BlockState state = secondary.get(paletteInfo);
 				blockMap.put(pos, state);
 				checkBounds(pos);
 			}
@@ -191,7 +191,7 @@ public class Schematic {
 	public Template writeToTemplate() {
 		final Template template = new Template();
 
-		template.setAuthor(Minecraft.getMinecraft().player.getName());
+		template.setAuthor(Minecraft.getInstance().player.getName());
 		template.setSize(bounds.getSize());
 		materializedSketch.getBlockMap()
 				.forEach((pos, state) -> template.putBlock(pos.subtract(bounds.getOrigin()), state));

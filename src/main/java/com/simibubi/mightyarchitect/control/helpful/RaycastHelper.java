@@ -2,8 +2,8 @@ package com.simibubi.mightyarchitect.control.helpful;
 
 import java.util.function.Predicate;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -12,19 +12,19 @@ import net.minecraft.world.World;
 
 public class RaycastHelper {
 
-	public static RayTraceResult rayTraceRange(World worldIn, EntityPlayer playerIn, double range) {
+	public static RayTraceResult rayTraceRange(World worldIn, PlayerEntity playerIn, double range) {
 		Vec3d origin = getTraceOrigin(playerIn);
 		Vec3d target = getTraceTarget(playerIn, range, origin);
 		return worldIn.rayTraceBlocks(origin, target, false, true, false);
 	}
 
-	public static PredicateTraceResult rayTraceUntil(EntityPlayer playerIn, double range, Predicate<BlockPos> predicate) {
+	public static PredicateTraceResult rayTraceUntil(PlayerEntity playerIn, double range, Predicate<BlockPos> predicate) {
 		Vec3d origin = getTraceOrigin(playerIn);
 		Vec3d target = getTraceTarget(playerIn, range, origin);
 		return rayTraceUntil(origin, target, predicate);
 	}
 
-	private static Vec3d getTraceTarget(EntityPlayer playerIn, double range, Vec3d origin) {
+	private static Vec3d getTraceTarget(PlayerEntity playerIn, double range, Vec3d origin) {
 		float f = playerIn.rotationPitch;
 		float f1 = playerIn.rotationYaw;
 		float f2 = MathHelper.cos(-f1 * 0.017453292F - (float) Math.PI);
@@ -38,7 +38,7 @@ public class RaycastHelper {
 		return vec3d1;
 	}
 
-	private static Vec3d getTraceOrigin(EntityPlayer playerIn) {
+	private static Vec3d getTraceOrigin(PlayerEntity playerIn) {
 		double d0 = playerIn.posX;
 		double d1 = playerIn.posY + (double) playerIn.getEyeHeight();
 		double d2 = playerIn.posZ;
@@ -62,7 +62,7 @@ public class RaycastHelper {
 		BlockPos currentPos = new BlockPos(x, y, z);
 
 		if (predicate.test(currentPos))
-			return new PredicateTraceResult(currentPos, EnumFacing.getFacingFromVector(dx - x, dy - y, dz - z));
+			return new PredicateTraceResult(currentPos, Direction.getFacingFromVector(dx - x, dy - y, dz - z));
 
 		int remainingDistance = 200;
 
@@ -137,22 +137,22 @@ public class RaycastHelper {
 				d5 = -1.0E-4D;
 			}
 
-			EnumFacing enumfacing;
+			Direction enumfacing;
 
 			if (d3 < d4 && d3 < d5) {
-				enumfacing = dx > x ? EnumFacing.WEST : EnumFacing.EAST;
+				enumfacing = dx > x ? Direction.WEST : Direction.EAST;
 				start = new Vec3d(d0, start.y + d7 * d3, start.z + d8 * d3);
 			} else if (d4 < d5) {
-				enumfacing = dy > y ? EnumFacing.DOWN : EnumFacing.UP;
+				enumfacing = dy > y ? Direction.DOWN : Direction.UP;
 				start = new Vec3d(start.x + d6 * d4, d1, start.z + d8 * d4);
 			} else {
-				enumfacing = dz > z ? EnumFacing.NORTH : EnumFacing.SOUTH;
+				enumfacing = dz > z ? Direction.NORTH : Direction.SOUTH;
 				start = new Vec3d(start.x + d6 * d5, start.y + d7 * d5, d2);
 			}
 
-			x = MathHelper.floor(start.x) - (enumfacing == EnumFacing.EAST ? 1 : 0);
-			y = MathHelper.floor(start.y) - (enumfacing == EnumFacing.UP ? 1 : 0);
-			z = MathHelper.floor(start.z) - (enumfacing == EnumFacing.SOUTH ? 1 : 0);
+			x = MathHelper.floor(start.x) - (enumfacing == Direction.EAST ? 1 : 0);
+			y = MathHelper.floor(start.y) - (enumfacing == Direction.UP ? 1 : 0);
+			z = MathHelper.floor(start.z) - (enumfacing == Direction.SOUTH ? 1 : 0);
 			currentPos = new BlockPos(x, y, z);
 
 			if (predicate.test(currentPos))
@@ -164,9 +164,9 @@ public class RaycastHelper {
 
 	public static class PredicateTraceResult {
 		private BlockPos pos;
-		private EnumFacing facing;
+		private Direction facing;
 
-		public PredicateTraceResult(BlockPos pos, EnumFacing facing) {
+		public PredicateTraceResult(BlockPos pos, Direction facing) {
 			this.pos = pos;
 			this.facing = facing;
 		}
@@ -175,7 +175,7 @@ public class RaycastHelper {
 			// missed, no result
 		}
 
-		public EnumFacing getFacing() {
+		public Direction getFacing() {
 			return facing;
 		}
 

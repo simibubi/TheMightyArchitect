@@ -10,7 +10,7 @@ import com.google.common.collect.ImmutableList;
 import com.simibubi.mightyarchitect.control.design.partials.Design;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 
@@ -137,8 +137,8 @@ public class DesignTheme {
 		this.types = types;
 	}
 
-	public NBTTagCompound asTagCompound() {
-		NBTTagCompound compound = new NBTTagCompound();
+	public CompoundNBT asTagCompound() {
+		CompoundNBT compound = new CompoundNBT();
 
 		compound.setString("Name", getDisplayName());
 		compound.setString("Designer", getDesigner());
@@ -156,7 +156,7 @@ public class DesignTheme {
 		return compound;
 	}
 
-	public static DesignTheme fromNBT(NBTTagCompound compound) {
+	public static DesignTheme fromNBT(CompoundNBT compound) {
 		if (compound == null)
 			return null;
 

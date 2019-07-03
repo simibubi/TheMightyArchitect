@@ -14,11 +14,11 @@ import com.simibubi.mightyarchitect.control.helpful.TesselatorTextures;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.entity.PlayerEntitySP;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.EnumFacing.Axis;
+import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
@@ -37,7 +37,7 @@ public abstract class GroundPlanningToolBase implements ImAToolForGroundPlanning
 
 	@Override
 	public void updateSelection() {
-		EntityPlayerSP player = Minecraft.getMinecraft().player;
+		PlayerEntitySP player = Minecraft.getInstance().player;
 		transparentStacks.clear();
 
 		RayTraceResult trace = RaycastHelper.rayTraceRange(player.world, player, 75);
@@ -61,7 +61,7 @@ public abstract class GroundPlanningToolBase implements ImAToolForGroundPlanning
 
 	}
 
-	protected void makeStacksTransparent(EntityPlayerSP player, BlockPos hit) {
+	protected void makeStacksTransparent(PlayerEntitySP player, BlockPos hit) {
 		if (!model.getGroundPlan().isEmpty()) {
 			final BlockPos target = hit;
 			RaycastHelper.rayTraceUntil(player, 75, pos -> {

@@ -4,14 +4,14 @@ import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.Schematic;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 
 public abstract class PhaseBase implements IArchitectPhase {
 
 	protected Minecraft minecraft;
 	
 	public PhaseBase() {
-		minecraft = Minecraft.getMinecraft();
+		minecraft = Minecraft.getInstance();
 	}
 	
 	@Override
@@ -35,7 +35,7 @@ public abstract class PhaseBase implements IArchitectPhase {
 		if (message == null) 
 			return;
 		
-		minecraft.player.sendStatusMessage(new TextComponentString(message), true);
+		minecraft.player.sendStatusMessage(new StringTextComponent(message), true);
 	}
 
 	

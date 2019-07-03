@@ -1,9 +1,9 @@
 package com.simibubi.mightyarchitect.gui.widgets;
 
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.screen.Screen;
 
-public class DynamicLabel extends Gui {
+public class DynamicLabel extends AbstractGui {
 
 	public String text;
 	public int x, y;
@@ -13,8 +13,8 @@ public class DynamicLabel extends Gui {
 		this.text = "Label";
 	}
 	
-	public void draw(GuiScreen screen) {
-		drawString(screen.mc.fontRenderer, text, x, y, 0xff_ff_ff);
+	public void draw(Screen screen) {
+		drawString(screen.getMinecraft().fontRenderer, text, x, y, 0xff_ff_ff);
 	}
 	
 }

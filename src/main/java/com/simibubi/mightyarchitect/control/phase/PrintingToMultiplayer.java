@@ -7,12 +7,12 @@ import com.google.common.collect.ImmutableList;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.TemplateBlockAccess;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -28,7 +28,7 @@ public class PrintingToMultiplayer extends PhaseBase {
 	@Override
 	public void whenEntered() {
 		remaining = new LinkedList<>(((TemplateBlockAccess) getModel().getMaterializedSketch()).getAllPositions());
-		Minecraft.getMinecraft().player.sendChatMessage("/setblock checking permission for 'The Mighty Architect'.");
+		Minecraft.getInstance().player.sendChatMessage("/setblock checking permission for 'The Mighty Architect'.");
 		cooldown = 500;
 		approved = false;
 	}
@@ -49,12 +49,12 @@ public class PrintingToMultiplayer extends PhaseBase {
 				BlockPos pos = remaining.get(0);
 				remaining.remove(0);
 				pos = pos.add(getModel().getAnchor());
-				IBlockState state = getModel().getMaterializedSketch().getBlockState(pos);
+				BlockState state = getModel().getMaterializedSketch().getBlockState(pos);
 				
-				if (!minecraft.world.mayPlace(state.getBlock(), pos, true, EnumFacing.DOWN, minecraft.player))
+				if (!minecraft.world.mayPlace(state.getBlock(), pos, true, Direction.DOWN, minecraft.player))
 					continue;
 				
-				Minecraft.getMinecraft().player.sendChatMessage("/setblock " + pos.getX() + " " + pos.getY() + " " + pos.getZ()
+				Minecraft.getInstance().player.sendChatMessage("/setblock " + pos.getX() + " " + pos.getY() + " " + pos.getZ()
 				+ " " + state.getBlock().getRegistryName() + " " + state.getBlock().getMetaFromState(state));
 			} else {
 				ArchitectManager.unload();
@@ -82,9 +82,9 @@ public class PrintingToMultiplayer extends PhaseBase {
 					}
 					if (test.equals("commands.generic.num.invalid")) {
 						approved = true;
-						Minecraft.getMinecraft().player.sendChatMessage("/me is printing a structure created by the Mighty Architect.");
-						Minecraft.getMinecraft().player.sendChatMessage("/gamerule sendCommandFeedback false");
-						Minecraft.getMinecraft().player.sendChatMessage("/gamerule logAdminCommands false");
+						Minecraft.getInstance().player.sendChatMessage("/me is printing a structure created by the Mighty Architect.");
+						Minecraft.getInstance().player.sendChatMessage("/gamerule sendCommandFeedback false");
+						Minecraft.getInstance().player.sendChatMessage("/gamerule logAdminCommands false");
 						return;
 					}
 				} else {
@@ -102,9 +102,9 @@ public class PrintingToMultiplayer extends PhaseBase {
 	@Override
 	public void whenExited() {
 		if (approved) {
-			Minecraft.getMinecraft().player.sendStatusMessage(new TextComponentString("Finished Printing, enjoy!"), false);
-			Minecraft.getMinecraft().player.sendChatMessage("/gamerule logAdminCommands true");
-			Minecraft.getMinecraft().player.sendChatMessage("/gamerule sendCommandFeedback true");			
+			Minecraft.getInstance().player.sendStatusMessage(new StringTextComponent("Finished Printing, enjoy!"), false);
+			Minecraft.getInstance().player.sendChatMessage("/gamerule logAdminCommands true");
+			Minecraft.getInstance().player.sendChatMessage("/gamerule sendCommandFeedback true");			
 		}
 		cooldown = 0;
 	}

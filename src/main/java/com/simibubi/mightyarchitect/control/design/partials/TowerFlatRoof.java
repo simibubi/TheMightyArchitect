@@ -1,11 +1,11 @@
 package com.simibubi.mightyarchitect.control.design.partials;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 public class TowerFlatRoof extends TowerRoof {
 
 	@Override
-	public Design fromNBT(NBTTagCompound compound) {
+	public Design fromNBT(CompoundNBT compound) {
 		TowerFlatRoof towerRoof = new TowerFlatRoof();
 		towerRoof.applyNBT(compound);
 		towerRoof.radius = compound.getInteger("Radius");

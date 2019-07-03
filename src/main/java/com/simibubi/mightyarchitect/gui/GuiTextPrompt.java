@@ -3,20 +3,19 @@ package com.simibubi.mightyarchitect.gui;
 import java.io.IOException;
 import java.util.function.Consumer;
 
-import org.lwjgl.input.Keyboard;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.util.text.StringTextComponent;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
-
-public class GuiTextPrompt extends GuiScreen {
+public class GuiTextPrompt extends Screen {
 
 	private Consumer<String> callback;
 	private Consumer<String> abortCallback;
 
-	private GuiTextField nameField;
-	private GuiButton confirm;
-	private GuiButton abort;
+	private TextFieldWidget nameField;
+	private Button confirm;
+	private Button abort;
 
 	private int xSize;
 	private int ySize;
@@ -30,6 +29,7 @@ public class GuiTextPrompt extends GuiScreen {
 	private boolean confirmed;
 
 	public GuiTextPrompt(Consumer<String> callBack, Consumer<String> abortCallback) {
+		super(new StringTextComponent("Text Prompt"));
 		this.callback = callBack;
 		this.abortCallback = abortCallback;
 
@@ -39,60 +39,53 @@ public class GuiTextPrompt extends GuiScreen {
 	}
 
 	@Override
-	public void initGui() {
-		super.initGui();
-		Keyboard.enableRepeatEvents(true);
+	public void init() {
+		super.init();
 
 		xSize = GuiResources.TEXT_INPUT.width;
 		ySize = GuiResources.TEXT_INPUT.height + 30;
 		xTopLeft = (this.width - this.xSize) / 2;
 		yTopLeft = (this.height - this.ySize) / 2;
 
-		this.nameField = new GuiTextField(0, this.fontRenderer, xTopLeft + 33, yTopLeft + 26, 128, 8);
+		this.nameField = new TextFieldWidget(font, xTopLeft + 33, yTopLeft + 26, 128, 8, "");
 		this.nameField.setTextColor(-1);
 		this.nameField.setDisabledTextColour(-1);
 		this.nameField.setEnableBackgroundDrawing(false);
 		this.nameField.setMaxStringLength(35);
-		this.nameField.setFocused(true);
+		this.nameField.changeFocus(true);
 
-		confirm = new GuiButton(1, xTopLeft - 5, yTopLeft + 50, 100, 20, buttonTextConfirm);
-		abort = new GuiButton(2, xTopLeft + 100, yTopLeft + 50, 100, 20, buttonTextAbort);
-
-		buttonList.add(confirm);
-		buttonList.add(abort);
-	}
-
-	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		drawDefaultBackground();
-
-		GuiResources.TEXT_INPUT.draw(this, xTopLeft, yTopLeft);
-
-		super.drawScreen(mouseX, mouseY, partialTicks);
-
-		fontRenderer.drawString(title, xTopLeft + (xSize/2) - (fontRenderer.getStringWidth(title)/2), yTopLeft + 11, GuiResources.FONT_COLOR, false);
-		
-		this.nameField.drawTextBox();
-	}
-
-	@Override
-	protected void actionPerformed(GuiButton button) throws IOException {
-		if (button == confirm) {
+		confirm = new Button(xTopLeft - 5, yTopLeft + 50, 100, 20, buttonTextConfirm, button -> {
 			callback.accept(nameField.getText());
 			confirmed = true;
-			mc.displayGuiScreen(null);
-		} else if (button == abort) {
-			mc.displayGuiScreen(null);
-		}
-		super.actionPerformed(button);
+			minecraft.displayGuiScreen(null);
+		});
+
+		abort = new Button(xTopLeft + 100, yTopLeft + 50, 100, 20, buttonTextAbort, button -> {
+			minecraft.displayGuiScreen(null);
+		});
+		
+		buttons.add(confirm);
+		buttons.add(abort);
+
 	}
 
 	@Override
-	public void onGuiClosed() {
+	public void render(int mouseX, int mouseY, float partialTicks) {
+		renderBackground();
+
+		GuiResources.TEXT_INPUT.draw(this, xTopLeft, yTopLeft);
+		super.render(mouseX, mouseY, partialTicks);
+
+		font.drawString(title, xTopLeft + (xSize / 2) - (font.getStringWidth(title) / 2), yTopLeft + 11,
+				GuiResources.FONT_COLOR);
+		this.nameField.render(mouseX, mouseY, partialTicks);
+	}
+
+	@Override
+	public void onClose() {
 		if (!confirmed)
 			abortCallback.accept(nameField.getText());
-		super.onGuiClosed();
-		Keyboard.enableRepeatEvents(false);
+		super.onClose();
 	}
 
 	public void setButtonTextConfirm(String buttonTextConfirm) {
@@ -107,18 +100,23 @@ public class GuiTextPrompt extends GuiScreen {
 		this.title = title;
 	}
 
+	@Override
+	public boolean charTyped(char typedChar, int keyCode) {
+		if (keyCode == Keyboard.RETURN) {
+			confirm.onPress();
+			return true;
+		}
+		if (!this.nameField.charTyped(typedChar, keyCode))
+			super.charTyped(typedChar, keyCode);
+		return false;
+	}
+
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 		this.nameField.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		if (keyCode == Keyboard.KEY_RETURN) {
-			actionPerformed(confirm);
-			return;
-		}
-		if (!this.nameField.textboxKeyTyped(typedChar, keyCode))
-			super.keyTyped(typedChar, keyCode);
 	}
 
 }

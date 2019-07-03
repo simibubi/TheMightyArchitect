@@ -6,13 +6,13 @@ import java.util.Map;
 import com.simibubi.mightyarchitect.control.design.DesignSlice;
 import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 
 public class Corner extends Design {
 	
 	@Override
-	public Design fromNBT(NBTTagCompound compound) {
+	public Design fromNBT(CompoundNBT compound) {
 		Corner corner = new Corner();
 		corner.applyNBT(compound);
 		return corner;

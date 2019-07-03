@@ -2,20 +2,6 @@ package com.simibubi.mightyarchitect;
 
 import org.apache.logging.log4j.Logger;
 
-import com.simibubi.mightyarchitect.block.AllBlocks;
-import com.simibubi.mightyarchitect.gui.GuiHandler;
-import com.simibubi.mightyarchitect.item.AllItems;
-import com.simibubi.mightyarchitect.networking.PacketInstantPrint;
-import com.simibubi.mightyarchitect.networking.PacketInstantPrint.PacketHandlerInstantPrint;
-import com.simibubi.mightyarchitect.networking.PacketNbt;
-import com.simibubi.mightyarchitect.networking.PacketNbt.PacketHandlerNbt;
-import com.simibubi.mightyarchitect.networking.PacketPlaceSign;
-import com.simibubi.mightyarchitect.networking.PacketPlaceSign.PacketHandlerPlaceSign;
-import com.simibubi.mightyarchitect.networking.PacketSender;
-import com.simibubi.mightyarchitect.networking.PacketSetHotbarItem;
-import com.simibubi.mightyarchitect.networking.PacketSetHotbarItem.PacketHandlerSetHotbarItem;
-import com.simibubi.mightyarchitect.networking.PacketSymmetryEffect;
-import com.simibubi.mightyarchitect.networking.PacketSymmetryEffect.PacketHandlerSymmetryEffect;
 import com.simibubi.mightyarchitect.networking.Packets;
 
 import net.minecraft.block.Block;
@@ -25,7 +11,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -36,7 +21,6 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.network.NetworkRegistry;
 
 @EventBusSubscriber(bus = Bus.FORGE)
 @Mod(TheMightyArchitect.ID)
@@ -65,25 +49,19 @@ public class TheMightyArchitect {
 	}
 
 	private void init(final FMLCommonSetupEvent event) {
-		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
+//		NetworkRegistry.registerGuiHandler(instance, new GuiHandler());
 		Packets.registerPackets();
 	}
 
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
-		AllItems.registerAll(event.getRegistry());
-		AllBlocks.registerAllItemBlocks(event.getRegistry());
+		AllItems.registerItems(event.getRegistry());
+		AllBlocks.registerItemBlocks(event.getRegistry());
 	}
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
-		AllBlocks.registerAll(event.getRegistry());
-	}
-
-	@SubscribeEvent
-	public static void registerModels(ModelRegistryEvent event) {
-		AllItems.initModels();
-		AllBlocks.initModels();
+		AllBlocks.registerBlocks(event.getRegistry());
 	}
 
 	@SubscribeEvent

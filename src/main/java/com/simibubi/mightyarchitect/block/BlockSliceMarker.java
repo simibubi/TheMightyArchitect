@@ -1,82 +1,62 @@
 package com.simibubi.mightyarchitect.block;
 
+import com.simibubi.mightyarchitect.AllItems;
 import com.simibubi.mightyarchitect.control.design.DesignSlice.DesignSliceTrait;
-import com.simibubi.mightyarchitect.item.AllItems;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumFacing.Axis;
-import net.minecraft.util.EnumHand;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.EnumProperty;
+import net.minecraft.state.StateContainer.Builder;
+import net.minecraft.util.Direction.Axis;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 
-public class BlockSliceMarker extends BlockForMightyArchitects {
+public class BlockSliceMarker extends Block {
 
-	public static final PropertyBool compass = PropertyBool.create("compass");
-	public static final PropertyEnum<DesignSliceTrait> VARIANT = PropertyEnum.<DesignSliceTrait>create("variant",
+	public static final BooleanProperty compass = BooleanProperty.create("compass");
+	public static final EnumProperty<DesignSliceTrait> VARIANT = EnumProperty.<DesignSliceTrait>create("variant",
 			DesignSliceTrait.class);
 
-	public BlockSliceMarker(String name) {
-		super(name, Material.ROCK);
-		this.setHardness(2.0f);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, DesignSliceTrait.Standard));
+	public BlockSliceMarker() {
+		super(Properties.create(Material.ROCK));
+		this.setDefaultState(getDefaultState().with(VARIANT, DesignSliceTrait.Standard));
 	}
 
 	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] {compass, VARIANT});
-	}
-	
-	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		if (worldIn.getBlockState(pos.down()).getBlock() == this)
-			return state.withProperty(compass, false);
-		return state.withProperty(compass, true);
+	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+		builder.add(compass, VARIANT);
+		super.fillStateContainer(builder);
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (facing.getAxis() == Axis.Y)
+	public BlockState getStateForPlacement(BlockItemUseContext context) {
+		if (context.getWorld().getBlockState(context.getPos().down()).getBlock() == this)
+			return getDefaultState().with(compass, false);
+		return getDefaultState().with(compass, true);
+	}
+
+	@Override
+	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn,
+			BlockRayTraceResult hit) {
+		if (hit.getFace().getAxis() == Axis.Y)
 			return false;
-		if (playerIn.getHeldItem(hand).getItem() == AllItems.wand_architect)
+		if (AllItems.ARCHITECT_WAND.typeOf(player.getHeldItem(handIn)))
 			return false;
 		if (worldIn.isRemote)
 			return true;
 
-		int meta = getMetaFromState(worldIn.getBlockState(pos));
-		int max = DesignSliceTrait.values().length;
-		if (!playerIn.isSneaking()) {
-			meta = (meta + 1) % max;
-		} else {
-			meta = (meta - 1);
-			if (meta < 0)
-				meta = max - 1;
-		}
-		IBlockState stateFromMeta = getStateFromMeta(meta);
-		worldIn.setBlockState(pos, stateFromMeta);
-		playerIn.sendStatusMessage(new TextComponentString(
-				((DesignSliceTrait) stateFromMeta.getProperties().get(VARIANT)).getDescription()), true);
+		DesignSliceTrait currentTrait = state.get(VARIANT);
+		worldIn.setBlockState(pos, state.with(VARIANT, currentTrait.cycle(player.isSneaking() ? -1 : 1)));
+		player.sendStatusMessage(new StringTextComponent(currentTrait.getDescription()), true);
 
 		return true;
-	}
-
-	@Override
-	public int getMetaFromState(IBlockState state) {
-		return ((DesignSliceTrait) state.getProperties().get(VARIANT)).ordinal();
-	}
-
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(VARIANT, DesignSliceTrait.values()[meta]);
 	}
 
 }

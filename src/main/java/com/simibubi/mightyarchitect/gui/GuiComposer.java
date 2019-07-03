@@ -1,14 +1,11 @@
 package com.simibubi.mightyarchitect.gui;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.compose.CylinderStack;
 import com.simibubi.mightyarchitect.control.compose.Room;
@@ -27,11 +24,11 @@ import com.simibubi.mightyarchitect.gui.widgets.ScrollArea.IScrollAction;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollBar;
 import com.simibubi.mightyarchitect.gui.widgets.SimiButton;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.Widget;
+import net.minecraft.util.text.StringTextComponent;
 
-public class GuiComposer extends GuiScreen {
+public class GuiComposer extends Screen {
 
 	private static final int BUTTON_ADD_LAYER = 0;
 	private static final int BUTTON_NORMAL_ROOF = 1;
@@ -60,6 +57,7 @@ public class GuiComposer extends GuiScreen {
 	private float alpha;
 
 	public GuiComposer(Stack stack) {
+		super(new StringTextComponent("Composer"));
 		this.stack = stack;
 		theme = ArchitectManager.getModel().getGroundPlan().theme;
 		stats = theme.getStatistics();
@@ -69,7 +67,7 @@ public class GuiComposer extends GuiScreen {
 
 	private void init(Stack stack) {
 		partials = new ArrayList<>();
-		buttonList.clear();
+		buttons.clear();
 
 		List<Room> rooms = stack.getRooms();
 		stack.forEach(room -> {
@@ -88,7 +86,7 @@ public class GuiComposer extends GuiScreen {
 			buttonNormalRoof = new SimiButton(BUTTON_NORMAL_ROOF, x, yTopLeft,
 					tower ? GuiResources.ICON_TOWER_ROOF : GuiResources.ICON_NORMAL_ROOF);
 			indicatorNormalRoof = new GuiIndicator(x, yTopLeft - 5, "");
-			buttonList.add(buttonNormalRoof);
+			buttons.add(buttonNormalRoof);
 			x += 20;
 		}
 
@@ -96,7 +94,7 @@ public class GuiComposer extends GuiScreen {
 			buttonFlatRoof = new SimiButton(BUTTON_FLAT_ROOF, x, yTopLeft,
 					tower ? GuiResources.ICON_TOWER_FLAT_ROOF : GuiResources.ICON_FLAT_ROOF);
 			indicatorFlatRoof = new GuiIndicator(x, yTopLeft - 5, "");
-			buttonList.add(buttonFlatRoof);
+			buttons.add(buttonFlatRoof);
 			x += 20;
 		}
 
@@ -104,7 +102,7 @@ public class GuiComposer extends GuiScreen {
 				tower ? GuiResources.ICON_TOWER_NO_ROOF : GuiResources.ICON_NO_ROOF);
 		indicatorNoRoof = new GuiIndicator(x, yTopLeft - 5, "");
 
-		buttonList.add(buttonNoRoof);
+		buttons.add(buttonNoRoof);
 
 		swapRoofTypeIfNecessary();
 		indicate(stack.highest().roofType == DesignType.ROOF ? indicatorNormalRoof
@@ -120,7 +118,7 @@ public class GuiComposer extends GuiScreen {
 	private void swapRoofTypeIfNecessary() {
 		if (buttonNormalRoof == null)
 			return;
-		buttonNormalRoof.enabled = normalRoofPossible();
+		buttonNormalRoof.active = normalRoofPossible();
 
 		if (indicatorNormalRoof.state == State.OFF)
 			return;
@@ -141,7 +139,7 @@ public class GuiComposer extends GuiScreen {
 	}
 
 	@Override
-	public void initGui() {
+	public void init() {
 		init(stack);
 		if (stack.floors() <= ThemeStatistics.MAX_FLOORS)
 			addButton(new SimiButton(BUTTON_ADD_LAYER, xTopLeft + 2, yTopLeft, GuiResources.ICON_ADD));
@@ -150,20 +148,20 @@ public class GuiComposer extends GuiScreen {
 		for (int layer = 0; layer < partials.size(); layer++) {
 			GuiComposerPartial partial = partials.get(layer);
 			int offset = (partials.size() - layer - 1) * 52 + 20;
-			partial.initGui(offset);
+			partial.init(offset);
 		}
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		this.drawDefaultBackground();
+	public void render(int mouseX, int mouseY, float partialTicks) {
+		this.renderBackground();
 
 		if (alpha < 1f)
 			alpha += (1 - alpha) * .2f;
 
 		mouseY -= scrollBar.getYShift();
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(0, scrollBar.getYShift(), 0);
+		GlStateManager.translated(0, scrollBar.getYShift(), 0);
 
 		for (int layer = 0; layer < partials.size(); layer++) {
 			GuiComposerPartial partial = partials.get(layer);
@@ -171,20 +169,20 @@ public class GuiComposer extends GuiScreen {
 			partial.drawScreen(offset, mouseX, mouseY, partialTicks);
 		}
 
-		super.drawScreen(mouseX, mouseY, partialTicks);
+		super.render(mouseX, mouseY, partialTicks);
 
 		if (indicatorNormalRoof != null)
-			indicatorNormalRoof.render(mc, mouseX, mouseY);
+			indicatorNormalRoof.render(minecraft, mouseX, mouseY);
 		if (indicatorFlatRoof != null)
-			indicatorFlatRoof.render(mc, mouseX, mouseY);
-		indicatorNoRoof.render(mc, mouseX, mouseY);
+			indicatorFlatRoof.render(minecraft, mouseX, mouseY);
+		indicatorNoRoof.render(minecraft, mouseX, mouseY);
 
 		GlStateManager.popMatrix();
 
 		scrollBar.render(this);
 
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(0, scrollBar.getYShift(), 0);
+		GlStateManager.translated(0, scrollBar.getYShift(), 0);
 
 		SelectionTool.hoveredRoom = null;
 		for (int layer = 0; layer < partials.size(); layer++) {
@@ -208,6 +206,30 @@ public class GuiComposer extends GuiScreen {
 	public void updateAllPositioningLabels() {
 		for (GuiComposerPartial partial : partials)
 			partial.updatePositioningLabels();
+	}
+	
+	@Override
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+		Widget clicked = null;
+		for (Widget button : buttons) {
+			if (button.isMouseOver(mouseX, mouseY))
+				clicked = button;
+		}
+		
+		if (clicked != null && clicked instanceof SimiButton)
+			actionPerformed((SimiButton) clicked);
+		
+		mouseY = (int) (mouseY - scrollBar.getYShift());
+		super.mouseClicked(mouseX, mouseY, mouseButton);
+
+		int scrollAmount = ((mouseButton == 0) ? -1 : 1) * ((Keyboard.isKeyDown(Keyboard.LSHIFT)) ? 5 : 1);
+		for (GuiComposerPartial partial : partials) {
+			for (ScrollArea area : partial.scrollAreas) {
+				area.tryScroll(mouseX, mouseY, scrollAmount);
+			}
+		}
+		
+		return super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
 	class GuiComposerPartial {
@@ -236,7 +258,7 @@ public class GuiComposer extends GuiScreen {
 			scrollAreaSize = new Vector<>(3);
 		}
 
-		public void initGui(int yOffset) {
+		public void init(int yOffset) {
 			scrollAreas.clear();
 			int x = parent.xTopLeft;
 			int y = parent.yTopLeft + yOffset;
@@ -357,7 +379,7 @@ public class GuiComposer extends GuiScreen {
 				scrollArea.setState(pos.elementAt(i));
 				scrollArea.setTitle("Move Rooms");
 
-				float angle = mc.player.rotationYawHead % 360;
+				float angle = minecraft.player.rotationYawHead % 360;
 				if (angle < -180)
 					angle += 360;
 				if (angle > 180)
@@ -490,17 +512,15 @@ public class GuiComposer extends GuiScreen {
 			int x = parent.xTopLeft;
 			int y = parent.yTopLeft + yOffset;
 
-			GlStateManager.enableAlpha();
 			GlStateManager.enableBlend();
-			GlStateManager.color(1, 1, 1, parent.alpha);
+			GlStateManager.color4f(1, 1, 1, parent.alpha);
 			GuiResources.COMPOSER.draw(parent, x, y);
-			GlStateManager.disableAlpha();
 			GlStateManager.disableBlend();
 
-			drawCenteredString(fontRenderer, "" + (layer + 1), x + 13, y + 15, 0xCCDDFF);
+			drawCenteredString(font, "" + (layer + 1), x + 13, y + 15, 0xCCDDFF);
 
-			fontRenderer.drawString("Type", x + 32, y + 15, GuiResources.FONT_COLOR, false);
-			fontRenderer.drawString("Style", x + 32, y + 35, GuiResources.FONT_COLOR, false);
+			font.drawString("Type", x + 32, y + 15, GuiResources.FONT_COLOR);
+			font.drawString("Style", x + 32, y + 35, GuiResources.FONT_COLOR);
 
 			style.draw(parent);
 			styleGroup.draw(parent);
@@ -523,24 +543,21 @@ public class GuiComposer extends GuiScreen {
 
 	}
 
-	@Override
-	protected void actionPerformed(GuiButton button) throws IOException {
-		super.actionPerformed(button);
-
+	protected void actionPerformed(SimiButton button) {
 		switch (button.id) {
 		case BUTTON_ADD_LAYER:
 			stack.increase();
-			initGui();
+			init();
 			return;
 
 		case BUTTON_REMOVE_LAYER:
-			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || stack.floors() == 1) {
+			if (Keyboard.isKeyDown(Keyboard.LSHIFT) || stack.floors() == 1) {
 				ArchitectManager.getModel().getGroundPlan().remove(stack);
-				mc.displayGuiScreen(null);
+				minecraft.displayGuiScreen(null);
 				return;
 			}
 			stack.decrease();
-			initGui();
+			init();
 			return;
 
 		case BUTTON_NORMAL_ROOF:
@@ -570,47 +587,32 @@ public class GuiComposer extends GuiScreen {
 	}
 
 	@Override
-	public boolean doesGuiPauseGame() {
+	public boolean isPauseScreen() {
 		return false;
 	}
 
 	@Override
-	public void onGuiClosed() {
+	public void onClose() {
 		SelectionTool.hoveredRoom = null;
-		super.onGuiClosed();
+		super.onClose();
 	}
 	
 	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-		mouseY = (int) (mouseY - scrollBar.getYShift());
-		super.mouseClicked(mouseX, mouseY, mouseButton);
-
-		int scrollAmount = ((mouseButton == 0) ? -1 : 1) * ((Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) ? 5 : 1);
-		for (GuiComposerPartial partial : partials) {
-			for (ScrollArea area : partial.scrollAreas) {
-				area.tryScroll(mouseX, mouseY, scrollAmount);
-			}
-		}
-
-	}
-
-	@Override
-	public void handleMouseInput() throws IOException {
-		super.handleMouseInput();
-
-		int i = Mouse.getEventX() * this.width / this.mc.displayWidth;
-		float jBeforeShift = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+	public boolean mouseScrolled(double mouseX, double mouseY, double scroll) {
+		
+		float jBeforeShift = (float) (this.height - mouseY * this.height / this.minecraft.mainWindow.getHeight() - 1);
 		int j = (int) (jBeforeShift - scrollBar.getYShift());
-		int scroll = Mouse.getEventDWheel();
-
+		
 		if (scroll != 0) {
-			scrollBar.tryScroll(i, (int) jBeforeShift, (int) (scroll / -120f));
+			scrollBar.tryScroll((int) mouseX, (int) jBeforeShift, (int) (scroll / -120f));
 			for (GuiComposerPartial partial : partials) {
 				for (ScrollArea area : partial.scrollAreas) {
-					area.tryScroll(i, j, (int) (scroll / -120f));
+					area.tryScroll((int) mouseX, j, (int) (scroll / -120f));
 				}
 			}
 		}
+		
+		return super.mouseScrolled(mouseX, mouseY, scroll);
 	}
-
+	
 }

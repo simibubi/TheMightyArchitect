@@ -33,17 +33,17 @@ import com.simibubi.mightyarchitect.networking.PacketSender;
 import com.simibubi.mightyarchitect.proxy.CombinedClientProxy;
 
 import net.minecraft.block.BlockStoneSlab;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -134,7 +134,7 @@ public class ArchitectManager {
 		if (getModel().getSketch() == null)
 			return;
 
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft mc = Minecraft.getInstance();
 
 		if (mc.isSingleplayer()) {
 			for (PacketInstantPrint packet : getModel().getPackets()) {
@@ -165,7 +165,7 @@ public class ArchitectManager {
 		OutputStream outputStream = null;
 		try {
 			outputStream = Files.newOutputStream(Paths.get(filepath), StandardOpenOption.CREATE);
-			NBTTagCompound nbttagcompound = getModel().writeToTemplate().writeToNBT(new NBTTagCompound());
+			CompoundNBT nbttagcompound = getModel().writeToTemplate().writeToNBT(new CompoundNBT());
 			CompressedStreamTools.writeCompressed(nbttagcompound, outputStream);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -177,7 +177,7 @@ public class ArchitectManager {
 	}
 
 	public static void status(String message) {
-		Minecraft.getMinecraft().player.sendStatusMessage(new TextComponentString(message), true);
+		Minecraft.getInstance().player.sendStatusMessage(new StringTextComponent(message), true);
 	}
 
 	public static void pickPalette() {
@@ -249,7 +249,7 @@ public class ArchitectManager {
 
 	@SubscribeEvent
 	public static void onClientTick(ClientTickEvent event) {
-		if (Minecraft.getMinecraft().world != null) {
+		if (Minecraft.getInstance().world != null) {
 			phase.getPhaseHandler().update();
 		}
 		menu.onClientTick();
@@ -257,7 +257,7 @@ public class ArchitectManager {
 
 	@SubscribeEvent
 	public static void render(RenderWorldLastEvent event) {
-		if (Minecraft.getMinecraft().world != null) {
+		if (Minecraft.getInstance().world != null) {
 			phase.getPhaseHandler().render();
 		}
 	}
@@ -307,9 +307,9 @@ public class ArchitectManager {
 			IArchitectPhase phaseHandler = phase.getPhaseHandler();
 			if (phaseHandler instanceof IListenForBlockEvents) {
 				Vec3d hitVec = event.getHitVec();
-				IBlockState stateForPlacement = ((ItemBlock) item).getBlock().getStateForPlacement(event.getWorld(),
+				BlockState stateForPlacement = ((ItemBlock) item).getBlock().getStateForPlacement(event.getWorld(),
 						event.getPos(), event.getFace(), (float) hitVec.x, (float) hitVec.y, (float) hitVec.z,
-						event.getItemStack().getMetadata(), event.getEntityPlayer(), event.getHand());
+						event.getItemStack().getMetadata(), event.getPlayerEntity(), event.getHand());
 				BlockPos offset = event.getPos().offset(event.getFace());
 
 				if (stateForPlacement.getBlock() == Blocks.STONE_SLAB) {

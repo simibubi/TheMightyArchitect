@@ -1,12 +1,12 @@
 package com.simibubi.mightyarchitect.gui.widgets;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.simibubi.mightyarchitect.gui.GuiResources;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.AbstractGui;
 
-public class GuiIndicator extends Gui {
+public class GuiIndicator extends AbstractGui {
 	
 	public enum State {
 		OFF, ON,
@@ -39,9 +39,9 @@ public class GuiIndicator extends Gui {
 			case GREEN: toDraw = GuiResources.INDICATOR_GREEN; break;
 			default: toDraw = GuiResources.INDICATOR; break;
 		}
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.getTextureManager().bindTexture(toDraw.location);
-		drawTexturedModalRect(x, y, toDraw.startX, toDraw.startY, toDraw.width, toDraw.height);
+		blit(x, y, toDraw.startX, toDraw.startY, toDraw.width, toDraw.height);
 	}
 	
 }

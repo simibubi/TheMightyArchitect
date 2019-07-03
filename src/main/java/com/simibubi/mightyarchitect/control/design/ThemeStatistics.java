@@ -3,7 +3,7 @@ package com.simibubi.mightyarchitect.control.design;
 import com.simibubi.mightyarchitect.control.helpful.DesignHelper;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 
 public class ThemeStatistics {
 
@@ -170,7 +170,7 @@ public class ThemeStatistics {
 	}
 
 	private void chat(String message) {
-		Minecraft.getMinecraft().player.sendMessage(new TextComponentString(message));
+		Minecraft.getInstance().player.sendMessage(new StringTextComponent(message));
 	}
 
 }

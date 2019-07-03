@@ -9,9 +9,9 @@ import com.simibubi.mightyarchitect.control.palette.BlockOrientation;
 import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumFacing.Axis;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.IStringSerializable;
 
 public class DesignSlice {
@@ -38,13 +38,18 @@ public class DesignSlice {
 		public String getDescription() {
 			return description;
 		}
+		
+		public DesignSliceTrait cycle(int amount) {
+			DesignSliceTrait[] values = values();
+			return values[(this.ordinal() + amount + values.length) % values.length];
+		}
 	}
 
 	private DesignSliceTrait trait;
 	private Palette[][] blocks;
 	private BlockOrientation[][] orientations;
-
-	public static DesignSlice fromNBT(NBTTagCompound sliceTag) {
+	
+	public static DesignSlice fromNBT(CompoundNBT sliceTag) {
 		DesignSlice slice = new DesignSlice();
 		slice.trait = DesignSliceTrait.valueOf(sliceTag.getString("Trait"));
 
@@ -94,7 +99,7 @@ public class DesignSlice {
 		
 		BlockOrientation blockOrientation = orientations[z][x];
 		if (!blockOrientation.hasFacing())
-			blockOrientation = BlockOrientation.valueOf(blockOrientation.getHalf(), EnumFacing.NORTH);
+			blockOrientation = BlockOrientation.valueOf(blockOrientation.getHalf(), Direction.NORTH);
 		
 		PaletteBlockInfo paletteBlockInfo = new PaletteBlockInfo(palette, blockOrientation);			
 		paletteBlockInfo.afterPosition = BlockOrientation.NORTH.withRotation(rotation);

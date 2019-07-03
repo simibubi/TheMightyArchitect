@@ -3,8 +3,8 @@ package com.simibubi.mightyarchitect.control.design;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import com.simibubi.mightyarchitect.AllBlocks;
 import com.simibubi.mightyarchitect.TheMightyArchitect;
-import com.simibubi.mightyarchitect.block.AllBlocks;
 import com.simibubi.mightyarchitect.control.compose.Cuboid;
 import com.simibubi.mightyarchitect.control.design.DesignSlice.DesignSliceTrait;
 import com.simibubi.mightyarchitect.control.design.partials.Wall;
@@ -17,15 +17,15 @@ import com.simibubi.mightyarchitect.control.phase.export.PhaseEditTheme;
 import com.simibubi.mightyarchitect.networking.PacketPlaceSign;
 import com.simibubi.mightyarchitect.networking.PacketSender;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 
 public class DesignExporter {
@@ -91,13 +91,13 @@ public class DesignExporter {
 		PhaseEditTheme.resetVisualization();
 
 		// Assemble nbt
-		NBTTagCompound compound = new NBTTagCompound();
+		CompoundNBT compound = new CompoundNBT();
 		compound.setTag("Size", NBTUtil.createPosTag(size));
 
 		NBTTagList layers = new NBTTagList();
 
 		for (int y = 0; y < size.getY(); y++) {
-			NBTTagCompound layerTag = new NBTTagCompound();
+			CompoundNBT layerTag = new CompoundNBT();
 			DesignSliceTrait trait = DesignSliceTrait.values()[markerValueAt(worldIn, layerDefAnchor.up(y))];
 			layerTag.setString("Trait", trait.name());
 
@@ -105,11 +105,11 @@ public class DesignExporter {
 			for (int z = 0; z < size.getZ(); z++) {
 				for (int x = 0; x < size.getX(); x++) {
 					BlockPos pos = anchor.east().add(x, y, z);
-					IBlockState blockState = worldIn.getBlockState(pos);
+					BlockState blockState = worldIn.getBlockState(pos);
 					Palette block = scanningPalette.scan(blockState);
 
 					if (block == null && blockState.getBlock() != Blocks.AIR) {
-						Minecraft.getMinecraft().player.sendMessage(new TextComponentString(
+						Minecraft.getInstance().player.sendMessage(new StringTextComponent(
 								blockState.getBlock().getLocalizedName() + " @" + pos.getX() + "," + pos.getY() + ","
 										+ pos.getZ() + " does not belong to the Scanner Palette"));
 						return "Export failed";

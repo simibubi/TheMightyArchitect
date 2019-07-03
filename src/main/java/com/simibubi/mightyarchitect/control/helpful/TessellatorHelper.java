@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
@@ -14,13 +14,13 @@ public class TessellatorHelper {
 	public static final float fontScale = 1/512f;
 
 	public static void prepareForDrawing() {
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft mc = Minecraft.getInstance();
 		GlStateManager.pushMatrix();
 		GlStateManager.pushAttrib();
 		GlStateManager.enableBlend();
 		GlStateManager.enableAlpha();
 		GlStateManager.color(1, 1, 1, 1);
-		EntityPlayer player = mc.player;
+		PlayerEntity player = mc.player;
 
 		double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double) mc.getRenderPartialTicks();
 		double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double) mc.getRenderPartialTicks();
@@ -37,7 +37,7 @@ public class TessellatorHelper {
 	}
 	
 	public static void drawString(String str, float x, float y, float z, boolean scalesUp, boolean hasDepth) {
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft mc = Minecraft.getInstance();
 		float pitch = mc.getRenderManager().playerViewX;
 		float yaw = mc.getRenderManager().playerViewY;
 		boolean isThirdPersonFrontal = mc.gameSettings.thirdPersonView == 2;

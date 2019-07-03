@@ -1,7 +1,5 @@
 package com.simibubi.mightyarchitect;
 
-import com.simibubi.mightyarchitect.item.AllItems;
-
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 
@@ -13,6 +11,6 @@ public final class MightyArchitectItemGroup extends ItemGroup {
 
 	@Override
 	public ItemStack createIcon() {
-		return new ItemStack(AllItems.blueprint_filled);
+		return new ItemStack(AllItems.BLUEPRINT.get());
 	}
 }

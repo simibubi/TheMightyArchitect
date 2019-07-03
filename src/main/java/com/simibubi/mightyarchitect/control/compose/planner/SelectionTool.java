@@ -14,7 +14,7 @@ import com.simibubi.mightyarchitect.gui.GuiComposer;
 import com.simibubi.mightyarchitect.gui.GuiOpener;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.entity.PlayerEntitySP;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -40,7 +40,7 @@ public class SelectionTool extends GroundPlanningToolBase {
 			return;
 		}
 
-		EntityPlayerSP player = Minecraft.getMinecraft().player;
+		PlayerEntitySP player = Minecraft.getInstance().player;
 
 		PredicateTraceResult result = RaycastHelper.rayTraceUntil(player, 70, position -> {
 			return groundPlan.getRoomAtPos(position.subtract(anchor)) != null;

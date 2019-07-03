@@ -2,7 +2,7 @@ package com.simibubi.mightyarchitect.gui;
 
 import com.simibubi.mightyarchitect.TheMightyArchitect;
 
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.ResourceLocation;
 
 public enum GuiResources {
@@ -70,9 +70,9 @@ public enum GuiResources {
 		this.startX = startX; this.startY = startY;
 	}
 	
-	public void draw(GuiScreen screen, int i, int j) {
-		screen.mc.getTextureManager().bindTexture(location);
-		screen.drawTexturedModalRect(i, j, startX, startY, width, height);
+	public void draw(Screen screen, int i, int j) {
+		screen.getMinecraft().getTextureManager().bindTexture(location);
+		screen.blit(i, j, startX, startY, width, height);
 	}
 
 }

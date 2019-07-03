@@ -1,6 +1,6 @@
 package com.simibubi.mightyarchitect.control;
 
-import com.simibubi.mightyarchitect.block.AllBlocks;
+import com.simibubi.mightyarchitect.AllBlocks;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.item.AllItems;
@@ -8,7 +8,7 @@ import com.simibubi.mightyarchitect.networking.PacketSender;
 import com.simibubi.mightyarchitect.networking.PacketSetHotbarItem;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -78,13 +78,13 @@ public class ArchitectKits {
 	
 	@SuppressWarnings("deprecation")
 	private static void setHotbarBlock(int slot, Block block) {
-		setHotbarItem(slot, block.getItem(Minecraft.getMinecraft().world, BlockPos.ORIGIN, block.getDefaultState()));
+		setHotbarItem(slot, block.getItem(Minecraft.getInstance().world, BlockPos.ORIGIN, block.getDefaultState()));
 	}
 	
 	private static void setHotbarBlock(int slot, Palette palette) {
-		IBlockState state = DesignExporter.theme.getDefaultPalette().get(palette);
+		BlockState state = DesignExporter.theme.getDefaultPalette().get(palette);
 		@SuppressWarnings("deprecation")
-		ItemStack stack = state.getBlock().getItem(Minecraft.getMinecraft().world, BlockPos.ORIGIN, state);
+		ItemStack stack = state.getBlock().getItem(Minecraft.getInstance().world, BlockPos.ORIGIN, state);
 		setHotbarItem(slot, stack.setStackDisplayName(palette.getDisplayName() + " (" + stack.getDisplayName() + ")"));
 	}
 	

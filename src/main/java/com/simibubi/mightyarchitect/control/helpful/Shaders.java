@@ -16,13 +16,13 @@ public enum Shaders {
 	}
 
 	public boolean isActive() {
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft mc = Minecraft.getInstance();
 		return mc.entityRenderer.isShaderActive()
 				&& mc.entityRenderer.getShaderGroup().getShaderGroupName().equals(location.toString());
 	}
 
 	public void setActive(boolean active) {
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft mc = Minecraft.getInstance();
 
 		if (this == None) {
 			mc.entityRenderer.stopUseShader();

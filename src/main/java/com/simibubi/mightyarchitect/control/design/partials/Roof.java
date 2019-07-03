@@ -6,7 +6,7 @@ import java.util.Map;
 import com.simibubi.mightyarchitect.control.design.DesignSlice;
 import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 
 public class Roof extends Design {
@@ -14,7 +14,7 @@ public class Roof extends Design {
 	private static final int CROSS_ROOF_DEPTH = -1;
 
 	@Override
-	public Design fromNBT(NBTTagCompound compound) {
+	public Design fromNBT(CompoundNBT compound) {
 		Roof roof = new Roof();
 		roof.applyNBT(compound);
 		roof.defaultWidth = compound.getInteger("Roofspan");

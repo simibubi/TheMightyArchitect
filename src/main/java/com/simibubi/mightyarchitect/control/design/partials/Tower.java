@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 
 public class Tower extends Design {
@@ -12,7 +12,7 @@ public class Tower extends Design {
 	public int radius;
 	
 	@Override
-	public Design fromNBT(NBTTagCompound compound) {
+	public Design fromNBT(CompoundNBT compound) {
 		Tower tower = new Tower();
 		tower.applyNBT(compound);
 		tower.radius = compound.getInteger("Radius");

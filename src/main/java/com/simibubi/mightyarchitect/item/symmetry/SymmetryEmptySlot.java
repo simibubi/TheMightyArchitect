@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -38,7 +38,7 @@ public class SymmetryEmptySlot extends SymmetryElement {
 	}
 
 	@Override
-	public Map<BlockPos, IBlockState> process(BlockPos position, IBlockState block) {
+	public Map<BlockPos, BlockState> process(BlockPos position, BlockState block) {
 		return new HashMap<>();
 	}
 
@@ -48,7 +48,7 @@ public class SymmetryEmptySlot extends SymmetryElement {
 	}
 
 	@Override
-	public IBlockState getModel() {
+	public BlockState getModel() {
 		return null;
 	}
 	

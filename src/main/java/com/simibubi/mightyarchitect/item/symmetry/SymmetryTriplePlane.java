@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
-import com.simibubi.mightyarchitect.block.AllBlocks;
+import com.simibubi.mightyarchitect.AllBlocks;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -20,8 +20,8 @@ public class SymmetryTriplePlane extends SymmetryElement {
 	}
 
 	@Override
-	public Map<BlockPos, IBlockState> process(BlockPos position, IBlockState block) {
-		Map<BlockPos, IBlockState> result = new HashMap<>();
+	public Map<BlockPos, BlockState> process(BlockPos position, BlockState block) {
+		Map<BlockPos, BlockState> result = new HashMap<>();
 
 		result.put(flipX(position), flipX(block));
 		result.put(flipZ(position), flipZ(block));
@@ -41,8 +41,8 @@ public class SymmetryTriplePlane extends SymmetryElement {
 	}
 
 	@Override
-	public IBlockState getModel() {
-		return AllBlocks.symmetry_tripleplane.getDefaultState();
+	public BlockState getModel() {
+		return AllBlocks.SYMMETRY_TRIPLEPLANE.block.getDefaultState();
 	}
 
 	@Override
