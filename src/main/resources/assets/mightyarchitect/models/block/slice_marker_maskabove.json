@@ -1,6 +1,6 @@
 {
 	"textures": {
-		"icon" : "mightyarchitect:blocks/slice_marker_maskabove"
+		"icon" : "mightyarchitect:block/slice_marker_maskabove"
 	},
 	"parent": "mightyarchitect:block/slice_marker"
 }

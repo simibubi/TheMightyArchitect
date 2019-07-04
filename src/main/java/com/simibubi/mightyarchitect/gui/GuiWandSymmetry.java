@@ -162,14 +162,14 @@ public class GuiWandSymmetry extends Screen {
 	}
 
 	@Override
-	public void onClose() {
+	public void removed() {
 		ItemStack heldItemMainhand = minecraft.player.getHeldItemMainhand();
 		CompoundNBT compound = heldItemMainhand.getTag();
 		compound.put(ItemWandSymmetry.$SYMMETRY, currentElement.writeToNbt());
 		heldItemMainhand.setTag(compound);
 		Packets.channel.send(PacketDistributor.SERVER.noArg(), new PacketNbt(heldItemMainhand));
 		minecraft.player.setHeldItem(Hand.MAIN_HAND, heldItemMainhand);
-		super.onClose();
+		super.removed();
 	}
 
 	@Override

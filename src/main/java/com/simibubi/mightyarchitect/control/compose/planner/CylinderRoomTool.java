@@ -40,7 +40,7 @@ public class CylinderRoomTool extends RoomTool {
 		BlockRayTraceResult trace = RaycastHelper.rayTraceRange(player.world, player, 75);
 		if (trace != null && trace.getType() == Type.BLOCK) {
 
-			BlockPos hit = new BlockPos(trace.getHitVec());
+			BlockPos hit = trace.getPos();
 			makeStacksTransparent(player, hit);
 			
 			if (trace.getFace().getAxis().isVertical())

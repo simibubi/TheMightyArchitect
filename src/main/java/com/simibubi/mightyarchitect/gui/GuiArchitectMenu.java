@@ -122,7 +122,7 @@ public class GuiArchitectMenu extends Screen {
 
 		FontRenderer font = Minecraft.getInstance().fontRenderer;
 		if (!focused)
-		font.drawString("Press " + TheMightyArchitect.COMPOSE.getTranslationKey() + " to focus", xPos,
+		font.drawString("Press " + TheMightyArchitect.COMPOSE.getLocalizedName() + " to focus", xPos,
 				yPos - 14, 0xEEEEEE);
 		font.drawString(title, xPos, yPos, 0xEEEEEE);
 
@@ -173,8 +173,8 @@ public class GuiArchitectMenu extends Screen {
 	}
 
 	@Override
-	public void onClose() {
-		super.onClose();
+	public void removed() {
+		super.removed();
 		setFocused(false);
 	}
 

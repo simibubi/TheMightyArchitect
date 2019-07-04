@@ -1,12 +1,12 @@
 {
 	"multipart": [
-		{ "apply": { "model": "mightyarchitect:slice_marker_particle" }},
-		{ "when": { "compass": "true" }, "apply": { "model": "mightyarchitect:slice_marker_compass", "uvlock": true }},
-		{ "when": { "variant": "standard" }, "apply": { "model": "mightyarchitect:slice_marker_standard" }},
-		{ "when": { "variant": "cloneonce" }, "apply": { "model": "mightyarchitect:slice_marker_clone1" }},
-		{ "when": { "variant": "clonethrice" }, "apply": { "model": "mightyarchitect:slice_marker_clone3" }},
-		{ "when": { "variant": "optional" }, "apply": { "model": "mightyarchitect:slice_marker_optional" }},
-		{ "when": { "variant": "maskabove" }, "apply": { "model": "mightyarchitect:slice_marker_maskabove" }},
-		{ "when": { "variant": "maskbelow" }, "apply": { "model": "mightyarchitect:slice_marker_maskbelow" }}
+		{ "apply": { "model": "mightyarchitect:block/slice_marker_particle" }},
+		{ "when": { "compass": "true" }, "apply": { "model": "mightyarchitect:block/slice_marker_compass", "uvlock": true }},
+		{ "when": { "variant": "standard" }, "apply": { "model": "mightyarchitect:block/slice_marker_standard" }},
+		{ "when": { "variant": "cloneonce" }, "apply": { "model": "mightyarchitect:block/slice_marker_clone1" }},
+		{ "when": { "variant": "clonethrice" }, "apply": { "model": "mightyarchitect:block/slice_marker_clone3" }},
+		{ "when": { "variant": "optional" }, "apply": { "model": "mightyarchitect:block/slice_marker_optional" }},
+		{ "when": { "variant": "maskabove" }, "apply": { "model": "mightyarchitect:block/slice_marker_maskabove" }},
+		{ "when": { "variant": "maskbelow" }, "apply": { "model": "mightyarchitect:block/slice_marker_maskbelow" }}
 	]
 }

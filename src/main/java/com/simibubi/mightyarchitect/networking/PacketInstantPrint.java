@@ -48,7 +48,7 @@ public class PacketInstantPrint {
 		Context ctx = context.get();
 		ctx.enqueueWork(() -> {
 			blocks.blocks.forEach((pos, state) -> {
-				ctx.getSender().getEntityWorld().setBlockState(pos, state);
+				ctx.getSender().getEntityWorld().setBlockState(pos, state, 3);
 			});
 		});
     }

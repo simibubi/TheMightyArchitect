@@ -262,7 +262,7 @@ public class GuiDesignExporter extends Screen {
 	}
 
 	@Override
-	public void onClose() {
+	public void removed() {
 		DesignTheme theme = DesignExporter.theme;
 		DesignExporter.layer = theme.getLayers().get(scrollAreaLayer.getState());
 

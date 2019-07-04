@@ -27,6 +27,7 @@ import com.simibubi.mightyarchitect.gui.GuiEditTheme;
 import com.simibubi.mightyarchitect.gui.GuiOpener;
 import com.simibubi.mightyarchitect.gui.GuiPalettePicker;
 import com.simibubi.mightyarchitect.gui.GuiTextPrompt;
+import com.simibubi.mightyarchitect.gui.Keyboard;
 import com.simibubi.mightyarchitect.networking.PacketInstantPrint;
 import com.simibubi.mightyarchitect.networking.Packets;
 
@@ -36,9 +37,9 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
-import net.minecraftforge.client.event.GuiScreenEvent.MouseClickedEvent;
 import net.minecraftforge.client.event.GuiScreenEvent.MouseScrollEvent;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
+import net.minecraftforge.client.event.InputEvent.MouseInputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -255,12 +256,17 @@ public class ArchitectManager {
 	}
 
 	@SubscribeEvent
-	public static void onRightClick(MouseClickedEvent event) {
+	public static void onClick(MouseInputEvent event) {
+		if (event.getAction() != Keyboard.PRESS)
+			return;
 		phase.getPhaseHandler().onClick(event.getButton());
 	}
 
 	@SubscribeEvent
 	public static void onKeyTyped(KeyInputEvent event) {
+		if (event.getAction() != Keyboard.PRESS)
+			return;
+		
 		if (TheMightyArchitect.COMPOSE.isPressed()) {
 			if (menu.isFocused())
 				return;

@@ -11,6 +11,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RegionRenderCacheBuilder;
@@ -22,6 +23,7 @@ import net.minecraft.client.renderer.vertex.VertexFormatElement.Usage;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ForgeHooksClient;
@@ -155,15 +157,12 @@ public class SchematicHologram {
 				return;
 			}
 
-			final float partialTicks = event.getPartialTicks();
-
-			// Copied from EntityRenderer. This code can be found by looking at usages of
-			// Entity.prevPosX.
-			// It also appears in many other places throughout Minecraft's rendering
-			double renderPosX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) partialTicks;
-			double renderPosY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double) partialTicks;
-			double renderPosZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double) partialTicks;
-
+			ActiveRenderInfo renderInfo = Minecraft.getInstance().gameRenderer.getActiveRenderInfo();
+			Vec3d view = renderInfo.getProjectedView();
+			double renderPosX = view.x;
+			double renderPosY = view.y;
+			double renderPosZ = view.z;
+			
 			GlStateManager.enableAlphaTest();
 			GlStateManager.enableBlend();
 			Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);

@@ -1,0 +1,10 @@
+{
+	"item.mightyarchitect.empty_blueprint": "Empty Blueprint",
+	"item.mightyarchitect.blueprint": "Useless Item",
+	"item.mightyarchitect.symmetry_wand": "Staff of Symmetry",
+	"item.mightyarchitect.architect_wand": "Design Exporter",
+	"item.mightyarchitect.filling_wand": "Filling Wand",
+	"block.mightyarchitect.slice_marker": "Design Layer Marker",
+	"block.mightyarchitect.design_anchor": "Design Marker",
+	"itemGroup.mightyarchitect": "The Mighty Architect"
+}

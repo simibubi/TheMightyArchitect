@@ -1,9 +1,9 @@
 {
     "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
     "textures": {
-        "0": "blocks/glass_white",
-        "1": "blocks/obsidian",
-        "2": "blocks/hardened_clay_stained_blue"
+        "0": "block/white_stained_glass",
+        "1": "block/obsidian",
+        "2": "block/blue_terracotta"
     },
     "elements": [
         {

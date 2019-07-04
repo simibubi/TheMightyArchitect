@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
@@ -48,7 +49,7 @@ public abstract class GroundPlanningToolBase implements ImAToolForGroundPlanning
 			makeStacksTransparent(player, hit);
 
 			boolean replaceable = player.world.getBlockState(hit)
-					.isReplaceable(new BlockItemUseContext(new ItemUseContext(player, player.getActiveHand(), trace)));
+					.isReplaceable(new BlockItemUseContext(new ItemUseContext(player, Hand.MAIN_HAND, trace)));
 			if (trace.getFace().getAxis().isVertical() && !replaceable)
 				hit = hit.offset(trace.getFace());
 

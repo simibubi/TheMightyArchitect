@@ -28,11 +28,11 @@ public class GuiPalettePicker extends Screen {
 	private int xTopLeft, yTopLeft;
 	private PaletteButton primary, secondary;
 	private boolean scanPicker;
-	
+
 	public GuiPalettePicker() {
 		this(false);
 	}
-	
+
 	public GuiPalettePicker(boolean scanPicker) {
 		super(new StringTextComponent("Palette Picker"));
 		minecraft = Minecraft.getInstance();
@@ -73,40 +73,41 @@ public class GuiPalettePicker extends Screen {
 		// create
 		if (!scanPicker) {
 			addButton(new SimiButton(id + i, x + 1 + (i % 5) * 23, y + 1 + (i / 5) * 23, GuiResources.ICON_ADD));
-			i++;			
+			i++;
 		}
 
 	}
 
 	@Override
-	public void onClose() {
-		super.onClose();
-		
+	public void removed() {
+		super.removed();
+
 		if (scanPicker) {
 			if (primary.palette.hasDuplicates())
-				minecraft.player.sendStatusMessage(new StringTextComponent("Warning: Ambiguous Scanner Palette ( " + primary.palette.getDuplicates() + " )"), false);
-			
+				minecraft.player.sendStatusMessage(
+						new StringTextComponent(
+								"Warning: Ambiguous Scanner Palette ( " + primary.palette.getDuplicates() + " )"),
+						false);
+
 			minecraft.player.sendStatusMessage(new StringTextComponent("Updated Default Palette"), true);
 			DesignExporter.theme.setDefaultPalette(primary.palette);
 		}
 	}
-	
+
 	private void updateSelected() {
 		if (buttons.contains(primary))
 			buttons.remove(primary);
 		if (buttons.contains(secondary))
 			buttons.remove(secondary);
-		
+
 		if (scanPicker) {
-			primary = new PaletteButton(DesignExporter.scanningPalette, this, 0, xTopLeft + 134,
-					yTopLeft + 6);
+			primary = new PaletteButton(DesignExporter.scanningPalette, this, 0, xTopLeft + 134, yTopLeft + 6);
 			primary.active = false;
 			buttons.add(primary);
 			return;
 		}
-		
-		primary = new PaletteButton(ArchitectManager.getModel().getPrimary(), this, 0, xTopLeft + 134,
-				yTopLeft + 6);
+
+		primary = new PaletteButton(ArchitectManager.getModel().getPrimary(), this, 0, xTopLeft + 134, yTopLeft + 6);
 		primary.active = false;
 		secondary = new PaletteButton(ArchitectManager.getModel().getSecondary(), this, 1, xTopLeft + 191,
 				yTopLeft + 6);
@@ -123,36 +124,38 @@ public class GuiPalettePicker extends Screen {
 		super.render(mouseX, mouseY, partialTicks);
 
 		int color = GuiResources.FONT_COLOR;
-		
+
 		if (scanPicker) {
 			font.drawString("Choose a palette for", xTopLeft + 8, yTopLeft + 10, color);
 			font.drawString("scanning your Designs.", xTopLeft + 8, yTopLeft + 18, color);
 			font.drawString("Selected", xTopLeft + 134, yTopLeft + 30, color);
-			
+
 		} else {
 			font.drawString("Palette Picker", xTopLeft + 8, yTopLeft + 10, color);
 			font.drawString("Primary", xTopLeft + 134, yTopLeft + 30, color);
 			font.drawString("Secondary", xTopLeft + 191, yTopLeft + 30, color);
-			
+
 		}
-		
+
 		font.drawString("Included Palettes", xTopLeft + 8, yTopLeft + 53, color);
 		font.drawString("My Palettes", xTopLeft + 134, yTopLeft + 53, color);
 	}
 
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-		if (mouseButton == 1) {
-			for (int i = 0; i < this.buttons.size(); ++i) {
-				Widget guibutton = this.buttons.get(i);
+	@Override
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+		for (int i = 0; i < this.buttons.size(); ++i) {
+			Widget guibutton = this.buttons.get(i);
 
-				if (guibutton.keyPressed(mouseX, mouseY, mouseButton)) {
-					guibutton.playDownSound(this.minecraft.getSoundHandler());
+			if (guibutton.isMouseOver(mouseX, mouseY)) {
+				guibutton.playDownSound(this.minecraft.getSoundHandler());
+				if (mouseButton == 0)
+					this.actionPerformed((AbstractButton) guibutton);
+				if (mouseButton == 1)
 					this.actionRightClickPerformed((AbstractButton) guibutton);
-				}
+				return true;
 			}
-		} else {
-			super.mouseClicked(mouseX, mouseY, mouseButton);
 		}
+		return super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
 	protected void actionPerformed(AbstractButton button) {
@@ -162,10 +165,10 @@ public class GuiPalettePicker extends Screen {
 			updateSelected();
 			return;
 		}
-		
+
 		if (button instanceof SimiButton) {
 			ArchitectManager.createPalette(true);
-			minecraft.displayGuiScreen(null);			
+			minecraft.displayGuiScreen(null);
 		} else {
 			ArchitectManager.getModel().swapPrimaryPalette(((PaletteButton) button).palette);
 			updateSelected();
@@ -176,7 +179,7 @@ public class GuiPalettePicker extends Screen {
 	protected void actionRightClickPerformed(AbstractButton button) {
 		if (scanPicker)
 			return;
-		
+
 		if (button instanceof SimiButton) {
 			ArchitectManager.createPalette(false);
 			minecraft.displayGuiScreen(null);
@@ -186,7 +189,7 @@ public class GuiPalettePicker extends Screen {
 			SchematicHologram.getInstance().schematicChanged();
 		}
 	}
-	
+
 	@Override
 	public boolean isPauseScreen() {
 		return false;
@@ -208,7 +211,7 @@ public class GuiPalettePicker extends Screen {
 			GlStateManager.pushMatrix();
 			mc.getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 			GlStateManager.enableBlend();
-			
+
 			BufferBuilder buffer = Tessellator.getInstance().getBuffer();
 			GlStateManager.translatef(x + 11f, y + 10f, 10);
 			GlStateManager.rotatef(90f, 1f, 0f, 0f);
@@ -216,37 +219,38 @@ public class GuiPalettePicker extends Screen {
 			GlStateManager.rotatef(20f, 1f, 0f, 0f);
 			GlStateManager.rotatef(-10f, 0f, 0f, 1f);
 			GlStateManager.scalef(8, -8, 8);
-			
-			renderBlock(mc, buffer, new BlockPos(0,0,0), Palette.INNER_PRIMARY);
-			renderBlock(mc, buffer, new BlockPos(1,0,0), Palette.INNER_DETAIL);
-			renderBlock(mc, buffer, new BlockPos(0,1,0), Palette.HEAVY_PRIMARY);
-			renderBlock(mc, buffer, new BlockPos(1,1,0), Palette.ROOF_PRIMARY);
-			
+
+			renderBlock(mc, buffer, new BlockPos(0, 0, 0), Palette.INNER_PRIMARY);
+			renderBlock(mc, buffer, new BlockPos(1, 0, 0), Palette.INNER_DETAIL);
+			renderBlock(mc, buffer, new BlockPos(0, 1, 0), Palette.HEAVY_PRIMARY);
+			renderBlock(mc, buffer, new BlockPos(1, 1, 0), Palette.ROOF_PRIMARY);
+
 			GlStateManager.popMatrix();
 		}
 
 		protected void renderBlock(Minecraft mc, BufferBuilder buffer, BlockPos pos, Palette key) {
 			IBakedModel model = mc.getBlockRendererDispatcher().getModelForState(palette.get(key));
 //			mc.getBlockRendererDispatcher().getBlockModelRenderer().renderModel(mc.world, model, palette.get(key), pos, buffer, false);
-			mc.getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightness(model, palette.get(key), 1, true);
+			mc.getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightness(model, palette.get(key), 1,
+					true);
 //			
 		}
 
 		@Override
 		public void renderButton(int mouseX, int mouseY, float p_renderButton_3_) {
 			drawPreview(minecraft);
-			
+
 			super.renderButton(mouseX, mouseY, p_renderButton_3_);
-			
+
 			if (mouseX >= x && mouseX <= x + 20 && mouseY >= y && mouseY <= y + 20) {
 				renderTooltip(palette.getName(), mouseX, mouseY);
 				GlStateManager.color4f(1, 1, 1, 1);
 			}
 		}
-		
+
 		@Override
 		public void onPress() {
-			
+
 		}
 
 	}

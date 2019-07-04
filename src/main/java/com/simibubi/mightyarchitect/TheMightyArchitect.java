@@ -2,6 +2,7 @@ package com.simibubi.mightyarchitect;
 
 import org.apache.logging.log4j.Logger;
 
+import com.simibubi.mightyarchitect.gui.Keyboard;
 import com.simibubi.mightyarchitect.networking.Packets;
 
 import net.minecraft.block.Block;
@@ -13,6 +14,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -37,14 +39,15 @@ public class TheMightyArchitect {
 	public static ItemGroup creativeTab = new MightyArchitectItemGroup();
 
 	public TheMightyArchitect() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientInit);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		modEventBus.addListener(this::clientInit);
+        modEventBus.addListener(this::init);
     }
 	
 	private void clientInit(FMLClientSetupEvent event) {
 		AllItems.initColorHandlers();
 
-		COMPOSE = new KeyBinding("Start composing", 103, "The Mighty Architect");
+		COMPOSE = new KeyBinding("Start composing", Keyboard.G, "The Mighty Architect");
 		ClientRegistry.registerKeyBinding(COMPOSE);
 	}
 
@@ -53,15 +56,19 @@ public class TheMightyArchitect {
 		Packets.registerPackets();
 	}
 
-	@SubscribeEvent
-	public static void registerItems(RegistryEvent.Register<Item> event) {
-		AllItems.registerItems(event.getRegistry());
-		AllBlocks.registerItemBlocks(event.getRegistry());
-	}
-
-	@SubscribeEvent
-	public static void registerBlocks(RegistryEvent.Register<Block> event) {
-		AllBlocks.registerBlocks(event.getRegistry());
+	@EventBusSubscriber(bus = Bus.MOD)
+	public static class RegistryListener {
+		
+		@SubscribeEvent
+		public static void registerItems(RegistryEvent.Register<Item> event) {
+			AllItems.registerItems(event.getRegistry());
+			AllBlocks.registerItemBlocks(event.getRegistry());
+		}
+		
+		@SubscribeEvent
+		public static void registerBlocks(RegistryEvent.Register<Block> event) {
+			AllBlocks.registerBlocks(event.getRegistry());
+		}
 	}
 
 	@SubscribeEvent
@@ -79,7 +86,7 @@ public class TheMightyArchitect {
 		if (event.getEntity() instanceof PlayerEntity && mc.isSingleplayer()) {
 			mc.ingameGUI.getChatGUI().printChatMessage(new StringTextComponent("The Mighty Architect v" + VERSION));
 			mc.ingameGUI.getChatGUI().printChatMessage(new StringTextComponent(
-					"Press [" + COMPOSE.getKey().getTranslationKey() + "] to start a Build."));
+					"Press [" + COMPOSE.getKeyBinding().getLocalizedName() + "] to start a Build."));
 		}
 	}
 

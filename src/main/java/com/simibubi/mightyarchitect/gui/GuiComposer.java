@@ -592,9 +592,9 @@ public class GuiComposer extends Screen {
 	}
 
 	@Override
-	public void onClose() {
+	public void removed() {
 		SelectionTool.hoveredRoom = null;
-		super.onClose();
+		super.removed();
 	}
 	
 	@Override

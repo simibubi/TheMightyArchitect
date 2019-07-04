@@ -9,7 +9,7 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 public class Packets {
 
 	public static final SimpleChannel channel = NetworkRegistry.newSimpleChannel(
-			new ResourceLocation(TheMightyArchitect.ID), () -> "1", v -> v.equals("1"), v -> v.equals("1"));
+			new ResourceLocation(TheMightyArchitect.ID, "simple_channel"), () -> "1", v -> v.equals("1"), v -> v.equals("1"));
 
 	public static void registerPackets() {
 		int i = 0;

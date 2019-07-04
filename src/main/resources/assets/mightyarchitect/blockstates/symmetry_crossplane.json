@@ -1,9 +1,9 @@
 {
 	"forgemarker": 1,
     "variants": {
-		"normal": { "model": "mightyarchitect:symmetry_crossplane" },
-		"inventory": { "model": "mightyarchitect:symmetry_crossplane" },
-		"align=y": { "model": "mightyarchitect:symmetry_crossplane"},
-        "align=d": { "model": "mightyarchitect:symmetry_crossplane_diagonal"}
+		"normal": { "model": "mightyarchitect:block/symmetry_crossplane" },
+		"inventory": { "model": "mightyarchitect:block/symmetry_crossplane" },
+		"align=y": { "model": "mightyarchitect:block/symmetry_crossplane"},
+        "align=d": { "model": "mightyarchitect:block/symmetry_crossplane_diagonal"}
 	}
 }

@@ -53,8 +53,9 @@ public class BlockSliceMarker extends Block {
 			return true;
 
 		DesignSliceTrait currentTrait = state.get(VARIANT);
-		worldIn.setBlockState(pos, state.with(VARIANT, currentTrait.cycle(player.isSneaking() ? -1 : 1)));
-		player.sendStatusMessage(new StringTextComponent(currentTrait.getDescription()), true);
+		DesignSliceTrait newTrait = currentTrait.cycle(player.isSneaking() ? -1 : 1);
+		worldIn.setBlockState(pos, state.with(VARIANT, newTrait));
+		player.sendStatusMessage(new StringTextComponent(newTrait.getDescription()), true);
 
 		return true;
 	}

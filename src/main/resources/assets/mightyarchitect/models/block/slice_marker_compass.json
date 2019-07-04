@@ -1,8 +1,8 @@
 {
     "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
     "textures": {
-        "0": "mightyarchitect:blocks/slice_marker_top",
-        "1": "blocks/glass_black"
+        "0": "mightyarchitect:block/slice_marker_top",
+        "1": "block/black_stained_glass"
     },
     "elements": [
         {

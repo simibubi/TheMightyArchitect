@@ -288,8 +288,8 @@ public class GuiEditTheme extends Screen {
 	}
 
 	@Override
-	public void onClose() {
-		super.onClose();
+	public void removed() {
+		super.removed();
 		if (!inputName.getText().isEmpty())
 			theme.setDisplayName(inputName.getText());
 		if (!inputAuthor.getText().isEmpty())

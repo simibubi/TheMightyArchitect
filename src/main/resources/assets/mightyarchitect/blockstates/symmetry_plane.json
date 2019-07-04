@@ -1,9 +1,9 @@
 {
 	"forgemarker": 1,
     "variants": {
-		"normal": { "model": "mightyarchitect:symmetry_plane" },
-		"inventory": { "model": "mightyarchitect:symmetry_plane" },
-		"align=xy": { "model": "mightyarchitect:symmetry_plane" },
-        "align=yz": { "model": "mightyarchitect:symmetry_plane", "y": 90 }
+		"normal": { "model": "mightyarchitect:block/symmetry_plane" },
+		"inventory": { "model": "mightyarchitect:block/symmetry_plane" },
+		"align=xy": { "model": "mightyarchitect:block/symmetry_plane" },
+        "align=yz": { "model": "mightyarchitect:block/symmetry_plane", "y": 90 }
 	}
 }

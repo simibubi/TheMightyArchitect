@@ -1,6 +1,5 @@
 package com.simibubi.mightyarchitect.gui;
 
-import java.io.IOException;
 import java.util.function.Consumer;
 
 import net.minecraft.client.gui.screen.Screen;
@@ -82,10 +81,10 @@ public class GuiTextPrompt extends Screen {
 	}
 
 	@Override
-	public void onClose() {
+	public void removed() {
 		if (!confirmed)
 			abortCallback.accept(nameField.getText());
-		super.onClose();
+		super.removed();
 	}
 
 	public void setButtonTextConfirm(String buttonTextConfirm) {
@@ -102,21 +101,26 @@ public class GuiTextPrompt extends Screen {
 
 	@Override
 	public boolean charTyped(char typedChar, int keyCode) {
-		if (keyCode == Keyboard.RETURN) {
-			confirm.onPress();
-			return true;
-		}
+		
 		if (!this.nameField.charTyped(typedChar, keyCode))
 			super.charTyped(typedChar, keyCode);
 		return false;
 	}
-
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-		super.mouseClicked(mouseX, mouseY, mouseButton);
-		this.nameField.mouseClicked(mouseX, mouseY, mouseButton);
+	
+	@Override
+	public boolean keyPressed(int keyCode, int p_keyPressed_2_, int p_keyPressed_3_) {
+		if (keyCode == Keyboard.RETURN) {
+			confirm.onPress();
+			return true;
+		}
+		this.nameField.keyPressed(keyCode, p_keyPressed_2_, p_keyPressed_3_);
+		return super.keyPressed(keyCode, p_keyPressed_2_, p_keyPressed_3_);
 	}
 
-	protected void keyTyped(char typedChar, int keyCode) throws IOException {
+	@Override
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+		this.nameField.mouseClicked(mouseX, mouseY, mouseButton);
+		return super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
 }

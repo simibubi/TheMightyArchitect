@@ -26,7 +26,7 @@ public enum AllBlocks {
 
 	private AllBlocks(Block block) {
 		this.block = block;
-		this.block.setRegistryName(TheMightyArchitect.ID, this.name().toLowerCase().replace("_", ""));
+		this.block.setRegistryName(TheMightyArchitect.ID, this.name().toLowerCase());
 	}
 
 	public static void registerBlocks(IForgeRegistry<Block> registry) {
