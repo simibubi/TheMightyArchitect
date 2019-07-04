@@ -12,17 +12,16 @@ import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.design.ThemeStatistics;
 import com.simibubi.mightyarchitect.control.helpful.RaycastHelper;
-import com.simibubi.mightyarchitect.control.helpful.TesselatorTextures;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
+import com.simibubi.mightyarchitect.control.helpful.TessellatorTextures;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.PlayerEntitySP;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 
 public class CylinderRoomTool extends RoomTool {
@@ -35,17 +34,17 @@ public class CylinderRoomTool extends RoomTool {
 
 	@Override
 	public void updateSelection() {
-		PlayerEntitySP player = Minecraft.getInstance().player;
+		ClientPlayerEntity player = Minecraft.getInstance().player;
 		transparentStacks.clear();
 
-		RayTraceResult trace = RaycastHelper.rayTraceRange(player.world, player, 75);
-		if (trace != null && trace.typeOfHit == Type.BLOCK) {
+		BlockRayTraceResult trace = RaycastHelper.rayTraceRange(player.world, player, 75);
+		if (trace != null && trace.getType() == Type.BLOCK) {
 
-			BlockPos hit = trace.getBlockPos();
+			BlockPos hit = new BlockPos(trace.getHitVec());
 			makeStacksTransparent(player, hit);
 			
-			if (trace.sideHit.getAxis() == Axis.Y)
-				hit = hit.offset(trace.sideHit);
+			if (trace.getFace().getAxis().isVertical())
+				hit = hit.offset(trace.getFace());
 
 			if (model.getAnchor() == null)
 				selectedPosition = hit;
@@ -123,7 +122,7 @@ public class CylinderRoomTool extends RoomTool {
 		BlockPos selectedPos = (anchor != null)? selectedPosition.add(anchor) : selectedPosition;
 		BlockPos firstPos = (firstPosition != null)? firstPosition.add(anchor) : null;
 
-		TesselatorTextures.Selection.bind();
+		TessellatorTextures.Selection.bind();
 		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 

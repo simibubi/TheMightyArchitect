@@ -15,7 +15,7 @@ public class Tower extends Design {
 	public Design fromNBT(CompoundNBT compound) {
 		Tower tower = new Tower();
 		tower.applyNBT(compound);
-		tower.radius = compound.getInteger("Radius");
+		tower.radius = compound.getInt("Radius");
 		tower.defaultWidth = tower.radius * 2 + 1;
 		return tower;
 	}

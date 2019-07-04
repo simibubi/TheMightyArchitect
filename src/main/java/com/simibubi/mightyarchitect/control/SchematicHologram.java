@@ -7,33 +7,37 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.block.state.BlockState;
+import com.mojang.blaze3d.platform.GlStateManager;
+
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RegionRenderCacheBuilder;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
+import net.minecraft.client.renderer.vertex.VertexFormatElement.Usage;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * Renders a structure into the world
+ * 
  * @author simibubi
  */
-@EventBusSubscriber(Side.CLIENT)
+@EventBusSubscriber(Dist.CLIENT)
 public class SchematicHologram {
 
 	// These buffers are large enough for an entire chunk, consider using
@@ -61,7 +65,7 @@ public class SchematicHologram {
 	public static SchematicHologram getInstance() {
 		return instance;
 	}
-	
+
 	public static void display(Schematic schematic) {
 		instance = new SchematicHologram();
 		instance.startHologram(schematic);
@@ -70,7 +74,7 @@ public class SchematicHologram {
 	public static void reset() {
 		instance = null;
 	}
-	
+
 	public void schematicChanged() {
 		changed = true;
 	}
@@ -95,15 +99,15 @@ public class SchematicHologram {
 	private static void redraw(final Minecraft minecraft) {
 		Arrays.fill(usedBlockRenderLayers, false);
 		Arrays.fill(startedBufferBuilders, false);
-		
+
 		Schematic schematic = instance.schematic;
 		TemplateBlockAccess materializedSketch = (TemplateBlockAccess) schematic.getMaterializedSketch();
-		
-		final IBlockAccess blockAccess = materializedSketch;
+
+		final IEnviromentBlockReader blockAccess = materializedSketch;
 		final BlockRendererDispatcher blockRendererDispatcher = minecraft.getBlockRendererDispatcher();
 
 		List<BlockState> blockstates = new LinkedList<>();
-		
+
 		for (BlockPos localPos : materializedSketch.getAllPositions()) {
 			BlockPos pos = localPos.add(schematic.getAnchor());
 			final BlockState state = blockAccess.getBlockState(pos);
@@ -113,7 +117,7 @@ public class SchematicHologram {
 				}
 				ForgeHooksClient.setRenderLayer(blockRenderLayer);
 				final int blockRenderLayerId = blockRenderLayer.ordinal();
-				final BufferBuilder bufferBuilder = bufferCache.getWorldRendererByLayerId(blockRenderLayerId);
+				final BufferBuilder bufferBuilder = bufferCache.getBuilder(blockRenderLayerId);
 				if (!startedBufferBuilders[blockRenderLayerId]) {
 					startedBufferBuilders[blockRenderLayerId] = true;
 					// Copied from RenderChunk
@@ -125,7 +129,7 @@ public class SchematicHologram {
 				// if (Config.isShaders()) SVertexBuilder.pushEntity(state, pos,
 				// blockAccess, bufferBuilder);
 				usedBlockRenderLayers[blockRenderLayerId] |= blockRendererDispatcher.renderBlock(state, pos,
-						blockAccess, bufferBuilder);
+						blockAccess, bufferBuilder, minecraft.world.rand, EmptyModelData.INSTANCE);
 				blockstates.add(state);
 				// if (Config.isShaders())
 				// SVertexBuilder.popEntity(bufferBuilder);
@@ -138,7 +142,7 @@ public class SchematicHologram {
 			if (!startedBufferBuilders[blockRenderLayerId]) {
 				continue;
 			}
-			bufferCache.getWorldRendererByLayerId(blockRenderLayerId).finishDrawing();
+			bufferCache.getBuilder(blockRenderLayerId).finishDrawing();
 		}
 	}
 
@@ -146,34 +150,35 @@ public class SchematicHologram {
 	public static void onRenderWorldLastEvent(final RenderWorldLastEvent event) {
 		if (instance != null && instance.active) {
 			final Entity entity = Minecraft.getInstance().getRenderViewEntity();
-			
+
 			if (entity == null) {
 				return;
 			}
-			
+
 			final float partialTicks = event.getPartialTicks();
-			
-			// Copied from EntityRenderer. This code can be found by looking at usages of Entity.prevPosX.
+
+			// Copied from EntityRenderer. This code can be found by looking at usages of
+			// Entity.prevPosX.
 			// It also appears in many other places throughout Minecraft's rendering
 			double renderPosX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) partialTicks;
 			double renderPosY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double) partialTicks;
 			double renderPosZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double) partialTicks;
 
-			GlStateManager.enableAlpha();
+			GlStateManager.enableAlphaTest();
 			GlStateManager.enableBlend();
-			Minecraft.getInstance().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-	
+			Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+
 			for (int blockRenderLayerId = 0; blockRenderLayerId < usedBlockRenderLayers.length; blockRenderLayerId++) {
 				if (!usedBlockRenderLayers[blockRenderLayerId]) {
 					continue;
 				}
-				final BufferBuilder bufferBuilder = bufferCache.getWorldRendererByLayerId(blockRenderLayerId);
+				final BufferBuilder bufferBuilder = bufferCache.getBuilder(blockRenderLayerId);
 				GlStateManager.pushMatrix();
-				GlStateManager.translate(-renderPosX, -renderPosY, -renderPosZ);
+				GlStateManager.translated(-renderPosX, -renderPosY, -renderPosZ);
 				drawBuffer(bufferBuilder);
 				GlStateManager.popMatrix();
 			}
-			GlStateManager.disableAlpha();
+			GlStateManager.disableAlphaTest();
 			GlStateManager.disableBlend();
 		}
 	}
@@ -182,24 +187,24 @@ public class SchematicHologram {
 	// reset the buffer
 	private static void drawBuffer(final BufferBuilder bufferBuilder) {
 		if (bufferBuilder.getVertexCount() > 0) {
-			
+
 			VertexFormat vertexformat = bufferBuilder.getVertexFormat();
-			int size = vertexformat.getNextOffset();
+			int size = vertexformat.getSize();
 			ByteBuffer bytebuffer = bufferBuilder.getByteBuffer();
 			List<VertexFormatElement> list = vertexformat.getElements();
 
 			for (int index = 0; index < list.size(); ++index) {
 				VertexFormatElement vertexformatelement = list.get(index);
-				VertexFormatElement.EnumUsage usage = vertexformatelement.getUsage();
+				Usage usage = vertexformatelement.getUsage();
 				bytebuffer.position(vertexformat.getOffset(index));
 				usage.preDraw(vertexformat, index, size, bytebuffer);
 			}
 
-			GlStateManager.glDrawArrays(bufferBuilder.getDrawMode(), 0, bufferBuilder.getVertexCount());
-			
+			GlStateManager.drawArrays(bufferBuilder.getDrawMode(), 0, bufferBuilder.getVertexCount());
+
 			for (int index = 0; index < list.size(); ++index) {
 				VertexFormatElement vertexformatelement = list.get(index);
-				VertexFormatElement.EnumUsage usage = vertexformatelement.getUsage();
+				Usage usage = vertexformatelement.getUsage();
 				usage.postDraw(vertexformat, index, size, bytebuffer);
 			}
 		}

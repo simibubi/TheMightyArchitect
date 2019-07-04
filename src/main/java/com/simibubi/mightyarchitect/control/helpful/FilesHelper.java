@@ -13,11 +13,11 @@ import com.google.gson.JsonParser;
 import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.simibubi.mightyarchitect.TheMightyArchitect;
 
-import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.JsonToNBT;
 
 public class FilesHelper {
 
@@ -84,9 +84,9 @@ public class FilesHelper {
 			reader.close();
 			inputStream.close();
 			return JsonToNBT.getTagFromJson(element.toString());
-		} catch (NBTException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (CommandSyntaxException e) {
 			e.printStackTrace();
 		}
 		return null;

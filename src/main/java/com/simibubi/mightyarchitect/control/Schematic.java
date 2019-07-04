@@ -1,5 +1,7 @@
 package com.simibubi.mightyarchitect.control;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +15,13 @@ import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 import com.simibubi.mightyarchitect.networking.PacketInstantPrint;
 
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.gen.feature.template.Template;
+import net.minecraft.world.gen.feature.template.Template.BlockInfo;
 
 public class Schematic {
 
@@ -80,7 +85,7 @@ public class Schematic {
 		return secondaryPalette;
 	}
 
-	public IBlockAccess getMaterializedSketch() {
+	public IBlockReader getMaterializedSketch() {
 		return materializedSketch;
 	}
 
@@ -160,7 +165,7 @@ public class Schematic {
 
 	private void checkBounds(BlockPos pos) {
 		if (bounds == null)
-			bounds = new Room(pos, BlockPos.ORIGIN);
+			bounds = new Room(pos, BlockPos.ZERO);
 
 		int x = pos.getX();
 		int y = pos.getY();
@@ -190,12 +195,28 @@ public class Schematic {
 
 	public Template writeToTemplate() {
 		final Template template = new Template();
+		template.setAuthor(Minecraft.getInstance().player.getName().getFormattedText());
 
-		template.setAuthor(Minecraft.getInstance().player.getName());
-		template.setSize(bounds.getSize());
-		materializedSketch.getBlockMap()
-				.forEach((pos, state) -> template.putBlock(pos.subtract(bounds.getOrigin()), state));
-
+		try {
+			Field fBlocks = template.getClass().getDeclaredField("blocks");
+			Field fSize = template.getClass().getDeclaredField("size");
+			fBlocks.setAccessible(true);
+			fSize.setAccessible(true);
+			Object objectBlocks = fBlocks.get(template);
+			fSize.set(template, bounds.getSize());
+			@SuppressWarnings("unchecked")
+			List<List<BlockInfo>> blocks = (List<List<Template.BlockInfo>>) objectBlocks;
+			
+			List<BlockInfo> added = new ArrayList<>();
+			
+			materializedSketch.getBlockMap()
+			.forEach((pos, state) -> added.add(new BlockInfo(pos.subtract(bounds.getOrigin()), state, new CompoundNBT())));
+			blocks.add(added);
+			
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		
 		return template;
 	}
 

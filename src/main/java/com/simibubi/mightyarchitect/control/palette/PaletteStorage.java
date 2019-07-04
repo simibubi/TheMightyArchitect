@@ -14,12 +14,12 @@ import java.util.Random;
 import com.google.gson.JsonElement;
 import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.simibubi.mightyarchitect.TheMightyArchitect;
 import com.simibubi.mightyarchitect.control.helpful.FilesHelper;
 
-import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.JsonToNBT;
 
 public class PaletteStorage {
 
@@ -70,7 +70,7 @@ public class PaletteStorage {
 			reader.setLenient(true);
 			JsonElement element = Streams.parse(reader);
 			return PaletteDefinition.fromNBT(JsonToNBT.getTagFromJson(element.toString()));
-		} catch (IOException | NBTException e) {
+		} catch (IOException | CommandSyntaxException e) {
 			e.printStackTrace();
 		}
 		return null;

@@ -13,7 +13,7 @@ public class TowerRoof extends Tower {
 	public Design fromNBT(CompoundNBT compound) {
 		TowerRoof towerRoof = new TowerRoof();
 		towerRoof.applyNBT(compound);
-		towerRoof.radius = compound.getInteger("Radius");
+		towerRoof.radius = compound.getInt("Radius");
 		towerRoof.defaultWidth = towerRoof.radius * 2 + 1;
 		return towerRoof;
 	}

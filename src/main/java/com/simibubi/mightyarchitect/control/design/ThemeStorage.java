@@ -17,9 +17,9 @@ import com.simibubi.mightyarchitect.control.helpful.FilesHelper;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.ListNBT;
 
 public class ThemeStorage {
 
@@ -81,7 +81,7 @@ public class ThemeStorage {
 	public static DesignTheme createTheme(String name) {
 		if (name.isEmpty())
 			name = "My Theme";
-		DesignTheme theme = new DesignTheme(name, Minecraft.getInstance().player.getName(),
+		DesignTheme theme = new DesignTheme(name, Minecraft.getInstance().player.getName().getFormattedText(),
 				new StandardDesignPicker());
 		theme.setFilePath(FilesHelper.slug(name));
 		theme.setImported(true);
@@ -109,8 +109,8 @@ public class ThemeStorage {
 		FilesHelper.createFolderIfMissing(folderPath);
 		CompoundNBT massiveThemeTag = new CompoundNBT();
 
-		massiveThemeTag.setTag("Theme", theme.asTagCompound());
-		massiveThemeTag.setTag("Palette", theme.getDefaultPalette().writeToNBT(new CompoundNBT()));
+		massiveThemeTag.put("Theme", theme.asTagCompound());
+		massiveThemeTag.put("Palette", theme.getDefaultPalette().writeToNBT(new CompoundNBT()));
 
 		Map<DesignLayer, Map<DesignType, Set<CompoundNBT>>> designFiles = DesignResourceLoader
 				.loadThemeFromFolder(theme);
@@ -125,31 +125,30 @@ public class ThemeStorage {
 				if (!designFiles.get(layer).containsKey(type))
 					continue;
 
-				NBTTagList designs = new NBTTagList();
+				ListNBT designs = new ListNBT();
 				for (CompoundNBT tag : designFiles.get(layer).get(type))
-					designs.appendTag(tag);
-				types.setTag(type.name(), designs);
+					designs.add(tag);
+				types.put(type.name(), designs);
 			}
-			layers.setTag(layer.name(), types);
+			layers.put(layer.name(), types);
 		}
-		massiveThemeTag.setTag("Designs", layers);
+		massiveThemeTag.put("Designs", layers);
 
 		if (compressed) {
 			try {
 				Path path = Paths.get(folderPath + "/" + theme.getFilePath() + ".theme");
 				Files.deleteIfExists(path);
-				OutputStream outputStream = Files.newOutputStream(
-						path, StandardOpenOption.CREATE);
+				OutputStream outputStream = Files.newOutputStream(path, StandardOpenOption.CREATE);
 				CompressedStreamTools.writeCompressed(massiveThemeTag, outputStream);
 				outputStream.close();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}			
+			}
 		} else {
-			FilesHelper.saveTagCompoundAsJsonCompact(massiveThemeTag, folderPath + "/" + theme.getFilePath() + ".json");	
+			FilesHelper.saveTagCompoundAsJsonCompact(massiveThemeTag, folderPath + "/" + theme.getFilePath() + ".json");
 		}
-		
-		return theme.getFilePath() + (compressed? ".theme" : ".json");
+
+		return theme.getFilePath() + (compressed ? ".theme" : ".json");
 	}
 
 	public static DesignTheme importThemeFullyFromFile(String path) {
@@ -179,34 +178,33 @@ public class ThemeStorage {
 
 					CompoundNBT themeCompound;
 					CompoundNBT paletteCompound;
-					
+
 					if (themeFolder.equals("export"))
 						continue;
 
 					if (themeFolder.endsWith(".theme") || themeFolder.endsWith(".json")) {
 						CompoundNBT themeFile = new CompoundNBT();
-						
+
 						if (themeFolder.endsWith(".theme")) {
 							try {
 								InputStream inputStream = Files.newInputStream(
-										Paths.get(folderPath + "/" + themeFolder),
-										StandardOpenOption.READ);
+										Paths.get(folderPath + "/" + themeFolder), StandardOpenOption.READ);
 								themeFile = CompressedStreamTools.readCompressed(inputStream);
 								inputStream.close();
 							} catch (IOException e) {
 								e.printStackTrace();
-							}							
+							}
 						} else {
 							themeFile = FilesHelper.loadJsonAsNBT("themes/" + themeFolder);
 						}
-						
-						themeCompound = themeFile.getCompoundTag("Theme");
-						paletteCompound = themeFile.getCompoundTag("Palette");						
+
+						themeCompound = themeFile.getCompound("Theme");
+						paletteCompound = themeFile.getCompound("Palette");
 					} else {
 						themeCompound = FilesHelper.loadJsonAsNBT(folderPath + "/" + themeFolder + "/theme.json");
 						paletteCompound = FilesHelper.loadJsonAsNBT(folderPath + "/" + themeFolder + "/palette.json");
 					}
-					
+
 					if (themeCompound == null)
 						continue;
 

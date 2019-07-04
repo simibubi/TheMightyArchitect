@@ -7,25 +7,27 @@ import java.util.Map;
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.simibubi.mightyarchitect.control.Schematic;
 import com.simibubi.mightyarchitect.control.SchematicHologram;
-import com.simibubi.mightyarchitect.control.helpful.TesselatorTextures;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
+import com.simibubi.mightyarchitect.control.helpful.TessellatorTextures;
 import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.client.model.data.EmptyModelData;
 
 public class PhaseCreatingPalette extends PhaseBase implements IListenForBlockEvents, IDrawBlockHighlights {
 
@@ -37,10 +39,10 @@ public class PhaseCreatingPalette extends PhaseBase implements IListenForBlockEv
 	public void whenEntered() {
 
 		Schematic model = getModel();
-		WorldClient world = minecraft.world;
+		ClientWorld world = minecraft.world;
 
 		palette = model.getCreatedPalette();
-		center = world.getHeight(minecraft.player.getPosition());
+		center = world.getHeight(Heightmap.Type.WORLD_SURFACE, minecraft.player.getPosition());
 		grid = new HashMap<>();
 
 		for (int i = 0; i < 16; i++) {
@@ -61,7 +63,7 @@ public class PhaseCreatingPalette extends PhaseBase implements IListenForBlockEv
 	@Override
 	public void render() {
 		TessellatorHelper.prepareForDrawing();
-		TesselatorTextures.RoomTransparent.bind();
+		TessellatorTextures.RoomTransparent.bind();
 		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
@@ -71,7 +73,7 @@ public class PhaseCreatingPalette extends PhaseBase implements IListenForBlockEv
 
 		Tessellator.getInstance().draw();
 
-		minecraft.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		minecraft.getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 
 		for (int i = 0; i < 16; i++) {
@@ -87,14 +89,14 @@ public class PhaseCreatingPalette extends PhaseBase implements IListenForBlockEv
 			GlStateManager.pushMatrix();
 			BlockPos translate = positionFromIndex(i);
 			minecraft.getBlockRendererDispatcher().renderBlock(state, translate, minecraft.world,
-					bufferBuilder);
+					bufferBuilder, minecraft.world.rand, EmptyModelData.INSTANCE);
 			GlStateManager.popMatrix();
 		}
 
 		Tessellator.getInstance().draw();
 		
 		TessellatorHelper.cleanUpAfterDrawing();
-		Minecraft.getInstance().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 	}
 
 	@Override
@@ -130,8 +132,8 @@ public class PhaseCreatingPalette extends PhaseBase implements IListenForBlockEv
 	@Override
 	public void onBlockHighlight(DrawBlockHighlightEvent event) {
 		RayTraceResult raytrace = event.getTarget();
-		if (raytrace != null && raytrace.typeOfHit == Type.BLOCK) {
-			BlockPos targetBlock = raytrace.getBlockPos().offset(raytrace.sideHit);
+		if (raytrace != null && raytrace.getType() == Type.BLOCK) {
+			BlockPos targetBlock = new BlockPos(raytrace.getHitVec());
 
 			if (grid.containsKey(targetBlock)) {
 				TessellatorHelper.prepareForDrawing();

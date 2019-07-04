@@ -7,9 +7,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 import org.apache.commons.io.IOUtils;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 
+import com.simibubi.mightyarchitect.TheMightyArchitect;
 import com.simibubi.mightyarchitect.control.compose.GroundPlan;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
@@ -29,34 +28,27 @@ import com.simibubi.mightyarchitect.gui.GuiOpener;
 import com.simibubi.mightyarchitect.gui.GuiPalettePicker;
 import com.simibubi.mightyarchitect.gui.GuiTextPrompt;
 import com.simibubi.mightyarchitect.networking.PacketInstantPrint;
-import com.simibubi.mightyarchitect.networking.PacketSender;
-import com.simibubi.mightyarchitect.proxy.CombinedClientProxy;
+import com.simibubi.mightyarchitect.networking.Packets;
 
-import net.minecraft.block.BlockStoneSlab;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
-import net.minecraftforge.client.event.MouseEvent;
+import net.minecraftforge.client.event.GuiScreenEvent.MouseClickedEvent;
+import net.minecraftforge.client.event.GuiScreenEvent.MouseScrollEvent;
+import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
-@EventBusSubscriber(value = Side.CLIENT)
+@EventBusSubscriber(value = Dist.CLIENT)
 public class ArchitectManager {
 
 	private static ArchitectPhases phase = ArchitectPhases.Empty;
@@ -138,7 +130,7 @@ public class ArchitectManager {
 
 		if (mc.isSingleplayer()) {
 			for (PacketInstantPrint packet : getModel().getPackets()) {
-				PacketSender.INSTANCE.sendToServer(packet);
+				Packets.channel.sendToServer(packet);
 			}
 			SchematicHologram.reset();
 			status("Printed result into world.");
@@ -263,18 +255,13 @@ public class ArchitectManager {
 	}
 
 	@SubscribeEvent
-	public static void onRightClick(MouseEvent event) {
-		if (event.isButtonstate() && Mouse.isButtonDown(event.getButton())) {
-			phase.getPhaseHandler().onClick(event.getButton());
-		}
+	public static void onRightClick(MouseClickedEvent event) {
+		phase.getPhaseHandler().onClick(event.getButton());
 	}
 
 	@SubscribeEvent
 	public static void onKeyTyped(KeyInputEvent event) {
-		if (!Keyboard.getEventKeyState())
-			return;
-
-		if (CombinedClientProxy.COMPOSE.isPressed()) {
+		if (TheMightyArchitect.COMPOSE.isPressed()) {
 			if (menu.isFocused())
 				return;
 
@@ -285,43 +272,22 @@ public class ArchitectManager {
 			return;
 		}
 
-		phase.getPhaseHandler().onKey(Keyboard.getEventKey());
+		phase.getPhaseHandler().onKey(event.getKey());
 	}
 
 	@SubscribeEvent
-	public static void onMouseScrolled(MouseEvent event) {
-		if (event.getDwheel() != 0 && phase == ArchitectPhases.Composing) {
-			boolean cancel = phase.getPhaseHandler().onScroll(event.getDwheel() / 120);
+	public static void onMouseScrolled(MouseScrollEvent event) {
+		if (phase == ArchitectPhases.Composing) {
+			boolean cancel = phase.getPhaseHandler().onScroll((int) (event.getScrollDelta() / 120));
 			event.setCanceled(cancel);
 		}
 	}
 
 	@SubscribeEvent
-	public static void onBlockPlaced(PlayerInteractEvent.RightClickBlock event) {
-		if (event.getItemStack() == ItemStack.EMPTY) {
-			return;
-		}
-
-		Item item = event.getItemStack().getItem();
-		if (item instanceof ItemBlock) {
-			IArchitectPhase phaseHandler = phase.getPhaseHandler();
-			if (phaseHandler instanceof IListenForBlockEvents) {
-				Vec3d hitVec = event.getHitVec();
-				BlockState stateForPlacement = ((ItemBlock) item).getBlock().getStateForPlacement(event.getWorld(),
-						event.getPos(), event.getFace(), (float) hitVec.x, (float) hitVec.y, (float) hitVec.z,
-						event.getItemStack().getMetadata(), event.getPlayerEntity(), event.getHand());
-				BlockPos offset = event.getPos().offset(event.getFace());
-
-				if (stateForPlacement.getBlock() == Blocks.STONE_SLAB) {
-					if (event.getWorld().getBlockState(event.getPos()).equals(stateForPlacement)) {
-						stateForPlacement = Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(
-								BlockStoneSlab.VARIANT, stateForPlacement.getValue(BlockStoneSlab.VARIANT));
-						offset = event.getPos();
-					}
-				}
-
-				((IListenForBlockEvents) phaseHandler).onBlockPlaced(offset, stateForPlacement);
-			}
+	public static void onBlockPlaced(EntityPlaceEvent event) {
+		IArchitectPhase phaseHandler = phase.getPhaseHandler();
+		if (phaseHandler instanceof IListenForBlockEvents) {
+			((IListenForBlockEvents) phaseHandler).onBlockPlaced(event.getPos(), event.getPlacedBlock());
 		}
 
 	}

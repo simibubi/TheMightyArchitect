@@ -17,25 +17,25 @@ public enum Shaders {
 
 	public boolean isActive() {
 		Minecraft mc = Minecraft.getInstance();
-		return mc.entityRenderer.isShaderActive()
-				&& mc.entityRenderer.getShaderGroup().getShaderGroupName().equals(location.toString());
+		return mc.gameRenderer.isShaderActive()
+				&& mc.gameRenderer.getShaderGroup().getShaderGroupName().equals(location.toString());
 	}
 
 	public void setActive(boolean active) {
 		Minecraft mc = Minecraft.getInstance();
 
 		if (this == None) {
-			mc.entityRenderer.stopUseShader();
+			mc.gameRenderer.stopUseShader();
 			return;
 		}
 
 		if (active && !isActive()) {
-			mc.entityRenderer.loadShader(location);
+			mc.gameRenderer.loadShader(location);
 			return;
 		}
 
 		if (!active && isActive()) {
-			mc.entityRenderer.stopUseShader();
+			mc.gameRenderer.stopUseShader();
 			return;
 		}
 	}

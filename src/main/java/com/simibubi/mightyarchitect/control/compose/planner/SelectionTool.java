@@ -8,13 +8,13 @@ import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.control.compose.Stack;
 import com.simibubi.mightyarchitect.control.helpful.RaycastHelper;
 import com.simibubi.mightyarchitect.control.helpful.RaycastHelper.PredicateTraceResult;
-import com.simibubi.mightyarchitect.control.helpful.TesselatorTextures;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
+import com.simibubi.mightyarchitect.control.helpful.TessellatorTextures;
 import com.simibubi.mightyarchitect.gui.GuiComposer;
 import com.simibubi.mightyarchitect.gui.GuiOpener;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.PlayerEntitySP;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -40,7 +40,7 @@ public class SelectionTool extends GroundPlanningToolBase {
 			return;
 		}
 
-		PlayerEntitySP player = Minecraft.getInstance().player;
+		ClientPlayerEntity player = Minecraft.getInstance().player;
 
 		PredicateTraceResult result = RaycastHelper.rayTraceUntil(player, 70, position -> {
 			return groundPlan.getRoomAtPos(position.subtract(anchor)) != null;
@@ -69,7 +69,7 @@ public class SelectionTool extends GroundPlanningToolBase {
 		if (selectedStack == null)
 			return;
 
-		TesselatorTextures.SelectedRoom.bind();
+		TessellatorTextures.SelectedRoom.bind();
 		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
@@ -83,7 +83,7 @@ public class SelectionTool extends GroundPlanningToolBase {
 		Tessellator.getInstance().draw();
 		
 		if (hoveredRoom != null) {
-			TesselatorTextures.SuperSelectedRoom.bind();
+			TessellatorTextures.SuperSelectedRoom.bind();
 			bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 			
 			BlockPos pos = hoveredRoom.getOrigin().add(ArchitectManager.getModel().getAnchor());

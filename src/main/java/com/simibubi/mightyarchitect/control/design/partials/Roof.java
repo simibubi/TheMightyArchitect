@@ -17,7 +17,7 @@ public class Roof extends Design {
 	public Design fromNBT(CompoundNBT compound) {
 		Roof roof = new Roof();
 		roof.applyNBT(compound);
-		roof.defaultWidth = compound.getInteger("Roofspan");
+		roof.defaultWidth = compound.getInt("Roofspan");
 		return roof;
 	}
 

@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 
 import com.simibubi.mightyarchitect.AllBlocks;
 import com.simibubi.mightyarchitect.TheMightyArchitect;
+import com.simibubi.mightyarchitect.block.BlockSliceMarker;
 import com.simibubi.mightyarchitect.control.compose.Cuboid;
 import com.simibubi.mightyarchitect.control.design.DesignSlice.DesignSliceTrait;
 import com.simibubi.mightyarchitect.control.design.partials.Wall;
@@ -15,15 +16,15 @@ import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 import com.simibubi.mightyarchitect.control.phase.export.PhaseEditTheme;
 import com.simibubi.mightyarchitect.networking.PacketPlaceSign;
-import com.simibubi.mightyarchitect.networking.PacketSender;
+import com.simibubi.mightyarchitect.networking.Packets;
 
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.tileentity.TileEntitySign;
+import net.minecraft.tileentity.SignTileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
@@ -92,14 +93,14 @@ public class DesignExporter {
 
 		// Assemble nbt
 		CompoundNBT compound = new CompoundNBT();
-		compound.setTag("Size", NBTUtil.createPosTag(size));
+		compound.put("Size", NBTUtil.writeBlockPos(size));
 
-		NBTTagList layers = new NBTTagList();
+		ListNBT layers = new ListNBT();
 
 		for (int y = 0; y < size.getY(); y++) {
 			CompoundNBT layerTag = new CompoundNBT();
 			DesignSliceTrait trait = DesignSliceTrait.values()[markerValueAt(worldIn, layerDefAnchor.up(y))];
-			layerTag.setString("Trait", trait.name());
+			layerTag.putString("Trait", trait.name());
 
 			StringBuilder data = new StringBuilder();
 			for (int z = 0; z < size.getZ(); z++) {
@@ -110,7 +111,7 @@ public class DesignExporter {
 
 					if (block == null && blockState.getBlock() != Blocks.AIR) {
 						Minecraft.getInstance().player.sendMessage(new StringTextComponent(
-								blockState.getBlock().getLocalizedName() + " @" + pos.getX() + "," + pos.getY() + ","
+								blockState.getBlock().getTranslationKey() + " @" + pos.getX() + "," + pos.getY() + ","
 										+ pos.getZ() + " does not belong to the Scanner Palette"));
 						return "Export failed";
 					}
@@ -120,7 +121,7 @@ public class DesignExporter {
 				if (z < size.getZ() - 1)
 					data.append(",");
 			}
-			layerTag.setString("Blocks", data.toString());
+			layerTag.putString("Blocks", data.toString());
 
 			StringBuilder orientationStrip = new StringBuilder();
 			for (int z = 0; z < size.getZ(); z++) {
@@ -132,21 +133,21 @@ public class DesignExporter {
 				if (z < size.getZ() - 1)
 					orientationStrip.append(",");
 			}
-			layerTag.setString("Facing", orientationStrip.toString());
+			layerTag.putString("Facing", orientationStrip.toString());
 
-			layers.appendTag(layerTag);
+			layers.add(layerTag);
 		}
 
-		compound.setTag("Layers", layers);
+		compound.put("Layers", layers);
 
 		// Additional data
 		int data = designParameter;
 		switch (type) {
 		case ROOF:
-			compound.setInteger("Roofspan", data);
+			compound.putInt("Roofspan", data);
 			break;
 		case FLAT_ROOF:
-			compound.setInteger("Margin", data);
+			compound.putInt("Margin", data);
 			break;
 		case WALL:
 			if (data == -1)
@@ -154,12 +155,12 @@ public class DesignExporter {
 			ExpandBehaviour expandBehaviour = Wall.ExpandBehaviour.values()[data];
 			if (size.getX() == 1 && expandBehaviour == ExpandBehaviour.MergedRepeat)
 				return "Can't merge Walls of length 1. Use 'Repeat' instead.";
-			compound.setString("ExpandBehaviour", expandBehaviour.name());
+			compound.putString("ExpandBehaviour", expandBehaviour.name());
 			break;
 		case TOWER_FLAT_ROOF:
 		case TOWER_ROOF:
 		case TOWER:
-			compound.setInteger("Radius", data);
+			compound.putInt("Radius", data);
 			break;
 		default:
 			break;
@@ -180,9 +181,9 @@ public class DesignExporter {
 		String designPath = "";
 
 		BlockPos signPos = anchor.up();
-		if (worldIn.getBlockState(signPos).getBlock() == Blocks.STANDING_SIGN) {
-			TileEntitySign sign = (TileEntitySign) worldIn.getTileEntity(signPos);
-			filename = sign.signText[1].getUnformattedText();
+		if (worldIn.getBlockState(signPos).getBlock() == Blocks.SPRUCE_SIGN) {
+			SignTileEntity sign = (SignTileEntity) worldIn.getTileEntity(signPos);
+			filename = sign.signText[1].getString();
 			designPath = typePath + "/" + filename;
 
 		} else {
@@ -197,7 +198,7 @@ public class DesignExporter {
 			}
 		}
 
-		PacketSender.INSTANCE.sendToServer(
+		Packets.channel.sendToServer(
 				new PacketPlaceSign(layer.getDisplayName().substring(0, 1) + ". " + type.getDisplayName(), filename, signPos));
 		FilesHelper.saveTagCompoundAsJson(compound, designPath);
 		return designPath;
@@ -220,11 +221,11 @@ public class DesignExporter {
 	}
 
 	private static boolean isMarker(World worldIn, BlockPos pos) {
-		return worldIn.getBlockState(pos).getBlock() == AllBlocks.slice_marker;
+		return AllBlocks.SLICE_MARKER.typeOf(worldIn.getBlockState(pos));
 	}
 
 	private static int markerValueAt(World worldIn, BlockPos pos) {
-		return AllBlocks.slice_marker.getMetaFromState(worldIn.getBlockState(pos));
+		return worldIn.getBlockState(pos).get(BlockSliceMarker.VARIANT).ordinal();
 	}
 
 }

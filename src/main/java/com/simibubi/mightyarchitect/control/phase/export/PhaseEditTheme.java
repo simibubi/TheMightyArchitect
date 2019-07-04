@@ -5,18 +5,18 @@ import java.util.List;
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.simibubi.mightyarchitect.control.compose.Cuboid;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.helpful.BuildingHelper;
-import com.simibubi.mightyarchitect.control.helpful.TesselatorTextures;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
+import com.simibubi.mightyarchitect.control.helpful.TessellatorTextures;
 import com.simibubi.mightyarchitect.control.phase.PhaseBase;
 
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
 
@@ -94,8 +94,8 @@ public class PhaseEditTheme extends PhaseBase {
 		if (selectedDesign == null)
 			return;
 		TessellatorHelper.prepareForDrawing();
-		TesselatorTextures.Selection.bind();
-		GlStateManager.enableAlpha();
+		TessellatorTextures.Selection.bind();
+		GlStateManager.enableAlphaTest();
 		GlStateManager.enableBlend();
 		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
@@ -106,23 +106,23 @@ public class PhaseEditTheme extends PhaseBase {
 		Tessellator.getInstance().draw();
 		
 		bufferBuilder.begin(3, DefaultVertexFormats.POSITION_COLOR);
-		GlStateManager.glLineWidth(2.0F);
-        GlStateManager.disableTexture2D();
+		GlStateManager.lineWidth(2.0F);
+        GlStateManager.disableTexture();
         GlStateManager.depthMask(false);
-		RenderGlobal.drawBoundingBox(bufferBuilder, selection.x - 1/8f, selection.y + 1/16f, selection.z - 1/8f, selection.x + selection.width + 1/8f, selection.y + selection.height + 1/16f, selection.z + selection.length + 1/8f, 1, 1, 1, 0.6f);
+        WorldRenderer.drawBoundingBox(bufferBuilder, selection.x - 1/8f, selection.y + 1/16f, selection.z - 1/8f, selection.x + selection.width + 1/8f, selection.y + selection.height + 1/16f, selection.z + selection.length + 1/8f, 1, 1, 1, 0.6f);
 		Tessellator.getInstance().draw();
-		GlStateManager.enableTexture2D();
+		GlStateManager.enableTexture();
 		GlStateManager.depthMask(true);
 		
 		if (effectiveSelectedDesign != null) {
-			TesselatorTextures.Exporter.bind();
+			TessellatorTextures.Exporter.bind();
 			bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 			
 			if (DesignExporter.type == DesignType.TOWER || DesignExporter.type == DesignType.TOWER_FLAT_ROOF || DesignExporter.type == DesignType.TOWER_ROOF) {
 				int radius = DesignExporter.designParameter;
 				BlockPos center = selection.getCenter().down(selection.height / 2);
 				for (BlockPos pos : BuildingHelper.getCircle(center, radius)) {
-					TessellatorHelper.cube(bufferBuilder, pos, BlockPos.ORIGIN.add(1, effectiveSelectedDesign.height, 1),
+					TessellatorHelper.cube(bufferBuilder, pos, BlockPos.ZERO.add(1, effectiveSelectedDesign.height, 1),
 							1 / 32d, true, false);	
 				}
 			} else {

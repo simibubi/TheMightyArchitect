@@ -7,7 +7,7 @@ import java.util.List;
 import com.simibubi.mightyarchitect.control.helpful.DesignHelper;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.PlayerEntitySP;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
@@ -16,7 +16,7 @@ public class ThemeValidator {
 	static List<StringTextComponent> complaints;
 
 	public static void check(DesignTheme theme) {
-		PlayerEntitySP player = Minecraft.getInstance().player;
+		ClientPlayerEntity player = Minecraft.getInstance().player;
 		player.sendMessage(new StringTextComponent("--> Validation on " + theme.getDisplayName() + " <--"));
 		theme.clearDesigns();
 		ThemeStatistics stats = theme.getStatistics();

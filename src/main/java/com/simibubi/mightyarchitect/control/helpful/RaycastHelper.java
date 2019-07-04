@@ -5,17 +5,21 @@ import java.util.function.Predicate;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceContext.BlockMode;
+import net.minecraft.util.math.RayTraceContext.FluidMode;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class RaycastHelper {
 
-	public static RayTraceResult rayTraceRange(World worldIn, PlayerEntity playerIn, double range) {
+	public static BlockRayTraceResult rayTraceRange(World worldIn, PlayerEntity playerIn, double range) {
 		Vec3d origin = getTraceOrigin(playerIn);
 		Vec3d target = getTraceTarget(playerIn, range, origin);
-		return worldIn.rayTraceBlocks(origin, target, false, true, false);
+		RayTraceContext context = new RayTraceContext(origin, target, BlockMode.COLLIDER, FluidMode.NONE, playerIn);
+		return worldIn.rayTraceBlocks(context);
 	}
 
 	public static PredicateTraceResult rayTraceUntil(PlayerEntity playerIn, double range, Predicate<BlockPos> predicate) {
@@ -34,7 +38,7 @@ public class RaycastHelper {
 		float f6 = f3 * f4;
 		float f7 = f2 * f4;
 		double d3 = range;
-		Vec3d vec3d1 = origin.addVector((double) f6 * d3, (double) f5 * d3, (double) f7 * d3);
+		Vec3d vec3d1 = origin.add((double) f6 * d3, (double) f5 * d3, (double) f7 * d3);
 		return vec3d1;
 	}
 

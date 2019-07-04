@@ -11,8 +11,8 @@ import com.simibubi.mightyarchitect.control.design.partials.Design;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.StringNBT;
 
 public class DesignTheme {
 
@@ -140,18 +140,18 @@ public class DesignTheme {
 	public CompoundNBT asTagCompound() {
 		CompoundNBT compound = new CompoundNBT();
 
-		compound.setString("Name", getDisplayName());
-		compound.setString("Designer", getDesigner());
+		compound.putString("Name", getDisplayName());
+		compound.putString("Designer", getDesigner());
 
-		NBTTagList layers = new NBTTagList();
-		NBTTagList types = new NBTTagList();
+		ListNBT layers = new ListNBT();
+		ListNBT types = new ListNBT();
 
-		this.layers.forEach(layer -> layers.appendTag(new NBTTagString(layer.name())));
-		this.types.forEach(type -> types.appendTag(new NBTTagString(type.name())));
+		this.layers.forEach(layer -> layers.add(new StringNBT(layer.name())));
+		this.types.forEach(type -> types.add(new StringNBT(type.name())));
 
-		compound.setTag("Layers", layers);
-		compound.setTag("Types", types);
-		compound.setInteger("Maximum Room Height", maxFloorHeight);
+		compound.put("Layers", layers);
+		compound.put("Types", types);
+		compound.putInt("Maximum Room Height", maxFloorHeight);
 
 		return compound;
 	}
@@ -166,13 +166,13 @@ public class DesignTheme {
 		theme.layers = new ArrayList<>();
 		theme.types = new ArrayList<>();
 		
-		if (compound.hasKey("Maximum Room Height"))
-			theme.maxFloorHeight = compound.getInteger("Maximum Room Height");
+		if (compound.contains("Maximum Room Height"))
+			theme.maxFloorHeight = compound.getInt("Maximum Room Height");
 		
-		compound.getTagList("Layers", 8)
-				.forEach(s -> theme.layers.add(DesignLayer.valueOf(((NBTTagString) s).getString())));
-		compound.getTagList("Types", 8)
-				.forEach(s -> theme.types.add(DesignType.valueOf(((NBTTagString) s).getString())));
+		compound.getList("Layers", 8)
+				.forEach(s -> theme.layers.add(DesignLayer.valueOf(((StringNBT) s).getString())));
+		compound.getList("Types", 8)
+				.forEach(s -> theme.types.add(DesignType.valueOf(((StringNBT) s).getString())));
 
 		theme.updateRoomLayers();
 		return theme;

@@ -18,7 +18,7 @@ import com.simibubi.mightyarchitect.control.helpful.FilesHelper;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.ListNBT;
 
 public class DesignResourceLoader {
 
@@ -91,18 +91,18 @@ public class DesignResourceLoader {
 		
 		final CompoundNBT themeFile = importedThemeFile;
 
-		if (themeFile.hasKey("Designs")) {
+		if (themeFile.contains("Designs")) {
 			theme.getLayers().forEach(layer -> {
 
 				final HashMap<DesignType, Set<CompoundNBT>> typeMap = new HashMap<>();
 				theme.getTypes().forEach(type -> {
 
 					Set<CompoundNBT> designs = new HashSet<>();
-					CompoundNBT tagLayers = themeFile.getCompoundTag("Designs");
-					if (tagLayers.hasKey(layer.name())) {
-						CompoundNBT tagTypes = tagLayers.getCompoundTag(layer.name());
-						if (tagTypes.hasKey(type.name())) {
-							NBTTagList tagDesigns = tagTypes.getTagList(type.name(), 10);
+					CompoundNBT tagLayers = themeFile.getCompound("Designs");
+					if (tagLayers.contains(layer.name())) {
+						CompoundNBT tagTypes = tagLayers.getCompound(layer.name());
+						if (tagTypes.contains(type.name())) {
+							ListNBT tagDesigns = tagTypes.getList(type.name(), 10);
 							tagDesigns.forEach(tag -> designs.add((CompoundNBT) tag));
 						}
 					}

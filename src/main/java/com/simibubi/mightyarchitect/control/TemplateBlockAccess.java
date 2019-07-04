@@ -5,17 +5,17 @@ import java.util.Set;
 
 import com.simibubi.mightyarchitect.control.compose.Cuboid;
 
-import net.minecraft.block.state.BlockState;
-import net.minecraft.init.Biomes;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.fluid.IFluidState;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.WorldType;
+import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.world.LightType;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 
-public class TemplateBlockAccess implements IBlockAccess {
+public class TemplateBlockAccess implements IEnviromentBlockReader {
 
 	private Map<BlockPos, BlockState> blocks;
 	private Cuboid bounds;
@@ -37,11 +37,6 @@ public class TemplateBlockAccess implements IBlockAccess {
 	}
 
 	@Override
-	public int getCombinedLight(BlockPos pos, int lightValue) {
-		return 15 << 20 | lightValue << 4;
-	}
-
-	@Override
 	public BlockState getBlockState(BlockPos globalPos) {
 		BlockPos pos = globalPos.subtract(anchor);
 		if (bounds.contains(pos) && blocks.containsKey(pos)) {
@@ -51,36 +46,23 @@ public class TemplateBlockAccess implements IBlockAccess {
 		}
 	}
 
+	public Map<BlockPos, BlockState> getBlockMap() {
+		return blocks;
+	}
+
 	@Override
-	public boolean isAirBlock(BlockPos pos) {
-		return this.getBlockState(pos).getBlock().isAir(this.getBlockState(pos), this, pos);
+	public IFluidState getFluidState(BlockPos pos) {
+		return null;
 	}
 
 	@Override
 	public Biome getBiome(BlockPos pos) {
-		return Biomes.VOID;
+		return Biomes.THE_VOID;
 	}
 
 	@Override
-	public int getStrongPower(BlockPos pos, Direction direction) {
-		return 0;
-	}
-
-	@Override
-	public WorldType getWorldType() {
-		return WorldType.FLAT;
-	}
-
-	@Override
-	public boolean isSideSolid(BlockPos pos, Direction side, boolean _default) {
-		if (bounds.contains(anchor.subtract(pos)))
-			return getBlockState(pos).isSideSolid(this, pos, side);
-		else 
-			return _default;
-	}
-
-	public Map<BlockPos, BlockState> getBlockMap() {
-		return blocks;
+	public int getLightFor(LightType type, BlockPos pos) {
+		return 10;
 	}
 
 }

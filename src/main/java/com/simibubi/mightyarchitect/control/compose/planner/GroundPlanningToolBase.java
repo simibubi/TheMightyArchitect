@@ -10,17 +10,18 @@ import com.simibubi.mightyarchitect.control.Schematic;
 import com.simibubi.mightyarchitect.control.compose.GroundPlan;
 import com.simibubi.mightyarchitect.control.compose.Stack;
 import com.simibubi.mightyarchitect.control.helpful.RaycastHelper;
-import com.simibubi.mightyarchitect.control.helpful.TesselatorTextures;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
+import com.simibubi.mightyarchitect.control.helpful.TessellatorTextures;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.PlayerEntitySP;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.Direction.Axis;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 
 public abstract class GroundPlanningToolBase implements ImAToolForGroundPlanning {
@@ -37,18 +38,19 @@ public abstract class GroundPlanningToolBase implements ImAToolForGroundPlanning
 
 	@Override
 	public void updateSelection() {
-		PlayerEntitySP player = Minecraft.getInstance().player;
+		ClientPlayerEntity player = Minecraft.getInstance().player;
 		transparentStacks.clear();
 
-		RayTraceResult trace = RaycastHelper.rayTraceRange(player.world, player, 75);
-		if (trace != null && trace.typeOfHit == Type.BLOCK) {
+		BlockRayTraceResult trace = RaycastHelper.rayTraceRange(player.world, player, 75);
+		if (trace != null && trace.getType() == Type.BLOCK) {
 
-			BlockPos hit = trace.getBlockPos();
+			BlockPos hit = new BlockPos(trace.getHitVec());
 			makeStacksTransparent(player, hit);
-			
-			boolean replaceable = player.world.getBlockState(hit).getBlock().isReplaceable(player.world, hit);
-			if (trace.sideHit.getAxis() == Axis.Y && !replaceable)
-				hit = hit.offset(trace.sideHit);
+
+			boolean replaceable = player.world.getBlockState(hit)
+					.isReplaceable(new BlockItemUseContext(new ItemUseContext(player, player.getActiveHand(), trace)));
+			if (trace.getFace().getAxis().isVertical() && !replaceable)
+				hit = hit.offset(trace.getFace());
 
 			if (model.getAnchor() == null)
 				selectedPosition = hit;
@@ -61,7 +63,7 @@ public abstract class GroundPlanningToolBase implements ImAToolForGroundPlanning
 
 	}
 
-	protected void makeStacksTransparent(PlayerEntitySP player, BlockPos hit) {
+	protected void makeStacksTransparent(ClientPlayerEntity player, BlockPos hit) {
 		if (!model.getGroundPlan().isEmpty()) {
 			final BlockPos target = hit;
 			RaycastHelper.rayTraceUntil(player, 75, pos -> {
@@ -84,7 +86,7 @@ public abstract class GroundPlanningToolBase implements ImAToolForGroundPlanning
 
 		if (model.getAnchor() == null) {
 			model.setAnchor(selectedPosition);
-			selectedPosition = BlockPos.ORIGIN;
+			selectedPosition = BlockPos.ZERO;
 		}
 
 		return null;
@@ -102,7 +104,7 @@ public abstract class GroundPlanningToolBase implements ImAToolForGroundPlanning
 
 		if (groundPlan != null && anchor != null) {
 			BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-			TesselatorTextures.Trim.bind();
+			TessellatorTextures.Trim.bind();
 			bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
 			groundPlan.forEachStack(stack -> {
@@ -114,23 +116,23 @@ public abstract class GroundPlanningToolBase implements ImAToolForGroundPlanning
 
 					if (room == stack.highest()) {
 						TessellatorHelper.walls(bufferBuilder, pos.add(0, room.height, 0),
-								new BlockPos(room.width, 1, room.length), 0.125, false, true);						
-					} 
+								new BlockPos(room.width, 1, room.length), 0.125, false, true);
+					}
 
 				});
 			});
 
 			Tessellator.getInstance().draw();
-			
+
 			groundPlan.forEachStack(stack -> {
 				bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-				
+
 				if (transparentStacks.contains(stack)) {
-					TesselatorTextures.RoomTransparent.bind();
+					TessellatorTextures.RoomTransparent.bind();
 				} else {
-					TesselatorTextures.Room.bind();					
+					TessellatorTextures.Room.bind();
 				}
-				
+
 				stack.forEach(room -> {
 					BlockPos pos = room.getOrigin().add(anchor);
 					if (room == stack.highest())

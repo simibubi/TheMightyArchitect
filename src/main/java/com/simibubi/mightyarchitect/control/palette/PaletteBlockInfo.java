@@ -1,6 +1,6 @@
 package com.simibubi.mightyarchitect.control.palette;
 
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.BlockState;
 
 public class PaletteBlockInfo {
 	

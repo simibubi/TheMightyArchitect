@@ -2,15 +2,14 @@ package com.simibubi.mightyarchitect.control.phase;
 
 import java.util.List;
 
-import org.lwjgl.input.Keyboard;
-
 import com.google.common.collect.ImmutableList;
 import com.simibubi.mightyarchitect.control.compose.planner.Tools;
 import com.simibubi.mightyarchitect.control.helpful.ShaderManager;
 import com.simibubi.mightyarchitect.control.helpful.Shaders;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
+import com.simibubi.mightyarchitect.gui.Keyboard;
 
-import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.MainWindow;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Post;
 
 public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
@@ -41,7 +40,7 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 
 	@Override
 	public void onKey(int key) {
-		if (key == Keyboard.KEY_RIGHT) {
+		if (key == Keyboard.RIGHT) {
 			activeTool = activeTool.next();
 			
 			if (!getModel().getGroundPlan().theme.getStatistics().hasTowers) {
@@ -53,7 +52,7 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 			return;
 		}
 
-		if (key == Keyboard.KEY_LEFT) {
+		if (key == Keyboard.LEFT) {
 			activeTool = activeTool.previous();
 			
 			if (!getModel().getGroundPlan().theme.getStatistics().hasTowers) {
@@ -86,9 +85,9 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 
 	@Override
 	public void renderGameOverlay(Post event) {
-		ScaledResolution scaledresolution = new ScaledResolution(minecraft);
-		minecraft.fontRenderer.drawString(activeTool.getDisplayName(), scaledresolution.getScaledWidth() / 2 + 15,
-				scaledresolution.getScaledHeight() / 2 + 5, 0xDDDDDD, true);
+		MainWindow window = minecraft.mainWindow;
+		minecraft.fontRenderer.drawString(activeTool.getDisplayName(), window.getScaledWidth() / 2 + 15,
+				window.getScaledHeight() / 2 + 5, 0xDDDDDD);
 	}
 
 	@Override

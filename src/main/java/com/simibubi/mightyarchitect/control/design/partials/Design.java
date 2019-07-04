@@ -11,7 +11,7 @@ import com.simibubi.mightyarchitect.control.design.DesignSlice.DesignSliceTrait;
 import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos;
 
@@ -27,17 +27,17 @@ public abstract class Design {
 	public abstract Design fromNBT(CompoundNBT compound);
 	
 	protected void applyNBT(CompoundNBT compound) {
-		size = NBTUtil.getPosFromTag(compound.getCompoundTag("Size"));
+		size = NBTUtil.readBlockPos(compound.getCompound("Size"));
 		defaultWidth = size.getX();
 		slices = new DesignSlice[size.getY()];
 		
 		defaultHeight = 0;
 		yShift = 0;
 		heights = ImmutableSet.of(0);
-		NBTTagList sliceTagList = compound.getTagList("Layers", 10);
+		ListNBT sliceTagList = compound.getList("Layers", 10);
 		
 		for (int sliceIndex = 0; sliceIndex < slices.length; sliceIndex++) {
-			DesignSlice slice = DesignSlice.fromNBT(sliceTagList.getCompoundTagAt(sliceIndex));
+			DesignSlice slice = DesignSlice.fromNBT(sliceTagList.getCompound(sliceIndex));
 			defaultHeight = slice.adjustDefaultHeight(defaultHeight);
 			heights = slice.adjustHeigthsList(heights);
 			slices[sliceIndex] = slice;
@@ -48,7 +48,7 @@ public abstract class Design {
 	}
 	
 	public void getBlocks(DesignInstance instance, Map<BlockPos, PaletteBlockInfo> blocks) {
-		getBlocksShifted(instance, blocks, BlockPos.ORIGIN);
+		getBlocksShifted(instance, blocks, BlockPos.ZERO);
 	}
 	
 	protected void getBlocksShifted(DesignInstance instance, Map<BlockPos, PaletteBlockInfo> blocks, BlockPos localShift) {

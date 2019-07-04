@@ -1,33 +1,32 @@
 package com.simibubi.mightyarchitect.control;
 
 import com.simibubi.mightyarchitect.AllBlocks;
+import com.simibubi.mightyarchitect.AllItems;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.palette.Palette;
-import com.simibubi.mightyarchitect.item.AllItems;
-import com.simibubi.mightyarchitect.networking.PacketSender;
 import com.simibubi.mightyarchitect.networking.PacketSetHotbarItem;
+import com.simibubi.mightyarchitect.networking.Packets;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockState;
-import net.minecraft.client.Minecraft;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.StringTextComponent;
 
 public class ArchitectKits {
-	
+
 	public static void ExporterToolkit() {
-		setHotbarItem(0, AllItems.wand_architect);
-		setHotbarItem(1, AllItems.wand_fill);
-		setHotbarItem(2, AllItems.wand_symmetry);
+		setHotbarItem(0, AllItems.ARCHITECT_WAND.get());
+		setHotbarItem(1, AllItems.FILLING_WAND.get());
+		setHotbarItem(2, AllItems.SYMMETRY_WAND.get());
 		clearHotbarItem(3);
-		setHotbarBlock(4, AllBlocks.design_anchor);
-		setHotbarBlock(5, AllBlocks.slice_marker);
+		setHotbarBlock(4, AllBlocks.DESIGN_ANCHOR.get());
+		setHotbarBlock(5, AllBlocks.SLICE_MARKER.get());
 		clearHotbarItem(6);
 		setHotbarBlock(7, Palette.CLEAR);
 		setHotbarBlock(8, Palette.FLOOR);
 	}
-	
+
 	public static void FoundationToolkit() {
 		setHotbarBlock(0, Palette.HEAVY_POST);
 		setHotbarBlock(1, Palette.HEAVY_PRIMARY);
@@ -39,7 +38,7 @@ public class ArchitectKits {
 		setHotbarBlock(7, Palette.OUTER_THICK);
 		setHotbarBlock(8, Palette.OUTER_THIN);
 	}
-	
+
 	public static void RegularToolkit() {
 		setHotbarBlock(0, Palette.FLOOR);
 		setHotbarBlock(1, Palette.INNER_PRIMARY);
@@ -51,7 +50,7 @@ public class ArchitectKits {
 		setHotbarBlock(7, Palette.OUTER_THICK);
 		setHotbarBlock(8, Palette.OUTER_THIN);
 	}
-	
+
 	public static void RoofingToolkit() {
 		setHotbarBlock(0, Palette.ROOF_PRIMARY);
 		setHotbarBlock(1, Palette.ROOF_DETAIL);
@@ -67,26 +66,24 @@ public class ArchitectKits {
 	private static void clearHotbarItem(int slot) {
 		setHotbarItem(slot, ItemStack.EMPTY);
 	}
-	
+
 	private static void setHotbarItem(int slot, Item item) {
 		setHotbarItem(slot, new ItemStack(item));
 	}
-	
+
 	private static void setHotbarItem(int slot, ItemStack stack) {
-		PacketSender.INSTANCE.sendToServer(new PacketSetHotbarItem(slot, stack));
+		Packets.channel.sendToServer(new PacketSetHotbarItem(slot, stack));
 	}
-	
-	@SuppressWarnings("deprecation")
+
 	private static void setHotbarBlock(int slot, Block block) {
-		setHotbarItem(slot, block.getItem(Minecraft.getInstance().world, BlockPos.ORIGIN, block.getDefaultState()));
+		setHotbarItem(slot, block.asItem());
 	}
-	
+
 	private static void setHotbarBlock(int slot, Palette palette) {
 		BlockState state = DesignExporter.theme.getDefaultPalette().get(palette);
-		@SuppressWarnings("deprecation")
-		ItemStack stack = state.getBlock().getItem(Minecraft.getInstance().world, BlockPos.ORIGIN, state);
-		setHotbarItem(slot, stack.setStackDisplayName(palette.getDisplayName() + " (" + stack.getDisplayName() + ")"));
+		ItemStack stack = new ItemStack(state.getBlock().asItem());
+		setHotbarItem(slot, stack.setDisplayName(
+				new StringTextComponent(palette.getDisplayName() + " (" + stack.getDisplayName() + ")")));
 	}
-	
-	
+
 }

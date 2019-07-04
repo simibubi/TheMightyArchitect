@@ -68,7 +68,7 @@ public class DesignSlice {
 		}
 		
 		slice.orientations = new BlockOrientation[length][width];
-		if (sliceTag.hasKey("Facing")) {
+		if (sliceTag.contains("Facing")) {
 			strips = sliceTag.getString("Facing").split(",");
 			
 			for (int z = 0; z < length; z++) {
