@@ -19,7 +19,7 @@ public abstract class PhaseBase implements IArchitectPhase {
 	}
 
 	@Override
-	public void onKey(int key) {
+	public void onKey(int key, boolean released) {
 	}
 	
 	@Override

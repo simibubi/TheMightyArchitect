@@ -1,32 +1,47 @@
 package com.simibubi.mightyarchitect.control.phase;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import com.google.common.collect.ImmutableList;
+import com.simibubi.mightyarchitect.TheMightyArchitect;
 import com.simibubi.mightyarchitect.control.compose.planner.Tools;
 import com.simibubi.mightyarchitect.control.helpful.ShaderManager;
 import com.simibubi.mightyarchitect.control.helpful.Shaders;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
-import com.simibubi.mightyarchitect.gui.Keyboard;
+import com.simibubi.mightyarchitect.gui.ToolSelectionScreen;
 
-import net.minecraft.client.MainWindow;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Post;
 
 public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 
 	private Tools activeTool;
+	private ToolSelectionScreen toolSelection;
 
 	@Override
 	public void whenEntered() {
+		final Consumer<Tools> callback = tool -> {
+			equipTool(tool);
+		};
+
 		activeTool = Tools.Room;
 		activeTool.getTool().init();
+		toolSelection = new ToolSelectionScreen(Tools.getGroundPlanningTools(), callback);
 
 		ShaderManager.setActiveShader(Shaders.Blueprint);
+	}
+
+	private void equipTool(Tools tool) {
+		if (tool == activeTool)
+			return;
+		activeTool = tool;
+		activeTool.getTool().init();
 	}
 
 	@Override
 	public void update() {
 		activeTool.getTool().updateSelection();
+		toolSelection.update();
 	}
 
 	@Override
@@ -35,38 +50,30 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 			String message = activeTool.getTool().handleRightClick();
 			sendStatusMessage(message);
 		}
-
 	}
 
 	@Override
-	public void onKey(int key) {
-		if (key == Keyboard.RIGHT) {
-			activeTool = activeTool.next();
-			
-			if (!getModel().getGroundPlan().theme.getStatistics().hasTowers) {
-				if (activeTool == Tools.Cylinder)
-					activeTool = activeTool.next();					
-			}
-			
-			activeTool.getTool().init();
+	public void onKey(int key, boolean released) {
+		if (key != TheMightyArchitect.TOOL_MENU.getKey().getKeyCode())
 			return;
+
+		if (released && toolSelection.focused) {
+			toolSelection.focused = false;
+			toolSelection.onClose();
 		}
 
-		if (key == Keyboard.LEFT) {
-			activeTool = activeTool.previous();
-			
-			if (!getModel().getGroundPlan().theme.getStatistics().hasTowers) {
-				if (activeTool == Tools.Cylinder)
-					activeTool = activeTool.previous();					
-			}
-			
-			activeTool.getTool().init();
-			return;
-		}
+		if (!released && !toolSelection.focused)
+			toolSelection.focused = true;
+
 	}
-	
+
 	@Override
 	public boolean onScroll(int amount) {
+		if (toolSelection.focused) {
+			toolSelection.cycle(amount);
+			return true;
+		}
+
 		return activeTool.getTool().handleMouseWheel(amount);
 	}
 
@@ -85,14 +92,14 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 
 	@Override
 	public void renderGameOverlay(Post event) {
-		MainWindow window = minecraft.mainWindow;
-		minecraft.fontRenderer.drawString(activeTool.getDisplayName(), window.getScaledWidth() / 2 + 15,
-				window.getScaledHeight() / 2 + 5, 0xDDDDDD);
+		toolSelection.renderPassive(event.getPartialTicks());
 	}
 
 	@Override
 	public List<String> getToolTip() {
-		return ImmutableList.of("Draw the layout of your build, adding rooms, towers and other. Modify their size, style and palette using the Selection Tool.", "Use your < > Arrow Keys to switch tools.");
+		return ImmutableList.of(
+				"Draw the layout of your build, adding rooms, towers and other. Modify their size, style and palette using the Selection Tool.",
+				"Use your < > Arrow Keys to switch tools.");
 	}
 
 }

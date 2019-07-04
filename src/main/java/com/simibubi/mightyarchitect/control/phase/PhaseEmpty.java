@@ -19,10 +19,6 @@ public class PhaseEmpty extends PhaseBase {
 	}
 
 	@Override
-	public void onKey(int key) {
-	}
-
-	@Override
 	public void render() {
 	}
 

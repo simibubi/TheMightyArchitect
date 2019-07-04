@@ -1,7 +1,5 @@
 package com.simibubi.mightyarchitect.gui;
 
-import java.io.IOException;
-
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.SchematicHologram;

@@ -12,7 +12,7 @@ public interface IArchitectPhase {
 	public List<String> getToolTip();
 	
 	public void onClick(int button);
-	public void onKey(int key);
+	public void onKey(int key, boolean released);
 	public boolean onScroll(int amount);
 	
 }

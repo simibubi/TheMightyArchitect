@@ -37,7 +37,6 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
-import net.minecraftforge.client.event.GuiScreenEvent.MouseScrollEvent;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.client.event.InputEvent.MouseInputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -246,6 +245,14 @@ public class ArchitectManager {
 			phase.getPhaseHandler().update();
 		}
 		menu.onClientTick();
+
+	}
+
+	public static boolean onMouseScrolled(int delta) {
+		if (phase == ArchitectPhases.Composing) {
+			return phase.getPhaseHandler().onScroll(delta);
+		}
+		return false;
 	}
 
 	@SubscribeEvent
@@ -264,9 +271,6 @@ public class ArchitectManager {
 
 	@SubscribeEvent
 	public static void onKeyTyped(KeyInputEvent event) {
-		if (event.getAction() != Keyboard.PRESS)
-			return;
-		
 		if (TheMightyArchitect.COMPOSE.isPressed()) {
 			if (menu.isFocused())
 				return;
@@ -278,15 +282,7 @@ public class ArchitectManager {
 			return;
 		}
 
-		phase.getPhaseHandler().onKey(event.getKey());
-	}
-
-	@SubscribeEvent
-	public static void onMouseScrolled(MouseScrollEvent event) {
-		if (phase == ArchitectPhases.Composing) {
-			boolean cancel = phase.getPhaseHandler().onScroll((int) (event.getScrollDelta() / 120));
-			event.setCanceled(cancel);
-		}
+		phase.getPhaseHandler().onKey(event.getKey(), event.getAction() != Keyboard.PRESS);
 	}
 
 	@SubscribeEvent

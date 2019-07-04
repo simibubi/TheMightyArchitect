@@ -52,7 +52,14 @@ public enum GuiResources {
 	ICON_LAYER_REGULAR("icons.png", 0, 48, 16, 16),
 	ICON_LAYER_OPEN("icons.png", 16, 48, 16, 16),
 	ICON_LAYER_FOUNDATION("icons.png", 32, 48, 16, 16),
-	ICON_LAYER_SPECIAL("icons.png", 48, 48, 16, 16);
+	ICON_LAYER_SPECIAL("icons.png", 48, 48, 16, 16),
+	
+	ICON_TOOL_RESHAPE("icons.png", 0, 64, 16, 16),
+	ICON_TOOL_ROOM("icons.png", 16, 64, 16, 16),
+	ICON_TOOL_TOWER("icons.png", 32, 64, 16, 16),
+	ICON_TOOL_STACK("icons.png", 48, 64, 16, 16),
+	
+	ICON_TOOL_HEIGHT("icons.png", 0, 80, 16, 16);
 	
 	public static final int FONT_COLOR = 0x575F7A;
 	

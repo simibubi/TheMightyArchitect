@@ -25,12 +25,6 @@ public class PhaseEditing extends PhaseBase {
 	}
 
 	@Override
-	public void onKey(int key) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void render() {
 		// TODO Auto-generated method stub
 

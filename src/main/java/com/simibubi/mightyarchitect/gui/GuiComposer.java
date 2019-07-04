@@ -184,13 +184,13 @@ public class GuiComposer extends Screen {
 		GlStateManager.pushMatrix();
 		GlStateManager.translated(0, scrollBar.getYShift(), 0);
 
-		SelectionTool.hoveredRoom = null;
+		SelectionTool.selectedRoom = null;
 		for (int layer = 0; layer < partials.size(); layer++) {
 			GuiComposerPartial partial = partials.get(layer);
 			int offset = (partials.size() - layer - 1) * 52 + 20;
 			
 			if (partial.isHovered(offset, mouseX, mouseY))
-				SelectionTool.hoveredRoom = partial.cuboid;
+				SelectionTool.selectedRoom = partial.cuboid;
 			
 			for (ScrollArea area : partial.scrollAreas) {
 				if ((partial.scrollAreaPosition.contains(area) || partial.scrollAreaSize.contains(area)) && area.isHovered(mouseX, mouseY)) {
@@ -593,7 +593,7 @@ public class GuiComposer extends Screen {
 
 	@Override
 	public void removed() {
-		SelectionTool.hoveredRoom = null;
+		SelectionTool.selectedRoom = null;
 		super.removed();
 	}
 	
