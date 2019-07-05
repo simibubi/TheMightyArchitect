@@ -1,5 +1,6 @@
 package com.simibubi.mightyarchitect.control.compose.planner;
 
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -14,6 +15,7 @@ import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.design.ThemeStatistics;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorTextures;
+import com.simibubi.mightyarchitect.gui.Keyboard;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -29,8 +31,10 @@ public class RoomTool extends GroundPlanningToolBase {
 	public void init() {
 		super.init();
 		firstPosition = null;
+		toolModeNoCtrl = "3-Grid";
+		toolModeCtrl = "5-Grid";
 	}
-	
+
 	@Override
 	public String handleRightClick() {
 		super.handleRightClick();
@@ -51,14 +55,14 @@ public class RoomTool extends GroundPlanningToolBase {
 		Room room = new Room(firstPosition, selectedPosition.subtract(firstPosition));
 		room.width++;
 		room.length++;
-		
+
 		DesignTheme theme = groundPlan.theme;
 		ThemeStatistics stats = theme.getStatistics();
 		boolean hasFoundation = theme.getLayers().contains(DesignLayer.Foundation);
-		
-		room.height = hasFoundation? 2 : Math.min(4, theme.getMaxFloorHeight());
+
+		room.height = hasFoundation ? 2 : Math.min(4, theme.getMaxFloorHeight());
 		room.designLayer = hasFoundation ? DesignLayer.Foundation : DesignLayer.Regular;
-		
+
 		int facadeWidth = Math.min(room.width, room.length);
 
 		if (facadeWidth % 2 == 0) {
@@ -75,22 +79,22 @@ public class RoomTool extends GroundPlanningToolBase {
 		}
 
 		if (facadeWidth > stats.MaxGableRoof || !stats.hasGables) {
-			room.roofType = stats.hasFlatRoof ?  DesignType.FLAT_ROOF : DesignType.NONE;
+			room.roofType = stats.hasFlatRoof ? DesignType.FLAT_ROOF : DesignType.NONE;
 		} else {
-			room.roofType = stats.hasGables ? DesignType.ROOF : DesignType.NONE;			
+			room.roofType = stats.hasGables ? DesignType.ROOF : DesignType.NONE;
 		}
-		
+
 		lastAddedStack = new Stack(room);
 		groundPlan.addStack(lastAddedStack);
 		firstPosition = null;
 		return "New Room has been added";
 	}
-	
+
 	@Override
 	public boolean handleMouseWheel(int scroll) {
 		if (lastAddedStack == null)
 			return false;
-		
+
 		if (scroll > 0) {
 			lastAddedStack.increase();
 		} else {
@@ -100,7 +104,7 @@ public class RoomTool extends GroundPlanningToolBase {
 				lastAddedStack = null;
 			}
 		}
-		
+
 		return true;
 	}
 
@@ -115,11 +119,34 @@ public class RoomTool extends GroundPlanningToolBase {
 			return;
 
 		BlockPos size = selectedPosition.subtract(firstPosition);
-		if (size.getX() % 2 != 0) {
-			selectedPosition = selectedPosition.east(size.getX() > 0 ? 1 : -1);
-		}
-		if (size.getZ() % 2 != 0) {
-			selectedPosition = selectedPosition.south(size.getZ() > 0 ? 1 : -1);
+
+		if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL)) {
+			// 5-Grid
+			int xr = (size.getX()) % 4;
+			if (xr < 0)
+				xr += 4;
+			else 
+				xr = 4 - xr;
+			if (xr != 0) {
+				selectedPosition = selectedPosition.east(size.getX() > 0 ? xr : -xr);
+			}
+			int zr = (size.getZ()) % 4;
+			if (zr < 0)
+				zr += 4;
+			else 
+				zr = 4 - zr;
+			if (zr != 0) {
+				selectedPosition = selectedPosition.south(size.getZ() > 0 ? zr : -zr);
+			}
+
+		} else {
+			// 3-Grid
+			if (size.getX() % 2 != 0) {
+				selectedPosition = selectedPosition.east(size.getX() > 0 ? 1 : -1);
+			}
+			if (size.getZ() % 2 != 0) {
+				selectedPosition = selectedPosition.south(size.getZ() > 0 ? 1 : -1);
+			}
 		}
 	}
 
@@ -128,10 +155,10 @@ public class RoomTool extends GroundPlanningToolBase {
 		if (selectedPosition == null) {
 			return;
 		}
-		
+
 		BlockPos anchor = ArchitectManager.getModel().getAnchor();
-		BlockPos selectedPos = (anchor != null)? selectedPosition.add(anchor) : selectedPosition;
-		BlockPos firstPos = (firstPosition != null)? firstPosition.add(anchor) : null;
+		BlockPos selectedPos = (anchor != null) ? selectedPosition.add(anchor) : selectedPosition;
+		BlockPos firstPos = (firstPosition != null) ? firstPosition.add(anchor) : null;
 
 		TessellatorTextures.Selection.bind();
 		GlStateManager.enableAlphaTest();

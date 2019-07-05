@@ -24,17 +24,25 @@ public abstract class AbstractRoomFaceSelectionTool extends GroundPlanningToolBa
 	public static Stack selectedStack;
 	public static Room selectedRoom;
 	public static Direction selectedFace;
-	
+
+	protected boolean highlightRoom;
+
 	@Override
 	public void init() {
 		super.init();
+		highlightRoom = true;
+		selectedStack = null;
+		selectedFace = null;
+		selectedRoom = null;
 	}
-	
+
 	@Override
 	public void updateSelection() {
+		updateOverlay();
+		
 		final GroundPlan groundPlan = ArchitectManager.getModel().getGroundPlan();
 		final BlockPos anchor = ArchitectManager.getModel().getAnchor();
-		
+
 		if (groundPlan.isEmpty()) {
 			selectedStack = null;
 			selectedFace = null;
@@ -50,6 +58,8 @@ public abstract class AbstractRoomFaceSelectionTool extends GroundPlanningToolBa
 
 		if (result.missed()) {
 			selectedStack = null;
+			selectedFace = null;
+			selectedRoom = null;
 			return;
 		}
 
@@ -69,24 +79,26 @@ public abstract class AbstractRoomFaceSelectionTool extends GroundPlanningToolBa
 		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
 		selectedStack.forEach(room -> {
-			if (room == selectedRoom)
+			if (room == selectedRoom && highlightRoom)
 				return;
 			BlockPos pos = room.getOrigin().add(ArchitectManager.getModel().getAnchor());
 			TessellatorHelper.cube(bufferBuilder, pos, room.getSize(), 1 / 16d, true, true);
 		});
 
 		Tessellator.getInstance().draw();
-		
-		if (selectedRoom != null) {
+
+		if (selectedRoom != null && highlightRoom) {
 			TessellatorTextures.SuperSelectedRoom.bind();
 			bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-			
+
 			BlockPos pos = selectedRoom.getOrigin().add(ArchitectManager.getModel().getAnchor());
 			TessellatorHelper.cube(bufferBuilder, pos, selectedRoom.getSize(), 1 / 16d, true, true);
-			
+
 			Tessellator.getInstance().draw();
 		}
-		
+
 	}
+
+	
 
 }

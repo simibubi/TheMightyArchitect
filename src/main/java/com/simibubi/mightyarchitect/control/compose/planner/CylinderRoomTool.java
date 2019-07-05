@@ -30,6 +30,8 @@ public class CylinderRoomTool extends RoomTool {
 	public void init() {
 		super.init();
 		firstPosition = null;
+		toolModeCtrl = null;
+		toolModeNoCtrl = null;
 	}
 
 	@Override

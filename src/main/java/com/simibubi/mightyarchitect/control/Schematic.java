@@ -10,6 +10,7 @@ import java.util.Vector;
 import com.simibubi.mightyarchitect.control.compose.Cuboid;
 import com.simibubi.mightyarchitect.control.compose.GroundPlan;
 import com.simibubi.mightyarchitect.control.compose.Room;
+import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.Sketch;
 import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
@@ -226,6 +227,10 @@ public class Schematic {
 
 	public boolean isEditingPrimary() {
 		return editingPrimary;
+	}
+	
+	public DesignTheme getTheme() {
+		return groundPlan.theme;
 	}
 
 }

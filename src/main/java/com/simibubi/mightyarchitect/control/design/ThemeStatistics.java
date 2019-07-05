@@ -1,5 +1,6 @@
 package com.simibubi.mightyarchitect.control.design;
 
+import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.control.helpful.DesignHelper;
 
 import net.minecraft.client.Minecraft;
@@ -11,10 +12,10 @@ public class ThemeStatistics {
 	public static final int MIN_TOWER_RADIUS = 1, MAX_TOWER_RADIUS = 15;
 	public static final int MIN_ROOF_SPAN = 3, MAX_ROOF_SPAN = 35;
 	public static final int MIN_MARGIN = 0, MAX_MARGIN = 15;
-	
+
 	// Limits for the composer
 	public static final int MAX_FLOORS = 25;
-	
+
 	public int MinRoomLength = 3;
 	public int MaxRoomLength = 97;
 
@@ -55,7 +56,7 @@ public class ThemeStatistics {
 				if (!designExists(towerQuery)) {
 					break;
 				}
-				
+
 				stats.hasTowers = true;
 
 				for (int radius = 1; radius <= stats.MaxRoomLength; radius += 1) {
@@ -87,11 +88,11 @@ public class ThemeStatistics {
 
 			// Determine min and max gable span
 			DesignQuery roofQuery = new DesignQuery(theme, DesignLayer.Roofing, DesignType.ROOF);
-			
+
 			if (!designExists(roofQuery)) {
 				stats.hasGables = false;
 			}
-			
+
 			for (int roofSpan = 3; roofSpan <= 15; roofSpan += 2) {
 				if (designExists(roofQuery.withWidth(roofSpan))) {
 					stats.MinGableRoof = roofSpan;
@@ -112,11 +113,11 @@ public class ThemeStatistics {
 
 		if (theme.getTypes().contains(DesignType.FLAT_ROOF)) {
 			DesignQuery roofQuery = new DesignQuery(theme, DesignLayer.Roofing, DesignType.FLAT_ROOF);
-			
+
 			if (!designExists(roofQuery)) {
 				stats.hasFlatRoof = false;
 			}
-			
+
 			for (int roofSpan = 3; roofSpan <= stats.MaxRoomLength; roofSpan += 2) {
 				if (designExists(roofQuery.withWidth(roofSpan))) {
 					stats.MinFlatRoof = roofSpan;
@@ -140,37 +141,71 @@ public class ThemeStatistics {
 
 	public void sendToPlayer() {
 		chat("Room size: " + MinRoomLength + " to " + (MaxRoomLength == 97 ? "Infinity" : MaxRoomLength));
-		
+
 		if (hasFlatRoof)
 			chat("Smallest Flat Roof Spans: " + MinFlatRoof);
 		else
 			chat("No Flat Roofing");
-		
+
 		if (hasGables)
 			chat("Gable Roofs span: " + MinGableRoof + " to " + MaxGableRoof);
 		else
 			chat("No Gable Roofing");
-		
+
 		if (hasTowers) {
 			chat("Tower radii: " + MinTowerRadius + " to " + MaxTowerRadius);
-			
+
 			if (hasFlatTowerRoof)
 				chat("Has Flat Tower Roofing");
-			else 
+			else
 				chat("No Flat Tower Roofing");
-			
+
 			if (hasConicalRoof)
 				chat("Largest Conical Roof radius: " + MaxConicalRoofRadius);
-			else 
+			else
 				chat("No Conical Roofing");
-			
-		} else {			
+
+		} else {
 			chat("No Towers");
 		}
 	}
 
 	private void chat(String message) {
 		Minecraft.getInstance().player.sendMessage(new StringTextComponent(message));
+	}
+
+	public DesignType fallbackRoof(Room room, boolean tower) {
+		DesignType desired = room.roofType;
+		if (!tower && desired == DesignType.ROOF) {
+			if (hasGables && Math.min(room.width, room.length) <= MaxGableRoof
+					&& Math.min(room.width, room.length) >= MinGableRoof)
+				return desired;
+			if (hasFlatRoof && Math.min(room.width, room.length) >= MinFlatRoof)
+				return DesignType.FLAT_ROOF;
+			return DesignType.NONE;
+		}
+
+		if (!tower && desired == DesignType.FLAT_ROOF) {
+			if (hasFlatRoof)
+				return desired;
+			return DesignType.NONE;
+		}
+
+		if (tower && desired == DesignType.ROOF) {
+			if (hasConicalRoof && room.width <= MaxConicalRoofRadius * 2 + 1)
+				return desired;
+			if (hasFlatTowerRoof)
+				return DesignType.FLAT_ROOF;
+			return DesignType.NONE;
+		}
+
+		if (tower && desired == DesignType.FLAT_ROOF) {
+			if (hasFlatTowerRoof)
+				return desired;
+			return DesignType.NONE;
+		}
+
+		return DesignType.NONE;
 	}
 
 }

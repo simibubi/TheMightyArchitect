@@ -28,7 +28,7 @@ public enum DesignType {
 	TOWER_ROOF("towerroof", "Conical Roof", new TowerRoof()), 
 	TOWER_FLAT_ROOF("towerflatroof", "Flat Tower Roof", new TowerFlatRoof()), 
 	
-	NONE("none", "Don't use", null);
+	NONE("none", "None", null);
 
 	private String filePath;
 	private String displayName;

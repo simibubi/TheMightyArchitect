@@ -1,8 +1,9 @@
 package com.simibubi.mightyarchitect.control.compose.planner;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
 import com.simibubi.mightyarchitect.gui.GuiResources;
 
 public enum Tools {
@@ -46,7 +47,9 @@ public enum Tools {
 	}
 	
 	public static List<Tools> getGroundPlanningTools() {
-		return ImmutableList.of(Room, Cylinder, Height, MoveReshape, Stack, Roof, Select);
+		List<Tools> tools = new ArrayList<>();
+		Collections.addAll(tools, Room, Cylinder, Height, MoveReshape, Stack, Roof, Select);
+		return tools;
 	}
 	
 }

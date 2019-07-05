@@ -26,7 +26,12 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 
 		activeTool = Tools.Room;
 		activeTool.getTool().init();
-		toolSelection = new ToolSelectionScreen(Tools.getGroundPlanningTools(), callback);
+		List<Tools> groundPlanningTools = Tools.getGroundPlanningTools();
+		
+		if (!getModel().getTheme().getStatistics().hasTowers)
+			groundPlanningTools.remove(Tools.Cylinder);
+		
+		toolSelection = new ToolSelectionScreen(groundPlanningTools, callback);
 
 		ShaderManager.setActiveShader(Shaders.Blueprint);
 	}
@@ -93,6 +98,7 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 	@Override
 	public void renderGameOverlay(Post event) {
 		toolSelection.renderPassive(event.getPartialTicks());
+		activeTool.getTool().renderOverlay();
 	}
 
 	@Override

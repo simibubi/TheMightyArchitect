@@ -9,6 +9,7 @@ public interface ImAToolForGroundPlanning {
 	
 	public void renderTool();
 	public void renderGroundPlan();
+	public void renderOverlay();
 	
 	public void init();
 }
