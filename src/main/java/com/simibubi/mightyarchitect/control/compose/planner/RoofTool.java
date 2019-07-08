@@ -4,8 +4,6 @@ import com.simibubi.mightyarchitect.control.compose.CylinderStack;
 import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.control.design.DesignType;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
 public class RoofTool extends AbstractRoomFaceSelectionTool {
@@ -44,10 +42,7 @@ public class RoofTool extends AbstractRoomFaceSelectionTool {
 		super.updateSelection();
 
 		if (selectedStack != null) {
-			Minecraft.getInstance().player.sendStatusMessage(
-					new StringTextComponent(
-							"Roof Type: " + TextFormatting.AQUA + selectedStack.highest().roofType.getDisplayName()),
-					true);
+			status("Roof Type: " + TextFormatting.AQUA + selectedStack.highest().roofType.getDisplayName());
 		}
 	}
 

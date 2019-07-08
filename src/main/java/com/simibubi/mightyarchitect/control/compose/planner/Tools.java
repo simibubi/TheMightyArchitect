@@ -14,19 +14,25 @@ public enum Tools {
 	Height(new HeightTool(), "Adjust (Y)", GuiResources.ICON_TOOL_HEIGHT),
 	Stack(new StackTool(), "Floors", GuiResources.ICON_TOOL_STACK),
 	Roof(new RoofTool(), "Roof Style", GuiResources.ICON_NORMAL_ROOF),
-	Select(new SelectionTool(), "Select", GuiResources.ICON_TARGET);
+	Select(new SelectionTool(), "Select", GuiResources.ICON_TARGET),
 	
-	private ImAToolForGroundPlanning tool;
+	RerollAll(new RerollTool(), "Reroll All", GuiResources.ICON_TOOL_REROLL),
+	RerollTarget(new RerollTargetTool(), "Reroll Target", GuiResources.ICON_TOOL_REROLL_TARGET),
+	LayerStyle(new LayerStyleTool(), "Wall Style", GuiResources.ICON_LAYER_OPEN),
+	CopyDesign(new CopyDesignTool(), "Reuse Patterns", GuiResources.ICON_3x3),
+	Palette(new PalettePainterTool(), "Palette", GuiResources.ICON_TOOL_PALETTE);
+	
+	private IComposerTool tool;
 	private String displayName;
 	private GuiResources icon;
 	
-	private Tools(ImAToolForGroundPlanning tool, String name, GuiResources icon) {
+	private Tools(IComposerTool tool, String name, GuiResources icon) {
 		this.tool = tool;
 		this.displayName = name;
 		this.icon = icon;
 	}
 	
-	public ImAToolForGroundPlanning getTool() {
+	public IComposerTool getTool() {
 		return tool;
 	}
 	
@@ -38,17 +44,15 @@ public enum Tools {
 		return icon;
 	}
 	
-	public Tools next() {
-		return values()[(this.ordinal() + 1) % values().length];
-	}
-	
-	public Tools previous() {
-		return values()[(this.ordinal() - 1 + values().length) % values().length];
-	}
-	
 	public static List<Tools> getGroundPlanningTools() {
 		List<Tools> tools = new ArrayList<>();
 		Collections.addAll(tools, Room, Cylinder, Height, MoveReshape, Stack, Roof, Select);
+		return tools;
+	}
+	
+	public static List<Tools> getWallDecorationTools() {
+		List<Tools> tools = new ArrayList<>();
+		Collections.addAll(tools, RerollAll, RerollTarget, CopyDesign, LayerStyle, Palette);
 		return tools;
 	}
 	

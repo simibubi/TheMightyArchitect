@@ -46,11 +46,10 @@ public class ArchitectMenu {
 				return false;
 
 			case 'r':
-				ArchitectManager.reroll();
 				ArchitectManager.getModel().updatePalettePreview();
-				SchematicHologram.getInstance().schematicChanged();
+				ArchitectManager.reAssemble();
 				return false;
-
+				
 			case 'c':
 				ArchitectManager.pickPalette();
 				return true;

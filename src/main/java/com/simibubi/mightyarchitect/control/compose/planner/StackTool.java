@@ -3,8 +3,6 @@ package com.simibubi.mightyarchitect.control.compose.planner;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.design.ThemeStatistics;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
 public class StackTool extends AbstractRoomFaceSelectionTool {
@@ -14,7 +12,7 @@ public class StackTool extends AbstractRoomFaceSelectionTool {
 		super.init();
 		highlightRoom = false;
 	}
-	
+
 	@Override
 	public boolean handleMouseWheel(int scroll) {
 		if (selectedStack != null) {
@@ -42,8 +40,7 @@ public class StackTool extends AbstractRoomFaceSelectionTool {
 		super.updateSelection();
 
 		if (selectedStack != null) {
-			Minecraft.getInstance().player.sendStatusMessage(
-					new StringTextComponent("Floors: " + TextFormatting.AQUA + selectedStack.floors()), true);
+			status("Floors: " + TextFormatting.AQUA + selectedStack.floors());
 		}
 	}
 

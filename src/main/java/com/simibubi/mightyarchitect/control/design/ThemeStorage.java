@@ -81,8 +81,7 @@ public class ThemeStorage {
 	public static DesignTheme createTheme(String name) {
 		if (name.isEmpty())
 			name = "My Theme";
-		DesignTheme theme = new DesignTheme(name, Minecraft.getInstance().player.getName().getFormattedText(),
-				new StandardDesignPicker());
+		DesignTheme theme = new DesignTheme(name, Minecraft.getInstance().player.getName().getFormattedText());
 		theme.setFilePath(FilesHelper.slug(name));
 		theme.setImported(true);
 		theme.setDefaultPalette(PaletteDefinition.defaultPalette());

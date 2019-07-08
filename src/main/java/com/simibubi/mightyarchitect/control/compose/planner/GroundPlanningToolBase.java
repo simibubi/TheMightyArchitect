@@ -3,12 +3,9 @@ package com.simibubi.mightyarchitect.control.compose.planner;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.simibubi.mightyarchitect.control.ArchitectManager;
-import com.simibubi.mightyarchitect.control.Schematic;
 import com.simibubi.mightyarchitect.control.compose.CylinderStack;
 import com.simibubi.mightyarchitect.control.compose.GroundPlan;
 import com.simibubi.mightyarchitect.control.compose.Room;
@@ -17,9 +14,7 @@ import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.helpful.RaycastHelper;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorTextures;
-import com.simibubi.mightyarchitect.gui.Keyboard;
 
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -30,29 +25,22 @@ import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult.Type;
 
-public abstract class GroundPlanningToolBase implements ImAToolForGroundPlanning {
+public abstract class GroundPlanningToolBase extends ComposerToolBase {
 
-	protected Schematic model;
 	protected BlockPos selectedPosition;
 	protected Set<Stack> transparentStacks;
 
-	protected String toolModeNoCtrl = null;
-	protected String toolModeCtrl = null;
-	protected float toolModeYOffset = 0;
-	protected float lastToolModeYOffset = 0;
-	
 	public void init() {
-		model = ArchitectManager.getModel();
+		super.init();
 		selectedPosition = null;
 		transparentStacks = new HashSet<>();
 	}
 
 	@Override
 	public void updateSelection() {
-		updateOverlay();
+		super.updateSelection();
 		
 		ClientPlayerEntity player = Minecraft.getInstance().player;
 		transparentStacks.clear();
@@ -77,14 +65,6 @@ public abstract class GroundPlanningToolBase implements ImAToolForGroundPlanning
 			selectedPosition = null;
 		}
 
-	}
-
-	protected void updateOverlay() {
-		lastToolModeYOffset = toolModeYOffset;
-		if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL))
-			toolModeYOffset += (12 - toolModeYOffset) * .2f;
-		else
-			toolModeYOffset *= .8f;
 	}
 
 	protected void makeStacksTransparent(ClientPlayerEntity player, BlockPos hit) {
@@ -254,31 +234,5 @@ public abstract class GroundPlanningToolBase implements ImAToolForGroundPlanning
 			GlStateManager.color3f(1, 1, 1);
 			GlStateManager.lineWidth(1);
 		}
-	}
-	
-	@Override
-	public void renderOverlay() {
-		GlStateManager.pushMatrix();
-		MainWindow mainWindow = Minecraft.getInstance().mainWindow;
-		GlStateManager.translated(mainWindow.getScaledWidth() / 2, mainWindow.getScaledHeight() / 2 - 3, 0);
-		GlStateManager.translated(25,
-				-MathHelper.lerp(Minecraft.getInstance().getRenderPartialTicks(), lastToolModeYOffset, toolModeYOffset),
-				0);
-
-		if (toolModeNoCtrl != null) {
-			int color = 0xFFFFFFFF;
-			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL))
-				color = 0x66AACCFF;
-			Minecraft.getInstance().fontRenderer.drawStringWithShadow(toolModeNoCtrl, 0, 0, color);
-		}
-		if (toolModeCtrl != null) {
-			int color = 0xFFFFFFFF;
-			if (!Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL))
-				color = 0x66AACCFF;
-			Minecraft.getInstance().fontRenderer.drawStringWithShadow(toolModeCtrl, 0, 12, color);
-		}
-
-		GlStateManager.color4f(1, 1, 1, 1);
-		GlStateManager.popMatrix();
 	}
 }

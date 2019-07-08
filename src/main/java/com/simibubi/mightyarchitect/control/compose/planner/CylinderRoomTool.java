@@ -110,7 +110,7 @@ public class CylinderRoomTool extends RoomTool {
 		lastAddedStack = new CylinderStack(room);
 		groundPlan.addStack(lastAddedStack);
 		firstPosition = null;
-		return "§aNew Tower has been added";
+		return "New Tower has been added";
 	}
 	
 	@Override

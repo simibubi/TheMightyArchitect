@@ -75,6 +75,7 @@ public class ArchitectManager {
 	}
 
 	public static void unload() {
+		model.getTheme().getDesignPicker().reset();
 		enterPhase(ArchitectPhases.Empty);
 		resetSchematic();
 
@@ -98,9 +99,10 @@ public class ArchitectManager {
 		enterPhase(ArchitectPhases.Previewing);
 	}
 
-	public static void reroll() {
+	public static void reAssemble() {
 		GroundPlan groundPlan = model.getGroundPlan();
 		model.setSketch(groundPlan.theme.getDesignPicker().assembleSketch(groundPlan));
+		SchematicHologram.getInstance().schematicChanged();
 	}
 
 	public static void createPalette(boolean primary) {
@@ -139,6 +141,7 @@ public class ArchitectManager {
 		} else {
 			enterPhase(ArchitectPhases.PrintingToMultiplayer);
 		}
+		
 	}
 
 	public static void writeToFile(String name) {
@@ -249,10 +252,7 @@ public class ArchitectManager {
 	}
 
 	public static boolean onMouseScrolled(int delta) {
-		if (phase == ArchitectPhases.Composing) {
-			return phase.getPhaseHandler().onScroll(delta);
-		}
-		return false;
+		return phase.getPhaseHandler().onScroll(delta);
 	}
 
 	@SubscribeEvent

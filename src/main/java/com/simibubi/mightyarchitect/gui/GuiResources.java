@@ -59,7 +59,10 @@ public enum GuiResources {
 	ICON_TOOL_TOWER("icons.png", 32, 64, 16, 16),
 	ICON_TOOL_STACK("icons.png", 48, 64, 16, 16),
 	
-	ICON_TOOL_HEIGHT("icons.png", 0, 80, 16, 16);
+	ICON_TOOL_HEIGHT("icons.png", 0, 80, 16, 16),
+	ICON_TOOL_REROLL("icons.png", 16, 80, 16, 16),
+	ICON_TOOL_REROLL_TARGET("icons.png", 32, 80, 16, 16),
+	ICON_TOOL_PALETTE("icons.png", 48, 80, 16, 16);
 	
 	public static final int FONT_COLOR = 0x575F7A;
 	

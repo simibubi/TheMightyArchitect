@@ -90,7 +90,7 @@ public class Schematic {
 		return materializedSketch;
 	}
 
-	private void assembleSketch() {
+	public void assembleSketch() {
 		assembledSketch = sketch.assemble();
 	}
 
@@ -133,7 +133,7 @@ public class Schematic {
 		materializeSketch();
 	}
 
-	private void materializeSketch() {
+	public void materializeSketch() {
 		if (primaryPalette == null) {
 			PaletteDefinition defaultPalette = groundPlan.theme.getDefaultPalette();
 			primaryPalette = defaultPalette.clone();

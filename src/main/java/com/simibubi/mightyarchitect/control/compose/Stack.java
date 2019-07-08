@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
+import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.design.ThemeStatistics;
 
 import net.minecraft.util.math.BlockPos;
@@ -95,6 +96,10 @@ public class Stack {
 
 	public int getMinWidth() {
 		return theme.getStatistics().MinRoomLength;
+	}
+	
+	public DesignType getRoofType() {
+		return highest().roofType;
 	}
 
 }

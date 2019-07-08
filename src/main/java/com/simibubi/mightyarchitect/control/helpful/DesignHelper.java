@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.simibubi.mightyarchitect.control.compose.Room;
+import com.simibubi.mightyarchitect.control.compose.Stack;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
+import com.simibubi.mightyarchitect.control.design.DesignPicker.RoomDesignMapping;
 import com.simibubi.mightyarchitect.control.design.DesignQuery;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.DesignType;
+import com.simibubi.mightyarchitect.control.design.TemporaryDesignCache;
 import com.simibubi.mightyarchitect.control.design.ThemeStorage;
-import com.simibubi.mightyarchitect.control.design.StyleGroupManager.StyleGroupDesignProvider;
 import com.simibubi.mightyarchitect.control.design.partials.Corner;
 import com.simibubi.mightyarchitect.control.design.partials.Design;
 import com.simibubi.mightyarchitect.control.design.partials.Design.DesignInstance;
@@ -56,33 +59,64 @@ public class DesignHelper {
 	}
 
 	/**
-	 * Creates a closed room around the specified cuboid using 4 walls and 4
-	 * corners
+	 * Creates a closed room around the specified cuboid using 4 walls and 4 corners
 	 */
-	public static void addCuboid(StyleGroupDesignProvider designProvider, List<DesignInstance> designList,
-			DesignTheme theme, DesignLayer layer, BlockPos start, BlockPos size) {
+	public static void addCuboid(TemporaryDesignCache designProvider, List<DesignInstance> designList,
+			DesignTheme theme, DesignLayer layer, Room room) {
 
 		Design facadeA = null;
 		Design facadeB = null;
+		BlockPos start = room.getOrigin();
+		BlockPos size = room.getSize();
 		int width = size.getX();
 		int height = size.getY();
 		int length = size.getZ();
 
-		DesignQuery facadeQuery = new DesignQuery(theme, layer, DesignType.FACADE).withHeight(height).withoutFallback();
-		DesignQuery wallQuery = new DesignQuery(theme, layer, DesignType.WALL).withHeight(height);
-
-		DesignQuery cornerQuery = new DesignQuery(theme, layer, DesignType.CORNER).withHeight(height);
-
+		Design wallA = null, wallB = null, corner = null;
 		boolean facadeAlongX = width <= length;
 		boolean facadeAlongZ = width >= length;
-		if (facadeAlongX)
-			facadeA = designProvider.find(facadeQuery.withWidth(width - 2));
-		if (facadeAlongZ)
-			facadeB = designProvider.find(facadeQuery.withWidth(length - 2));
 
-		Design wallA = (facadeA != null) ? facadeA : designProvider.find(wallQuery.withWidth(width - 2));
-		Design wallB = (facadeB != null) ? facadeB : designProvider.find(wallQuery.withWidth(length - 2));
-		Design corner = designProvider.find(cornerQuery);
+		// Find cached entry
+		if (designProvider.hasCachedRoom(room)) {
+			RoomDesignMapping designs = designProvider.getCachedRoom(room);
+			wallA = designs.wall1;
+			wallB = designs.wall2;
+			corner = designs.corner;
+
+			// Size changed
+			if (!wallA.fitsHorizontally(width - 2) || !wallA.fitsVertically(height))
+				wallA = null;
+			if (!wallB.fitsHorizontally(length - 2) || !wallB.fitsVertically(height))
+				wallB = null;
+			if (!corner.fitsVertically(height))
+				corner = null;
+
+		}
+
+		// Find new designs
+		if (wallA == null || wallB == null || corner == null) {
+			DesignQuery facadeQuery = new DesignQuery(theme, layer, DesignType.FACADE).withHeight(height)
+					.withoutFallback();
+			DesignQuery wallQuery = new DesignQuery(theme, layer, DesignType.WALL).withHeight(height);
+			DesignQuery cornerQuery = new DesignQuery(theme, layer, DesignType.CORNER).withHeight(height);
+
+			if (wallA == null) {
+				if (facadeAlongX)
+					facadeA = designProvider.find(facadeQuery.withWidth(width - 2));
+				wallA = (facadeA != null) ? facadeA : designProvider.find(wallQuery.withWidth(width - 2));
+			}
+
+			if (wallB == null) {
+				if (facadeAlongZ)
+					facadeB = designProvider.find(facadeQuery.withWidth(length - 2));
+				wallB = (facadeB != null) ? facadeB : designProvider.find(wallQuery.withWidth(length - 2));
+			}
+
+			if (corner == null)
+				corner = designProvider.find(cornerQuery);
+
+			designProvider.cacheRoom(room, new RoomDesignMapping(wallA, wallB, corner));
+		}
 
 		BlockPos cornerZ = start.add(0, 0, length - 1);
 		BlockPos cornerXZ = start.add(width - 1, 0, length - 1);
@@ -102,13 +136,30 @@ public class DesignHelper {
 
 	}
 
-	public static void addTower(StyleGroupDesignProvider designProvider, List<DesignInstance> designList,
-			DesignTheme theme, DesignLayer layer, BlockPos start, BlockPos size) {
+	public static void addTower(TemporaryDesignCache designProvider, List<DesignInstance> designList, DesignTheme theme,
+			DesignLayer layer, Room room) {
+		BlockPos start = room.getOrigin();
+		BlockPos size = room.getSize();
 		int diameter = size.getX();
 		int height = size.getY();
+		Design tower = null;
 
-		DesignQuery towerQuery = new DesignQuery(theme, layer, DesignType.TOWER).withWidth(diameter).withHeight(height);
-		Design tower = designProvider.find(towerQuery);
+		// Find cached entry
+		if (designProvider.hasCachedRoom(room)) {
+			tower = designProvider.getCachedRoom(room).wall1;
+
+			// Size changed
+			if (!tower.fitsHorizontally(diameter) || !tower.fitsVertically(height))
+				tower = null;
+		}
+
+		// Find new designs
+		if (tower == null) {
+			DesignQuery towerQuery = new DesignQuery(theme, layer, DesignType.TOWER).withWidth(diameter)
+					.withHeight(height);
+			tower = designProvider.find(towerQuery);
+			designProvider.cacheRoom(room, new RoomDesignMapping(tower));
+		}
 
 		if (tower == null)
 			return;
@@ -116,13 +167,30 @@ public class DesignHelper {
 		designList.add(tower(tower, start, height));
 	}
 
-	public static void addTowerRoof(StyleGroupDesignProvider designProvider, List<DesignInstance> designList,
-			DesignTheme theme, DesignLayer layer, BlockPos start, BlockPos size, boolean flat) {
+	public static void addTowerRoof(TemporaryDesignCache designProvider, List<DesignInstance> designList,
+			DesignTheme theme, DesignLayer layer, Stack stack, boolean flat) {
+		Room highest = stack.highest();
+		BlockPos start = highest.getOrigin().up(highest.height);
+		BlockPos size = highest.getSize();
 		int diameter = size.getX();
+		Design roof = null;
 
-		DesignType type = flat ? DesignType.TOWER_FLAT_ROOF : DesignType.TOWER_ROOF;
-		DesignQuery roofQuery = new DesignQuery(theme, layer, type).withWidth(diameter);
-		Design roof = designProvider.find(roofQuery);
+		// Find cached entry
+		if (designProvider.hasCachedRoof(stack)) {
+			roof = designProvider.getCachedRoof(stack);
+
+			// Size or Type changed
+			boolean typeChanged = stack.getRoofType().getDesign().getClass() != roof.getClass();
+			if (!roof.fitsHorizontally(diameter) || typeChanged)
+				roof = null;
+		}
+
+		if (roof == null) {
+			DesignType type = flat ? DesignType.TOWER_FLAT_ROOF : DesignType.TOWER_ROOF;
+			DesignQuery roofQuery = new DesignQuery(theme, layer, type).withWidth(diameter);
+			roof = designProvider.find(roofQuery);
+			designProvider.cacheRoof(stack, roof);
+		}
 
 		if (roof == null)
 			return;
@@ -131,11 +199,13 @@ public class DesignHelper {
 	}
 
 	/**
-	 * Creates a roof with two facades sitting on the shorter sides of the
-	 * cuboid
+	 * Creates a roof with two facades sitting on the shorter sides of the cuboid
 	 */
-	public static void addNormalRoof(StyleGroupDesignProvider designProvider, List<DesignInstance> designList,
-			DesignTheme theme, DesignLayer layer, BlockPos start, BlockPos size) {
+	public static void addNormalRoof(TemporaryDesignCache designProvider, List<DesignInstance> designList,
+			DesignTheme theme, DesignLayer layer, Stack stack) {
+		Room highest = stack.highest();
+		BlockPos start = highest.getOrigin().up(highest.height);
+		BlockPos size = highest.getSize();
 		boolean south = size.getZ() < size.getX();
 		int depth = south ? size.getX() : size.getZ();
 		int width = south ? size.getZ() : size.getX();
@@ -143,8 +213,20 @@ public class DesignHelper {
 		BlockPos cornerZ = start.add(0, 0, size.getZ() - 1);
 		BlockPos cornerXZ = start.add(size.getX() - 1, 0, size.getZ() - 1);
 		BlockPos cornerX = start.add(size.getX() - 1, 0, 0);
+		Design roof = null;
 
-		Design roof = designProvider.find(new DesignQuery(theme, layer, DesignType.ROOF).withWidth(width));
+		if (designProvider.hasCachedRoof(stack)) {
+			roof = designProvider.getCachedRoof(stack);
+
+			// Size or Type changed
+			if (!roof.fitsHorizontally(width) || roof.getClass() != highest.roofType.getDesign().getClass())
+				roof = null;
+		}
+
+		if (roof == null) {
+			roof = designProvider.find(new DesignQuery(theme, layer, DesignType.ROOF).withWidth(width));
+			designProvider.cacheRoof(stack, roof);
+		}
 
 		if (roof == null)
 			return;
@@ -156,8 +238,11 @@ public class DesignHelper {
 	/**
 	 * Creates a roof with facades on all sides of the cuboid
 	 */
-	public static void addNormalCrossRoof(StyleGroupDesignProvider designProvider, List<DesignInstance> designList,
-			DesignTheme theme, DesignLayer layer, BlockPos start, BlockPos size) {
+	public static void addNormalCrossRoof(TemporaryDesignCache designProvider, List<DesignInstance> designList,
+			DesignTheme theme, DesignLayer layer, Stack stack) {
+		Room highest = stack.highest();
+		BlockPos start = highest.getOrigin().up(highest.height);
+		BlockPos size = highest.getSize();
 		boolean south = size.getZ() < size.getX();
 		int depth = south ? size.getX() : size.getZ();
 		int width = south ? size.getZ() : size.getX();
@@ -165,8 +250,20 @@ public class DesignHelper {
 		BlockPos cornerZ = start.add(0, 0, size.getZ() - 1);
 		BlockPos cornerXZ = start.add(size.getX() - 1, 0, size.getZ() - 1);
 		BlockPos cornerX = start.add(size.getX() - 1, 0, 0);
+		Design roof = null;
 
-		Design roof = designProvider.find(new DesignQuery(theme, layer, DesignType.ROOF).withWidth(width));
+		if (designProvider.hasCachedRoof(stack)) {
+			roof = designProvider.getCachedRoof(stack);
+
+			// Size or Type changed
+			if (!roof.fitsHorizontally(width) || roof.getClass() != highest.roofType.getDesign().getClass())
+				roof = null;
+		}
+
+		if (roof == null) {
+			roof = designProvider.find(new DesignQuery(theme, layer, DesignType.ROOF).withWidth(width));
+			designProvider.cacheRoof(stack, roof);
+		}
 
 		if (roof == null)
 			return;
@@ -180,8 +277,11 @@ public class DesignHelper {
 	/**
 	 * Creates a flat roof on top of the cuboid
 	 */
-	public static void addFlatRoof(StyleGroupDesignProvider designProvider, List<DesignInstance> designList,
-			DesignTheme theme, DesignLayer layer, BlockPos start, BlockPos size) {
+	public static void addFlatRoof(TemporaryDesignCache designProvider, List<DesignInstance> designList,
+			DesignTheme theme, DesignLayer layer, Stack stack) {
+		Room highest = stack.highest();
+		BlockPos start = highest.getOrigin().up(highest.height);
+		BlockPos size = highest.getSize();
 		boolean south = size.getZ() < size.getX();
 		int depth = south ? size.getX() : size.getZ();
 		int width = south ? size.getZ() : size.getX();
@@ -189,8 +289,20 @@ public class DesignHelper {
 		BlockPos cornerZ = start.add(0, 0, size.getZ() - 1);
 		BlockPos cornerXZ = start.add(size.getX() - 1, 0, size.getZ() - 1);
 		BlockPos cornerX = start.add(size.getX() - 1, 0, 0);
+		Design flatroof = null;
 
-		Design flatroof = designProvider.find(new DesignQuery(theme, layer, DesignType.FLAT_ROOF).withWidth(width));
+		if (designProvider.hasCachedRoof(stack)) {
+			flatroof = designProvider.getCachedRoof(stack);
+
+			// Size or Type changed
+			if (!flatroof.fitsHorizontally(width) || flatroof.getClass() != highest.roofType.getDesign().getClass())
+				flatroof = null;
+		}
+
+		if (flatroof == null) {
+			flatroof = designProvider.find(new DesignQuery(theme, layer, DesignType.FLAT_ROOF).withWidth(width));
+			designProvider.cacheRoof(stack, flatroof);
+		}
 
 		if (flatroof == null)
 			return;
@@ -201,8 +313,8 @@ public class DesignHelper {
 	}
 
 	/**
-	 * Adds a wall in the specified design between the corner points facing z+
-	 * when x1 < x2
+	 * Adds a wall in the specified design between the corner points facing z+ when
+	 * x1 < x2
 	 */
 	public static DesignInstance wall(Design design, BlockPos corner1, BlockPos corner2, int height) {
 		int xDiff = corner2.getX() - corner1.getX();
@@ -216,8 +328,7 @@ public class DesignHelper {
 	}
 
 	/**
-	 * Creates a corner of the specified design. Valid angles: 45, 135, -135,
-	 * -45,
+	 * Creates a corner of the specified design. Valid angles: 45, 135, -135, -45,
 	 */
 	public static DesignInstance corner(Design design, BlockPos pos, int angle, int height, boolean flip) {
 		return ((Corner) design).create(pos, angle + 45, height, flip);
@@ -238,8 +349,8 @@ public class DesignHelper {
 	}
 
 	/**
-	 * Creates a quadroof part of the specified design. Valid angles: 0, 90,
-	 * 180, -90
+	 * Creates a quadroof part of the specified design. Valid angles: 0, 90, 180,
+	 * -90
 	 */
 	public static DesignInstance quadRoof(Design design, BlockPos pos, int angle, int depth) {
 		return ((Roof) design).createAsCross(pos, angle, depth);

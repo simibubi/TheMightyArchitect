@@ -3,126 +3,110 @@
     "OUTER_THICK": {
       "Properties": {
         "east": "false",
+        "waterlogged": "false",
         "south": "false",
         "north": "false",
-        "variant": "cobblestone",
         "west": "false",
-        "up": "false"
+        "up": "true"
       },
       "Name": "minecraft:cobblestone_wall"
     },
     "OUTER_FLAT": {
       "Properties": {
         "half": "bottom",
+        "waterlogged": "false",
+        "powered": "false",
         "facing": "south",
         "open": "true"
       },
-      "Name": "minecraft:trapdoor"
+      "Name": "minecraft:spruce_trapdoor"
     },
     "INNER_PRIMARY": {
-      "Properties": {
-        "variant": "spruce"
-      },
-      "Name": "minecraft:planks"
+      "Name": "minecraft:spruce_planks"
     },
     "HEAVY_POST": {
       "Properties": {
         "east": "false",
+        "waterlogged": "false",
         "south": "false",
         "north": "false",
-        "variant": "mossy_cobblestone",
         "west": "false",
-        "up": "false"
+        "up": "true"
       },
-      "Name": "minecraft:cobblestone_wall"
+      "Name": "minecraft:stone_brick_wall"
     },
     "ROOF_PRIMARY": {
-      "Properties": {
-        "variant": "granite"
-      },
-      "Name": "minecraft:stone"
+      "Name": "minecraft:granite"
     },
     "INNER_DETAIL": {
       "Properties": {
-        "variant": "spruce",
         "axis": "y"
       },
-      "Name": "minecraft:log"
+      "Name": "minecraft:spruce_wood"
     },
     "ROOF_SLAB": {
       "Properties": {
-        "half": "bottom",
-        "variant": "brick"
+        "waterlogged": "false",
+        "type": "bottom"
       },
-      "Name": "minecraft:stone_slab"
+      "Name": "minecraft:brick_slab"
     },
     "WINDOW": {
       "Properties": {
         "east": "false",
+        "waterlogged": "false",
         "south": "false",
         "north": "false",
         "west": "false"
       },
       "Name": "minecraft:glass_pane"
     },
-    "Name": "Default Palette",
+    "Name": "Standard Medieval",
     "HEAVY_PRIMARY": {
+      "Name": "minecraft:polished_andesite"
+    },
+    "FLOOR": {
       "Properties": {
-        "variant": "smooth_andesite"
+        "axis": "y"
       },
-      "Name": "minecraft:stone"
+      "Name": "minecraft:stripped_oak_wood"
     },
     "HEAVY_SECONDARY": {
       "Name": "minecraft:cobblestone"
     },
     "ROOF_DETAIL": {
-      "Name": "minecraft:brick_block"
-    },
-    "ROOF_SLAB_TOP": {
-      "Properties": {
-        "half": "top",
-        "variant": "brick"
-      },
-      "Name": "minecraft:stone_slab"
-    },
-    "ROOF_SECONDARY": {
-      "Properties": {
-        "variant": "smooth_granite"
-      },
-      "Name": "minecraft:stone"
+      "Name": "minecraft:bricks"
     },
     "INNER_SECONDARY": {
       "Properties": {
-        "variant": "dark_oak"
+        "axis": "z"
       },
-      "Name": "minecraft:planks"
+      "Name": "minecraft:stripped_spruce_log"
     },
     "OUTER_SLAB": {
       "Properties": {
-        "half": "bottom",
-        "variant": "cobblestone"
+        "waterlogged": "false",
+        "type": "bottom"
       },
-      "Name": "minecraft:stone_slab"
+      "Name": "minecraft:cobblestone_slab"
     },
     "HEAVY_WINDOW": {
       "Properties": {
         "east": "false",
-        "color": "black",
+        "waterlogged": "false",
         "south": "false",
         "north": "false",
         "west": "false"
       },
-      "Name": "minecraft:stained_glass_pane"
+      "Name": "minecraft:black_stained_glass_pane"
     },
     "CLEAR": {
-      "Properties": {
-        "color": "red"
-      },
-      "Name": "minecraft:stained_glass"
+      "Name": "minecraft:air"
     },
     "OUTER_THIN": {
       "Properties": {
         "east": "false",
+        "waterlogged": "false",
         "south": "false",
         "north": "false",
         "west": "false"

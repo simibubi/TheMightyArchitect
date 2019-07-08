@@ -1,6 +1,6 @@
 package com.simibubi.mightyarchitect.control.compose.planner;
 
-public interface ImAToolForGroundPlanning {
+public interface IComposerTool {
 
 	public String handleRightClick();
 	public boolean handleMouseWheel(int scroll);

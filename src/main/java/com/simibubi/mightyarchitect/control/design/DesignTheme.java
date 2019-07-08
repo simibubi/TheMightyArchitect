@@ -19,21 +19,21 @@ public class DesignTheme {
 	private String filePath;
 	private String displayName;
 	private String designer;
-	private IPickDesigns designPicker;
+	private DesignPicker designPicker;
 	private boolean imported;
 	private PaletteDefinition defaultPalette;
 	private ThemeStatistics statistics;
 	private int maxFloorHeight;
-	
+
 	private List<DesignLayer> roomLayers;
 	private List<DesignLayer> layers;
 	private List<DesignType> types;
 	private Map<DesignLayer, Map<DesignType, Set<Design>>> designs;
 
-	public DesignTheme(String displayName, String designer, IPickDesigns designPicker) {
+	public DesignTheme(String displayName, String designer) {
 		this.designer = designer;
 		this.displayName = displayName;
-		this.designPicker = designPicker;
+		this.designPicker = new DesignPicker();
 		this.designPicker.setTheme(this);
 		imported = false;
 		maxFloorHeight = 10;
@@ -59,7 +59,7 @@ public class DesignTheme {
 	public String getFilePath() {
 		return filePath;
 	}
-	
+
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
 	}
@@ -68,7 +68,7 @@ public class DesignTheme {
 		return displayName;
 	}
 
-	public IPickDesigns getDesignPicker() {
+	public DesignPicker getDesignPicker() {
 		return designPicker;
 	}
 
@@ -79,7 +79,7 @@ public class DesignTheme {
 	public List<DesignType> getTypes() {
 		return types;
 	}
-	
+
 	public boolean isImported() {
 		return imported;
 	}
@@ -104,9 +104,9 @@ public class DesignTheme {
 		designs = DesignResourceLoader.loadDesignsForTheme(this);
 		statistics = ThemeStatistics.evaluate(this);
 	}
-	
+
 	public ThemeStatistics getStatistics() {
-		if (designs == null) {			
+		if (designs == null) {
 			initDesigns();
 		}
 		return statistics;
@@ -115,11 +115,11 @@ public class DesignTheme {
 	public void clearDesigns() {
 		designs = null;
 	}
-	
+
 	public void setDesigner(String designer) {
 		this.designer = designer;
 	}
-	
+
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 	}
@@ -127,12 +127,12 @@ public class DesignTheme {
 	public String getDesigner() {
 		return designer;
 	}
-	
+
 	public void setLayers(List<DesignLayer> layers) {
 		this.layers = layers;
 		updateRoomLayers();
 	}
-	
+
 	public void setTypes(List<DesignType> types) {
 		this.types = types;
 	}
@@ -160,24 +160,21 @@ public class DesignTheme {
 		if (compound == null)
 			return null;
 
-		DesignTheme theme = new DesignTheme(compound.getString("Name"), compound.getString("Designer"),
-				new StandardDesignPicker());
+		DesignTheme theme = new DesignTheme(compound.getString("Name"), compound.getString("Designer"));
 
 		theme.layers = new ArrayList<>();
 		theme.types = new ArrayList<>();
-		
+
 		if (compound.contains("Maximum Room Height"))
 			theme.maxFloorHeight = compound.getInt("Maximum Room Height");
-		
-		compound.getList("Layers", 8)
-				.forEach(s -> theme.layers.add(DesignLayer.valueOf(((StringNBT) s).getString())));
-		compound.getList("Types", 8)
-				.forEach(s -> theme.types.add(DesignType.valueOf(((StringNBT) s).getString())));
+
+		compound.getList("Layers", 8).forEach(s -> theme.layers.add(DesignLayer.valueOf(((StringNBT) s).getString())));
+		compound.getList("Types", 8).forEach(s -> theme.types.add(DesignType.valueOf(((StringNBT) s).getString())));
 
 		theme.updateRoomLayers();
 		return theme;
 	}
-	
+
 	public void setImported(boolean imported) {
 		this.imported = imported;
 	}

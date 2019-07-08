@@ -120,9 +120,9 @@ public enum BlockOrientation {
 			if (facing.getAxis().isHorizontal())
 				newState = newState.with(BlockStateProperties.HORIZONTAL_FACING, facing);
 
-		if (state.getBlock() instanceof TrapDoorBlock)
-			state = state.with(BlockStateProperties.HORIZONTAL_FACING,
-					state.get(BlockStateProperties.HORIZONTAL_FACING).getOpposite());
+		if (newState.getBlock() instanceof TrapDoorBlock)
+			newState = newState.with(BlockStateProperties.HORIZONTAL_FACING,
+					newState.get(BlockStateProperties.HORIZONTAL_FACING).getOpposite());
 
 		if (hasFacing() && state.has(BlockStateProperties.AXIS)) {
 			Axis axis = state.get(BlockStateProperties.AXIS);
