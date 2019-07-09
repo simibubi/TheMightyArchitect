@@ -39,6 +39,7 @@ public abstract class WallDecorationToolBase extends ComposerToolBase {
 
 		GlStateManager.lineWidth(5);
 		GlStateManager.color4f(1, 1, 1, 1);
+		GlStateManager.disableTexture();
 
 		if (highlightStack && selectedStack != null) {
 			BlockPos min = selectedStack.lowest().getOrigin().add(model.getAnchor());
@@ -66,6 +67,7 @@ public abstract class WallDecorationToolBase extends ComposerToolBase {
 		}
 
 		GlStateManager.lineWidth(1);
+		GlStateManager.enableTexture();
 
 	}
 

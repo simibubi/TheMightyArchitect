@@ -122,21 +122,21 @@ public class RoomTool extends GroundPlanningToolBase {
 
 		if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL)) {
 			// 5-Grid
-			int xr = (size.getX()) % 4;
+			int xr = (size.getX() +2) % 4;
 			if (xr < 0)
 				xr += 4;
 			else 
 				xr = 4 - xr;
 			if (xr != 0) {
-				selectedPosition = selectedPosition.east(size.getX() > 0 ? xr : -xr);
+				selectedPosition = selectedPosition.east(size.getX() > 0 ? xr : 4-xr);
 			}
-			int zr = (size.getZ()) % 4;
+			int zr = (size.getZ() +2) % 4;
 			if (zr < 0)
 				zr += 4;
 			else 
 				zr = 4 - zr;
 			if (zr != 0) {
-				selectedPosition = selectedPosition.south(size.getZ() > 0 ? zr : -zr);
+				selectedPosition = selectedPosition.south(size.getZ() > 0 ? zr : 4-zr);
 			}
 
 		} else {

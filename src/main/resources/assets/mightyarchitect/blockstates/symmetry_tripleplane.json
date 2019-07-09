@@ -1,7 +1,6 @@
 {
 	"forgemarker": 1,
     "variants": {
-		"normal": { "model": "mightyarchitect:block/symmetry_tripleplane" },
-		"inventory": { "model": "mightyarchitect:block/symmetry_tripleplane" }
+		"": { "model": "mightyarchitect:block/symmetry_tripleplane" }
 	}
 }

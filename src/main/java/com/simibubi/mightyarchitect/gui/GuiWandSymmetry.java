@@ -4,8 +4,8 @@ import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.simibubi.mightyarchitect.gui.widgets.DynamicLabel;
+import com.simibubi.mightyarchitect.gui.widgets.OptionScrollArea;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollArea;
-import com.simibubi.mightyarchitect.gui.widgets.ScrollArea.IScrollAction;
 import com.simibubi.mightyarchitect.item.ItemWandSymmetry;
 import com.simibubi.mightyarchitect.item.symmetry.SymmetryCrossPlane;
 import com.simibubi.mightyarchitect.item.symmetry.SymmetryElement;
@@ -15,7 +15,6 @@ import com.simibubi.mightyarchitect.item.symmetry.SymmetryTriplePlane;
 import com.simibubi.mightyarchitect.networking.PacketNbt;
 import com.simibubi.mightyarchitect.networking.Packets;
 
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -26,14 +25,10 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.fml.network.PacketDistributor;
 
-public class GuiWandSymmetry extends Screen {
-
-	private int xSize, ySize;
-	private int xTopLeft, yTopLeft;
+public class GuiWandSymmetry extends AbstractSimiScreen {
 
 	private ScrollArea areaType;
 	private DynamicLabel labelType;
@@ -45,7 +40,7 @@ public class GuiWandSymmetry extends Screen {
 	private ItemStack wand;
 
 	public GuiWandSymmetry(ItemStack wand) {
-		super(new StringTextComponent("Symmetry Wand"));
+		super();
 
 		currentElement = ItemWandSymmetry.getMirror(wand);
 		if (currentElement instanceof SymmetryEmptySlot) {
@@ -57,76 +52,72 @@ public class GuiWandSymmetry extends Screen {
 
 	@Override
 	public void init() {
-		xSize = GuiResources.WAND_SYMMETRY.width + 50;
-		ySize = GuiResources.WAND_SYMMETRY.height + 50;
-		xTopLeft = (this.width - this.xSize) / 2;
-		yTopLeft = (this.height - this.ySize) / 2;
+		super.init();
+		this.setWindowSize(GuiResources.WAND_SYMMETRY.width + 50, GuiResources.WAND_SYMMETRY.height + 50);
 
-		labelType = new DynamicLabel(xTopLeft + 122, yTopLeft + 15);
-		labelAlign = new DynamicLabel(xTopLeft + 122, yTopLeft + 35);
+		labelType = new DynamicLabel(topLeftX + 122, topLeftY + 15, "").colored(0xFFFFFFFF).withShadow();
+		labelAlign = new DynamicLabel(topLeftX + 122, topLeftY + 35, "").colored(0xFFFFFFFF).withShadow();
 
-		areaType = new ScrollArea(SymmetryElement.TOOLTIP_ELEMENTS, new IScrollAction() {
-			@Override
-			public void onScroll(int position) {
-				switch (position) {
-				case 0:
-					currentElement = new SymmetryPlane(currentElement.getPosition());
-					break;
-				case 1:
-					currentElement = new SymmetryCrossPlane(currentElement.getPosition());
-					break;
-				case 2:
-					currentElement = new SymmetryTriplePlane(currentElement.getPosition());
-					break;
-				default:
-					break;
-				}
-				labelType.text = SymmetryElement.TOOLTIP_ELEMENTS.get(position);
-				initAlign(currentElement);
+		int state = currentElement instanceof SymmetryTriplePlane ? 2
+				: currentElement instanceof SymmetryCrossPlane ? 1 : 0;
+		areaType = new OptionScrollArea(topLeftX + 119, topLeftY + 12, 70, 14)
+				.forOptions(SymmetryElement.TOOLTIP_ELEMENTS).titled("Type of Mirror").writingTo(labelType)
+				.setState(state);
+
+		areaType.calling(position -> {
+			switch (position) {
+			case 0:
+				currentElement = new SymmetryPlane(currentElement.getPosition());
+				break;
+			case 1:
+				currentElement = new SymmetryCrossPlane(currentElement.getPosition());
+				break;
+			case 2:
+				currentElement = new SymmetryTriplePlane(currentElement.getPosition());
+				break;
+			default:
+				break;
 			}
-
+			initAlign(currentElement);
 		});
-		areaType.setBounds(xTopLeft + 119, yTopLeft + 12, 70, 14);
-		areaType.setState(currentElement instanceof SymmetryTriplePlane ? 2
-				: currentElement instanceof SymmetryCrossPlane ? 1 : 0);
-		areaType.setTitle("Type of Mirror");
-		labelType.text = SymmetryElement.TOOLTIP_ELEMENTS.get(areaType.getState());
+
+		widgets.clear();
+		
 		initAlign(currentElement);
+
+		widgets.add(labelAlign);
+		widgets.add(areaType);
+		widgets.add(labelType);
 
 	}
 
 	private void initAlign(SymmetryElement element) {
-		areaAlign = new ScrollArea(element.getAlignToolTips(), new IScrollAction() {
-			@Override
-			public void onScroll(int position) {
-				element.setOrientation(position);
-				labelAlign.text = element.getAlignToolTips().get(position);
-			}
-		});
-		areaAlign.setBounds(xTopLeft + 119, yTopLeft + 32, 70, 14);
-		areaAlign.setState(element.getOrientationIndex());
-		areaAlign.setTitle("Direction");
-		labelAlign.text = element.getAlignToolTips().get(element.getOrientationIndex());
+		if (areaAlign != null) {
+			widgets.remove(areaAlign);
+		}
+
+		areaAlign = new OptionScrollArea(topLeftX + 119, topLeftY + 32, 70, 14).forOptions(element.getAlignToolTips())
+				.titled("Direction").writingTo(labelAlign).setState(element.getOrientationIndex())
+				.calling(element::setOrientation);
+
+		widgets.add(areaAlign);
 	}
 
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
-		renderBackground();
-
-		GuiResources.WAND_SYMMETRY.draw(this, xTopLeft, yTopLeft);
-
-		int x = xTopLeft + 63;
-		int y = yTopLeft + 15;
-
-		drawString(font, "Symmetry", x, y, GuiResources.FONT_COLOR);
-		drawString(font, "Direction", x, y + 20, GuiResources.FONT_COLOR);
-		labelType.draw(this);
-		labelAlign.draw(this);
-		areaType.draw(this, mouseX, mouseY);
-		areaAlign.draw(this, mouseX, mouseY);
-
-		super.render(mouseX, mouseY, partialTicks);
+	public void tick() {
+		super.tick();
 		animationProgress++;
+	}
+
+	@Override
+	protected void renderWindow(int mouseX, int mouseY, float partialTicks) {
+		GuiResources.WAND_SYMMETRY.draw(this, topLeftX, topLeftY);
+
+		int x = topLeftX + 63;
+		int y = topLeftY + 15;
+
+		font.drawString("Symmetry", x, y, GuiResources.FONT_COLOR);
+		font.drawString("Direction", x, y + 20, GuiResources.FONT_COLOR);
 
 		minecraft.getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 		GlStateManager.enableBlend();
@@ -134,27 +125,27 @@ public class GuiWandSymmetry extends Screen {
 		renderBlock();
 		renderBlock();
 
+		GlStateManager.pushLightingAttributes();
 		RenderHelper.disableStandardItemLighting();
 		GlStateManager.pushMatrix();
-		GlStateManager.translated((this.width - this.xSize) / 2 + 250, 300, 100);
+		GlStateManager.translated((this.width - this.sWidth) / 2 + 250, 250, 100);
 		GlStateManager.rotatef(-30, .4f, 0, -.2f);
 		GlStateManager.rotatef(90 + 0.2f * animationProgress, 0, 1, 0);
-		GlStateManager.scaled(300, -300, 300);
+		GlStateManager.scaled(100, -100, 100);
 		itemRenderer.renderItem(wand, itemRenderer.getModelWithOverrides(wand));
 		GlStateManager.popMatrix();
 		RenderHelper.enableStandardItemLighting();
-
+		GlStateManager.popAttributes();
 	}
 
 	protected void renderBlock() {
 		GlStateManager.pushMatrix();
 		BufferBuilder buffer = Tessellator.getInstance().getBuffer();
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-		GlStateManager.translated(xTopLeft + 18, yTopLeft + 42, 20);
+		GlStateManager.translated(topLeftX + 15, topLeftY - 117, 20);
 		GlStateManager.rotatef(-22.5f, .3f, 1f, 0f);
 		GlStateManager.scaled(32, -32, 32);
-		GlStateManager.shadeModel(GL11.GL_SMOOTH);
-		minecraft.getBlockRendererDispatcher().renderBlock(currentElement.getModel(), new BlockPos(0, 0, 0),
+		minecraft.getBlockRendererDispatcher().renderBlock(currentElement.getModel(), new BlockPos(0, -5, 0),
 				minecraft.world, buffer, minecraft.world.rand, EmptyModelData.INSTANCE);
 
 		Tessellator.getInstance().draw();
@@ -170,16 +161,6 @@ public class GuiWandSymmetry extends Screen {
 		Packets.channel.send(PacketDistributor.SERVER.noArg(), new PacketNbt(heldItemMainhand));
 		minecraft.player.setHeldItem(Hand.MAIN_HAND, heldItemMainhand);
 		super.removed();
-	}
-
-	@Override
-	public boolean mouseScrolled(double x, double y, double scroll) {
-		if (scroll != 0) {
-			areaAlign.tryScroll(x, y, (int) (scroll / -120f));
-			areaType.tryScroll(x, y, (int) (scroll / -120f));
-		}
-
-		return super.mouseScrolled(x, y, scroll);
 	}
 
 }

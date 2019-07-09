@@ -1,6 +1,9 @@
 package com.simibubi.mightyarchitect.control.compose.planner;
 
+import org.lwjgl.glfw.GLFW;
+
 import com.simibubi.mightyarchitect.control.ArchitectManager;
+import com.simibubi.mightyarchitect.gui.Keyboard;
 
 import net.minecraft.util.text.TextFormatting;
 
@@ -9,7 +12,13 @@ public class PalettePainterTool extends WallDecorationToolBase {
 	@Override
 	public void init() {
 		super.init();
-		highlightRoom = true;
+
+		highlightStack = true;
+		highlightRoom = false;
+		highlightRoof = false;
+		
+		toolModeNoCtrl = "Stack";
+		toolModeCtrl = "Room";
 	}
 
 	@Override
@@ -25,10 +34,28 @@ public class PalettePainterTool extends WallDecorationToolBase {
 			return false;
 		}
 
-		selectedRoom.secondaryPalette ^= true;
+		if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL)) {
+			// Paint Room
+			selectedRoom.secondaryPalette ^= true;
+			
+		} else {
+			// Paint Stack
+			boolean secondary = !selectedStack.lowest().secondaryPalette;
+			selectedStack.forEach(room -> room.secondaryPalette = secondary);
+		}
+		
 		ArchitectManager.reAssemble();
 		status(selectedRoom.secondaryPalette ? "Secondary Palette" : "Primary Palette");
 		return true;
+	}
+	
+	@Override
+	public void updateSelection() {
+		super.updateSelection();
+		
+		highlightRoom = Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL);
+		highlightStack = !highlightRoom;
+		highlightRoof = highlightRoom;
 	}
 
 }

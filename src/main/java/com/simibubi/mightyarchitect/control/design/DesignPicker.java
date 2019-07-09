@@ -118,7 +118,15 @@ public class DesignPicker {
 		stack.forEach(this::rerollRoom);
 		rerollRoof(stack);
 	}
-
+	
+	public void putRoom(Room room, RoomDesignMapping mapping) {
+		roomDesigns.put(room, mapping);
+	}
+	
+	public void putRoof(Stack stack, Design roof) {
+		roofDesigns.put(stack, roof);
+	}
+	
 	public void setTheme(DesignTheme theme) {
 		this.theme = theme;
 	}

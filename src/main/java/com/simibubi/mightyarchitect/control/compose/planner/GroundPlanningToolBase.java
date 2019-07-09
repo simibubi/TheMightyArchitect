@@ -150,6 +150,7 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 		}
 		
 		renderRoof();
+		
 	}
 	
 	protected void renderRoof() {
@@ -160,6 +161,7 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 			BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 			GlStateManager.color3f(0, 0, 0);
 			GlStateManager.lineWidth(10);
+			GlStateManager.disableTexture();
 
 			groundPlan.forEachStack(stack -> {
 				Room room = stack.highest();
@@ -233,6 +235,7 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 
 			GlStateManager.color3f(1, 1, 1);
 			GlStateManager.lineWidth(1);
+			GlStateManager.enableTexture();
 		}
 	}
 }

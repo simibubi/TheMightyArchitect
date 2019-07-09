@@ -30,15 +30,21 @@ public abstract class ComposerToolBase implements IComposerTool {
 	public static Stack selectedStack;
 	public static Room selectedRoom;
 	public static Direction selectedFace;
+	public static BlockPos selectedPos;
 	
 	protected Schematic model;
 	
 	@Override
 	public void init() {
 		model = ArchitectManager.getModel();	
+		deselect();
+	}
+
+	protected void deselect() {
 		selectedStack = null;
 		selectedFace = null;
 		selectedRoom = null;
+		selectedPos = null;
 	}
 	
 	@Override
@@ -52,9 +58,7 @@ public abstract class ComposerToolBase implements IComposerTool {
 		final BlockPos anchor = ArchitectManager.getModel().getAnchor();
 
 		if (groundPlan.isEmpty()) {
-			selectedStack = null;
-			selectedFace = null;
-			selectedRoom = null;
+			deselect();
 			return;
 		}
 
@@ -65,15 +69,13 @@ public abstract class ComposerToolBase implements IComposerTool {
 		});
 
 		if (result.missed()) {
-			selectedStack = null;
-			selectedFace = null;
-			selectedRoom = null;
+			deselect();
 			return;
 		}
 
-		BlockPos pos = result.getPos().subtract(anchor);
-		selectedRoom = groundPlan.getRoomAtPos(pos);
-		selectedStack = groundPlan.getStackAtPos(pos);
+		selectedPos = result.getPos().subtract(anchor);
+		selectedRoom = groundPlan.getRoomAtPos(selectedPos);
+		selectedStack = groundPlan.getStackAtPos(selectedPos);
 		selectedFace = result.getFacing();
 	}
 	

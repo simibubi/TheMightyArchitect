@@ -282,7 +282,8 @@ public class ArchitectManager {
 			return;
 		}
 
-		phase.getPhaseHandler().onKey(event.getKey(), event.getAction() != Keyboard.PRESS);
+		boolean released = event.getAction() == Keyboard.RELEASE;
+		phase.getPhaseHandler().onKey(event.getKey(), released);
 	}
 
 	@SubscribeEvent

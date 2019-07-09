@@ -1,5 +1,6 @@
 package com.simibubi.mightyarchitect.gui.widgets;
 
+import com.google.common.collect.ImmutableList;
 import com.simibubi.mightyarchitect.gui.GuiResources;
 
 public class GuiIndicator extends AbstractSimiWidget {
@@ -13,7 +14,7 @@ public class GuiIndicator extends AbstractSimiWidget {
 	
 	public GuiIndicator(int x, int y, String tooltip) {
 		super(x, y, GuiResources.INDICATOR.width, GuiResources.INDICATOR.height);
-		this.toolTip = tooltip;
+		this.toolTip = ImmutableList.of(tooltip);
 		this.state = State.OFF;
 	}
 	

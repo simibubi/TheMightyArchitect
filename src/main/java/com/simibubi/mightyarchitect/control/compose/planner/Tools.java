@@ -14,7 +14,6 @@ public enum Tools {
 	Height(new HeightTool(), "Adjust (Y)", GuiResources.ICON_TOOL_HEIGHT),
 	Stack(new StackTool(), "Floors", GuiResources.ICON_TOOL_STACK),
 	Roof(new RoofTool(), "Roof Style", GuiResources.ICON_NORMAL_ROOF),
-	Select(new SelectionTool(), "Select", GuiResources.ICON_TARGET),
 	
 	RerollAll(new RerollTool(), "Reroll All", GuiResources.ICON_TOOL_REROLL),
 	RerollTarget(new RerollTargetTool(), "Reroll Target", GuiResources.ICON_TOOL_REROLL_TARGET),
@@ -46,7 +45,7 @@ public enum Tools {
 	
 	public static List<Tools> getGroundPlanningTools() {
 		List<Tools> tools = new ArrayList<>();
-		Collections.addAll(tools, Room, Cylinder, Height, MoveReshape, Stack, Roof, Select);
+		Collections.addAll(tools, Room, Cylinder, Height, MoveReshape, Stack, Roof);
 		return tools;
 	}
 	

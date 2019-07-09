@@ -1,7 +1,6 @@
 package com.simibubi.mightyarchitect.gui;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -11,28 +10,20 @@ import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.phase.export.PhaseEditTheme;
 import com.simibubi.mightyarchitect.gui.widgets.DynamicLabel;
+import com.simibubi.mightyarchitect.gui.widgets.OptionScrollArea;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollArea;
-import com.simibubi.mightyarchitect.gui.widgets.ScrollArea.IScrollAction;
 
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.util.text.StringTextComponent;
 
-public class GuiDesignExporter extends Screen {
+public class GuiDesignExporter extends AbstractSimiScreen {
 
 	public GuiDesignExporter() {
-		super(new StringTextComponent("Design Exporter"));
+		super();
 	}
-
-	private int xSize, ySize;
-	private int xTopLeft, yTopLeft;
-
-	private List<ScrollArea> scrollAreas;
 
 	private ScrollArea scrollAreaLayer;
 	private ScrollArea scrollAreaType;
 	private ScrollArea scrollAreaAdditionalData;
-
 	private DynamicLabel labelTheme;
 	private DynamicLabel labelLayer;
 	private DynamicLabel labelType;
@@ -46,10 +37,7 @@ public class GuiDesignExporter extends Screen {
 	public void init() {
 		super.init();
 		animationProgress = 0;
-		xSize = GuiResources.EXPORTER.width + 100;
-		ySize = GuiResources.EXPORTER.height + 50;
-		xTopLeft = (this.width - this.xSize) / 2;
-		yTopLeft = (this.height - this.ySize) / 2;
+		setWindowSize(GuiResources.EXPORTER.width + 100, GuiResources.EXPORTER.height + 50);
 
 		DesignTheme theme = DesignExporter.theme;
 		DesignLayer layer = DesignExporter.layer;
@@ -57,20 +45,20 @@ public class GuiDesignExporter extends Screen {
 
 		additionalDataValue = DesignExporter.designParameter;
 
-		labelTheme = new DynamicLabel(xTopLeft + 96, yTopLeft + 28);
-		labelLayer = new DynamicLabel(xTopLeft + 96, yTopLeft + 48);
-		labelType = new DynamicLabel(xTopLeft + 96, yTopLeft + 68);
-		labelAdditionalData = new DynamicLabel(xTopLeft + 96, yTopLeft + 88);
+		labelTheme = new DynamicLabel(topLeftX + 96, topLeftY + 28, "").withShadow();
+		labelLayer = new DynamicLabel(topLeftX + 96, topLeftY + 48, "").withShadow();
+		labelType = new DynamicLabel(topLeftX + 96, topLeftY + 68, "").withShadow();
+		labelAdditionalData = new DynamicLabel(topLeftX + 96, topLeftY + 88, "").withShadow();
 
-		scrollAreas = new LinkedList<>();
 		additionalDataKey = "";
 		initScrollAreas(theme, layer, type);
 	}
 
 	private void initScrollAreas(DesignTheme theme, DesignLayer layer, DesignType type) {
-		scrollAreas.clear();
+		widgets.clear();
 
 		List<DesignLayer> layers = theme.getLayers();
+		labelTheme.text = theme.getDisplayName();
 
 		if (!layers.contains(layer))
 			layer = DesignLayer.Regular;
@@ -78,22 +66,30 @@ public class GuiDesignExporter extends Screen {
 		List<String> layerOptions = new ArrayList<>();
 		layers.forEach(l -> layerOptions.add(l.getDisplayName()));
 
-		scrollAreaLayer = new ScrollArea(layerOptions, new IScrollAction() {
-			@Override
-			public void onScroll(int position) {
-				labelLayer.text = layerOptions.get(position);
-				initTypeScrollArea(theme, layers.get(position), DesignExporter.type);
-			}
-		});
-		scrollAreaLayer.setBounds(xTopLeft + 93, yTopLeft + 45, 90, 14);
-		scrollAreaLayer.setTitle("Style Layer");
-		scrollAreaLayer.setState(layers.indexOf(layer));
-		labelLayer.text = layer.getDisplayName();
-		scrollAreas.add(scrollAreaLayer);
+//		scrollAreaLayer = new ScrollArea(layerOptions, new IScrollAction() {
+//			@Override
+//			public void onScroll(int position) {
+//				labelLayer.text = layerOptions.get(position);
+//				initTypeScrollArea(theme, layers.get(position), DesignExporter.type);
+//			}
+//		});
+//		scrollAreaLayer.setBounds(topLeftX + 93, topLeftY + 45, 90, 14);
+//		scrollAreaLayer.setTitle("Style Layer");
+//		scrollAreaLayer.setState(layers.indexOf(layer));
+//		labelLayer.text = layer.getDisplayName();
+//		scrollAreas.add(scrollAreaLayer);
+
+		scrollAreaLayer = new OptionScrollArea(topLeftX + 93, topLeftY + 45, 90, 14).forOptions(layerOptions)
+				.titled("Layer").writingTo(labelLayer).setState(layers.indexOf(layer))
+				.calling(position -> initTypeScrollArea(theme, layers.get(position), DesignExporter.type));
+
+		widgets.add(labelTheme);
+		widgets.add(labelLayer);
+		widgets.add(labelType);
+		widgets.add(labelAdditionalData);
+		widgets.add(scrollAreaLayer);
 
 		initTypeScrollArea(theme, layer, type);
-
-		labelTheme.text = theme.getDisplayName();
 	}
 
 	protected void initTypeScrollArea(DesignTheme theme, DesignLayer layer, DesignType type) {
@@ -123,23 +119,29 @@ public class GuiDesignExporter extends Screen {
 		List<String> typeOptions = new ArrayList<>();
 		types.forEach(t -> typeOptions.add(t.getDisplayName()));
 
-		if (scrollAreas.contains(scrollAreaType))
-			scrollAreas.remove(scrollAreaType);
+		if (widgets.contains(scrollAreaType))
+			widgets.remove(scrollAreaType);
 
-		scrollAreaType = new ScrollArea(typeOptions, new IScrollAction() {
-			@Override
-			public void onScroll(int position) {
-				labelType.text = typeOptions.get(position);
-				DesignExporter.type = types.get(position);
-				initAdditionalDataScrollArea(types.get(position));
-			}
-		});
-		scrollAreaType.setBounds(xTopLeft + 93, yTopLeft + 65, 90, 14);
-		scrollAreaType.setTitle("Design Type");
-		scrollAreaType.setState(types.indexOf(type));
-		labelType.text = type.getDisplayName();
-		scrollAreas.add(scrollAreaType);
+//		scrollAreaType = new ScrollArea(typeOptions, new IScrollAction() {
+//			@Override
+//			public void onScroll(int position) {
+//				labelType.text = typeOptions.get(position);
+//				DesignExporter.type = types.get(position);
+//				initAdditionalDataScrollArea(types.get(position));
+//			}
+//		});
+//		scrollAreaType.setBounds(topLeftX + 93, topLeftY + 65, 90, 14);
+//		scrollAreaType.setTitle("Design Type");
+//		scrollAreaType.setState(types.indexOf(type));
+//		labelType.text = type.getDisplayName();
 
+		scrollAreaType = new OptionScrollArea(topLeftX + 93, topLeftY + 65, 90, 14).forOptions(typeOptions)
+				.titled("Design Type").writingTo(labelType).setState(types.indexOf(type)).calling(position -> {
+					DesignExporter.type = types.get(position);
+					initAdditionalDataScrollArea(types.get(position));
+				});
+
+		widgets.add(scrollAreaType);
 		initAdditionalDataScrollArea(type);
 	}
 
@@ -164,32 +166,21 @@ public class GuiDesignExporter extends Screen {
 					int min = (type.getMinSize() - 1) / 2;
 					int max = (type.getMaxSize() - 1) / 2;
 
-					scrollAreaAdditionalData = new ScrollArea(min, max + 1, new IScrollAction() {
-						@Override
-						public void onScroll(int position) {
-							additionalDataValue = position * 2 + 1;
-							labelAdditionalData.text = additionalDataValue + "m";
-						}
-					});
-					scrollAreaAdditionalData.setState((additionalDataValue - 1) / 2);
+					scrollAreaAdditionalData = new ScrollArea(topLeftX + 93, topLeftY + 85, 90, 14).withRange(min, max)
+							.setState((additionalDataValue - 1) / 2).calling(position -> {
+								additionalDataValue = position * 2 + 1;
+							});
 
 				} else {
 					int min = type.getMinSize();
 					int max = type.getMaxSize();
 
-					scrollAreaAdditionalData = new ScrollArea(min, max + 1, new IScrollAction() {
-
-						@Override
-						public void onScroll(int position) {
-							additionalDataValue = position;
-							labelAdditionalData.text = position + "m";
-						}
-
-					});
-					scrollAreaAdditionalData.setState(additionalDataValue);
+					scrollAreaAdditionalData = new ScrollArea(topLeftX + 93, topLeftY + 85, 90, 14)
+							.withRange(min, max + 1).setState(additionalDataValue).calling(position -> {
+								additionalDataValue = position;
+								labelAdditionalData.text = position + "m";
+							});
 				}
-
-				scrollAreaAdditionalData.setNumeric(true);
 
 			} else if (type.hasSubtypes()) {
 				if (additionalDataValue == -1)
@@ -200,19 +191,11 @@ public class GuiDesignExporter extends Screen {
 					additionalDataValue = 0;
 
 				labelAdditionalData.text = subtypeOptions.get(additionalDataValue);
-				scrollAreaAdditionalData = new ScrollArea(subtypeOptions, new IScrollAction() {
-					@Override
-					public void onScroll(int position) {
-						additionalDataValue = position;
-						labelAdditionalData.text = subtypeOptions.get(position);
-					}
-				});
-				scrollAreaAdditionalData.setNumeric(false);
-				scrollAreaAdditionalData.setState(additionalDataValue);
+				scrollAreaAdditionalData = new OptionScrollArea(topLeftX + 93, topLeftY + 85, 90, 14)
+						.forOptions(subtypeOptions).setState(additionalDataValue).calling(p -> additionalDataValue = p);
 			}
 
-			scrollAreaAdditionalData.setTitle(additionalDataKey);
-			scrollAreaAdditionalData.setBounds(xTopLeft + 93, yTopLeft + 85, 90, 14);
+			scrollAreaAdditionalData.titled(additionalDataKey).writingTo(labelAdditionalData);
 
 		} else {
 
@@ -225,14 +208,12 @@ public class GuiDesignExporter extends Screen {
 	}
 
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
-		renderBackground();
-		GuiResources.EXPORTER.draw(this, xTopLeft, yTopLeft);
-		super.render(mouseX, mouseY, partialTicks);
+	protected void renderWindow(int mouseX, int mouseY, float partialTicks) {
+		GuiResources.EXPORTER.draw(this, topLeftX, topLeftY);
 
 		RenderHelper.enableStandardItemLighting();
 		GlStateManager.pushMatrix();
-		GlStateManager.translatef((this.width - this.xSize) / 2 + 250, 280, 100);
+		GlStateManager.translatef((this.width - this.sWidth) / 2 + 250, 280, 100);
 		GlStateManager.rotatef(-30, .4f, 0, -.2f);
 		GlStateManager.rotatef(90 + 0.2f * animationProgress, 0, 1, 0);
 		GlStateManager.scalef(300, -300, 300);
@@ -243,22 +224,12 @@ public class GuiDesignExporter extends Screen {
 		animationProgress++;
 
 		int color = GuiResources.FONT_COLOR;
-		font.drawString("Export custom Designs", xTopLeft + 10, yTopLeft + 10, color);
+		font.drawString("Export custom Designs", topLeftX + 10, topLeftY + 10, color);
 
-		font.drawString("Theme", xTopLeft + 10, yTopLeft + 28, color);
-		font.drawString("Building Layer", xTopLeft + 10, yTopLeft + 48, color);
-		font.drawString("Design Type", xTopLeft + 10, yTopLeft + 68, color);
-		font.drawString(additionalDataKey, xTopLeft + 10, yTopLeft + 88, color);
-
-		labelTheme.draw(this);
-		labelLayer.draw(this);
-		labelType.draw(this);
-		labelAdditionalData.draw(this);
-
-		scrollAreas.forEach(area -> area.draw(this, mouseX, mouseY));
-		if (scrollAreaAdditionalData != null)
-			scrollAreaAdditionalData.draw(this, mouseX, mouseY);
-
+		font.drawString("Theme", topLeftX + 10, topLeftY + 28, color);
+		font.drawString("Building Layer", topLeftX + 10, topLeftY + 48, color);
+		font.drawString("Design Type", topLeftX + 10, topLeftY + 68, color);
+		font.drawString(additionalDataKey, topLeftX + 10, topLeftY + 88, color);
 	}
 
 	@Override
@@ -278,38 +249,6 @@ public class GuiDesignExporter extends Screen {
 		DesignExporter.type = types.get(scrollAreaType.getState());
 		DesignExporter.designParameter = additionalDataValue;
 		PhaseEditTheme.setVisualization(PhaseEditTheme.selectedDesign);
-	}
-
-	@Override
-	public boolean isPauseScreen() {
-		return false;
-	}
-
-	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-		super.mouseClicked(mouseX, mouseY, mouseButton);
-
-		int scrollAmount = ((mouseButton == 0) ? -1 : 1) * ((Keyboard.isKeyDown(Keyboard.LSHIFT)) ? 5 : 1);
-		scrollAreaLayer.tryScroll(mouseX, mouseY, scrollAmount);
-		scrollAreaType.tryScroll(mouseX, mouseY, scrollAmount);
-		if (scrollAreaAdditionalData != null)
-			scrollAreaAdditionalData.tryScroll(mouseX, mouseY, scrollAmount);
-
-		return false;
-	}
-
-	@Override
-	public boolean mouseScrolled(double x, double y, double scroll) {
-		if (scroll != 0) {
-			int amount = (int) (scroll / -120f);
-			scrollAreaLayer.tryScroll(x, y, amount);
-			scrollAreaType.tryScroll(x, y, amount);
-			if (scrollAreaAdditionalData != null)
-				scrollAreaAdditionalData.tryScroll(x, y, amount);
-
-			return super.mouseScrolled(x, y, scroll);
-		}
-		return false;
 	}
 
 }
