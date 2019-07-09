@@ -1,12 +1,8 @@
 package com.simibubi.mightyarchitect.gui.widgets;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.simibubi.mightyarchitect.gui.GuiResources;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-
-public class GuiIndicator extends AbstractGui {
+public class GuiIndicator extends AbstractSimiWidget {
 	
 	public enum State {
 		OFF, ON,
@@ -14,22 +10,15 @@ public class GuiIndicator extends AbstractGui {
 	}
 	
 	public State state;
-	public boolean hovered;
-	public String tooltip;
-	private int x, y;
-	private int width, height;
 	
-	public GuiIndicator( int x, int y, String tooltip ) {
-		this.x = x;
-		this.y = y;
-		this.width = GuiResources.INDICATOR.width;
-		this.height = GuiResources.INDICATOR.height;
-		this.tooltip = tooltip;
+	public GuiIndicator(int x, int y, String tooltip) {
+		super(x, y, GuiResources.INDICATOR.width, GuiResources.INDICATOR.height);
+		this.toolTip = tooltip;
 		this.state = State.OFF;
 	}
 	
-	public void render( Minecraft mc, int mouseX, int mouseY ) {
-		this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+	@Override
+	public void render(int mouseX, int mouseY, float partialTicks ) {
 		GuiResources toDraw;
 		switch(state) {
 			case ON: toDraw = GuiResources.INDICATOR_WHITE; break;
@@ -39,9 +28,7 @@ public class GuiIndicator extends AbstractGui {
 			case GREEN: toDraw = GuiResources.INDICATOR_GREEN; break;
 			default: toDraw = GuiResources.INDICATOR; break;
 		}
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.getTextureManager().bindTexture(toDraw.location);
-		blit(x, y, toDraw.startX, toDraw.startY, toDraw.width, toDraw.height);
+		toDraw.draw(this, x, y);
 	}
 	
 }

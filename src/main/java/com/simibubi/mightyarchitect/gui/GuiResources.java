@@ -2,7 +2,8 @@ package com.simibubi.mightyarchitect.gui;
 
 import com.simibubi.mightyarchitect.TheMightyArchitect;
 
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.util.ResourceLocation;
 
 public enum GuiResources {
@@ -80,8 +81,8 @@ public enum GuiResources {
 		this.startX = startX; this.startY = startY;
 	}
 	
-	public void draw(Screen screen, int i, int j) {
-		screen.getMinecraft().getTextureManager().bindTexture(location);
+	public void draw(AbstractGui screen, int i, int j) {
+		Minecraft.getInstance().getTextureManager().bindTexture(location);
 		screen.blit(i, j, startX, startY, width, height);
 	}
 
