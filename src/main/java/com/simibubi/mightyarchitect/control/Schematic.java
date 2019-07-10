@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Vector;
 
 import com.simibubi.mightyarchitect.control.compose.Cuboid;
@@ -38,8 +39,10 @@ public class Schematic {
 
 	private PaletteDefinition editedPalette;
 	private boolean editingPrimary;
+	public int seed;
 
 	public Schematic() {
+		seed = new Random().nextInt(100000);
 	}
 
 	public void setGroundPlan(GroundPlan groundPlan) {

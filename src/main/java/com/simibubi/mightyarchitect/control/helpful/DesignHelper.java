@@ -30,21 +30,20 @@ public class DesignHelper {
 	 * Finds a random design that fulfils the provided requirements. Returns a
 	 * fallback design if no fitting design was found.
 	 */
-	public static Design pickRandom(DesignQuery query) {
-		Design design = pickRandomNoFallback(query);
+	public static Design pickRandom(DesignQuery query, Random rand) {
+		Design design = pickRandomNoFallback(query, rand);
 
 		if (design == null && query.fallback) {
-			return pickRandomNoFallback(query.withTheme(ThemeStorage.IncludedThemes.Fallback.theme));
+			return pickRandomNoFallback(query.withTheme(ThemeStorage.IncludedThemes.Fallback.theme), rand);
 		}
 
 		return design;
 	}
 
-	private static Design pickRandomNoFallback(DesignQuery query) {
+	private static Design pickRandomNoFallback(DesignQuery query, Random rand) {
 		List<Design> remainingDesigns = new ArrayList<>(query.theme.getDesigns(query.layer, query.type));
-		Random dice = new Random();
 		while (!remainingDesigns.isEmpty()) {
-			int index = dice.nextInt(remainingDesigns.size());
+			int index = rand.nextInt(remainingDesigns.size());
 
 			Design chosen = remainingDesigns.get(index);
 			if (query.isWidthIgnored() || chosen.fitsHorizontally(query.desiredWidth)) {

@@ -16,7 +16,6 @@ import com.simibubi.mightyarchitect.gui.widgets.ScrollArea;
 import com.simibubi.mightyarchitect.gui.widgets.SimiButton;
 
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.util.text.StringTextComponent;
 
 public class GuiEditTheme extends AbstractSimiScreen {
@@ -79,8 +78,8 @@ public class GuiEditTheme extends AbstractSimiScreen {
 		int indexShift = -id;
 
 		regular = id + indexShift;
-		SimiButton button = new SimiButton(id++, x, y, GuiResources.ICON_LAYER_REGULAR);
-		button.tooltip = "Regular Style [Always enabled]";
+		SimiButton button = new SimiButton(x, y, GuiResources.ICON_LAYER_REGULAR);
+		button.setToolTip("Regular Style [Always enabled]");
 		buttons.add(button);
 		GuiIndicator guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = State.YELLOW;
@@ -88,8 +87,8 @@ public class GuiEditTheme extends AbstractSimiScreen {
 
 		x += 20;
 		foundation = id + indexShift;
-		button = new SimiButton(id++, x, y, GuiResources.ICON_LAYER_FOUNDATION);
-		button.tooltip = "Foundation Style";
+		button = new SimiButton(x, y, GuiResources.ICON_LAYER_FOUNDATION);
+		button.setToolTip("Foundation Style");
 		buttons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getLayers().contains(DesignLayer.Foundation) ? State.ON : State.OFF;
@@ -97,8 +96,8 @@ public class GuiEditTheme extends AbstractSimiScreen {
 
 		x += 20;
 		open = id + indexShift;
-		button = new SimiButton(id++, x, y, GuiResources.ICON_LAYER_OPEN);
-		button.tooltip = "Open Arcs Style";
+		button = new SimiButton(x, y, GuiResources.ICON_LAYER_OPEN);
+		button.setToolTip("Open Arcs Style");
 		buttons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getLayers().contains(DesignLayer.Open) ? State.ON : State.OFF;
@@ -106,8 +105,8 @@ public class GuiEditTheme extends AbstractSimiScreen {
 
 		x += 20;
 		special = id + indexShift;
-		button = new SimiButton(id++, x, y, GuiResources.ICON_LAYER_SPECIAL);
-		button.tooltip = "Special Layer";
+		button = new SimiButton(x, y, GuiResources.ICON_LAYER_SPECIAL);
+		button.setToolTip("Special Layer");
 		buttons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getLayers().contains(DesignLayer.Special) ? State.ON : State.OFF;
@@ -116,8 +115,8 @@ public class GuiEditTheme extends AbstractSimiScreen {
 		x = topLeftX + 10;
 		y += 49;
 
-		button = new SimiButton(id++, x, y, GuiResources.ICON_NO_ROOF);
-		button.tooltip = "Enable Rooms [Always Enabled]";
+		button = new SimiButton(x, y, GuiResources.ICON_NO_ROOF);
+		button.setToolTip("Enable Rooms [Always Enabled]");
 		buttons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = State.YELLOW;
@@ -125,8 +124,8 @@ public class GuiEditTheme extends AbstractSimiScreen {
 
 		x += 20;
 		flatRoof = id + indexShift;
-		button = new SimiButton(id++, x, y, GuiResources.ICON_FLAT_ROOF);
-		button.tooltip = "Flat Roofs";
+		button = new SimiButton(x, y, GuiResources.ICON_FLAT_ROOF);
+		button.setToolTip("Flat Roofs");
 		buttons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getTypes().contains(DesignType.FLAT_ROOF) ? State.ON : State.OFF;
@@ -134,8 +133,8 @@ public class GuiEditTheme extends AbstractSimiScreen {
 
 		x += 20;
 		roof = id + indexShift;
-		button = new SimiButton(id++, x, y, GuiResources.ICON_NORMAL_ROOF);
-		button.tooltip = "Gable Roofs";
+		button = new SimiButton(x, y, GuiResources.ICON_NORMAL_ROOF);
+		button.setToolTip("Gable Roofs");
 		buttons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getTypes().contains(DesignType.ROOF) ? State.ON : State.OFF;
@@ -144,8 +143,8 @@ public class GuiEditTheme extends AbstractSimiScreen {
 		x += 40;
 
 		tower = id + indexShift;
-		button = new SimiButton(id++, x, y, GuiResources.ICON_TOWER_NO_ROOF);
-		button.tooltip = "Enable Towers";
+		button = new SimiButton(x, y, GuiResources.ICON_TOWER_NO_ROOF);
+		button.setToolTip("Enable Towers");
 		buttons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getTypes().contains(DesignType.TOWER) ? State.ON : State.OFF;
@@ -153,8 +152,8 @@ public class GuiEditTheme extends AbstractSimiScreen {
 
 		x += 20;
 		towerFlatRoof = id + indexShift;
-		button = new SimiButton(id++, x, y, GuiResources.ICON_TOWER_FLAT_ROOF);
-		button.tooltip = "Flat Tower Roofs";
+		button = new SimiButton(x, y, GuiResources.ICON_TOWER_FLAT_ROOF);
+		button.setToolTip("Flat Tower Roofs");
 		buttons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getTypes().contains(DesignType.TOWER_FLAT_ROOF) ? State.ON : State.OFF;
@@ -162,8 +161,8 @@ public class GuiEditTheme extends AbstractSimiScreen {
 
 		x += 20;
 		towerRoof = id + indexShift;
-		button = new SimiButton(id++, x, y, GuiResources.ICON_TOWER_ROOF);
-		button.tooltip = "Conical Tower Roofs";
+		button = new SimiButton(x, y, GuiResources.ICON_TOWER_ROOF);
+		button.setToolTip("Conical Tower Roofs");
 		buttons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getTypes().contains(DesignType.TOWER_ROOF) ? State.ON : State.OFF;
@@ -181,11 +180,11 @@ public class GuiEditTheme extends AbstractSimiScreen {
 		widgets.add(areaRoomHeight);
 		widgets.add(labelRoomHeight);
 
-		confirm = new SimiButton(id, topLeftX + 172, topLeftY + 157, GuiResources.ICON_CONFIRM);
+		confirm = new SimiButton(topLeftX + 172, topLeftY + 157, GuiResources.ICON_CONFIRM);
 		buttons.add(confirm);
 	}
 
-	protected void actionPerformed(AbstractButton button) {
+	protected void actionPerformed(SimiButton button) {
 
 		if (button == confirm) {
 			minecraft.displayGuiScreen(null);

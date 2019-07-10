@@ -75,7 +75,9 @@ public class ArchitectManager {
 	}
 
 	public static void unload() {
-		model.getTheme().getDesignPicker().reset();
+		if (model.getGroundPlan() != null)
+			model.getTheme().getDesignPicker().reset();
+		
 		enterPhase(ArchitectPhases.Empty);
 		resetSchematic();
 
@@ -95,13 +97,13 @@ public class ArchitectManager {
 			return;
 		}
 
-		model.setSketch(groundPlan.theme.getDesignPicker().assembleSketch(groundPlan));
+		model.setSketch(groundPlan.theme.getDesignPicker().assembleSketch(groundPlan, model.seed));
 		enterPhase(ArchitectPhases.Previewing);
 	}
 
 	public static void reAssemble() {
 		GroundPlan groundPlan = model.getGroundPlan();
-		model.setSketch(groundPlan.theme.getDesignPicker().assembleSketch(groundPlan));
+		model.setSketch(groundPlan.theme.getDesignPicker().assembleSketch(groundPlan, model.seed));
 		SchematicHologram.getInstance().schematicChanged();
 	}
 

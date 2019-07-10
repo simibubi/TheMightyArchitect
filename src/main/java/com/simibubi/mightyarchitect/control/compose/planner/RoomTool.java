@@ -120,32 +120,35 @@ public class RoomTool extends GroundPlanningToolBase {
 
 		BlockPos size = selectedPosition.subtract(firstPosition);
 
+		int xSize = size.getX();
+		int zSize = size.getZ();
+		
 		if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL)) {
 			// 5-Grid
-			int xr = (size.getX() +2) % 4;
+			int xr = (xSize + ((xSize > 0)? 2 : -2)) % 4;
 			if (xr < 0)
 				xr += 4;
 			else 
 				xr = 4 - xr;
 			if (xr != 0) {
-				selectedPosition = selectedPosition.east(size.getX() > 0 ? xr : 4-xr);
+				selectedPosition = selectedPosition.east(xSize > 0 ? xr : -xr);
 			}
-			int zr = (size.getZ() +2) % 4;
+			int zr = (zSize + ((zSize > 0)? 2 : -2)) % 4;
 			if (zr < 0)
 				zr += 4;
 			else 
 				zr = 4 - zr;
 			if (zr != 0) {
-				selectedPosition = selectedPosition.south(size.getZ() > 0 ? zr : 4-zr);
+				selectedPosition = selectedPosition.south(zSize > 0 ? zr : -zr);
 			}
 
 		} else {
 			// 3-Grid
-			if (size.getX() % 2 != 0) {
-				selectedPosition = selectedPosition.east(size.getX() > 0 ? 1 : -1);
+			if (xSize % 2 != 0) {
+				selectedPosition = selectedPosition.east(xSize > 0 ? 1 : -1);
 			}
-			if (size.getZ() % 2 != 0) {
-				selectedPosition = selectedPosition.south(size.getZ() > 0 ? 1 : -1);
+			if (zSize % 2 != 0) {
+				selectedPosition = selectedPosition.south(zSize > 0 ? 1 : -1);
 			}
 		}
 	}

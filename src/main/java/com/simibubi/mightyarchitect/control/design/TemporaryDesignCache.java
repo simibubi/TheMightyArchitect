@@ -2,6 +2,7 @@ package com.simibubi.mightyarchitect.control.design;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Vector;
 
 import com.simibubi.mightyarchitect.control.compose.Room;
@@ -14,12 +15,13 @@ public class TemporaryDesignCache {
 	Map<Vector<Integer>, Design> designs;
 	Map<Room, RoomDesignMapping> roomDesigns;
 	Map<Stack, Design> roofDesigns;
-	boolean random;
+	Random random;
 
-	public TemporaryDesignCache(Map<Room, RoomDesignMapping> roomDesigns, Map<Stack, Design> roofDesigns) {
+	public TemporaryDesignCache(Map<Room, RoomDesignMapping> roomDesigns, Map<Stack, Design> roofDesigns, int seed) {
 		designs = new HashMap<>();
 		this.roomDesigns = roomDesigns;
 		this.roofDesigns = roofDesigns;
+		random = new Random(seed);
 	}
 	
 	public boolean hasCachedRoom(Room room) {
@@ -51,7 +53,7 @@ public class TemporaryDesignCache {
 		if (designs.containsKey(key)) {
 			return designs.get(key);
 		} else {
-			Design design = DesignHelper.pickRandom(query);
+			Design design = DesignHelper.pickRandom(query, random);
 			designs.put(key, design);
 			return design;
 		}

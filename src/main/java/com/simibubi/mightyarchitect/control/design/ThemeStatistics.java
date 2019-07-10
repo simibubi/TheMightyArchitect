@@ -1,5 +1,7 @@
 package com.simibubi.mightyarchitect.control.design;
 
+import java.util.Random;
+
 import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.control.helpful.DesignHelper;
 
@@ -136,7 +138,7 @@ public class ThemeStatistics {
 	}
 
 	protected static boolean designExists(DesignQuery query) {
-		return DesignHelper.pickRandom(query.withoutFallback()) != null;
+		return DesignHelper.pickRandom(query.withoutFallback(), new Random()) != null;
 	}
 
 	public void sendToPlayer() {

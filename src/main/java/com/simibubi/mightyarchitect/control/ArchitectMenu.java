@@ -96,10 +96,6 @@ public class ArchitectMenu {
 				ArchitectManager.pickPalette();
 				return true;
 
-			case 'r':
-				ArchitectManager.design();
-				return false;
-
 			case 'e':
 				ArchitectManager.compose();
 				return true;
@@ -251,7 +247,6 @@ public class ArchitectMenu {
 			
 		case Previewing:
 			keybinds.put("E", "Edit Ground Plan");
-			keybinds.put("R", "Re-Roll Designs");
 			keybinds.put("C", "Choose a Palette");
 			keybinds.lineBreak();
 			

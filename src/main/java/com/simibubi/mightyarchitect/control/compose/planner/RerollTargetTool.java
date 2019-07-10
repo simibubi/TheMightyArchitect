@@ -25,6 +25,7 @@ public class RerollTargetTool extends WallDecorationToolBase {
 		
 		boolean keyDown = Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL);
 		if (selectedRoom != null && keyDown) {
+			model.seed += amount;
 			
 			if (selectedFace == Direction.UP) {
 				model.getTheme().getDesignPicker().rerollRoof(selectedStack);
@@ -38,6 +39,7 @@ public class RerollTargetTool extends WallDecorationToolBase {
 		}
 		
 		if (selectedStack != null && !keyDown) {
+			model.seed += amount;
 			model.getTheme().getDesignPicker().rerollStack(selectedStack);
 			ArchitectManager.reAssemble();
 			return true;

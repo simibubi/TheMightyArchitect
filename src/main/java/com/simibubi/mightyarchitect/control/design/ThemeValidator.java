@@ -3,6 +3,7 @@ package com.simibubi.mightyarchitect.control.design;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import com.simibubi.mightyarchitect.control.helpful.DesignHelper;
 
@@ -145,7 +146,7 @@ public class ThemeValidator {
 	}
 
 	private static boolean exists(DesignQuery query) {
-		return DesignHelper.pickRandom(query.withoutFallback()) != null;
+		return DesignHelper.pickRandom(query.withoutFallback(), new Random()) != null;
 	}
 
 	private static void alert(String message) {

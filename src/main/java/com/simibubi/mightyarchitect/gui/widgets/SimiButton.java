@@ -4,21 +4,16 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.simibubi.mightyarchitect.gui.GuiResources;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.util.ResourceLocation;
 
-public class SimiButton extends AbstractButton {	
+public class SimiButton extends AbstractSimiWidget {	
 
 	private GuiResources icon;
 	protected boolean pressed;
-	public int id;
 	
-	public String tooltip;
-	
-	public SimiButton(int id, int x, int y, GuiResources icon) {
-		super(x, y, 16, 16, "");
+	public SimiButton(int x, int y, GuiResources icon) {
+		super(x, y, 16, 16);
 		this.icon = icon;
-		this.id = id;
 	}
 	
 	@Override
@@ -40,9 +35,11 @@ public class SimiButton extends AbstractButton {
 			blit(x +1, y +1, icon.startX, icon.startY, icon.width, icon.height);
 		}
 	}
+
 	
 	@Override
-	public void onPress() {
+	public void onClick(double p_onClick_1_, double p_onClick_3_) {
+		super.onClick(p_onClick_1_, p_onClick_3_);
 		this.pressed = true;
 	}
 	
@@ -50,6 +47,11 @@ public class SimiButton extends AbstractButton {
 	public void onRelease(double p_onRelease_1_, double p_onRelease_3_) {
 		super.onRelease(p_onRelease_1_, p_onRelease_3_);
 		this.pressed = false;
+	}
+	
+	public void setToolTip(String text) {
+		toolTip.clear();
+		toolTip.add(text);
 	}
 	
 }

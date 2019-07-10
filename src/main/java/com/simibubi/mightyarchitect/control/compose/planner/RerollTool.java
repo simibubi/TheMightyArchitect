@@ -6,7 +6,7 @@ public class RerollTool extends WallDecorationToolBase {
 
 	@Override
 	public boolean handleMouseWheel(int amount) {
-		
+		model.seed += amount;
 		model.getTheme().getDesignPicker().rerollAll();
 		ArchitectManager.reAssemble();
 		

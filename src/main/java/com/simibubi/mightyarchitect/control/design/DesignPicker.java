@@ -27,14 +27,14 @@ public class DesignPicker {
 		rerollAll();
 	}
 
-	public Sketch assembleSketch(GroundPlan groundPlan) {
-		Sketch sketch = pickDesigns(groundPlan);
+	public Sketch assembleSketch(GroundPlan groundPlan, int seed) {
+		Sketch sketch = pickDesigns(groundPlan, seed);
 		return sketch;
 	}
 
-	private Sketch pickDesigns(GroundPlan groundPlan) {
+	private Sketch pickDesigns(GroundPlan groundPlan, int seed) {
 		Sketch sketch = new Sketch();
-		TemporaryDesignCache provider = new TemporaryDesignCache(roomDesigns, roofDesigns);
+		TemporaryDesignCache provider = new TemporaryDesignCache(roomDesigns, roofDesigns, seed);
 
 		groundPlan.forEachStack(stack -> {
 			stack.forEach(room -> {

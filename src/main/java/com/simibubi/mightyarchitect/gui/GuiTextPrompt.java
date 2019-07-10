@@ -2,12 +2,12 @@ package com.simibubi.mightyarchitect.gui;
 
 import java.util.function.Consumer;
 
-import net.minecraft.client.gui.screen.Screen;
+import org.lwjgl.glfw.GLFW;
+
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.text.StringTextComponent;
 
-public class GuiTextPrompt extends Screen {
+public class GuiTextPrompt extends AbstractSimiScreen {
 
 	private Consumer<String> callback;
 	private Consumer<String> abortCallback;
@@ -16,11 +16,6 @@ public class GuiTextPrompt extends Screen {
 	private Button confirm;
 	private Button abort;
 
-	private int xSize;
-	private int ySize;
-	private int xTopLeft;
-	private int yTopLeft;
-
 	private String buttonTextConfirm;
 	private String buttonTextAbort;
 	private String title;
@@ -28,7 +23,7 @@ public class GuiTextPrompt extends Screen {
 	private boolean confirmed;
 
 	public GuiTextPrompt(Consumer<String> callBack, Consumer<String> abortCallback) {
-		super(new StringTextComponent("Text Prompt"));
+		super();
 		this.callback = callBack;
 		this.abortCallback = abortCallback;
 
@@ -40,44 +35,35 @@ public class GuiTextPrompt extends Screen {
 	@Override
 	public void init() {
 		super.init();
+		setWindowSize(GuiResources.TEXT_INPUT.width, GuiResources.TEXT_INPUT.height + 30);
 
-		xSize = GuiResources.TEXT_INPUT.width;
-		ySize = GuiResources.TEXT_INPUT.height + 30;
-		xTopLeft = (this.width - this.xSize) / 2;
-		yTopLeft = (this.height - this.ySize) / 2;
-
-		this.nameField = new TextFieldWidget(font, xTopLeft + 33, yTopLeft + 26, 128, 8, "");
+		this.nameField = new TextFieldWidget(font, topLeftX + 33, topLeftY + 26, 128, 8, "");
 		this.nameField.setTextColor(-1);
 		this.nameField.setDisabledTextColour(-1);
 		this.nameField.setEnableBackgroundDrawing(false);
 		this.nameField.setMaxStringLength(35);
 		this.nameField.changeFocus(true);
 
-		confirm = new Button(xTopLeft - 5, yTopLeft + 50, 100, 20, buttonTextConfirm, button -> {
+		confirm = new Button(topLeftX - 5, topLeftY + 50, 100, 20, buttonTextConfirm, button -> {
 			callback.accept(nameField.getText());
 			confirmed = true;
 			minecraft.displayGuiScreen(null);
 		});
 
-		abort = new Button(xTopLeft + 100, yTopLeft + 50, 100, 20, buttonTextAbort, button -> {
+		abort = new Button(topLeftX + 100, topLeftY + 50, 100, 20, buttonTextAbort, button -> {
 			minecraft.displayGuiScreen(null);
 		});
-		
-		buttons.add(confirm);
-		buttons.add(abort);
 
+		widgets.add(confirm);
+		widgets.add(abort);
+		widgets.add(nameField);
 	}
 
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
-		renderBackground();
-
-		GuiResources.TEXT_INPUT.draw(this, xTopLeft, yTopLeft);
-		super.render(mouseX, mouseY, partialTicks);
-
-		font.drawString(title, xTopLeft + (xSize / 2) - (font.getStringWidth(title) / 2), yTopLeft + 11,
+	public void renderWindow(int mouseX, int mouseY, float partialTicks) {
+		GuiResources.TEXT_INPUT.draw(this, topLeftX, topLeftY);
+		font.drawString(title, topLeftX + (sWidth / 2) - (font.getStringWidth(title) / 2), topLeftY + 11,
 				GuiResources.FONT_COLOR);
-		this.nameField.render(mouseX, mouseY, partialTicks);
 	}
 
 	@Override
@@ -100,27 +86,16 @@ public class GuiTextPrompt extends Screen {
 	}
 
 	@Override
-	public boolean charTyped(char typedChar, int keyCode) {
-		
-		if (!this.nameField.charTyped(typedChar, keyCode))
-			super.charTyped(typedChar, keyCode);
-		return false;
-	}
-	
-	@Override
 	public boolean keyPressed(int keyCode, int p_keyPressed_2_, int p_keyPressed_3_) {
-		if (keyCode == Keyboard.RETURN) {
+		if (keyCode == GLFW.GLFW_KEY_ENTER) {
 			confirm.onPress();
 			return true;
 		}
-		this.nameField.keyPressed(keyCode, p_keyPressed_2_, p_keyPressed_3_);
-		return super.keyPressed(keyCode, p_keyPressed_2_, p_keyPressed_3_);
-	}
-
-	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-		this.nameField.mouseClicked(mouseX, mouseY, mouseButton);
-		return super.mouseClicked(mouseX, mouseY, mouseButton);
+		if (keyCode == 256 && this.shouldCloseOnEsc()) {
+			this.onClose();
+			return true;
+		}
+		return nameField.keyPressed(keyCode, p_keyPressed_2_, p_keyPressed_3_);
 	}
 
 }

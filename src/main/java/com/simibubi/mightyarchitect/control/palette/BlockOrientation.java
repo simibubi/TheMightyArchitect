@@ -1,9 +1,11 @@
 package com.simibubi.mightyarchitect.control.palette;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.SlabBlock;
 import net.minecraft.block.TrapDoorBlock;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.Half;
+import net.minecraft.state.properties.SlabType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.Direction.AxisDirection;
@@ -107,22 +109,20 @@ public enum BlockOrientation {
 		if (hasHalf() && state.has(BlockStateProperties.HALF))
 			newState = newState.with(BlockStateProperties.HALF, half);
 
+		if (hasHalf() && state.has(SlabBlock.TYPE))
+			if (state.get(SlabBlock.TYPE) != SlabType.DOUBLE)
+				newState = newState.with(SlabBlock.TYPE, half == Half.TOP ? SlabType.TOP : SlabType.BOTTOM);
+
 		if (hasFacing() && state.has(BlockStateProperties.FACING))
-			if (facing.getAxis().isHorizontal() && state.get(BlockStateProperties.FACING).getAxis().isHorizontal())
+			if (state.get(BlockStateProperties.FACING).getAxis().isVertical() && forceAxis)
 				newState = newState.with(BlockStateProperties.FACING, facing);
 
 		if (hasFacing() && state.has(BlockStateProperties.FACING_EXCEPT_UP))
-			if (facing.getAxis().isHorizontal()
-					&& state.get(BlockStateProperties.FACING_EXCEPT_UP).getAxis().isHorizontal())
+			if (state.get(BlockStateProperties.FACING_EXCEPT_UP).getAxis().isVertical() && forceAxis)
 				newState = newState.with(BlockStateProperties.FACING_EXCEPT_UP, facing);
 
-		if (hasFacing() && state.has(BlockStateProperties.HORIZONTAL_FACING))
-			if (facing.getAxis().isHorizontal())
-				newState = newState.with(BlockStateProperties.HORIZONTAL_FACING, facing);
-
-		if (newState.getBlock() instanceof TrapDoorBlock)
-			newState = newState.with(BlockStateProperties.HORIZONTAL_FACING,
-					newState.get(BlockStateProperties.HORIZONTAL_FACING).getOpposite());
+//		if (forceAxis && newState.getBlock() instanceof TrapDoorBlock)
+//			newState = newState.rotate(Rotation.CLOCKWISE_180);
 
 		if (hasFacing() && state.has(BlockStateProperties.AXIS)) {
 			Axis axis = state.get(BlockStateProperties.AXIS);
