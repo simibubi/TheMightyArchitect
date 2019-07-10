@@ -9,7 +9,7 @@
         "west": "false",
         "up": "true"
       },
-      "Name": "minecraft:stone_brick_wall"
+      "Name": "minecraft:granite_wall"
     },
     "OUTER_FLAT": {
       "Properties": {
@@ -19,10 +19,10 @@
         "facing": "south",
         "open": "true"
       },
-      "Name": "minecraft:oak_trapdoor"
+      "Name": "minecraft:spruce_trapdoor"
     },
     "INNER_PRIMARY": {
-      "Name": "minecraft:light_gray_concrete"
+      "Name": "minecraft:bricks"
     },
     "HEAVY_POST": {
       "Properties": {
@@ -33,23 +33,23 @@
         "west": "false",
         "up": "true"
       },
-      "Name": "minecraft:brick_wall"
+      "Name": "minecraft:granite_wall"
     },
     "ROOF_PRIMARY": {
-      "Name": "minecraft:stone"
+      "Name": "minecraft:stone_bricks"
     },
     "INNER_DETAIL": {
       "Properties": {
         "axis": "y"
       },
-      "Name": "minecraft:quartz_pillar"
+      "Name": "minecraft:dark_oak_log"
     },
     "ROOF_SLAB": {
       "Properties": {
         "waterlogged": "false",
         "type": "bottom"
       },
-      "Name": "minecraft:quartz_slab"
+      "Name": "minecraft:smooth_stone_slab"
     },
     "WINDOW": {
       "Properties": {
@@ -59,9 +59,9 @@
         "north": "false",
         "west": "false"
       },
-      "Name": "minecraft:black_stained_glass_pane"
+      "Name": "minecraft:glass_pane"
     },
-    "Name": "Standard Modern",
+    "Name": "Industrial Revolution",
     "HEAVY_PRIMARY": {
       "Name": "minecraft:polished_granite"
     },
@@ -69,20 +69,23 @@
       "Name": "minecraft:smooth_stone"
     },
     "HEAVY_SECONDARY": {
-      "Name": "minecraft:bricks"
+      "Properties": {
+        "axis": "y"
+      },
+      "Name": "minecraft:dark_oak_log"
     },
     "ROOF_DETAIL": {
-      "Name": "minecraft:smooth_quartz"
+      "Name": "minecraft:smooth_stone"
     },
     "INNER_SECONDARY": {
-      "Name": "minecraft:light_gray_wool"
+      "Name": "minecraft:granite"
     },
     "OUTER_SLAB": {
       "Properties": {
         "waterlogged": "false",
         "type": "bottom"
       },
-      "Name": "minecraft:stone_slab"
+      "Name": "minecraft:dark_oak_slab"
     },
     "HEAVY_WINDOW": {
       "Properties": {

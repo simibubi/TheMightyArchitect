@@ -56,7 +56,7 @@ public class ItemWandFill extends Item {
 		}
 
 		for (BlockPos position : filledBlocks)
-			context.getWorld().setBlockState(position, Blocks.RED_STAINED_GLASS.getDefaultState());
+			context.getWorld().setBlockState(position, Blocks.BARRIER.getDefaultState());
 		return super.onItemUse(context);
 	}
 

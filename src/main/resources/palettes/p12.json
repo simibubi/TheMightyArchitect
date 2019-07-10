@@ -9,7 +9,7 @@
         "west": "false",
         "up": "true"
       },
-      "Name": "minecraft:stone_brick_wall"
+      "Name": "minecraft:diorite_wall"
     },
     "OUTER_FLAT": {
       "Properties": {
@@ -19,37 +19,30 @@
         "facing": "south",
         "open": "true"
       },
-      "Name": "minecraft:oak_trapdoor"
+      "Name": "minecraft:jungle_trapdoor"
     },
     "INNER_PRIMARY": {
-      "Name": "minecraft:light_gray_concrete"
+      "Name": "minecraft:white_wool"
     },
     "HEAVY_POST": {
       "Properties": {
-        "east": "false",
-        "waterlogged": "false",
-        "south": "false",
-        "north": "false",
-        "west": "false",
-        "up": "true"
+        "distance": "7",
+        "persistent": "true"
       },
-      "Name": "minecraft:brick_wall"
+      "Name": "minecraft:birch_leaves"
     },
     "ROOF_PRIMARY": {
-      "Name": "minecraft:stone"
+      "Name": "minecraft:cobblestone"
     },
     "INNER_DETAIL": {
-      "Properties": {
-        "axis": "y"
-      },
-      "Name": "minecraft:quartz_pillar"
+      "Name": "minecraft:dried_kelp_block"
     },
     "ROOF_SLAB": {
       "Properties": {
         "waterlogged": "false",
         "type": "bottom"
       },
-      "Name": "minecraft:quartz_slab"
+      "Name": "minecraft:smooth_stone_slab"
     },
     "WINDOW": {
       "Properties": {
@@ -59,44 +52,32 @@
         "north": "false",
         "west": "false"
       },
-      "Name": "minecraft:black_stained_glass_pane"
+      "Name": "minecraft:glass_pane"
     },
-    "Name": "Standard Modern",
+    "Name": "Sushi",
     "HEAVY_PRIMARY": {
       "Name": "minecraft:polished_granite"
     },
     "FLOOR": {
-      "Name": "minecraft:smooth_stone"
+      "Name": "minecraft:oak_planks"
     },
     "HEAVY_SECONDARY": {
-      "Name": "minecraft:bricks"
-    },
-    "ROOF_DETAIL": {
       "Name": "minecraft:smooth_quartz"
     },
+    "ROOF_DETAIL": {
+      "Name": "minecraft:smooth_stone"
+    },
     "INNER_SECONDARY": {
-      "Name": "minecraft:light_gray_wool"
+      "Name": "minecraft:jungle_planks"
     },
     "OUTER_SLAB": {
       "Properties": {
         "waterlogged": "false",
         "type": "bottom"
       },
-      "Name": "minecraft:stone_slab"
+      "Name": "minecraft:quartz_slab"
     },
     "HEAVY_WINDOW": {
-      "Properties": {
-        "half": "bottom",
-        "waterlogged": "false",
-        "shape": "straight",
-        "facing": "north"
-      },
-      "Name": "minecraft:brick_stairs"
-    },
-    "CLEAR": {
-      "Name": "minecraft:barrier"
-    },
-    "OUTER_THIN": {
       "Properties": {
         "east": "false",
         "waterlogged": "false",
@@ -104,7 +85,16 @@
         "north": "false",
         "west": "false"
       },
-      "Name": "minecraft:dark_oak_fence"
+      "Name": "minecraft:light_gray_stained_glass_pane"
+    },
+    "CLEAR": {
+      "Name": "minecraft:barrier"
+    },
+    "OUTER_THIN": {
+      "Properties": {
+        "facing": "down"
+      },
+      "Name": "minecraft:end_rod"
     }
   }
 }

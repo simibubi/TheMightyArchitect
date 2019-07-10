@@ -9,7 +9,7 @@
         "west": "false",
         "up": "true"
       },
-      "Name": "minecraft:stone_brick_wall"
+      "Name": "minecraft:cobblestone_wall"
     },
     "OUTER_FLAT": {
       "Properties": {
@@ -19,10 +19,10 @@
         "facing": "south",
         "open": "true"
       },
-      "Name": "minecraft:oak_trapdoor"
+      "Name": "minecraft:dark_oak_trapdoor"
     },
     "INNER_PRIMARY": {
-      "Name": "minecraft:light_gray_concrete"
+      "Name": "minecraft:blue_terracotta"
     },
     "HEAVY_POST": {
       "Properties": {
@@ -33,23 +33,20 @@
         "west": "false",
         "up": "true"
       },
-      "Name": "minecraft:brick_wall"
+      "Name": "minecraft:stone_brick_wall"
     },
     "ROOF_PRIMARY": {
-      "Name": "minecraft:stone"
+      "Name": "minecraft:spruce_planks"
     },
     "INNER_DETAIL": {
-      "Properties": {
-        "axis": "y"
-      },
-      "Name": "minecraft:quartz_pillar"
+      "Name": "minecraft:polished_diorite"
     },
     "ROOF_SLAB": {
       "Properties": {
         "waterlogged": "false",
         "type": "bottom"
       },
-      "Name": "minecraft:quartz_slab"
+      "Name": "minecraft:smooth_stone_slab"
     },
     "WINDOW": {
       "Properties": {
@@ -59,30 +56,33 @@
         "north": "false",
         "west": "false"
       },
-      "Name": "minecraft:black_stained_glass_pane"
+      "Name": "minecraft:glass_pane"
     },
-    "Name": "Standard Modern",
+    "Name": "Northbound",
     "HEAVY_PRIMARY": {
-      "Name": "minecraft:polished_granite"
+      "Name": "minecraft:polished_andesite"
     },
     "FLOOR": {
-      "Name": "minecraft:smooth_stone"
+      "Properties": {
+        "axis": "y"
+      },
+      "Name": "minecraft:acacia_wood"
     },
     "HEAVY_SECONDARY": {
-      "Name": "minecraft:bricks"
+      "Name": "minecraft:andesite"
     },
     "ROOF_DETAIL": {
-      "Name": "minecraft:smooth_quartz"
+      "Name": "minecraft:smooth_stone"
     },
     "INNER_SECONDARY": {
-      "Name": "minecraft:light_gray_wool"
+      "Name": "minecraft:blue_terracotta"
     },
     "OUTER_SLAB": {
       "Properties": {
         "waterlogged": "false",
         "type": "bottom"
       },
-      "Name": "minecraft:stone_slab"
+      "Name": "minecraft:stone_brick_slab"
     },
     "HEAVY_WINDOW": {
       "Properties": {
@@ -91,7 +91,7 @@
         "shape": "straight",
         "facing": "north"
       },
-      "Name": "minecraft:brick_stairs"
+      "Name": "minecraft:stone_brick_stairs"
     },
     "CLEAR": {
       "Name": "minecraft:barrier"
@@ -104,7 +104,7 @@
         "north": "false",
         "west": "false"
       },
-      "Name": "minecraft:dark_oak_fence"
+      "Name": "minecraft:spruce_fence"
     }
   }
 }

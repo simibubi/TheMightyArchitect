@@ -101,7 +101,7 @@
       "Name": "minecraft:black_stained_glass_pane"
     },
     "CLEAR": {
-      "Name": "minecraft:air"
+      "Name": "minecraft:barrier"
     },
     "OUTER_THIN": {
       "Properties": {

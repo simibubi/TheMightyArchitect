@@ -27,6 +27,7 @@ public class GuiEditTheme extends AbstractSimiScreen {
 
 	private List<GuiIndicator> indicators;
 	private List<TextFieldWidget> inputs;
+	private List<SimiButton> toggleButtons;
 
 	private SimiButton confirm;
 
@@ -46,8 +47,9 @@ public class GuiEditTheme extends AbstractSimiScreen {
 	public void init() {
 		super.init();
 		setWindowSize(GuiResources.THEME_EDITOR.width, GuiResources.THEME_EDITOR.height);
-
+		
 		// init text inputs
+		toggleButtons = new ArrayList<>();
 		inputs = new ArrayList<>();
 
 		int x = topLeftX + 85;
@@ -56,10 +58,12 @@ public class GuiEditTheme extends AbstractSimiScreen {
 
 		inputName = new TextFieldWidget(font, x, y, 104, 8, "");
 		inputName.setText(theme.getDisplayName());
+		inputName.changeFocus(false);
 		inputs.add(inputName);
 
 		inputAuthor = new TextFieldWidget(font, x, y + 20, 104, 8, "");
 		inputAuthor.setText(theme.getDesigner());
+		inputAuthor.changeFocus(false);
 		inputs.add(inputAuthor);
 
 		inputs.forEach(input -> {
@@ -70,44 +74,44 @@ public class GuiEditTheme extends AbstractSimiScreen {
 			input.changeFocus(false);
 		});
 
-		// init buttons and indicators
+		// init toggleButtons and indicators
 		indicators = new ArrayList<>();
 
 		x = topLeftX + 10;
 		y = topLeftY + 75;
 		int indexShift = -id;
 
-		regular = id + indexShift;
+		regular = id++ + indexShift;
 		SimiButton button = new SimiButton(x, y, GuiResources.ICON_LAYER_REGULAR);
 		button.setToolTip("Regular Style [Always enabled]");
-		buttons.add(button);
+		toggleButtons.add(button);
 		GuiIndicator guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = State.YELLOW;
 		indicators.add(guiIndicator);
 
 		x += 20;
-		foundation = id + indexShift;
+		foundation = id++ + indexShift;
 		button = new SimiButton(x, y, GuiResources.ICON_LAYER_FOUNDATION);
 		button.setToolTip("Foundation Style");
-		buttons.add(button);
+		toggleButtons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getLayers().contains(DesignLayer.Foundation) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
 
 		x += 20;
-		open = id + indexShift;
+		open = id++ + indexShift;
 		button = new SimiButton(x, y, GuiResources.ICON_LAYER_OPEN);
 		button.setToolTip("Open Arcs Style");
-		buttons.add(button);
+		toggleButtons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getLayers().contains(DesignLayer.Open) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
 
 		x += 20;
-		special = id + indexShift;
+		special = id++ + indexShift;
 		button = new SimiButton(x, y, GuiResources.ICON_LAYER_SPECIAL);
 		button.setToolTip("Special Layer");
-		buttons.add(button);
+		toggleButtons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getLayers().contains(DesignLayer.Special) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
@@ -115,55 +119,56 @@ public class GuiEditTheme extends AbstractSimiScreen {
 		x = topLeftX + 10;
 		y += 49;
 
+		id++;
 		button = new SimiButton(x, y, GuiResources.ICON_NO_ROOF);
 		button.setToolTip("Enable Rooms [Always Enabled]");
-		buttons.add(button);
+		toggleButtons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = State.YELLOW;
 		indicators.add(guiIndicator);
 
 		x += 20;
-		flatRoof = id + indexShift;
+		flatRoof = id++ + indexShift;
 		button = new SimiButton(x, y, GuiResources.ICON_FLAT_ROOF);
 		button.setToolTip("Flat Roofs");
-		buttons.add(button);
+		toggleButtons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getTypes().contains(DesignType.FLAT_ROOF) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
 
 		x += 20;
-		roof = id + indexShift;
+		roof = id++ + indexShift;
 		button = new SimiButton(x, y, GuiResources.ICON_NORMAL_ROOF);
 		button.setToolTip("Gable Roofs");
-		buttons.add(button);
+		toggleButtons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getTypes().contains(DesignType.ROOF) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
 
 		x += 40;
 
-		tower = id + indexShift;
+		tower = id++ + indexShift;
 		button = new SimiButton(x, y, GuiResources.ICON_TOWER_NO_ROOF);
 		button.setToolTip("Enable Towers");
-		buttons.add(button);
+		toggleButtons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getTypes().contains(DesignType.TOWER) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
 
 		x += 20;
-		towerFlatRoof = id + indexShift;
+		towerFlatRoof = id++ + indexShift;
 		button = new SimiButton(x, y, GuiResources.ICON_TOWER_FLAT_ROOF);
 		button.setToolTip("Flat Tower Roofs");
-		buttons.add(button);
+		toggleButtons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getTypes().contains(DesignType.TOWER_FLAT_ROOF) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
 
 		x += 20;
-		towerRoof = id + indexShift;
+		towerRoof = id++ + indexShift;
 		button = new SimiButton(x, y, GuiResources.ICON_TOWER_ROOF);
 		button.setToolTip("Conical Tower Roofs");
-		buttons.add(button);
+		toggleButtons.add(button);
 		guiIndicator = new GuiIndicator(x, y - 5, "");
 		guiIndicator.state = theme.getTypes().contains(DesignType.TOWER_ROOF) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
@@ -181,17 +186,35 @@ public class GuiEditTheme extends AbstractSimiScreen {
 		widgets.add(labelRoomHeight);
 
 		confirm = new SimiButton(topLeftX + 172, topLeftY + 157, GuiResources.ICON_CONFIRM);
-		buttons.add(confirm);
+		toggleButtons.add(confirm);
+		
+		widgets.addAll(indicators);
+		widgets.addAll(inputs);
+		widgets.addAll(toggleButtons);
 	}
 
-	protected void actionPerformed(SimiButton button) {
-
+	@Override
+	public boolean mouseClicked(double x, double y, int button) {
+		
+		if (button == 0) {
+			for (SimiButton button2 : toggleButtons) {
+				if (button2.isHovered()) {
+					buttonClicked(button2);
+					return true;
+				}
+			}
+		}
+		
+		return super.mouseClicked(x, y, button);
+	}
+	
+	protected void buttonClicked(SimiButton button) {
 		if (button == confirm) {
 			minecraft.displayGuiScreen(null);
 			return;
 		}
-
-		int index = buttons.indexOf(button);
+		
+		int index = toggleButtons.indexOf(button);
 
 		// not modifiable
 		GuiIndicator indicator = indicators.get(index);

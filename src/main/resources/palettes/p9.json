@@ -9,7 +9,7 @@
         "west": "false",
         "up": "true"
       },
-      "Name": "minecraft:stone_brick_wall"
+      "Name": "minecraft:brick_wall"
     },
     "OUTER_FLAT": {
       "Properties": {
@@ -19,37 +19,33 @@
         "facing": "south",
         "open": "true"
       },
-      "Name": "minecraft:oak_trapdoor"
+      "Name": "minecraft:spruce_trapdoor"
     },
     "INNER_PRIMARY": {
-      "Name": "minecraft:light_gray_concrete"
+      "Name": "minecraft:polished_granite"
     },
     "HEAVY_POST": {
       "Properties": {
-        "east": "false",
-        "waterlogged": "false",
-        "south": "false",
-        "north": "false",
-        "west": "false",
-        "up": "true"
+        "distance": "7",
+        "persistent": "true"
       },
-      "Name": "minecraft:brick_wall"
+      "Name": "minecraft:spruce_leaves"
     },
     "ROOF_PRIMARY": {
-      "Name": "minecraft:stone"
-    },
-    "INNER_DETAIL": {
       "Properties": {
         "axis": "y"
       },
-      "Name": "minecraft:quartz_pillar"
+      "Name": "minecraft:oak_wood"
+    },
+    "INNER_DETAIL": {
+      "Name": "minecraft:bricks"
     },
     "ROOF_SLAB": {
       "Properties": {
         "waterlogged": "false",
         "type": "bottom"
       },
-      "Name": "minecraft:quartz_slab"
+      "Name": "minecraft:oak_slab"
     },
     "WINDOW": {
       "Properties": {
@@ -59,39 +55,44 @@
         "north": "false",
         "west": "false"
       },
-      "Name": "minecraft:black_stained_glass_pane"
+      "Name": "minecraft:glass_pane"
     },
-    "Name": "Standard Modern",
+    "Name": "The Druidess",
     "HEAVY_PRIMARY": {
-      "Name": "minecraft:polished_granite"
+      "Name": "minecraft:mossy_cobblestone"
     },
     "FLOOR": {
-      "Name": "minecraft:smooth_stone"
+      "Properties": {
+        "axis": "x"
+      },
+      "Name": "minecraft:stripped_spruce_log"
     },
     "HEAVY_SECONDARY": {
-      "Name": "minecraft:bricks"
+      "Name": "minecraft:spruce_planks"
     },
     "ROOF_DETAIL": {
-      "Name": "minecraft:smooth_quartz"
+      "Name": "minecraft:oak_planks"
     },
     "INNER_SECONDARY": {
-      "Name": "minecraft:light_gray_wool"
+      "Name": "minecraft:granite"
     },
     "OUTER_SLAB": {
       "Properties": {
         "waterlogged": "false",
         "type": "bottom"
       },
-      "Name": "minecraft:stone_slab"
+      "Name": "minecraft:spruce_slab"
     },
     "HEAVY_WINDOW": {
       "Properties": {
-        "half": "bottom",
+        "east": "false",
         "waterlogged": "false",
-        "shape": "straight",
-        "facing": "north"
+        "south": "false",
+        "north": "false",
+        "west": "false",
+        "up": "true"
       },
-      "Name": "minecraft:brick_stairs"
+      "Name": "minecraft:mossy_cobblestone_wall"
     },
     "CLEAR": {
       "Name": "minecraft:barrier"
@@ -104,7 +105,7 @@
         "north": "false",
         "west": "false"
       },
-      "Name": "minecraft:dark_oak_fence"
+      "Name": "minecraft:spruce_fence"
     }
   }
 }

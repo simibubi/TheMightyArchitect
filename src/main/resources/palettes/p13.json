@@ -9,22 +9,9 @@
         "west": "false",
         "up": "true"
       },
-      "Name": "minecraft:stone_brick_wall"
+      "Name": "minecraft:mossy_stone_brick_wall"
     },
     "OUTER_FLAT": {
-      "Properties": {
-        "half": "bottom",
-        "waterlogged": "false",
-        "powered": "false",
-        "facing": "south",
-        "open": "true"
-      },
-      "Name": "minecraft:oak_trapdoor"
-    },
-    "INNER_PRIMARY": {
-      "Name": "minecraft:light_gray_concrete"
-    },
-    "HEAVY_POST": {
       "Properties": {
         "east": "false",
         "waterlogged": "false",
@@ -33,23 +20,30 @@
         "west": "false",
         "up": "true"
       },
-      "Name": "minecraft:brick_wall"
+      "Name": "minecraft:mossy_cobblestone_wall"
+    },
+    "INNER_PRIMARY": {
+      "Name": "minecraft:mossy_stone_bricks"
+    },
+    "HEAVY_POST": {
+      "Properties": {
+        "distance": "7",
+        "persistent": "true"
+      },
+      "Name": "minecraft:spruce_leaves"
     },
     "ROOF_PRIMARY": {
-      "Name": "minecraft:stone"
+      "Name": "minecraft:cobblestone"
     },
     "INNER_DETAIL": {
-      "Properties": {
-        "axis": "y"
-      },
-      "Name": "minecraft:quartz_pillar"
+      "Name": "minecraft:chiseled_stone_bricks"
     },
     "ROOF_SLAB": {
       "Properties": {
         "waterlogged": "false",
         "type": "bottom"
       },
-      "Name": "minecraft:quartz_slab"
+      "Name": "minecraft:smooth_stone_slab"
     },
     "WINDOW": {
       "Properties": {
@@ -59,23 +53,33 @@
         "north": "false",
         "west": "false"
       },
-      "Name": "minecraft:black_stained_glass_pane"
+      "Name": "minecraft:iron_bars"
     },
-    "Name": "Standard Modern",
+    "Name": "Skeleton HQ",
     "HEAVY_PRIMARY": {
-      "Name": "minecraft:polished_granite"
+      "Name": "minecraft:mossy_cobblestone"
     },
     "FLOOR": {
-      "Name": "minecraft:smooth_stone"
+      "Name": "minecraft:andesite"
     },
     "HEAVY_SECONDARY": {
-      "Name": "minecraft:bricks"
+      "Name": "minecraft:stone"
     },
     "ROOF_DETAIL": {
-      "Name": "minecraft:smooth_quartz"
+      "Properties": {
+        "waterlogged": "false",
+        "type": "double"
+      },
+      "Name": "minecraft:smooth_stone_slab"
     },
     "INNER_SECONDARY": {
-      "Name": "minecraft:light_gray_wool"
+      "Properties": {
+        "half": "bottom",
+        "waterlogged": "false",
+        "shape": "straight",
+        "facing": "north"
+      },
+      "Name": "minecraft:stone_brick_stairs"
     },
     "OUTER_SLAB": {
       "Properties": {
@@ -86,25 +90,24 @@
     },
     "HEAVY_WINDOW": {
       "Properties": {
-        "half": "bottom",
+        "east": "false",
         "waterlogged": "false",
-        "shape": "straight",
-        "facing": "north"
+        "south": "false",
+        "north": "false",
+        "west": "false",
+        "up": "true"
       },
-      "Name": "minecraft:brick_stairs"
+      "Name": "minecraft:mossy_cobblestone_wall"
     },
     "CLEAR": {
       "Name": "minecraft:barrier"
     },
     "OUTER_THIN": {
       "Properties": {
-        "east": "false",
-        "waterlogged": "false",
-        "south": "false",
-        "north": "false",
-        "west": "false"
+        "distance": "7",
+        "persistent": "true"
       },
-      "Name": "minecraft:dark_oak_fence"
+      "Name": "minecraft:jungle_leaves"
     }
   }
 }

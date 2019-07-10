@@ -94,7 +94,7 @@
       "Name": "minecraft:brick_stairs"
     },
     "CLEAR": {
-      "Name": "minecraft:barrier"
+      "Name": "minecraft:air"
     },
     "OUTER_THIN": {
       "Properties": {

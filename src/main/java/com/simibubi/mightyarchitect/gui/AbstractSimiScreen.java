@@ -40,11 +40,12 @@ public abstract class AbstractSimiScreen extends Screen {
 
 	@Override
 	public boolean mouseClicked(double x, double y, int button) {
+		boolean result = false;
 		for (Widget widget : widgets) {
 			if (widget.mouseClicked(x, y, button))
-				return true;
+				result = true;
 		}
-		return super.mouseClicked(x, y, button);
+		return result;
 	}
 
 	@Override

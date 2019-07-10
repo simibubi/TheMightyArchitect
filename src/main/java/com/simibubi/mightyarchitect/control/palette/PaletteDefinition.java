@@ -40,7 +40,7 @@ public class PaletteDefinition {
 					.put(Palette.OUTER_SLAB, Blocks.COBBLESTONE_SLAB).put(Palette.OUTER_THICK, Blocks.COBBLESTONE_WALL)
 					.put(Palette.OUTER_THIN, Blocks.SPRUCE_FENCE).put(Palette.ROOF_PRIMARY, Blocks.GRANITE)
 					.put(Palette.FLOOR, Blocks.OAK_PLANKS).put(Palette.ROOF_DETAIL, Blocks.BRICKS)
-					.put(Palette.CLEAR, Blocks.RED_STAINED_GLASS).put(Palette.ROOF_SLAB, Blocks.BRICK_SLAB)
+					.put(Palette.CLEAR, Blocks.BARRIER).put(Palette.ROOF_SLAB, Blocks.BRICK_SLAB)
 					.put(Palette.WINDOW, Blocks.GLASS_PANE);
 		}
 		return defaultPalette;
@@ -51,12 +51,13 @@ public class PaletteDefinition {
 		clone.clear = defaultPalette().clear();
 		clone.definition = new HashMap<>(defaultPalette().getDefinition());
 		definition.forEach((key, value) -> clone.definition.put(key, value));
+		clone.definition.put(Palette.CLEAR, Blocks.BARRIER.getDefaultState());
 		return clone;
 	}
 
 	public PaletteDefinition(String name) {
 		definition = new HashMap<>();
-		definition.put(Palette.CLEAR, Blocks.RED_STAINED_GLASS.getDefaultState());
+		definition.put(Palette.CLEAR, Blocks.BARRIER.getDefaultState());
 		this.name = name;
 	}
 
@@ -131,6 +132,8 @@ public class PaletteDefinition {
 				}
 			}
 		}
+		
+		palette.put(Palette.CLEAR, Blocks.BARRIER.getDefaultState());
 		return palette;
 	}
 

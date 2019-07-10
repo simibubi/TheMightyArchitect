@@ -126,15 +126,27 @@ public class GuiWandSymmetry extends AbstractSimiScreen {
 		renderBlock();
 
 		GlStateManager.pushLightingAttributes();
-		RenderHelper.disableStandardItemLighting();
 		GlStateManager.pushMatrix();
+		
+		RenderHelper.enableStandardItemLighting();
+		GlStateManager.enableBlend();
+		GlStateManager.enableRescaleNormal();
+		GlStateManager.enableAlphaTest();
+		GlStateManager.alphaFunc(516, 0.1F);
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);		
+		
 		GlStateManager.translated((this.width - this.sWidth) / 2 + 250, 250, 100);
 		GlStateManager.rotatef(-30, .4f, 0, -.2f);
 		GlStateManager.rotatef(90 + 0.2f * animationProgress, 0, 1, 0);
 		GlStateManager.scaled(100, -100, 100);
 		itemRenderer.renderItem(wand, itemRenderer.getModelWithOverrides(wand));
+		
+		GlStateManager.disableAlphaTest();
+		GlStateManager.disableRescaleNormal();
+		GlStateManager.disableLighting();
+		
 		GlStateManager.popMatrix();
-		RenderHelper.enableStandardItemLighting();
 		GlStateManager.popAttributes();
 	}
 

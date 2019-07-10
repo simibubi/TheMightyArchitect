@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import com.google.common.collect.ImmutableMap;
 import com.simibubi.mightyarchitect.control.compose.Cuboid;
 
 import net.minecraft.block.Block;
@@ -16,6 +17,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.tileentity.TileEntity;
@@ -87,7 +90,7 @@ public class TemplateBlockAccess implements IWorld {
 
 	@Override
 	public IFluidState getFluidState(BlockPos pos) {
-		return null;
+		return new FluidState(Fluids.EMPTY, ImmutableMap.of());
 	}
 
 	@Override
@@ -219,7 +222,7 @@ public class TemplateBlockAccess implements IWorld {
 
 	@Override
 	public Random getRandom() {
-		return null;
+		return new Random();
 	}
 
 	@Override

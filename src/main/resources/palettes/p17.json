@@ -6,43 +6,35 @@
         "waterlogged": "false",
         "south": "false",
         "north": "false",
-        "west": "false",
-        "up": "true"
+        "west": "false"
       },
-      "Name": "minecraft:stone_brick_wall"
+      "Name": "minecraft:light_blue_stained_glass_pane"
     },
     "OUTER_FLAT": {
-      "Properties": {
-        "half": "bottom",
-        "waterlogged": "false",
-        "powered": "false",
-        "facing": "south",
-        "open": "true"
-      },
-      "Name": "minecraft:oak_trapdoor"
-    },
-    "INNER_PRIMARY": {
-      "Name": "minecraft:light_gray_concrete"
-    },
-    "HEAVY_POST": {
       "Properties": {
         "east": "false",
         "waterlogged": "false",
         "south": "false",
         "north": "false",
-        "west": "false",
-        "up": "true"
+        "west": "false"
       },
-      "Name": "minecraft:brick_wall"
+      "Name": "minecraft:white_stained_glass_pane"
+    },
+    "INNER_PRIMARY": {
+      "Name": "minecraft:packed_ice"
+    },
+    "HEAVY_POST": {
+      "Properties": {
+        "waterlogged": "false",
+        "type": "bottom"
+      },
+      "Name": "minecraft:quartz_slab"
     },
     "ROOF_PRIMARY": {
-      "Name": "minecraft:stone"
+      "Name": "minecraft:light_blue_stained_glass"
     },
     "INNER_DETAIL": {
-      "Properties": {
-        "axis": "y"
-      },
-      "Name": "minecraft:quartz_pillar"
+      "Name": "minecraft:white_stained_glass"
     },
     "ROOF_SLAB": {
       "Properties": {
@@ -59,39 +51,40 @@
         "north": "false",
         "west": "false"
       },
-      "Name": "minecraft:black_stained_glass_pane"
+      "Name": "minecraft:blue_stained_glass_pane"
     },
-    "Name": "Standard Modern",
+    "Name": "Icy Castle",
     "HEAVY_PRIMARY": {
-      "Name": "minecraft:polished_granite"
+      "Name": "minecraft:blue_ice"
     },
     "FLOOR": {
-      "Name": "minecraft:smooth_stone"
+      "Name": "minecraft:snow_block"
     },
     "HEAVY_SECONDARY": {
-      "Name": "minecraft:bricks"
+      "Name": "minecraft:smooth_quartz"
     },
     "ROOF_DETAIL": {
       "Name": "minecraft:smooth_quartz"
     },
     "INNER_SECONDARY": {
-      "Name": "minecraft:light_gray_wool"
+      "Name": "minecraft:ice"
     },
     "OUTER_SLAB": {
       "Properties": {
         "waterlogged": "false",
         "type": "bottom"
       },
-      "Name": "minecraft:stone_slab"
+      "Name": "minecraft:quartz_slab"
     },
     "HEAVY_WINDOW": {
       "Properties": {
-        "half": "bottom",
+        "east": "false",
         "waterlogged": "false",
-        "shape": "straight",
-        "facing": "north"
+        "south": "false",
+        "north": "false",
+        "west": "false"
       },
-      "Name": "minecraft:brick_stairs"
+      "Name": "minecraft:blue_stained_glass_pane"
     },
     "CLEAR": {
       "Name": "minecraft:barrier"
@@ -104,7 +97,7 @@
         "north": "false",
         "west": "false"
       },
-      "Name": "minecraft:dark_oak_fence"
+      "Name": "minecraft:white_stained_glass_pane"
     }
   }
 }

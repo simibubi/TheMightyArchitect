@@ -45,12 +45,7 @@ public class ArchitectMenu {
 				GuiOpener.open(gui);
 				return false;
 
-			case 'r':
-				ArchitectManager.getModel().updatePalettePreview();
-				ArchitectManager.reAssemble();
-				return false;
-				
-			case 'c':
+			case 'd':
 				ArchitectManager.pickPalette();
 				return true;
 
@@ -228,9 +223,8 @@ public class ArchitectMenu {
 			
 		case CreatingPalette:
 			keybinds.put("F", "Save Palette");
+			keybinds.put("D", "Discard Palette");
 			keybinds.lineBreak();
-			keybinds.put("R", "Re-roll Designs");
-			keybinds.put("C", "Return to Picker");
 			keybinds.put("U", "Unload");
 			break;
 			

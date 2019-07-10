@@ -14,6 +14,7 @@ import com.simibubi.mightyarchitect.gui.widgets.OptionScrollArea;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollArea;
 
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 
 public class GuiDesignExporter extends AbstractSimiScreen {
 
@@ -146,6 +147,9 @@ public class GuiDesignExporter extends AbstractSimiScreen {
 	}
 
 	private void initAdditionalDataScrollArea(DesignType type) {
+		if (widgets.contains(scrollAreaAdditionalData))
+			widgets.remove(scrollAreaAdditionalData);
+
 		if (type.hasAdditionalData()) {
 
 			additionalDataKey = type.getAdditionalDataName();
@@ -167,16 +171,20 @@ public class GuiDesignExporter extends AbstractSimiScreen {
 					int max = (type.getMaxSize() - 1) / 2;
 
 					scrollAreaAdditionalData = new ScrollArea(topLeftX + 93, topLeftY + 85, 90, 14).withRange(min, max)
-							.setState((additionalDataValue - 1) / 2).calling(position -> {
+							.setState((additionalDataValue - 1) / 2).writingTo(labelAdditionalData)
+							.calling(position -> {
 								additionalDataValue = position * 2 + 1;
+								labelAdditionalData.text = position * 2 + 1 + "m";
 							});
+					labelAdditionalData.text = additionalDataValue + "m";
 
 				} else {
 					int min = type.getMinSize();
 					int max = type.getMaxSize();
 
 					scrollAreaAdditionalData = new ScrollArea(topLeftX + 93, topLeftY + 85, 90, 14)
-							.withRange(min, max + 1).setState(additionalDataValue).calling(position -> {
+							.withRange(min, max + 1).setState(additionalDataValue).writingTo(labelAdditionalData)
+							.calling(position -> {
 								additionalDataValue = position;
 								labelAdditionalData.text = position + "m";
 							});
@@ -192,10 +200,12 @@ public class GuiDesignExporter extends AbstractSimiScreen {
 
 				labelAdditionalData.text = subtypeOptions.get(additionalDataValue);
 				scrollAreaAdditionalData = new OptionScrollArea(topLeftX + 93, topLeftY + 85, 90, 14)
-						.forOptions(subtypeOptions).setState(additionalDataValue).calling(p -> additionalDataValue = p);
+						.forOptions(subtypeOptions).writingTo(labelAdditionalData).setState(additionalDataValue)
+						.calling(p -> additionalDataValue = p);
 			}
 
-			scrollAreaAdditionalData.titled(additionalDataKey).writingTo(labelAdditionalData);
+			scrollAreaAdditionalData.titled(additionalDataKey);
+			widgets.add(scrollAreaAdditionalData);
 
 		} else {
 
@@ -208,20 +218,40 @@ public class GuiDesignExporter extends AbstractSimiScreen {
 	}
 
 	@Override
+	public void tick() {
+		super.tick();
+		animationProgress++;
+	}
+
+	@Override
 	protected void renderWindow(int mouseX, int mouseY, float partialTicks) {
 		GuiResources.EXPORTER.draw(this, topLeftX, topLeftY);
 
-		RenderHelper.enableStandardItemLighting();
+		minecraft.getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+		GlStateManager.pushLightingAttributes();
 		GlStateManager.pushMatrix();
-		GlStateManager.translatef((this.width - this.sWidth) / 2 + 250, 280, 100);
+
+		RenderHelper.enableStandardItemLighting();
+		GlStateManager.enableBlend();
+		GlStateManager.enableRescaleNormal();
+		GlStateManager.enableAlphaTest();
+		GlStateManager.alphaFunc(516, 0.1F);
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+		GlStateManager.translatef((this.width - this.sWidth) / 2 + 250, 220, 100);
 		GlStateManager.rotatef(-30, .4f, 0, -.2f);
 		GlStateManager.rotatef(90 + 0.2f * animationProgress, 0, 1, 0);
-		GlStateManager.scalef(300, -300, 300);
+		GlStateManager.scalef(100, -100, 100);
 		itemRenderer.renderItem(minecraft.player.getHeldItemMainhand(),
 				itemRenderer.getModelWithOverrides(minecraft.player.getHeldItemMainhand()));
+//		itemRenderer.renderItemIntoGUI(minecraft.player.getHeldItemMainhand(), 0, 0);
+
+		GlStateManager.disableAlphaTest();
+		GlStateManager.disableRescaleNormal();
+		GlStateManager.disableLighting();
 		GlStateManager.popMatrix();
-		RenderHelper.disableStandardItemLighting();
-		animationProgress++;
+		GlStateManager.popAttributes();
 
 		int color = GuiResources.FONT_COLOR;
 		font.drawString("Export custom Designs", topLeftX + 10, topLeftY + 10, color);

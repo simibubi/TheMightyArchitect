@@ -254,6 +254,8 @@ public class ArchitectManager {
 	}
 
 	public static boolean onMouseScrolled(int delta) {
+		if (Minecraft.getInstance().currentScreen != null)
+			return false;
 		return phase.getPhaseHandler().onScroll(delta);
 	}
 
@@ -266,6 +268,8 @@ public class ArchitectManager {
 
 	@SubscribeEvent
 	public static void onClick(MouseInputEvent event) {
+		if (Minecraft.getInstance().currentScreen != null)
+			return;
 		if (event.getAction() != Keyboard.PRESS)
 			return;
 		phase.getPhaseHandler().onClick(event.getButton());
@@ -273,6 +277,8 @@ public class ArchitectManager {
 
 	@SubscribeEvent
 	public static void onKeyTyped(KeyInputEvent event) {
+		if (Minecraft.getInstance().currentScreen != null)
+			return;
 		if (TheMightyArchitect.COMPOSE.isPressed()) {
 			if (menu.isFocused())
 				return;

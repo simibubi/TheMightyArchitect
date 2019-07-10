@@ -47,7 +47,7 @@ public class GuiPalettePicker extends AbstractSimiScreen {
 
 		// resource palettes
 		int id = 2;
-		int x = topLeftX + 7;
+		int x = topLeftX + 10;
 		int y = topLeftY + 68;
 		for (String paletteName : PaletteStorage.getResourcePaletteNames()) {
 			widgets.add(new PaletteButton(PaletteStorage.getPalette(paletteName), this, id, x + ((id - 2) % 5) * 23,
@@ -57,7 +57,7 @@ public class GuiPalettePicker extends AbstractSimiScreen {
 
 		// my palettes
 		int i = 0;
-		x = topLeftX + 134;
+		x = topLeftX + 135;
 		y = topLeftY + 68;
 		for (String paletteName : PaletteStorage.getPaletteNames()) {
 			widgets.add(new PaletteButton(PaletteStorage.getPalette(paletteName), this, id + i, x + (i % 5) * 23,
@@ -98,16 +98,16 @@ public class GuiPalettePicker extends AbstractSimiScreen {
 			widgets.remove(secondary);
 
 		if (scanPicker) {
-			primary = new PaletteButton(DesignExporter.scanningPalette, this, 0, topLeftX + 134, topLeftY + 6);
+			primary = new PaletteButton(DesignExporter.scanningPalette, this, 0, topLeftX + 135, topLeftY + 8);
 			primary.active = false;
 			widgets.add(primary);
 			return;
 		}
 
-		primary = new PaletteButton(ArchitectManager.getModel().getPrimary(), this, 0, topLeftX + 134, topLeftY + 6);
+		primary = new PaletteButton(ArchitectManager.getModel().getPrimary(), this, 0, topLeftX + 135, topLeftY + 8);
 		primary.active = false;
-		secondary = new PaletteButton(ArchitectManager.getModel().getSecondary(), this, 1, topLeftX + 191,
-				topLeftY + 6);
+		secondary = new PaletteButton(ArchitectManager.getModel().getSecondary(), this, 1, topLeftX + 192,
+				topLeftY + 8);
 		secondary.active = false;
 		widgets.add(primary);
 		widgets.add(secondary);

@@ -13,16 +13,13 @@
     },
     "OUTER_FLAT": {
       "Properties": {
-        "half": "bottom",
         "waterlogged": "false",
-        "powered": "false",
-        "facing": "south",
-        "open": "true"
+        "facing": "south"
       },
-      "Name": "minecraft:oak_trapdoor"
+      "Name": "minecraft:dead_bubble_coral_wall_fan"
     },
     "INNER_PRIMARY": {
-      "Name": "minecraft:light_gray_concrete"
+      "Name": "minecraft:dead_tube_coral_block"
     },
     "HEAVY_POST": {
       "Properties": {
@@ -33,23 +30,23 @@
         "west": "false",
         "up": "true"
       },
-      "Name": "minecraft:brick_wall"
+      "Name": "minecraft:stone_brick_wall"
     },
     "ROOF_PRIMARY": {
-      "Name": "minecraft:stone"
-    },
-    "INNER_DETAIL": {
       "Properties": {
         "axis": "y"
       },
-      "Name": "minecraft:quartz_pillar"
+      "Name": "minecraft:oak_wood"
+    },
+    "INNER_DETAIL": {
+      "Name": "minecraft:dead_horn_coral_block"
     },
     "ROOF_SLAB": {
       "Properties": {
         "waterlogged": "false",
         "type": "bottom"
       },
-      "Name": "minecraft:quartz_slab"
+      "Name": "minecraft:smooth_stone_slab"
     },
     "WINDOW": {
       "Properties": {
@@ -61,28 +58,35 @@
       },
       "Name": "minecraft:black_stained_glass_pane"
     },
-    "Name": "Standard Modern",
+    "Name": "Coral Genocide",
     "HEAVY_PRIMARY": {
-      "Name": "minecraft:polished_granite"
+      "Properties": {
+        "axis": "y"
+      },
+      "Name": "minecraft:acacia_log"
     },
     "FLOOR": {
       "Name": "minecraft:smooth_stone"
     },
     "HEAVY_SECONDARY": {
-      "Name": "minecraft:bricks"
+      "Name": "minecraft:cobblestone"
     },
     "ROOF_DETAIL": {
-      "Name": "minecraft:smooth_quartz"
+      "Properties": {
+        "waterlogged": "false",
+        "type": "double"
+      },
+      "Name": "minecraft:smooth_stone_slab"
     },
     "INNER_SECONDARY": {
-      "Name": "minecraft:light_gray_wool"
+      "Name": "minecraft:dead_fire_coral_block"
     },
     "OUTER_SLAB": {
       "Properties": {
         "waterlogged": "false",
         "type": "bottom"
       },
-      "Name": "minecraft:stone_slab"
+      "Name": "minecraft:spruce_slab"
     },
     "HEAVY_WINDOW": {
       "Properties": {
@@ -91,7 +95,7 @@
         "shape": "straight",
         "facing": "north"
       },
-      "Name": "minecraft:brick_stairs"
+      "Name": "minecraft:polished_andesite_stairs"
     },
     "CLEAR": {
       "Name": "minecraft:barrier"
