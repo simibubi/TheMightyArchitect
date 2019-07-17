@@ -34,7 +34,9 @@ import com.simibubi.mightyarchitect.networking.Packets;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
@@ -77,7 +79,7 @@ public class ArchitectManager {
 	public static void unload() {
 		if (model.getGroundPlan() != null)
 			model.getTheme().getDesignPicker().reset();
-		
+
 		enterPhase(ArchitectPhases.Empty);
 		resetSchematic();
 
@@ -143,7 +145,7 @@ public class ArchitectManager {
 		} else {
 			enterPhase(ArchitectPhases.PrintingToMultiplayer);
 		}
-		
+
 	}
 
 	public static void writeToFile(String name) {
@@ -171,6 +173,11 @@ public class ArchitectManager {
 				IOUtils.closeQuietly(outputStream);
 		}
 		status("Saved as " + filepath);
+
+		BlockPos pos = model.getAnchor();
+		StringTextComponent component = new StringTextComponent("Deploy Schematic at: " + TextFormatting.BLUE + "["
+				+ pos.getX() + "," + pos.getY() + "," + pos.getZ() + "]");
+		Minecraft.getInstance().player.sendMessage(component);
 	}
 
 	public static void status(String message) {

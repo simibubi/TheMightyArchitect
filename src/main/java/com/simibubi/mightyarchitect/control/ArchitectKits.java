@@ -12,19 +12,20 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 
 public class ArchitectKits {
 
 	public static void ExporterToolkit() {
 		setHotbarItem(0, AllItems.ARCHITECT_WAND.get());
-		setHotbarItem(1, AllItems.FILLING_WAND.get());
-		setHotbarItem(2, AllItems.SYMMETRY_WAND.get());
+		setHotbarBlock(1, AllBlocks.DESIGN_ANCHOR.get());
+		setHotbarBlock(2, AllBlocks.SLICE_MARKER.get());
 		clearHotbarItem(3);
-		setHotbarBlock(4, AllBlocks.DESIGN_ANCHOR.get());
-		setHotbarBlock(5, AllBlocks.SLICE_MARKER.get());
+		setHotbarBlock(4, Palette.CLEAR);
+		setHotbarBlock(5, Palette.FLOOR);
 		clearHotbarItem(6);
-		setHotbarBlock(7, Palette.CLEAR);
-		setHotbarBlock(8, Palette.FLOOR);
+		clearHotbarItem(7);
+		clearHotbarItem(8);
 	}
 
 	public static void FoundationToolkit() {
@@ -82,8 +83,10 @@ public class ArchitectKits {
 	private static void setHotbarBlock(int slot, Palette palette) {
 		BlockState state = DesignExporter.theme.getDefaultPalette().get(palette);
 		ItemStack stack = new ItemStack(state.getBlock().asItem());
-		setHotbarItem(slot, stack.setDisplayName(
-				new StringTextComponent(palette.getDisplayName() + " (" + stack.getDisplayName() + ")")));
+		setHotbarItem(slot,
+				stack.setDisplayName(new StringTextComponent(TextFormatting.RESET + "" + TextFormatting.GOLD
+						+ palette.getDisplayName() + TextFormatting.WHITE + " (" + TextFormatting.GRAY
+						+ stack.getDisplayName().getFormattedText() + TextFormatting.WHITE + ")")));
 	}
 
 }

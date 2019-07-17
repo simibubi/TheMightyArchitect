@@ -1,8 +1,0 @@
-{
-	"forgemarker": 1,
-    "variants": {
-		"normal": { "model": "mightyarchitect:block/symmetry_plane" },
-		"align=xy": { "model": "mightyarchitect:block/symmetry_plane" },
-        "align=yz": { "model": "mightyarchitect:block/symmetry_plane", "y": 90 }
-	}
-}

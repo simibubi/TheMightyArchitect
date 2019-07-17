@@ -3,9 +3,6 @@ package com.simibubi.mightyarchitect;
 import com.simibubi.mightyarchitect.block.BlockDesignAnchor;
 import com.simibubi.mightyarchitect.block.BlockSliceMarker;
 import com.simibubi.mightyarchitect.block.IJustForRendering;
-import com.simibubi.mightyarchitect.block.symmetry.BlockSymmetryCrossPlane;
-import com.simibubi.mightyarchitect.block.symmetry.BlockSymmetryPlane;
-import com.simibubi.mightyarchitect.block.symmetry.BlockSymmetryTriplePlane;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -16,12 +13,8 @@ import net.minecraftforge.registries.IForgeRegistry;
 public enum AllBlocks {
 
 	SLICE_MARKER(new BlockSliceMarker()),
-	DESIGN_ANCHOR(new BlockDesignAnchor()),
+	DESIGN_ANCHOR(new BlockDesignAnchor());
 	
-	SYMMETRY_PLANE(new BlockSymmetryPlane()),
-	SYMMETRY_CROSSPLANE(new BlockSymmetryCrossPlane()),
-	SYMMETRY_TRIPLEPLANE(new BlockSymmetryTriplePlane());
-
 	public Block block;
 
 	private AllBlocks(Block block) {

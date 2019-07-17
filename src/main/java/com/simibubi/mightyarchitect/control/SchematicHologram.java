@@ -34,11 +34,6 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 
-/**
- * Renders a structure into the world
- * 
- * @author simibubi
- */
 @EventBusSubscriber(Dist.CLIENT)
 public class SchematicHologram {
 

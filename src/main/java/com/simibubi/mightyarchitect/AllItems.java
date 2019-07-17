@@ -1,8 +1,6 @@
 package com.simibubi.mightyarchitect;
 
 import com.simibubi.mightyarchitect.item.ItemWandArchitect;
-import com.simibubi.mightyarchitect.item.ItemWandFill;
-import com.simibubi.mightyarchitect.item.ItemWandSymmetry;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.Properties;
@@ -11,12 +9,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 public enum AllItems {
 	
-	ARCHITECT_WAND(new ItemWandArchitect(standardProperties())),
-	SYMMETRY_WAND(new ItemWandSymmetry(standardProperties())),
-	FILLING_WAND(new ItemWandFill(standardProperties())),
-	
-	EMPTY_BLUEPRINT(new Item(standardProperties().maxStackSize(1))),
-	BLUEPRINT(new Item(standardProperties().maxStackSize(1)));
+	ARCHITECT_WAND(new ItemWandArchitect(standardProperties()));
 
 	public Item item;
 
@@ -26,7 +19,7 @@ public enum AllItems {
 	}
 	
 	public static Properties standardProperties() {
-		return new Properties().group(TheMightyArchitect.creativeTab);
+		return new Properties();
 	}
 	
 	public static void registerItems(IForgeRegistry<Item> iForgeRegistry) {

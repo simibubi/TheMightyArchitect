@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 
 public class ThemeValidator {
 
@@ -18,7 +19,11 @@ public class ThemeValidator {
 
 	public static void check(DesignTheme theme) {
 		ClientPlayerEntity player = Minecraft.getInstance().player;
-		player.sendMessage(new StringTextComponent("--> Validation on " + theme.getDisplayName() + " <--"));
+		player.sendMessage(new StringTextComponent(" "));
+		player.sendMessage(new StringTextComponent(" "));
+		player.sendMessage(new StringTextComponent(" "));
+		player.sendMessage(new StringTextComponent(TextFormatting.AQUA + "--> Validation on " + TextFormatting.BLUE
+				+ TextFormatting.BOLD + theme.getDisplayName() + TextFormatting.AQUA + " <--"));
 		theme.clearDesigns();
 		ThemeStatistics stats = theme.getStatistics();
 		stats.sendToPlayer();
@@ -55,7 +60,7 @@ public class ThemeValidator {
 					}
 					if (!missingHeights.isEmpty())
 						alert(layer.getDisplayName() + " " + type.getDisplayName() + "s are missing heights "
-							+ glue(missingHeights));
+								+ glue(missingHeights));
 					break;
 				case NONE:
 					alert("Found design with no type in layer " + layer.getDisplayName() + "!");
@@ -85,8 +90,8 @@ public class ThemeValidator {
 								missingHeights.add(height);
 						}
 						if (!missingHeights.isEmpty())
-							alert(layer.getDisplayName() + " " + type.getDisplayName() + "s with radius " + radius + " are missing heights "
-								+ glue(missingHeights));
+							alert(layer.getDisplayName() + " " + type.getDisplayName() + "s with radius " + radius
+									+ " are missing heights " + glue(missingHeights));
 					}
 					break;
 				case TOWER_FLAT_ROOF:
@@ -119,8 +124,8 @@ public class ThemeValidator {
 								missingHeights.add(height);
 						}
 						if (!missingHeights.isEmpty())
-							alert(layer.getDisplayName() + " " + type.getDisplayName() + "s which span " + width + " are missing heights "
-								+ glue(missingHeights));
+							alert(layer.getDisplayName() + " " + type.getDisplayName() + "s which span " + width
+									+ " are missing heights " + glue(missingHeights));
 					}
 					break;
 				default:
@@ -132,15 +137,16 @@ public class ThemeValidator {
 		}
 
 		if (complaints.size() > 0) {
-			player.sendMessage(new StringTextComponent("The Following Designs are missing:"));
+			player.sendMessage(new StringTextComponent(TextFormatting.GOLD + "The Following Designs are missing:"));
 			for (ITextComponent text : complaints) {
 				player.sendMessage(text);
 			}
 			player.sendMessage(new StringTextComponent(
-					"Try and add these missing designs or exclude their type from your theme."));
+					TextFormatting.GOLD + "Try and add these missing designs or exclude their type from your theme."));
 
 		} else {
-			player.sendMessage(new StringTextComponent("For prior traits no missing designs have been found."));
+			player.sendMessage(new StringTextComponent(
+					TextFormatting.GREEN + "For prior traits no missing designs have been found."));
 		}
 
 	}
@@ -150,9 +156,9 @@ public class ThemeValidator {
 	}
 
 	private static void alert(String message) {
-		complaints.add(new StringTextComponent("-> " + message));
+		complaints.add(new StringTextComponent("-> " + TextFormatting.RED + message));
 	}
-	
+
 	private static String glue(List<Integer> heights) {
 		if (heights.isEmpty())
 			return null;

@@ -1,8 +1,0 @@
-{
-	"forgemarker": 1,
-    "variants": {
-		"normal": { "model": "mightyarchitect:block/symmetry_crossplane" },
-		"align=y": { "model": "mightyarchitect:block/symmetry_crossplane"},
-        "align=d": { "model": "mightyarchitect:block/symmetry_crossplane_diagonal"}
-	}
-}

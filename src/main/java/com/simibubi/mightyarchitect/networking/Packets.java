@@ -18,12 +18,8 @@ public class Packets {
 				PacketInstantPrint::handle);
 		channel.registerMessage(i++, PacketPlaceSign.class, PacketPlaceSign::toBytes, PacketPlaceSign::new,
 				PacketPlaceSign::handle);
-		channel.registerMessage(i++, PacketNbt.class, PacketNbt::toBytes, PacketNbt::new,
-				PacketNbt::handle);
 		channel.registerMessage(i++, PacketSetHotbarItem.class, PacketSetHotbarItem::toBytes, PacketSetHotbarItem::new,
 				PacketSetHotbarItem::handle);
-		channel.registerMessage(i++, PacketSymmetryEffect.class, PacketSymmetryEffect::toBytes, PacketSymmetryEffect::new,
-				PacketSymmetryEffect::handle);
 	}
 
 }

@@ -20,6 +20,9 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.DistExecutor;
 
 public class ItemWandArchitect extends Item {
 
@@ -36,16 +39,33 @@ public class ItemWandArchitect extends Item {
 			return ActionResultType.SUCCESS;
 
 		if (player.isSneaking()) {
-			PhaseEditTheme.resetVisualization();
+			DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+				resetVisualization();
+			});
 			return ActionResultType.SUCCESS;
 		}
 
 		BlockPos anchor = context.getPos();
 		BlockState blockState = world.getBlockState(anchor);
 
+		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+			handleUseOnDesignAnchor(player, world, anchor, blockState);
+		});
+
+		player.getCooldownTracker().setCooldown(this, 5);
+		return ActionResultType.SUCCESS;
+	}
+
+	@OnlyIn(value = Dist.CLIENT)
+	protected void resetVisualization() {
+		PhaseEditTheme.resetVisualization();
+	}
+
+	@OnlyIn(value = Dist.CLIENT)
+	protected void handleUseOnDesignAnchor(PlayerEntity player, World world, BlockPos anchor, BlockState blockState) {
 		if (AllBlocks.DESIGN_ANCHOR.typeOf(blockState)) {
 			if (!ArchitectManager.inPhase(ArchitectPhases.EditingThemes))
-				return ActionResultType.FAIL;
+				return;
 
 			String name = DesignExporter.exportDesign(world, anchor);
 			if (!name.isEmpty()) {
@@ -54,29 +74,38 @@ public class ItemWandArchitect extends Item {
 
 		} else {
 			if (!ArchitectManager.inPhase(ArchitectPhases.EditingThemes))
-				return ActionResultType.FAIL;
-			GuiOpener.open(new GuiDesignExporter());
+				return;
+			DistExecutor.runWhenOn(Dist.CLIENT, () -> this::openGui);
 		}
-
-		player.getCooldownTracker().setCooldown(this, 5);
-		return ActionResultType.SUCCESS;
 	}
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		if (worldIn.isRemote) {
-			if (!ArchitectManager.inPhase(ArchitectPhases.EditingThemes))
-				return super.onItemRightClick(worldIn, playerIn, handIn);
-
-			if (playerIn.isSneaking()) {
-				PhaseEditTheme.resetVisualization();
-
-			} else {
-				GuiOpener.open(new GuiDesignExporter());
-			}
+			DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+				handleRightClick(worldIn, playerIn, handIn);
+			});
 			playerIn.getCooldownTracker().setCooldown(this, 5);
 		}
 		return super.onItemRightClick(worldIn, playerIn, handIn);
+	}
+
+	@OnlyIn(value = Dist.CLIENT)
+	protected void handleRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		if (!ArchitectManager.inPhase(ArchitectPhases.EditingThemes))
+			return;
+
+		if (playerIn.isSneaking()) {
+			resetVisualization();
+
+		} else {
+			openGui();
+		}
+	}
+	
+	@OnlyIn(value = Dist.CLIENT)
+	private void openGui() {
+		GuiOpener.open(new GuiDesignExporter());
 	}
 
 	@Override
