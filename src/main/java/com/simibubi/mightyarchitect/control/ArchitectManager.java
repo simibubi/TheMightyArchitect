@@ -39,6 +39,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.client.event.GuiScreenEvent.MouseScrollEvent;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.client.event.InputEvent.MouseInputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -174,10 +175,12 @@ public class ArchitectManager {
 		}
 		status("Saved as " + filepath);
 
-		BlockPos pos = model.getAnchor();
+		BlockPos pos = model.getAnchor()
+				.add(((TemplateBlockAccess) model.getMaterializedSketch()).getBounds().getOrigin());
 		StringTextComponent component = new StringTextComponent("Deploy Schematic at: " + TextFormatting.BLUE + "["
 				+ pos.getX() + "," + pos.getY() + "," + pos.getZ() + "]");
 		Minecraft.getInstance().player.sendMessage(component);
+		unload();
 	}
 
 	public static void status(String message) {
@@ -260,10 +263,12 @@ public class ArchitectManager {
 
 	}
 
-	public static boolean onMouseScrolled(int delta) {
-		if (Minecraft.getInstance().currentScreen != null)
-			return false;
-		return phase.getPhaseHandler().onScroll(delta);
+	@SubscribeEvent
+	public static void onMouseScrolled(MouseScrollEvent.Post event) {
+		if (event.getGui() != null)
+			return;
+		if (phase.getPhaseHandler().onScroll((int) Math.signum(event.getScrollDelta())))
+			event.setCanceled(true);
 	}
 
 	@SubscribeEvent

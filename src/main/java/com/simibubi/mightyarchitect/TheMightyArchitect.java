@@ -3,7 +3,6 @@ package com.simibubi.mightyarchitect;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.gui.Keyboard;
 import com.simibubi.mightyarchitect.networking.Packets;
 
@@ -56,9 +55,7 @@ public class TheMightyArchitect {
 			TOOL_MENU = new KeyBinding("Tool Menu (Hold)", Keyboard.LALT, NAME);
 			ClientRegistry.registerKeyBinding(COMPOSE);
 			ClientRegistry.registerKeyBinding(TOOL_MENU);
-
 			ScrollFixer.init();
-			ScrollFixer.addMouseWheelListener(dy -> ArchitectManager.onMouseScrolled(dy.intValue()));
 		});
 	}
 

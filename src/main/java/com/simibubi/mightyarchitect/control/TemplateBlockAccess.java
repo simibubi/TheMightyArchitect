@@ -77,7 +77,7 @@ public class TemplateBlockAccess implements IWorld {
 	@Override
 	public BlockState getBlockState(BlockPos globalPos) {
 		BlockPos pos = globalPos.subtract(anchor);
-		if (bounds.contains(pos) && blocks.containsKey(pos)) {
+		if (getBounds().contains(pos) && blocks.containsKey(pos)) {
 			return blocks.get(pos);
 		} else {
 			return Blocks.AIR.getDefaultState();
@@ -246,6 +246,10 @@ public class TemplateBlockAccess implements IWorld {
 
 	@Override
 	public void playEvent(PlayerEntity player, int type, BlockPos pos, int data) {
+	}
+
+	public Cuboid getBounds() {
+		return bounds;
 	}
 
 }

@@ -24,6 +24,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.Template.BlockInfo;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 public class Schematic {
 
@@ -202,10 +203,9 @@ public class Schematic {
 		template.setAuthor(Minecraft.getInstance().player.getName().getFormattedText());
 
 		try {
-			Field fBlocks = template.getClass().getDeclaredField("blocks");
-			Field fSize = template.getClass().getDeclaredField("size");
-			fBlocks.setAccessible(true);
-			fSize.setAccessible(true);
+			Field fBlocks = ObfuscationReflectionHelper.findField(Template.class, "field_204769_a");
+			Field fSize = ObfuscationReflectionHelper.findField(Template.class, "field_186272_c");
+			
 			Object objectBlocks = fBlocks.get(template);
 			fSize.set(template, bounds.getSize());
 			@SuppressWarnings("unchecked")
@@ -217,7 +217,7 @@ public class Schematic {
 			.forEach((pos, state) -> added.add(new BlockInfo(pos.subtract(bounds.getOrigin()), state, new CompoundNBT())));
 			blocks.add(added);
 			
-		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+		} catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
 		
