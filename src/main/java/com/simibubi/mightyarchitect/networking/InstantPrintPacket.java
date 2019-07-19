@@ -14,18 +14,18 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 
-public class PacketInstantPrint {
+public class InstantPrintPacket {
 
 	private BunchOfBlocks blocks;
 
-	public PacketInstantPrint() {
+	public InstantPrintPacket() {
 	}
 
-	public PacketInstantPrint(BunchOfBlocks blocks) {
+	public InstantPrintPacket(BunchOfBlocks blocks) {
 		this.blocks = blocks;
 	}
 
-	public PacketInstantPrint(PacketBuffer buf) {
+	public InstantPrintPacket(PacketBuffer buf) {
 		Map<BlockPos, BlockState> blocks = new HashMap<>();
 		int size = buf.readInt();
 		for (int i = 0; i < size; i++) {
@@ -53,20 +53,20 @@ public class PacketInstantPrint {
 		});
     }
 	
-	public static List<PacketInstantPrint> sendSchematic(Map<BlockPos, BlockState> blockMap, BlockPos anchor) {
-		List<PacketInstantPrint> packets = new LinkedList<>();
+	public static List<InstantPrintPacket> sendSchematic(Map<BlockPos, BlockState> blockMap, BlockPos anchor) {
+		List<InstantPrintPacket> packets = new LinkedList<>();
 		
 		Map<BlockPos, BlockState> currentMap = new HashMap<>(BunchOfBlocks.MAX_SIZE);
 		List<BlockPos> posList = new ArrayList<>(blockMap.keySet());
 		
 		for (int i = 0; i < blockMap.size(); i++) {
 			if (currentMap.size() >= BunchOfBlocks.MAX_SIZE) {
-				packets.add(new PacketInstantPrint(new BunchOfBlocks(currentMap)));
+				packets.add(new InstantPrintPacket(new BunchOfBlocks(currentMap)));
 				currentMap = new HashMap<>(BunchOfBlocks.MAX_SIZE);
 			}
 			currentMap.put(posList.get(i).add(anchor), blockMap.get(posList.get(i)));
 		}
-		packets.add(new PacketInstantPrint(new BunchOfBlocks(currentMap)));
+		packets.add(new InstantPrintPacket(new BunchOfBlocks(currentMap)));
 		
 		return packets;
 	}

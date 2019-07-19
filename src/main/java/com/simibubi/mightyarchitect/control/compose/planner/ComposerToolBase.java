@@ -8,9 +8,9 @@ import com.simibubi.mightyarchitect.control.Schematic;
 import com.simibubi.mightyarchitect.control.compose.GroundPlan;
 import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.control.compose.Stack;
+import com.simibubi.mightyarchitect.control.helpful.Keyboard;
 import com.simibubi.mightyarchitect.control.helpful.RaycastHelper;
 import com.simibubi.mightyarchitect.control.helpful.RaycastHelper.PredicateTraceResult;
-import com.simibubi.mightyarchitect.gui.Keyboard;
 
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;

@@ -13,9 +13,9 @@ import com.simibubi.mightyarchitect.control.design.DesignLayer;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.design.ThemeStatistics;
+import com.simibubi.mightyarchitect.control.helpful.Keyboard;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorTextures;
-import com.simibubi.mightyarchitect.gui.Keyboard;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;

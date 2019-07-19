@@ -5,16 +5,16 @@ import java.util.List;
 
 import net.minecraft.util.text.TextFormatting;
 
-public class OptionScrollArea extends ScrollArea {
+public class SelectionScrollInput extends ScrollInput {
 
 	protected List<String> options;
 
-	public OptionScrollArea(int xIn, int yIn, int widthIn, int heightIn) {
+	public SelectionScrollInput(int xIn, int yIn, int widthIn, int heightIn) {
 		super(xIn, yIn, widthIn, heightIn);
 		options = new ArrayList<>();
 	}
 
-	public ScrollArea forOptions(List<String> options) {
+	public ScrollInput forOptions(List<String> options) {
 		this.options = options;
 		this.max = options.size();
 		updateTooltip();

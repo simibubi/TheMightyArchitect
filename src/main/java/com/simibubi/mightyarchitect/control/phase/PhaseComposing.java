@@ -104,8 +104,8 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 	@Override
 	public List<String> getToolTip() {
 		return ImmutableList.of(
-				"Draw the layout of your build, adding rooms, towers and other. Modify their size, style and palette using the Selection Tool.",
-				"Use your < > Arrow Keys to switch tools.");
+				"Draw the layout of your build, adding rooms, towers and other. Modify their position, size and roof using the Tools.",
+				"Use [" + TheMightyArchitect.TOOL_MENU.getLocalizedName().toUpperCase() + "]+Scroll to switch tools.");
 	}
 
 }

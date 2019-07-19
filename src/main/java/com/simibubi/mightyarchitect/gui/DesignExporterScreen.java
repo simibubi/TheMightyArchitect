@@ -9,26 +9,26 @@ import com.simibubi.mightyarchitect.control.design.DesignLayer;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.phase.export.PhaseEditTheme;
-import com.simibubi.mightyarchitect.gui.widgets.DynamicLabel;
-import com.simibubi.mightyarchitect.gui.widgets.OptionScrollArea;
-import com.simibubi.mightyarchitect.gui.widgets.ScrollArea;
+import com.simibubi.mightyarchitect.gui.widgets.Label;
+import com.simibubi.mightyarchitect.gui.widgets.SelectionScrollInput;
+import com.simibubi.mightyarchitect.gui.widgets.ScrollInput;
 
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 
-public class GuiDesignExporter extends AbstractSimiScreen {
+public class DesignExporterScreen extends AbstractSimiScreen {
 
-	public GuiDesignExporter() {
+	public DesignExporterScreen() {
 		super();
 	}
 
-	private ScrollArea scrollAreaLayer;
-	private ScrollArea scrollAreaType;
-	private ScrollArea scrollAreaAdditionalData;
-	private DynamicLabel labelTheme;
-	private DynamicLabel labelLayer;
-	private DynamicLabel labelType;
-	private DynamicLabel labelAdditionalData;
+	private ScrollInput scrollAreaLayer;
+	private ScrollInput scrollAreaType;
+	private ScrollInput scrollAreaAdditionalData;
+	private Label labelTheme;
+	private Label labelLayer;
+	private Label labelType;
+	private Label labelAdditionalData;
 
 	private String additionalDataKey;
 	private int additionalDataValue;
@@ -38,7 +38,7 @@ public class GuiDesignExporter extends AbstractSimiScreen {
 	public void init() {
 		super.init();
 		animationProgress = 0;
-		setWindowSize(GuiResources.EXPORTER.width + 100, GuiResources.EXPORTER.height + 50);
+		setWindowSize(ScreenResources.EXPORTER.width + 100, ScreenResources.EXPORTER.height + 50);
 
 		DesignTheme theme = DesignExporter.theme;
 		DesignLayer layer = DesignExporter.layer;
@@ -46,10 +46,10 @@ public class GuiDesignExporter extends AbstractSimiScreen {
 
 		additionalDataValue = DesignExporter.designParameter;
 
-		labelTheme = new DynamicLabel(topLeftX + 96, topLeftY + 28, "").withShadow();
-		labelLayer = new DynamicLabel(topLeftX + 96, topLeftY + 48, "").withShadow();
-		labelType = new DynamicLabel(topLeftX + 96, topLeftY + 68, "").withShadow();
-		labelAdditionalData = new DynamicLabel(topLeftX + 96, topLeftY + 88, "").withShadow();
+		labelTheme = new Label(topLeftX + 96, topLeftY + 28, "").withShadow();
+		labelLayer = new Label(topLeftX + 96, topLeftY + 48, "").withShadow();
+		labelType = new Label(topLeftX + 96, topLeftY + 68, "").withShadow();
+		labelAdditionalData = new Label(topLeftX + 96, topLeftY + 88, "").withShadow();
 
 		additionalDataKey = "";
 		initScrollAreas(theme, layer, type);
@@ -80,7 +80,7 @@ public class GuiDesignExporter extends AbstractSimiScreen {
 //		labelLayer.text = layer.getDisplayName();
 //		scrollAreas.add(scrollAreaLayer);
 
-		scrollAreaLayer = new OptionScrollArea(topLeftX + 93, topLeftY + 45, 90, 14).forOptions(layerOptions)
+		scrollAreaLayer = new SelectionScrollInput(topLeftX + 93, topLeftY + 45, 90, 14).forOptions(layerOptions)
 				.titled("Layer").writingTo(labelLayer).setState(layers.indexOf(layer))
 				.calling(position -> initTypeScrollArea(theme, layers.get(position), DesignExporter.type));
 
@@ -136,7 +136,7 @@ public class GuiDesignExporter extends AbstractSimiScreen {
 //		scrollAreaType.setState(types.indexOf(type));
 //		labelType.text = type.getDisplayName();
 
-		scrollAreaType = new OptionScrollArea(topLeftX + 93, topLeftY + 65, 90, 14).forOptions(typeOptions)
+		scrollAreaType = new SelectionScrollInput(topLeftX + 93, topLeftY + 65, 90, 14).forOptions(typeOptions)
 				.titled("Design Type").writingTo(labelType).setState(types.indexOf(type)).calling(position -> {
 					DesignExporter.type = types.get(position);
 					initAdditionalDataScrollArea(types.get(position));
@@ -170,7 +170,7 @@ public class GuiDesignExporter extends AbstractSimiScreen {
 					int min = (type.getMinSize() - 1) / 2;
 					int max = (type.getMaxSize() - 1) / 2;
 
-					scrollAreaAdditionalData = new ScrollArea(topLeftX + 93, topLeftY + 85, 90, 14).withRange(min, max)
+					scrollAreaAdditionalData = new ScrollInput(topLeftX + 93, topLeftY + 85, 90, 14).withRange(min, max)
 							.setState((additionalDataValue - 1) / 2).writingTo(labelAdditionalData)
 							.calling(position -> {
 								additionalDataValue = position * 2 + 1;
@@ -182,7 +182,7 @@ public class GuiDesignExporter extends AbstractSimiScreen {
 					int min = type.getMinSize();
 					int max = type.getMaxSize();
 
-					scrollAreaAdditionalData = new ScrollArea(topLeftX + 93, topLeftY + 85, 90, 14)
+					scrollAreaAdditionalData = new ScrollInput(topLeftX + 93, topLeftY + 85, 90, 14)
 							.withRange(min, max + 1).setState(additionalDataValue).writingTo(labelAdditionalData)
 							.calling(position -> {
 								additionalDataValue = position;
@@ -199,7 +199,7 @@ public class GuiDesignExporter extends AbstractSimiScreen {
 					additionalDataValue = 0;
 
 				labelAdditionalData.text = subtypeOptions.get(additionalDataValue);
-				scrollAreaAdditionalData = new OptionScrollArea(topLeftX + 93, topLeftY + 85, 90, 14)
+				scrollAreaAdditionalData = new SelectionScrollInput(topLeftX + 93, topLeftY + 85, 90, 14)
 						.forOptions(subtypeOptions).writingTo(labelAdditionalData).setState(additionalDataValue)
 						.calling(p -> additionalDataValue = p);
 			}
@@ -225,7 +225,7 @@ public class GuiDesignExporter extends AbstractSimiScreen {
 
 	@Override
 	protected void renderWindow(int mouseX, int mouseY, float partialTicks) {
-		GuiResources.EXPORTER.draw(this, topLeftX, topLeftY);
+		ScreenResources.EXPORTER.draw(this, topLeftX, topLeftY);
 
 		minecraft.getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 		GlStateManager.pushLightingAttributes();
@@ -253,7 +253,7 @@ public class GuiDesignExporter extends AbstractSimiScreen {
 		GlStateManager.popMatrix();
 		GlStateManager.popAttributes();
 
-		int color = GuiResources.FONT_COLOR;
+		int color = ScreenResources.FONT_COLOR;
 		font.drawString("Export custom Designs", topLeftX + 10, topLeftY + 10, color);
 
 		font.drawString("Theme", topLeftX + 10, topLeftY + 28, color);

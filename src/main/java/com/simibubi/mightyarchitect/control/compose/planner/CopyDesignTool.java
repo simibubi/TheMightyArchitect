@@ -12,7 +12,7 @@ import com.simibubi.mightyarchitect.control.design.DesignPicker;
 import com.simibubi.mightyarchitect.control.design.DesignPicker.RoomDesignMapping;
 import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.design.partials.Design;
-import com.simibubi.mightyarchitect.gui.Keyboard;
+import com.simibubi.mightyarchitect.control.helpful.Keyboard;
 
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.util.Direction;

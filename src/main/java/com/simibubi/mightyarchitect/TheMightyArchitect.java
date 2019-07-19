@@ -3,8 +3,7 @@ package com.simibubi.mightyarchitect;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.simibubi.mightyarchitect.gui.Keyboard;
-import com.simibubi.mightyarchitect.networking.Packets;
+import com.simibubi.mightyarchitect.control.helpful.Keyboard;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.settings.KeyBinding;
@@ -29,7 +28,7 @@ public class TheMightyArchitect {
 
 	public static final String ID = "mightyarchitect";
 	public static final String NAME = "The Mighty Architect";
-	public static final String VERSION = "0.4.1";
+	public static final String VERSION = "0.4.2";
 
 	public static TheMightyArchitect instance;
 
@@ -60,7 +59,7 @@ public class TheMightyArchitect {
 	}
 
 	private void init(final FMLCommonSetupEvent event) {
-		Packets.registerPackets();
+		AllPackets.registerPackets();
 	}
 
 	@EventBusSubscriber(bus = Bus.MOD)

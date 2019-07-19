@@ -85,6 +85,7 @@ public class ThemeStorage {
 		theme.setFilePath(FilesHelper.slug(name));
 		theme.setImported(true);
 		theme.setDefaultPalette(PaletteDefinition.defaultPalette());
+		theme.setDefaultSecondaryPalette(PaletteDefinition.defaultPalette());
 		return theme.withLayers(DesignLayer.Regular, DesignLayer.Roofing, DesignLayer.Foundation).withTypes(
 				DesignType.WALL, DesignType.CORNER, DesignType.ROOF, DesignType.FACADE, DesignType.FLAT_ROOF);
 	}
@@ -101,6 +102,10 @@ public class ThemeStorage {
 
 		String palettePath = folderPath + "/" + foldername + "/palette.json";
 		FilesHelper.saveTagCompoundAsJson(theme.getDefaultPalette().writeToNBT(new CompoundNBT()), palettePath);
+
+		String palette2Path = folderPath + "/" + foldername + "/palette2.json";
+		FilesHelper.saveTagCompoundAsJson(theme.getDefaultSecondaryPalette().writeToNBT(new CompoundNBT()),
+				palette2Path);
 	}
 
 	public static String exportThemeFullyAsFile(DesignTheme theme, boolean compressed) {
@@ -110,6 +115,7 @@ public class ThemeStorage {
 
 		massiveThemeTag.put("Theme", theme.asTagCompound());
 		massiveThemeTag.put("Palette", theme.getDefaultPalette().writeToNBT(new CompoundNBT()));
+		massiveThemeTag.put("SecondaryPalette", theme.getDefaultSecondaryPalette().writeToNBT(new CompoundNBT()));
 
 		Map<DesignLayer, Map<DesignType, Set<CompoundNBT>>> designFiles = DesignResourceLoader
 				.loadThemeFromFolder(theme);
@@ -157,10 +163,12 @@ public class ThemeStorage {
 	private static DesignTheme loadInternalTheme(String themeFolder) {
 		CompoundNBT themeCompound = FilesHelper.loadJsonResourceAsNBT("themes/" + themeFolder + "/theme.json");
 		CompoundNBT paletteCompound = FilesHelper.loadJsonResourceAsNBT("themes/" + themeFolder + "/palette.json");
+		CompoundNBT palette2Compound = FilesHelper.loadJsonResourceAsNBT("themes/" + themeFolder + "/palette2.json");
 		DesignTheme theme = DesignTheme.fromNBT(themeCompound);
 		theme.setFilePath(themeFolder);
 		theme.setImported(false);
 		theme.setDefaultPalette(PaletteDefinition.fromNBT(paletteCompound));
+		theme.setDefaultSecondaryPalette(PaletteDefinition.fromNBT(palette2Compound));
 		return theme;
 	}
 
@@ -168,58 +176,71 @@ public class ThemeStorage {
 		importedThemes = new ArrayList<>();
 		createdThemes = new ArrayList<>();
 		String folderPath = "themes";
-		if (Files.isDirectory(Paths.get(folderPath))) {
 
-			try {
-				DirectoryStream<Path> newDirectoryStream = Files.newDirectoryStream(Paths.get(folderPath));
-				for (Path path : newDirectoryStream) {
-					String themeFolder = path.getFileName().toString();
+		try {
+			if (!Files.isDirectory(Paths.get(folderPath))) 
+				Files.createDirectory(Paths.get(folderPath));
+			
+			DirectoryStream<Path> newDirectoryStream = Files.newDirectoryStream(Paths.get(folderPath));
+			for (Path path : newDirectoryStream) {
+				String themeFolder = path.getFileName().toString();
 
-					CompoundNBT themeCompound;
-					CompoundNBT paletteCompound;
+				CompoundNBT themeCompound;
+				CompoundNBT paletteCompound;
+				CompoundNBT secondaryPaletteCompound = null;
 
-					if (themeFolder.equals("export"))
-						continue;
+				if (themeFolder.equals("export"))
+					continue;
 
-					if (themeFolder.endsWith(".theme") || themeFolder.endsWith(".json")) {
-						CompoundNBT themeFile = new CompoundNBT();
+				if (themeFolder.endsWith(".theme") || themeFolder.endsWith(".json")) {
+					CompoundNBT themeFile = new CompoundNBT();
 
-						if (themeFolder.endsWith(".theme")) {
-							try {
-								InputStream inputStream = Files.newInputStream(
-										Paths.get(folderPath + "/" + themeFolder), StandardOpenOption.READ);
-								themeFile = CompressedStreamTools.readCompressed(inputStream);
-								inputStream.close();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-						} else {
-							themeFile = FilesHelper.loadJsonAsNBT("themes/" + themeFolder);
+					if (themeFolder.endsWith(".theme")) {
+						try {
+							InputStream inputStream = Files.newInputStream(Paths.get(folderPath + "/" + themeFolder),
+									StandardOpenOption.READ);
+							themeFile = CompressedStreamTools.readCompressed(inputStream);
+							inputStream.close();
+						} catch (IOException e) {
+							e.printStackTrace();
 						}
-
-						themeCompound = themeFile.getCompound("Theme");
-						paletteCompound = themeFile.getCompound("Palette");
 					} else {
-						themeCompound = FilesHelper.loadJsonAsNBT(folderPath + "/" + themeFolder + "/theme.json");
-						paletteCompound = FilesHelper.loadJsonAsNBT(folderPath + "/" + themeFolder + "/palette.json");
+						themeFile = FilesHelper.loadJsonAsNBT("themes/" + themeFolder);
 					}
 
-					if (themeCompound == null)
-						continue;
+					themeCompound = themeFile.getCompound("Theme");
+					paletteCompound = themeFile.getCompound("Palette");
+					if (themeFile.contains("SecondaryPalette"))
+						secondaryPaletteCompound = themeFile.getCompound("SecondaryPalette");
 
-					DesignTheme theme = DesignTheme.fromNBT(themeCompound);
-					theme.setFilePath(themeFolder);
-					theme.setImported(true);
-					theme.setDefaultPalette(PaletteDefinition.fromNBT(paletteCompound));
-					importedThemes.add(theme);
-					if (!themeFolder.endsWith(".theme") && !themeFolder.endsWith(".json"))
-						createdThemes.add(theme);
+				} else {
+					themeCompound = FilesHelper.loadJsonAsNBT(folderPath + "/" + themeFolder + "/theme.json");
+					paletteCompound = FilesHelper.loadJsonAsNBT(folderPath + "/" + themeFolder + "/palette.json");
+					secondaryPaletteCompound = FilesHelper
+							.loadJsonAsNBT(folderPath + "/" + themeFolder + "/palette2.json");
 				}
-				newDirectoryStream.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 
+				if (themeCompound == null)
+					continue;
+
+				DesignTheme theme = DesignTheme.fromNBT(themeCompound);
+				theme.setFilePath(themeFolder);
+				theme.setImported(true);
+				theme.setDefaultPalette(PaletteDefinition.fromNBT(paletteCompound));
+
+				if (secondaryPaletteCompound != null)
+					theme.setDefaultSecondaryPalette(PaletteDefinition.fromNBT(secondaryPaletteCompound));
+				else
+					theme.setDefaultSecondaryPalette(theme.getDefaultPalette());
+
+				importedThemes.add(theme);
+				if (!themeFolder.endsWith(".theme") && !themeFolder.endsWith(".json"))
+					createdThemes.add(theme);
+			}
+			newDirectoryStream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+
 	}
 }

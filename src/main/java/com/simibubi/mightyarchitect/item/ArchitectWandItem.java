@@ -5,8 +5,8 @@ import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.phase.ArchitectPhases;
 import com.simibubi.mightyarchitect.control.phase.export.PhaseEditTheme;
-import com.simibubi.mightyarchitect.gui.GuiDesignExporter;
-import com.simibubi.mightyarchitect.gui.GuiOpener;
+import com.simibubi.mightyarchitect.gui.DesignExporterScreen;
+import com.simibubi.mightyarchitect.gui.ScreenHelper;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,9 +24,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 
-public class ItemWandArchitect extends Item {
+public class ArchitectWandItem extends Item {
 
-	public ItemWandArchitect(Properties properties) {
+	public ArchitectWandItem(Properties properties) {
 		super(properties.maxStackSize(1).rarity(Rarity.RARE));
 	}
 
@@ -105,7 +105,7 @@ public class ItemWandArchitect extends Item {
 	
 	@OnlyIn(value = Dist.CLIENT)
 	private void openGui() {
-		GuiOpener.open(new GuiDesignExporter());
+		ScreenHelper.open(new DesignExporterScreen());
 	}
 
 	@Override

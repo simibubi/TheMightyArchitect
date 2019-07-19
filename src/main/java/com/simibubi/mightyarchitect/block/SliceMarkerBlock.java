@@ -18,13 +18,13 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 
-public class BlockSliceMarker extends Block {
+public class SliceMarkerBlock extends Block {
 
 	public static final BooleanProperty compass = BooleanProperty.create("compass");
 	public static final EnumProperty<DesignSliceTrait> VARIANT = EnumProperty.<DesignSliceTrait>create("variant",
 			DesignSliceTrait.class);
 
-	public BlockSliceMarker() {
+	public SliceMarkerBlock() {
 		super(Properties.create(Material.ROCK));
 		this.setDefaultState(getDefaultState().with(VARIANT, DesignSliceTrait.Standard));
 	}

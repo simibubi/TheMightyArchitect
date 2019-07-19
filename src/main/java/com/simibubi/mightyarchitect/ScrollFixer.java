@@ -12,6 +12,10 @@ import net.minecraftforge.client.event.GuiScreenEvent.MouseScrollEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
+/**
+ * Highly Temporary! 
+ * Workaround for https://github.com/MinecraftForge/MinecraftForge/issues/5811 until its fixed.
+ */
 public class ScrollFixer {
 
 	public static void init() {

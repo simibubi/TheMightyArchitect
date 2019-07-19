@@ -2,10 +2,10 @@ package com.simibubi.mightyarchitect.control;
 
 import com.simibubi.mightyarchitect.AllBlocks;
 import com.simibubi.mightyarchitect.AllItems;
+import com.simibubi.mightyarchitect.AllPackets;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.palette.Palette;
-import com.simibubi.mightyarchitect.networking.PacketSetHotbarItem;
-import com.simibubi.mightyarchitect.networking.Packets;
+import com.simibubi.mightyarchitect.networking.SetHotbarItemPacket;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -73,7 +73,7 @@ public class ArchitectKits {
 	}
 
 	private static void setHotbarItem(int slot, ItemStack stack) {
-		Packets.channel.sendToServer(new PacketSetHotbarItem(slot, stack));
+		AllPackets.channel.sendToServer(new SetHotbarItemPacket(slot, stack));
 	}
 
 	private static void setHotbarBlock(int slot, Block block) {

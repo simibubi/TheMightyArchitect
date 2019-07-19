@@ -1,17 +1,17 @@
 package com.simibubi.mightyarchitect.gui.widgets;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.simibubi.mightyarchitect.gui.GuiResources;
+import com.simibubi.mightyarchitect.gui.ScreenResources;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
-public class SimiButton extends AbstractSimiWidget {	
+public class IconButton extends AbstractSimiWidget {	
 
-	private GuiResources icon;
+	private ScreenResources icon;
 	protected boolean pressed;
 	
-	public SimiButton(int x, int y, GuiResources icon) {
+	public IconButton(int x, int y, ScreenResources icon) {
 		super(x, y, 16, 16);
 		this.icon = icon;
 	}
@@ -19,14 +19,14 @@ public class SimiButton extends AbstractSimiWidget {
 	@Override
 	public void renderButton(int mouseX, int mouseY, float partialTicks) {
 		if (this.visible) {
-			ResourceLocation buttonTextures = GuiResources.BUTTON.location;
+			ResourceLocation buttonTextures = ScreenResources.BUTTON.location;
 			ResourceLocation iconTexture = icon.location;
 			this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 			
-			GuiResources button = 
-					(pressed) ? button = GuiResources.BUTTON_DOWN : 
-						(isHovered) ? GuiResources.BUTTON_HOVER : 
-							GuiResources.BUTTON;
+			ScreenResources button = 
+					(pressed) ? button = ScreenResources.BUTTON_DOWN : 
+						(isHovered) ? ScreenResources.BUTTON_HOVER : 
+							ScreenResources.BUTTON;
 			
 			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			Minecraft.getInstance().getTextureManager().bindTexture(buttonTextures);

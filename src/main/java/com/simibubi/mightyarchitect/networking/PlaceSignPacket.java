@@ -10,22 +10,22 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 
-public class PacketPlaceSign {
+public class PlaceSignPacket {
 	
 	public String text1;
 	public String text2;
 	public BlockPos position;
 
-	public PacketPlaceSign() {
+	public PlaceSignPacket() {
 	}
 	
-	public PacketPlaceSign(String textLine1, String textLine2, BlockPos position) {
+	public PlaceSignPacket(String textLine1, String textLine2, BlockPos position) {
 		this.text1 = textLine1;
 		this.text2 = textLine2;
 		this.position = position;
 	}
 	
-	public PacketPlaceSign(PacketBuffer buffer) {
+	public PlaceSignPacket(PacketBuffer buffer) {
 		this(buffer.readString(), buffer.readString(), buffer.readBlockPos());
 	}
 

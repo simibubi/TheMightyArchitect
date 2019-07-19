@@ -15,7 +15,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.text.StringTextComponent;
 
-public class GuiArchitectMenu extends Screen {
+public class ArchitectMenuScreen extends Screen {
 
 	private KeyBindList keybinds;
 	private String title;
@@ -29,7 +29,7 @@ public class GuiArchitectMenu extends Screen {
 	private int targetY;
 	private float movingY;
 
-	public GuiArchitectMenu() {
+	public ArchitectMenuScreen() {
 		super(new StringTextComponent("Architect Menu"));
 		keybinds = new KeyBindList();
 		tooltip = new ArrayList<>();
@@ -108,7 +108,7 @@ public class GuiArchitectMenu extends Screen {
 		GlStateManager.pushMatrix();
 		GlStateManager.translatef(0, yShift(partialTicks), 0);
 		
-		GuiResources gray = GuiResources.GRAY;
+		ScreenResources gray = ScreenResources.GRAY;
 		GlStateManager.enableBlend();
 		GlStateManager.color4f(1, 1, 1, 3 / 4f);
 
@@ -122,7 +122,7 @@ public class GuiArchitectMenu extends Screen {
 
 		FontRenderer font = Minecraft.getInstance().fontRenderer;
 		if (!focused)
-		font.drawString("Press " + TheMightyArchitect.COMPOSE.getLocalizedName() + " to focus", xPos,
+		font.drawString("Press " + TheMightyArchitect.COMPOSE.getLocalizedName().toUpperCase() + " to focus", xPos,
 				yPos - 14, 0xEEEEEE);
 		font.drawString(title, xPos, yPos, 0xEEEEEE);
 

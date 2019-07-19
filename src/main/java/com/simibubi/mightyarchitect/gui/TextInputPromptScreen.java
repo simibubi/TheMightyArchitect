@@ -7,7 +7,7 @@ import org.lwjgl.glfw.GLFW;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
 
-public class GuiTextPrompt extends AbstractSimiScreen {
+public class TextInputPromptScreen extends AbstractSimiScreen {
 
 	private Consumer<String> callback;
 	private Consumer<String> abortCallback;
@@ -22,7 +22,7 @@ public class GuiTextPrompt extends AbstractSimiScreen {
 
 	private boolean confirmed;
 
-	public GuiTextPrompt(Consumer<String> callBack, Consumer<String> abortCallback) {
+	public TextInputPromptScreen(Consumer<String> callBack, Consumer<String> abortCallback) {
 		super();
 		this.callback = callBack;
 		this.abortCallback = abortCallback;
@@ -35,7 +35,7 @@ public class GuiTextPrompt extends AbstractSimiScreen {
 	@Override
 	public void init() {
 		super.init();
-		setWindowSize(GuiResources.TEXT_INPUT.width, GuiResources.TEXT_INPUT.height + 30);
+		setWindowSize(ScreenResources.TEXT_INPUT.width, ScreenResources.TEXT_INPUT.height + 30);
 
 		this.nameField = new TextFieldWidget(font, topLeftX + 33, topLeftY + 26, 128, 8, "");
 		this.nameField.setTextColor(-1);
@@ -61,9 +61,9 @@ public class GuiTextPrompt extends AbstractSimiScreen {
 
 	@Override
 	public void renderWindow(int mouseX, int mouseY, float partialTicks) {
-		GuiResources.TEXT_INPUT.draw(this, topLeftX, topLeftY);
+		ScreenResources.TEXT_INPUT.draw(this, topLeftX, topLeftY);
 		font.drawString(title, topLeftX + (sWidth / 2) - (font.getStringWidth(title) / 2), topLeftY + 11,
-				GuiResources.FONT_COLOR);
+				ScreenResources.FONT_COLOR);
 	}
 
 	@Override

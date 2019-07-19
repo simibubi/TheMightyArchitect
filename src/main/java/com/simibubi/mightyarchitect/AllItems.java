@@ -1,6 +1,6 @@
 package com.simibubi.mightyarchitect;
 
-import com.simibubi.mightyarchitect.item.ItemWandArchitect;
+import com.simibubi.mightyarchitect.item.ArchitectWandItem;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.Properties;
@@ -9,7 +9,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 public enum AllItems {
 	
-	ARCHITECT_WAND(new ItemWandArchitect(standardProperties()));
+	ARCHITECT_WAND(new ArchitectWandItem(standardProperties()));
 
 	public Item item;
 

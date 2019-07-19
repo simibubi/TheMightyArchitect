@@ -3,14 +3,14 @@ package com.simibubi.mightyarchitect.gui.widgets;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 
-public class DynamicLabel extends AbstractSimiWidget {
+public class Label extends AbstractSimiWidget {
 
 	public String text;
 	protected boolean hasShadow;
 	protected int color;
 	protected FontRenderer font;
 	
-	public DynamicLabel(int x, int y, String text) {
+	public Label(int x, int y, String text) {
 		super(x, y, Minecraft.getInstance().fontRenderer.getStringWidth(text), 10);
 		font = Minecraft.getInstance().fontRenderer;
 		this.text = "Label";
@@ -18,12 +18,12 @@ public class DynamicLabel extends AbstractSimiWidget {
 		hasShadow = false;
 	}
 	
-	public DynamicLabel colored(int color) {
+	public Label colored(int color) {
 		this.color = color;
 		return this;
 	}
 	
-	public DynamicLabel withShadow() {
+	public Label withShadow() {
 		this.hasShadow = true;
 		return this;
 	}

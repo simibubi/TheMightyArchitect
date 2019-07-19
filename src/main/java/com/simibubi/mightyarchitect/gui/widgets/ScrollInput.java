@@ -2,44 +2,44 @@ package com.simibubi.mightyarchitect.gui.widgets;
 
 import java.util.function.Consumer;
 
-import com.simibubi.mightyarchitect.gui.Keyboard;
+import com.simibubi.mightyarchitect.control.helpful.Keyboard;
 
 import net.minecraft.util.text.TextFormatting;
 
-public class ScrollArea extends AbstractSimiWidget {
+public class ScrollInput extends AbstractSimiWidget {
 
 	protected Consumer<Integer> onScroll;
 	protected int state;
 	protected String title = "Choose an option";
-	protected DynamicLabel displayLabel;
+	protected Label displayLabel;
 
 	protected int min, max;
 
-	public ScrollArea(int xIn, int yIn, int widthIn, int heightIn) {
+	public ScrollInput(int xIn, int yIn, int widthIn, int heightIn) {
 		super(xIn, yIn, widthIn, heightIn);
 		state = 0;
 		min = 0;
 		max = 1;
 	}
 	
-	public ScrollArea withRange(int min, int max) {
+	public ScrollInput withRange(int min, int max) {
 		this.min = min;
 		this.max = max;
 		return this;
 	}
 
-	public ScrollArea calling(Consumer<Integer> onScroll) {
+	public ScrollInput calling(Consumer<Integer> onScroll) {
 		this.onScroll = onScroll;
 		return this;
 	}
 
-	public ScrollArea titled(String title) {
+	public ScrollInput titled(String title) {
 		this.title = title;
 		updateTooltip();
 		return this;
 	}
 
-	public ScrollArea writingTo(DynamicLabel label) {
+	public ScrollInput writingTo(Label label) {
 		this.displayLabel = label;
 		writeToLabel();
 		return this;
@@ -49,7 +49,7 @@ public class ScrollArea extends AbstractSimiWidget {
 		return state;
 	}
 
-	public ScrollArea setState(int state) {
+	public ScrollInput setState(int state) {
 		this.state = state;
 		clampState();
 		updateTooltip();

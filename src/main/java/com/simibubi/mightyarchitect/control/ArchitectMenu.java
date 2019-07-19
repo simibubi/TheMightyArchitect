@@ -1,5 +1,6 @@
 package com.simibubi.mightyarchitect.control;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,9 +12,12 @@ import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.ThemeStorage;
 import com.simibubi.mightyarchitect.control.design.ThemeValidator;
 import com.simibubi.mightyarchitect.control.phase.ArchitectPhases;
-import com.simibubi.mightyarchitect.gui.GuiEditTheme;
-import com.simibubi.mightyarchitect.gui.GuiOpener;
-import com.simibubi.mightyarchitect.gui.GuiTextPrompt;
+import com.simibubi.mightyarchitect.gui.ThemeSettingsScreen;
+
+import net.minecraft.util.Util;
+
+import com.simibubi.mightyarchitect.gui.ScreenHelper;
+import com.simibubi.mightyarchitect.gui.TextInputPromptScreen;
 
 public class ArchitectMenu {
 
@@ -37,12 +41,12 @@ public class ArchitectMenu {
 			switch (c) {
 
 			case 'f':
-				GuiTextPrompt gui = new GuiTextPrompt(result -> ArchitectManager.finishPalette(result), result -> {
+				TextInputPromptScreen gui = new TextInputPromptScreen(result -> ArchitectManager.finishPalette(result), result -> {
 				});
 				gui.setButtonTextConfirm("Save and Apply");
 				gui.setButtonTextAbort("Cancel");
 				gui.setTitle("Enter a name for your Palette:");
-				GuiOpener.open(gui);
+				ScreenHelper.open(gui);
 				return false;
 
 			case 'd':
@@ -97,13 +101,13 @@ public class ArchitectMenu {
 
 			case 's':
 				if (test) return false;
-				GuiTextPrompt gui = new GuiTextPrompt(result -> ArchitectManager.writeToFile(result), result -> {
+				TextInputPromptScreen gui = new TextInputPromptScreen(result -> ArchitectManager.writeToFile(result), result -> {
 				});
 				gui.setButtonTextConfirm("Save Schematic");
 				gui.setButtonTextAbort("Cancel");
 				gui.setTitle("Enter a name for your Build:");
 
-				GuiOpener.open(gui);
+				ScreenHelper.open(gui);
 				return true;
 
 			case 'p':
@@ -124,6 +128,9 @@ public class ArchitectMenu {
 				return true;
 			case 'e':
 				ArchitectManager.enterPhase(ArchitectPhases.ListForEdit);
+				return false;
+			case 'o':
+				Util.getOSType().openFile(Paths.get("themes/").toFile());
 				return false;
 			case 'c':
 				ArchitectManager.unload();
@@ -172,7 +179,7 @@ public class ArchitectMenu {
 				return true;
 			
 			case 't':
-				GuiOpener.open(new GuiEditTheme());
+				ScreenHelper.open(new ThemeSettingsScreen());
 				return true;
 				
 			case 'e':
@@ -258,6 +265,7 @@ public class ArchitectMenu {
 		case ManagingThemes:
 			keybinds.put("N", "Create new Theme");
 			keybinds.put("E", "Edit an existing Theme");
+			keybinds.put("O", "Open Theme Folder");
 			keybinds.lineBreak();
 			keybinds.put("C", "Cancel");
 			break;

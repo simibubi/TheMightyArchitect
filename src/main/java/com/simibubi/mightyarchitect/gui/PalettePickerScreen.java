@@ -1,5 +1,8 @@
 package com.simibubi.mightyarchitect.gui;
 
+import java.nio.file.Paths;
+import java.util.Collections;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.SchematicHologram;
@@ -7,7 +10,7 @@ import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 import com.simibubi.mightyarchitect.control.palette.PaletteStorage;
-import com.simibubi.mightyarchitect.gui.widgets.SimiButton;
+import com.simibubi.mightyarchitect.gui.widgets.IconButton;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -16,20 +19,24 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 
-public class GuiPalettePicker extends AbstractSimiScreen {
+public class PalettePickerScreen extends AbstractSimiScreen {
 
 	private PaletteButton primary, secondary;
-	private SimiButton buttonAddPalette;
+	private IconButton buttonAddPalette;
+	private IconButton buttonOpenFolder;
+	private IconButton buttonRefresh;
 	private boolean scanPicker;
 
-	public GuiPalettePicker() {
+	public PalettePickerScreen() {
 		this(false);
 	}
 
-	public GuiPalettePicker(boolean scanPicker) {
+	public PalettePickerScreen(boolean scanPicker) {
 		super();
 		minecraft = Minecraft.getInstance();
 		this.scanPicker = scanPicker;
@@ -67,10 +74,21 @@ public class GuiPalettePicker extends AbstractSimiScreen {
 
 		// create
 		if (!scanPicker) {
-			buttonAddPalette = new SimiButton(x + (i % 5) * 23, y + (i / 5) * 23, GuiResources.ICON_ADD);
+			buttonAddPalette = new IconButton(x + (i % 5) * 23, y + (i / 5) * 23, ScreenResources.ICON_ADD);
 			buttonAddPalette.setToolTip("Create Palette");
-			widgets.add(buttonAddPalette);
+			buttonAddPalette.getToolTip().add(TextFormatting.GRAY + "Will use currently selected");
+			buttonAddPalette.getToolTip().add(TextFormatting.GRAY + "Palette as the template.");
 			i++;
+			
+			buttonOpenFolder = new IconButton(x + (i % 5) * 23, y + (i / 5) * 23, ScreenResources.ICON_FOLDER);
+			buttonOpenFolder.setToolTip("Open Palette Folder");
+			i++;
+			
+			buttonRefresh = new IconButton(x + (i % 5) * 23, y + (i / 5) * 23, ScreenResources.ICON_REFRESH);
+			buttonRefresh.setToolTip("Refresh Imported Palettes");
+			i++;
+			
+			Collections.addAll(widgets, buttonAddPalette, buttonOpenFolder, buttonRefresh);
 		}
 
 	}
@@ -82,12 +100,13 @@ public class GuiPalettePicker extends AbstractSimiScreen {
 		if (scanPicker) {
 			if (primary.palette.hasDuplicates())
 				minecraft.player.sendStatusMessage(
-						new StringTextComponent(
-								"Warning: Ambiguous Scanner Palette ( " + primary.palette.getDuplicates() + " )"),
+						new StringTextComponent( TextFormatting.RED +
+								"Warning: Ambiguous Scanner Palette " + TextFormatting.WHITE + "( " + primary.palette.getDuplicates() + " )"),
 						false);
 
 			minecraft.player.sendStatusMessage(new StringTextComponent("Updated Default Palette"), true);
 			DesignExporter.theme.setDefaultPalette(primary.palette);
+			DesignExporter.theme.setDefaultSecondaryPalette(secondary.palette);
 		}
 	}
 
@@ -100,7 +119,11 @@ public class GuiPalettePicker extends AbstractSimiScreen {
 		if (scanPicker) {
 			primary = new PaletteButton(DesignExporter.scanningPalette, this, 0, topLeftX + 135, topLeftY + 8);
 			primary.active = false;
+			secondary = new PaletteButton(DesignExporter.theme.getDefaultSecondaryPalette(), this, 1, topLeftX + 192,
+					topLeftY + 8);
+			secondary.active = false;
 			widgets.add(primary);
+			widgets.add(secondary);
 			return;
 		}
 
@@ -115,14 +138,13 @@ public class GuiPalettePicker extends AbstractSimiScreen {
 
 	@Override
 	public void renderWindow(int mouseX, int mouseY, float partialTicks) {
-		GuiResources.PALETTES.draw(this, topLeftX, topLeftY);
+		ScreenResources.PALETTES.draw(this, topLeftX, topLeftY);
 
-		int color = GuiResources.FONT_COLOR;
+		int color = ScreenResources.FONT_COLOR;
 
 		if (scanPicker) {
 			font.drawString("Choose a palette for", topLeftX + 8, topLeftY + 10, color);
-			font.drawString("scanning your Designs.", topLeftX + 8, topLeftY + 18, color);
-			font.drawString("Selected", topLeftX + 134, topLeftY + 30, color);
+			font.drawString("your theme.", topLeftX + 8, topLeftY + 18, color);
 
 		} else {
 			font.drawString("Palette Picker", topLeftX + 8, topLeftY + 10, color);
@@ -161,8 +183,17 @@ public class GuiPalettePicker extends AbstractSimiScreen {
 		}
 
 		if (!(button instanceof PaletteButton)) {
-			ArchitectManager.createPalette(true);
-			minecraft.displayGuiScreen(null);
+			if (button == buttonAddPalette) {
+				ArchitectManager.createPalette(true);
+				minecraft.displayGuiScreen(null);
+			}
+			if (button == buttonOpenFolder) {
+				Util.getOSType().openFile(Paths.get("palettes/").toFile());
+			}
+			if (button == buttonRefresh) {
+				PaletteStorage.loadAllPalettes();
+				init();
+			}
 		} else {
 			ArchitectManager.getModel().swapPrimaryPalette(((PaletteButton) button).palette);
 			updateSelected();
@@ -171,8 +202,12 @@ public class GuiPalettePicker extends AbstractSimiScreen {
 	}
 
 	protected void buttonRightClicked(Widget button) {
-		if (scanPicker)
+		if (scanPicker) {
+			if (button instanceof PaletteButton)
+				DesignExporter.theme.setDefaultSecondaryPalette(((PaletteButton) button).palette);
+			updateSelected();
 			return;
+		}
 
 		if (!(button instanceof PaletteButton)) {
 			ArchitectManager.createPalette(false);
@@ -184,12 +219,12 @@ public class GuiPalettePicker extends AbstractSimiScreen {
 		}
 	}
 
-	class PaletteButton extends SimiButton {
+	class PaletteButton extends IconButton {
 		Screen parent;
 		PaletteDefinition palette;
 
 		public PaletteButton(PaletteDefinition palette, Screen parent, int buttonId, int x, int y) {
-			super(x, y, GuiResources.ICON_NONE);
+			super(x, y, ScreenResources.ICON_NONE);
 			this.parent = parent;
 			this.palette = palette;
 			visible = true;
@@ -217,8 +252,8 @@ public class GuiPalettePicker extends AbstractSimiScreen {
 			GlStateManager.pushMatrix();
 			GlStateManager.translatef(pos.getX(), pos.getY(), pos.getZ());
 			IBakedModel model = mc.getBlockRendererDispatcher().getModelForState(palette.get(key));
-			mc.getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightness(model, palette.get(key), this.isHovered? 1 : .9f,
-					true);
+			mc.getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightness(model, palette.get(key),
+					this.isHovered ? 1 : .9f, true);
 			GlStateManager.popMatrix();
 		}
 

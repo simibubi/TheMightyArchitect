@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 
 @EventBusSubscriber(value = Dist.CLIENT)
-public class GuiOpener {
+public class ScreenHelper {
 
 	private static Screen openedGuiNextTick;
 

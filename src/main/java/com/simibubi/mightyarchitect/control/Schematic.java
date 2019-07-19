@@ -15,7 +15,7 @@ import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.Sketch;
 import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
-import com.simibubi.mightyarchitect.networking.PacketInstantPrint;
+import com.simibubi.mightyarchitect.networking.InstantPrintPacket;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -139,9 +139,8 @@ public class Schematic {
 
 	public void materializeSketch() {
 		if (primaryPalette == null) {
-			PaletteDefinition defaultPalette = groundPlan.theme.getDefaultPalette();
-			primaryPalette = defaultPalette.clone();
-			secondaryPalette = defaultPalette.clone();
+			primaryPalette = groundPlan.theme.getDefaultPalette().clone();
+			secondaryPalette = groundPlan.theme.getDefaultSecondaryPalette().clone();
 		}
 		
 		materializeSketch(primaryPalette, secondaryPalette);
@@ -224,8 +223,8 @@ public class Schematic {
 		return template;
 	}
 
-	public List<PacketInstantPrint> getPackets() {
-		return PacketInstantPrint.sendSchematic(materializedSketch.getBlockMap(), anchor);
+	public List<InstantPrintPacket> getPackets() {
+		return InstantPrintPacket.sendSchematic(materializedSketch.getBlockMap(), anchor);
 	}
 
 	public boolean isEditingPrimary() {

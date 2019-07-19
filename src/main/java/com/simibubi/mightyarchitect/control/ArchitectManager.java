@@ -8,12 +8,14 @@ import java.nio.file.StandardOpenOption;
 
 import org.apache.commons.io.IOUtils;
 
+import com.simibubi.mightyarchitect.AllPackets;
 import com.simibubi.mightyarchitect.TheMightyArchitect;
 import com.simibubi.mightyarchitect.control.compose.GroundPlan;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.ThemeStorage;
 import com.simibubi.mightyarchitect.control.helpful.FilesHelper;
+import com.simibubi.mightyarchitect.control.helpful.Keyboard;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 import com.simibubi.mightyarchitect.control.palette.PaletteStorage;
 import com.simibubi.mightyarchitect.control.phase.ArchitectPhases;
@@ -21,15 +23,13 @@ import com.simibubi.mightyarchitect.control.phase.IArchitectPhase;
 import com.simibubi.mightyarchitect.control.phase.IDrawBlockHighlights;
 import com.simibubi.mightyarchitect.control.phase.IListenForBlockEvents;
 import com.simibubi.mightyarchitect.control.phase.IRenderGameOverlay;
-import com.simibubi.mightyarchitect.gui.GuiArchitectMenu;
-import com.simibubi.mightyarchitect.gui.GuiDesignExporter;
-import com.simibubi.mightyarchitect.gui.GuiEditTheme;
-import com.simibubi.mightyarchitect.gui.GuiOpener;
-import com.simibubi.mightyarchitect.gui.GuiPalettePicker;
-import com.simibubi.mightyarchitect.gui.GuiTextPrompt;
-import com.simibubi.mightyarchitect.gui.Keyboard;
-import com.simibubi.mightyarchitect.networking.PacketInstantPrint;
-import com.simibubi.mightyarchitect.networking.Packets;
+import com.simibubi.mightyarchitect.gui.ArchitectMenuScreen;
+import com.simibubi.mightyarchitect.gui.DesignExporterScreen;
+import com.simibubi.mightyarchitect.gui.ThemeSettingsScreen;
+import com.simibubi.mightyarchitect.gui.ScreenHelper;
+import com.simibubi.mightyarchitect.gui.PalettePickerScreen;
+import com.simibubi.mightyarchitect.gui.TextInputPromptScreen;
+import com.simibubi.mightyarchitect.networking.InstantPrintPacket;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;
@@ -56,7 +56,7 @@ public class ArchitectManager {
 
 	private static ArchitectPhases phase = ArchitectPhases.Empty;
 	private static Schematic model = new Schematic();
-	private static GuiArchitectMenu menu = new GuiArchitectMenu();
+	private static ArchitectMenuScreen menu = new ArchitectMenuScreen();
 
 	public static boolean testRun = false;
 
@@ -136,8 +136,8 @@ public class ArchitectManager {
 		Minecraft mc = Minecraft.getInstance();
 
 		if (mc.isSingleplayer()) {
-			for (PacketInstantPrint packet : getModel().getPackets()) {
-				Packets.channel.sendToServer(packet);
+			for (InstantPrintPacket packet : getModel().getPackets()) {
+				AllPackets.channel.sendToServer(packet);
 			}
 			SchematicHologram.reset();
 			status("Printed result into world.");
@@ -196,11 +196,11 @@ public class ArchitectManager {
 			enterPhase(ArchitectPhases.Previewing);
 		}
 
-		GuiOpener.open(new GuiPalettePicker());
+		ScreenHelper.open(new PalettePickerScreen());
 	}
 
 	public static void pickScanPalette() {
-		GuiOpener.open(new GuiPalettePicker(true));
+		ScreenHelper.open(new PalettePickerScreen(true));
 	}
 
 	public static void manageThemes() {
@@ -208,16 +208,16 @@ public class ArchitectManager {
 	}
 
 	public static void createTheme() {
-		GuiTextPrompt gui = new GuiTextPrompt(result -> {
+		TextInputPromptScreen gui = new TextInputPromptScreen(result -> {
 			DesignExporter.setTheme(ThemeStorage.createTheme(result));
-			GuiOpener.open(new GuiEditTheme());
+			ScreenHelper.open(new ThemeSettingsScreen());
 		}, result -> {
 		});
 		gui.setButtonTextConfirm("Create");
 		gui.setButtonTextAbort("Cancel");
 		gui.setTitle("Enter a name for your Theme:");
 
-		GuiOpener.open(gui);
+		ScreenHelper.open(gui);
 	}
 
 	public static void editTheme(DesignTheme theme) {
@@ -226,7 +226,7 @@ public class ArchitectManager {
 	}
 
 	public static void changeExportedDesign() {
-		GuiOpener.open(new GuiDesignExporter());
+		ScreenHelper.open(new DesignExporterScreen());
 	}
 
 	// Phases
@@ -267,6 +267,8 @@ public class ArchitectManager {
 	public static void onMouseScrolled(MouseScrollEvent.Post event) {
 		if (event.getGui() != null)
 			return;
+		if (Minecraft.getInstance().currentScreen != null)
+			return;
 		if (phase.getPhaseHandler().onScroll((int) Math.signum(event.getScrollDelta())))
 			event.setCanceled(true);
 	}
@@ -296,7 +298,7 @@ public class ArchitectManager {
 				return;
 
 			menu.updateContents();
-			GuiOpener.open(menu);
+			ScreenHelper.open(menu);
 			menu.setFocused(true);
 			menu.setVisible(true);
 			return;

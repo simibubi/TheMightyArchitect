@@ -22,6 +22,7 @@ public class DesignTheme {
 	private DesignPicker designPicker;
 	private boolean imported;
 	private PaletteDefinition defaultPalette;
+	private PaletteDefinition defaultSecondaryPalette;
 	private ThemeStatistics statistics;
 	private int maxFloorHeight;
 
@@ -185,6 +186,14 @@ public class DesignTheme {
 
 	public void setDefaultPalette(PaletteDefinition defaultPalette) {
 		this.defaultPalette = defaultPalette;
+	}
+	
+	public PaletteDefinition getDefaultSecondaryPalette() {
+		return defaultSecondaryPalette;
+	}
+	
+	public void setDefaultSecondaryPalette(PaletteDefinition defaultSecondaryPalette) {
+		this.defaultSecondaryPalette = defaultSecondaryPalette;
 	}
 
 	public List<DesignLayer> getRoomLayers() {

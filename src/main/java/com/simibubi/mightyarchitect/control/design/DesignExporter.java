@@ -4,8 +4,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import com.simibubi.mightyarchitect.AllBlocks;
+import com.simibubi.mightyarchitect.AllPackets;
 import com.simibubi.mightyarchitect.TheMightyArchitect;
-import com.simibubi.mightyarchitect.block.BlockSliceMarker;
+import com.simibubi.mightyarchitect.block.SliceMarkerBlock;
 import com.simibubi.mightyarchitect.control.compose.Cuboid;
 import com.simibubi.mightyarchitect.control.design.DesignSlice.DesignSliceTrait;
 import com.simibubi.mightyarchitect.control.design.partials.Wall;
@@ -15,8 +16,7 @@ import com.simibubi.mightyarchitect.control.palette.BlockOrientation;
 import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 import com.simibubi.mightyarchitect.control.phase.export.PhaseEditTheme;
-import com.simibubi.mightyarchitect.networking.PacketPlaceSign;
-import com.simibubi.mightyarchitect.networking.Packets;
+import com.simibubi.mightyarchitect.networking.PlaceSignPacket;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -198,8 +198,8 @@ public class DesignExporter {
 			}
 		}
 
-		Packets.channel.sendToServer(
-				new PacketPlaceSign(layer.getDisplayName().substring(0, 1) + ". " + type.getDisplayName(), filename, signPos));
+		AllPackets.channel.sendToServer(
+				new PlaceSignPacket(layer.getDisplayName().substring(0, 1) + ". " + type.getDisplayName(), filename, signPos));
 		FilesHelper.saveTagCompoundAsJson(compound, designPath);
 		return designPath;
 		//
@@ -225,7 +225,7 @@ public class DesignExporter {
 	}
 
 	private static int markerValueAt(World worldIn, BlockPos pos) {
-		return worldIn.getBlockState(pos).get(BlockSliceMarker.VARIANT).ordinal();
+		return worldIn.getBlockState(pos).get(SliceMarkerBlock.VARIANT).ordinal();
 	}
 
 }

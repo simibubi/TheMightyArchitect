@@ -1,4 +1,4 @@
-package com.simibubi.mightyarchitect.gui;
+package com.simibubi.mightyarchitect.control.helpful;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.InputMappings;

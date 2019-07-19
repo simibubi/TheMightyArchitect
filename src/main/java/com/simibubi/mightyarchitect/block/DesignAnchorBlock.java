@@ -7,11 +7,11 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer.Builder;
 
-public class BlockDesignAnchor extends Block {
+public class DesignAnchorBlock extends Block {
 
 	public static final BooleanProperty compass = BooleanProperty.create("compass");
 	
-	public BlockDesignAnchor() {
+	public DesignAnchorBlock() {
 		super(Properties.create(Material.ROCK));
 	}
 	

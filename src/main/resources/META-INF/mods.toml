@@ -16,7 +16,7 @@ logoFile="icon.png" #optional
 # The modid of the mod
 modId="mightyarchitect" #mandatory
 # The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
-version="0.4.1" #mandatory
+version="0.4.2" #mandatory
  # A display name for the mod
 displayName="The Mighty Architect" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification <here>

@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.util.ResourceLocation;
 
-public enum GuiResources {
+public enum ScreenResources {
 	
 	// Inventories
 	PLAYER_INVENTORY("player_inventory.png", 176, 108),
@@ -63,7 +63,10 @@ public enum GuiResources {
 	ICON_TOOL_HEIGHT("icons.png", 0, 80, 16, 16),
 	ICON_TOOL_REROLL("icons.png", 16, 80, 16, 16),
 	ICON_TOOL_REROLL_TARGET("icons.png", 32, 80, 16, 16),
-	ICON_TOOL_PALETTE("icons.png", 48, 80, 16, 16);
+	ICON_TOOL_PALETTE("icons.png", 48, 80, 16, 16),
+	
+	ICON_FOLDER("icons.png", 0, 96, 16, 16),
+	ICON_REFRESH("icons.png", 16, 96, 16, 16);
 	
 	public static final int FONT_COLOR = 0x575F7A;
 	
@@ -71,11 +74,11 @@ public enum GuiResources {
 	public int width, height;
 	public int startX, startY;
 	
-	private GuiResources(String location, int width, int height) {
+	private ScreenResources(String location, int width, int height) {
 		this(location, 0, 0, width, height);
 	}
 	
-	private GuiResources(String location, int startX, int startY, int width, int height) {
+	private ScreenResources(String location, int startX, int startY, int width, int height) {
 		this.location = new ResourceLocation(TheMightyArchitect.ID, "textures/gui/" + location);
 		this.width = width; this.height = height;
 		this.startX = startX; this.startY = startY;

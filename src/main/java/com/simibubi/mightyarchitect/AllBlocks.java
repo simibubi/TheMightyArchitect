@@ -1,7 +1,7 @@
 package com.simibubi.mightyarchitect;
 
-import com.simibubi.mightyarchitect.block.BlockDesignAnchor;
-import com.simibubi.mightyarchitect.block.BlockSliceMarker;
+import com.simibubi.mightyarchitect.block.DesignAnchorBlock;
+import com.simibubi.mightyarchitect.block.SliceMarkerBlock;
 import com.simibubi.mightyarchitect.block.IJustForRendering;
 
 import net.minecraft.block.Block;
@@ -12,8 +12,8 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 public enum AllBlocks {
 
-	SLICE_MARKER(new BlockSliceMarker()),
-	DESIGN_ANCHOR(new BlockDesignAnchor());
+	SLICE_MARKER(new SliceMarkerBlock()),
+	DESIGN_ANCHOR(new DesignAnchorBlock());
 	
 	public Block block;
 

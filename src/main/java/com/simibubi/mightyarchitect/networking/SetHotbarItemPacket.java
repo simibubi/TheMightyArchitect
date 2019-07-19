@@ -7,17 +7,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 
-public class PacketSetHotbarItem {
+public class SetHotbarItemPacket {
 	
 	private int slot;
 	private ItemStack stack;
 
-	public PacketSetHotbarItem(int slot, ItemStack stack) {
+	public SetHotbarItemPacket(int slot, ItemStack stack) {
 		this.slot = slot;
 		this.stack = stack;
 	}
 	
-	public PacketSetHotbarItem(PacketBuffer buffer) {
+	public SetHotbarItemPacket(PacketBuffer buffer) {
 		this(buffer.readInt(), buffer.readItemStack());
 	}
 

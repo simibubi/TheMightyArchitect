@@ -1,9 +1,11 @@
 package com.simibubi.mightyarchitect.control.design;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import com.simibubi.mightyarchitect.control.compose.Room;
@@ -36,9 +38,7 @@ public class Sketch {
 		for (DesignInstance design : primary)
 			design.getBlocks(blocksPrimary);
 
-		clean(blocksPrimary);
-		clean(blocksSecondary);
-		
+		clean(blocksPrimary, blocksSecondary);
 		addFloors(blocksPrimary, blocksSecondary);
 
 		assembled.addElement(blocksPrimary);
@@ -46,8 +46,9 @@ public class Sketch {
 		return assembled;
 	}
 
-	private void clean(Map<BlockPos, PaletteBlockInfo> blocks) {
-		List<BlockPos> toRemove = new LinkedList<>();
+	private void clean(Map<BlockPos, PaletteBlockInfo> blocks, Map<BlockPos, PaletteBlockInfo> blocks2) {
+		Set<BlockPos> toRemove = new HashSet<>();
+		
 		for (BlockPos pos : blocks.keySet()) {
 			if (blocks.get(pos).palette == Palette.CLEAR) {
 				toRemove.add(pos);
@@ -57,9 +58,21 @@ public class Sketch {
 						toRemove.add(pos);
 				}
 			}
-
 		}
+		for (BlockPos pos : blocks2.keySet()) {
+			if (blocks2.get(pos).palette == Palette.CLEAR) {
+				toRemove.add(pos);
+			} else {
+				for (Room room : interior) {
+					if (room.contains(pos))
+						toRemove.add(pos);
+				}
+			}
+		}
+		
+		
 		toRemove.forEach(e -> blocks.remove(e));
+		toRemove.forEach(e -> blocks2.remove(e));
 		toRemove.clear();
 	}
 
