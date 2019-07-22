@@ -1,7 +1,6 @@
 package com.simibubi.mightyarchitect.gui;
 
 import java.nio.file.Paths;
-import java.util.Collections;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
@@ -79,17 +78,18 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 			buttonAddPalette.getToolTip().add(TextFormatting.GRAY + "Will use currently selected");
 			buttonAddPalette.getToolTip().add(TextFormatting.GRAY + "Palette as the template.");
 			i++;
-			
-			buttonOpenFolder = new IconButton(x + (i % 5) * 23, y + (i / 5) * 23, ScreenResources.ICON_FOLDER);
-			buttonOpenFolder.setToolTip("Open Palette Folder");
-			i++;
-			
-			buttonRefresh = new IconButton(x + (i % 5) * 23, y + (i / 5) * 23, ScreenResources.ICON_REFRESH);
-			buttonRefresh.setToolTip("Refresh Imported Palettes");
-			i++;
-			
-			Collections.addAll(widgets, buttonAddPalette, buttonOpenFolder, buttonRefresh);
+			widgets.add(buttonAddPalette);
 		}
+		
+		buttonOpenFolder = new IconButton(x + (i % 5) * 23, y + (i / 5) * 23, ScreenResources.ICON_FOLDER);
+		buttonOpenFolder.setToolTip("Open Palette Folder");
+		widgets.add(buttonOpenFolder);
+		i++;
+		
+		buttonRefresh = new IconButton(x + (i % 5) * 23, y + (i / 5) * 23, ScreenResources.ICON_REFRESH);
+		buttonRefresh.setToolTip("Refresh Imported Palettes");
+		widgets.add(buttonRefresh);
+		i++;
 
 	}
 
@@ -175,6 +175,15 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 	}
 
 	protected void buttonClicked(Widget button) {
+		if (button == buttonOpenFolder) {
+			Util.getOSType().openFile(Paths.get("palettes/").toFile());
+		}
+		
+		if (button == buttonRefresh) {
+			PaletteStorage.loadAllPalettes();
+			init();
+		}
+		
 		if (scanPicker) {
 			if (button instanceof PaletteButton)
 				DesignExporter.scanningPalette = ((PaletteButton) button).palette;
@@ -186,13 +195,6 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 			if (button == buttonAddPalette) {
 				ArchitectManager.createPalette(true);
 				minecraft.displayGuiScreen(null);
-			}
-			if (button == buttonOpenFolder) {
-				Util.getOSType().openFile(Paths.get("palettes/").toFile());
-			}
-			if (button == buttonRefresh) {
-				PaletteStorage.loadAllPalettes();
-				init();
 			}
 		} else {
 			ArchitectManager.getModel().swapPrimaryPalette(((PaletteButton) button).palette);

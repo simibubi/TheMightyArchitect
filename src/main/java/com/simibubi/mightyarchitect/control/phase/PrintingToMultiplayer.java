@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -44,23 +45,27 @@ public class PrintingToMultiplayer extends PhaseBase {
 			ArchitectManager.enterPhase(ArchitectPhases.Previewing);
 			return;
 		}
-		
+
 		for (int i = 0; i < 10; i++) {
 			if (!remaining.isEmpty()) {
 				BlockPos pos = remaining.get(0);
 				remaining.remove(0);
 				pos = pos.add(getModel().getAnchor());
 				BlockState state = getModel().getMaterializedSketch().getBlockState(pos);
-				
+
+				if (minecraft.world.getBlockState(pos) == state)
+					continue;
 				if (!minecraft.world.func_217350_a(state, pos, ISelectionContext.forEntity(minecraft.player)))
 					continue;
+
+				String blockstring = state.toString().replaceFirst("Block\\{", "").replaceFirst("\\}", "");
 				
-				Minecraft.getInstance().player.sendChatMessage("/setblock " + pos.getX() + " " + pos.getY() + " " + pos.getZ()
-				+ " " + state.getBlock().getRegistryName());
+				Minecraft.getInstance().player.sendChatMessage("/setblock " + pos.getX() + " " + pos.getY() + " "
+						+ pos.getZ() + " " + blockstring);
 			} else {
 				ArchitectManager.unload();
 				break;
-			}			
+			}
 		}
 	}
 
@@ -77,16 +82,19 @@ public class PrintingToMultiplayer extends PhaseBase {
 				ITextComponent iTextComponent = checking.get(0);
 				if (iTextComponent instanceof TranslationTextComponent) {
 					String test = ((TranslationTextComponent) iTextComponent).getKey();
-					if (test.equals("commands.generic.permission")) {
+					if (test.equals("command.unknown.command")) {
 						cooldown = 0;
+						event.setMessage(new StringTextComponent(
+								TextFormatting.RED + "You do not have permission to print on this server."));
 						return;
 					}
-					if (test.equals("commands.generic.num.invalid")) {
+					if (test.equals("parsing.int.expected")) {
 						approved = true;
 						Minecraft.getInstance().player
 								.sendChatMessage("/me is printing a structure created by the Mighty Architect.");
 						Minecraft.getInstance().player.sendChatMessage("/gamerule sendCommandFeedback false");
 						Minecraft.getInstance().player.sendChatMessage("/gamerule logAdminCommands false");
+						event.setCanceled(true);
 						return;
 					}
 				} else {
@@ -104,7 +112,7 @@ public class PrintingToMultiplayer extends PhaseBase {
 	@Override
 	public void whenExited() {
 		if (approved) {
-			Minecraft.getInstance().player.sendStatusMessage(new StringTextComponent("Finished Printing, enjoy!"),
+			Minecraft.getInstance().player.sendStatusMessage(new StringTextComponent(TextFormatting.GREEN + "Finished Printing, enjoy!"),
 					false);
 			Minecraft.getInstance().player.sendChatMessage("/gamerule logAdminCommands true");
 			Minecraft.getInstance().player.sendChatMessage("/gamerule sendCommandFeedback true");

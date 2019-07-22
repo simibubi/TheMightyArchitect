@@ -26,7 +26,7 @@ public class PlaceSignPacket {
 	}
 	
 	public PlaceSignPacket(PacketBuffer buffer) {
-		this(buffer.readString(), buffer.readString(), buffer.readBlockPos());
+		this(buffer.readString(128), buffer.readString(128), buffer.readBlockPos());
 	}
 
 	public void toBytes(PacketBuffer buffer) {

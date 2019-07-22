@@ -73,14 +73,17 @@ public enum BlockOrientation {
 		if (state.has(BlockStateProperties.HALF))
 			half = state.get(BlockStateProperties.HALF);
 
+		if (state.has(BlockStateProperties.SLAB_TYPE) && state.get(BlockStateProperties.SLAB_TYPE) != SlabType.DOUBLE)
+			half = state.get(BlockStateProperties.SLAB_TYPE) == SlabType.BOTTOM ? Half.BOTTOM : Half.TOP;
+
 		if (state.has(BlockStateProperties.FACING))
 			facing = state.get(BlockStateProperties.FACING);
 
 		if (state.has(BlockStateProperties.FACING_EXCEPT_UP))
-			facing = state.get(BlockStateProperties.FACING);
+			facing = state.get(BlockStateProperties.FACING_EXCEPT_UP);
 
 		if (state.has(BlockStateProperties.HORIZONTAL_FACING))
-			facing = state.get(BlockStateProperties.FACING);
+			facing = state.get(BlockStateProperties.HORIZONTAL_FACING);
 
 		if (state.getBlock() instanceof TrapDoorBlock)
 			facing = facing.getOpposite();
@@ -89,7 +92,8 @@ public enum BlockOrientation {
 			facing = Direction.getFacingFromAxis(AxisDirection.POSITIVE, state.get(BlockStateProperties.AXIS));
 
 		if (state.has(BlockStateProperties.HORIZONTAL_AXIS))
-			facing = Direction.getFacingFromAxis(AxisDirection.POSITIVE, state.get(BlockStateProperties.AXIS));
+			facing = Direction.getFacingFromAxis(AxisDirection.POSITIVE,
+					state.get(BlockStateProperties.HORIZONTAL_AXIS));
 
 		return valueOf(half, facing);
 	}

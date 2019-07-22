@@ -13,6 +13,10 @@ public enum TessellatorTextures {
     SuperSelectedRoom("inner_super_selected.png"),
     Selection("select.png"),
     Exporter("exporter.png"),
+    
+    PaletteUnchanged("palette_unchanged.png"),
+    PaletteChanged("palette_changed.png"),
+    
     Trim("trim.png");
 
     private ResourceLocation location;

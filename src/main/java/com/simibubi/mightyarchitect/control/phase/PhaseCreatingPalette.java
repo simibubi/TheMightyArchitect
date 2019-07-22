@@ -16,6 +16,7 @@ import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.TrapDoorBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -25,21 +26,24 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.model.data.EmptyModelData;
 
-public class PhaseCreatingPalette extends PhaseBase implements IListenForBlockEvents, IDrawBlockHighlights {
+public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlights {
 
 	private PaletteDefinition palette;
 	private BlockPos center;
 	private Map<BlockPos, Palette> grid;
+	private boolean[] changed;
 
 	@Override
 	public void whenEntered() {
 
 		Schematic model = getModel();
 		ClientWorld world = minecraft.world;
+		changed = new boolean[16];
 
 		palette = model.getCreatedPalette();
 		center = world.getHeight(Heightmap.Type.WORLD_SURFACE, minecraft.player.getPosition());
@@ -48,8 +52,10 @@ public class PhaseCreatingPalette extends PhaseBase implements IListenForBlockEv
 		for (int i = 0; i < 16; i++) {
 			BlockPos pos = positionFromIndex(i);
 			grid.put(pos, Palette.values()[i]);
-			if (!world.isAirBlock(pos))
+			if (!world.isAirBlock(pos) && palette.get(Palette.values()[i]) != world.getBlockState(pos)) {
 				palette.put(Palette.values()[i], world.getBlockState(pos));
+				changed[i] = true;
+			}
 		}
 
 		model.updatePalettePreview();
@@ -58,43 +64,82 @@ public class PhaseCreatingPalette extends PhaseBase implements IListenForBlockEv
 
 	@Override
 	public void update() {
+		for (int i = 0; i < 16; i++) {
+			BlockPos pos = positionFromIndex(i);
+
+			if (minecraft.world.isAirBlock(pos)) {
+				PaletteDefinition paletteDef = getModel().isEditingPrimary() ? getModel().getPrimary()
+						: getModel().getSecondary();
+				Palette key = grid.get(pos);
+
+				if (paletteDef.get(key) != palette.get(key)) {
+					palette.put(key, paletteDef.get(key));
+					changed[i] = false;
+					notifyChange();
+				}
+
+				continue;
+			}
+
+			BlockState state = minecraft.world.getBlockState(pos);
+			if (state.getBlock() instanceof TrapDoorBlock)
+				state = state.with(TrapDoorBlock.OPEN, true);
+
+			if (palette.get(Palette.values()[i]) != state) {
+				palette.put(grid.get(pos), state);
+				changed[i] = true;
+				notifyChange();
+			}
+		}
 	}
 
 	@Override
 	public void render() {
 		TessellatorHelper.prepareForDrawing();
-		TessellatorTextures.RoomTransparent.bind();
+		
 		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-
-		for (int i = 0; i < 16; i++) {
-			TessellatorHelper.cube(bufferBuilder, positionFromIndex(i), new BlockPos(1, 1, 1), 0.125, true, true);
-		}
-
-		Tessellator.getInstance().draw();
-
 		minecraft.getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 
+		// Blocks
 		for (int i = 0; i < 16; i++) {
 			BlockState state = palette.get(Palette.values()[i]);
-			PaletteDefinition paletteDef = getModel().isEditingPrimary() ? getModel().getPrimary()
-					: getModel().getSecondary();
 			
 			if (state == null)
 				continue;
-			if (!state.equals(paletteDef.get(Palette.values()[i])))
+			if (changed[i])
 				continue;
-			
+
 			GlStateManager.pushMatrix();
 			BlockPos translate = positionFromIndex(i);
-			minecraft.getBlockRendererDispatcher().renderBlock(state, translate, minecraft.world,
-					bufferBuilder, minecraft.world.rand, EmptyModelData.INSTANCE);
+			minecraft.getBlockRendererDispatcher().renderBlock(state, translate, minecraft.world, bufferBuilder,
+					minecraft.world.rand, EmptyModelData.INSTANCE);
 			GlStateManager.popMatrix();
 		}
-
 		Tessellator.getInstance().draw();
 		
+		// Changed frames
+		TessellatorTextures.PaletteChanged.bind();
+		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		for (int i = 0; i < 16; i++) {
+			if (!changed[i])
+				continue;
+
+			TessellatorHelper.cube(bufferBuilder, positionFromIndex(i), new BlockPos(1, 1, 1), 1 / 32d, true, true);
+		}
+		Tessellator.getInstance().draw();
+
+		// Unchanged frames
+		TessellatorTextures.PaletteUnchanged.bind();
+		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		for (int i = 0; i < 16; i++) {
+			if (changed[i])
+				continue;
+
+			TessellatorHelper.cube(bufferBuilder, positionFromIndex(i), new BlockPos(1, 1, 1), 1 / 32d, true, true);
+		}
+		Tessellator.getInstance().draw();
+
 		TessellatorHelper.cleanUpAfterDrawing();
 		Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
 	}
@@ -104,29 +149,11 @@ public class PhaseCreatingPalette extends PhaseBase implements IListenForBlockEv
 		getModel().stopPalettePreview();
 		SchematicHologram.reset();
 	}
-	
-	@Override
-	public void onBlockPlaced(BlockPos pos, BlockState state) {
-		if (grid.containsKey(pos)) {
-			palette.put(grid.get(pos), state);
-			notifyChange();
-		}
-	}
 
 	protected void notifyChange() {
 		getModel().updatePalettePreview();
+		minecraft.player.sendStatusMessage(new StringTextComponent("Updating Preview..."), true);
 		SchematicHologram.getInstance().schematicChanged();
-	}
-
-	@Override
-	public void onBlockBroken(BlockPos pos) {
-		if (grid.containsKey(pos)) {
-			PaletteDefinition paletteDef = getModel().isEditingPrimary() ? getModel().getPrimary()
-					: getModel().getSecondary();
-			Palette key = grid.get(pos);
-			palette.put(key, paletteDef.get(key));
-			notifyChange();
-		}
 	}
 
 	@Override
@@ -148,10 +175,12 @@ public class PhaseCreatingPalette extends PhaseBase implements IListenForBlockEv
 	private BlockPos positionFromIndex(int index) {
 		return center.east(-3 + (index % 4) * 2).south(-3 + (index / 4) * 2);
 	}
-	
+
 	@Override
 	public List<String> getToolTip() {
-		return ImmutableList.of("The Ghost blocks show the individual materials used in this build.", "Modify the palette by placing blocks into the marked areas. You do not have to fill all the gaps.", "Once finished, make sure to save it. [F]");
+		return ImmutableList.of("The Ghost blocks show the individual materials used in this build.",
+				"Modify the palette by placing blocks into the marked areas. You do not have to fill all the gaps.",
+				"Once finished, make sure to save it. [F]");
 	}
 
 }

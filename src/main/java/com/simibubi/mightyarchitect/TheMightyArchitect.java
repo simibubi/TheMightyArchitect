@@ -28,7 +28,7 @@ public class TheMightyArchitect {
 
 	public static final String ID = "mightyarchitect";
 	public static final String NAME = "The Mighty Architect";
-	public static final String VERSION = "0.4.2";
+	public static final String VERSION = "0.4.3";
 
 	public static TheMightyArchitect instance;
 

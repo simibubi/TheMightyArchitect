@@ -21,14 +21,13 @@ import com.simibubi.mightyarchitect.control.palette.PaletteStorage;
 import com.simibubi.mightyarchitect.control.phase.ArchitectPhases;
 import com.simibubi.mightyarchitect.control.phase.IArchitectPhase;
 import com.simibubi.mightyarchitect.control.phase.IDrawBlockHighlights;
-import com.simibubi.mightyarchitect.control.phase.IListenForBlockEvents;
 import com.simibubi.mightyarchitect.control.phase.IRenderGameOverlay;
 import com.simibubi.mightyarchitect.gui.ArchitectMenuScreen;
 import com.simibubi.mightyarchitect.gui.DesignExporterScreen;
-import com.simibubi.mightyarchitect.gui.ThemeSettingsScreen;
-import com.simibubi.mightyarchitect.gui.ScreenHelper;
 import com.simibubi.mightyarchitect.gui.PalettePickerScreen;
+import com.simibubi.mightyarchitect.gui.ScreenHelper;
 import com.simibubi.mightyarchitect.gui.TextInputPromptScreen;
+import com.simibubi.mightyarchitect.gui.ThemeSettingsScreen;
 import com.simibubi.mightyarchitect.networking.InstantPrintPacket;
 
 import net.minecraft.client.Minecraft;
@@ -46,7 +45,6 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.BlockEvent.EntityPlaceEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -306,23 +304,6 @@ public class ArchitectManager {
 
 		boolean released = event.getAction() == Keyboard.RELEASE;
 		phase.getPhaseHandler().onKey(event.getKey(), released);
-	}
-
-	@SubscribeEvent
-	public static void onBlockPlaced(EntityPlaceEvent event) {
-		IArchitectPhase phaseHandler = phase.getPhaseHandler();
-		if (phaseHandler instanceof IListenForBlockEvents) {
-			((IListenForBlockEvents) phaseHandler).onBlockPlaced(event.getPos(), event.getPlacedBlock());
-		}
-
-	}
-
-	@SubscribeEvent
-	public static void onBlockBroken(PlayerInteractEvent.LeftClickBlock event) {
-		IArchitectPhase phaseHandler = phase.getPhaseHandler();
-		if (phaseHandler instanceof IListenForBlockEvents) {
-			((IListenForBlockEvents) phaseHandler).onBlockBroken(event.getPos());
-		}
 	}
 
 	@SubscribeEvent
