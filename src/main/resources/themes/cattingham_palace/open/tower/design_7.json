@@ -1,0 +1,20 @@
+{
+  "Radius": 2,
+  "Size": {
+    "X": 7,
+    "Y": 2,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Facing": "AASSSAA,ACAAACA,TAAAAAU,TAAAAAU,TAAAAAU,ACAAACA,AARRRAA",
+      "Blocks": "  LLL  , KJ JK ,LJ   JL,L     L,LJ   JL, KJ JK ,  LLL  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,  J J  , J   J ,       , J   J ,  J J  ,       ",
+      "Trait": "Standard"
+    }
+  ]
+}

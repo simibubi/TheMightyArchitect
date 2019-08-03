@@ -1,0 +1,125 @@
+{
+  "Size": {
+    "X": 19,
+    "Y": 23,
+    "Z": 6
+  },
+  "Layers": [
+    {
+      "Facing": "BADAAAAAAAAAAAAADAB,BADDAAADAAADAAADDAB,AAAAAAAAAAAAAAAAAAA,AADAAAAAAAAAAAAADAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA",
+      "Blocks": "POGQQQQQQQQQQQQQGOP,POGGQQQGQQQGQQQGGOP,  IEEEEEEEEEEEEEI  ,  G             G  ,                   ,                   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "ACAAAAAAAAAAAAAAACA,AAAAAAAAAAAAAAAAAAA,AHHAAAAAAAAAAAAAHHA,AADAAAAAAAAAAAAADAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA",
+      "Blocks": " PMQQQQQQQQQQQQQMP , IOIQQQIQQQIQQQIOI , GGEFHFEFHFEFHFEGG ,  GJ   J   J   JG  ,                   ,                   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAAAAAAAAAAAA,ACAAAAAAAAAAAAAAACA,AAADAAAAAAAAAAADAAA,AADAAAAAAAAAAAAADAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA",
+      "Blocks": "   MQQQQQQQQQQQM   , PIOQQQIQQQIQQQOIP ,  IGFHFEFHFEFHFGI  , JGI   I   I   IGJ ,  J             J  ,                   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAABAAABAAAAAAA,AACAAAAAAAAAAAAACAA,AAADAAAAAAAAAAADAAA,ACDGAAAGAAAGAAAGDCA,AACAAAAAAAAAAAAACAA,AAAAAAAAAAAAAAAAAAA",
+      "Blocks": "   MQQQPQQQPQQQM   ,  POQQQOQQQOQQQOP  ,  OGEEEEFHFEEEEGO  , PGGI IG   GI IGGP ,  P             P  ,                   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAGAAAGAAAAAAA,AAAAAAAGAAAGAAAAAAA,AAADDAAAAAAAAADDAAA,AADADBDDAAADDBDADAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA",
+      "Blocks": "   MMQMGMQMGMQMM   ,   OOQOGOQOGOQOO   ,   GGEEEEEEEEEGG   ,  G GPGGI IGGPG G  ,       J   J       ,                   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAGDDDDDDDGAAAAA,AAAAAGADDDDDAGAAAAA,AAAADAADDDDDAADAAAA,AADADDADDBDDADDADAA,AAAAAAAGBBBGAAAAAAA,AAAAAAAAAAAAAAAAAAA",
+      "Blocks": "    MGNNNNNNNGM    ,    OGONNNNNOGO    ,   IGEEGGGGGEEGI   ,  G GG GGPGG GG G  ,       GPPPG       ,                   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAACAAAAAAAAAAACAAA,AADAGAADAAADAAGADAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA",
+      "Blocks": "    MMOQQQQQOMM    ,    MMOOQQQOOMM    ,   POEEOQQQOEEOP   ,  G G  GEEEG  G G  ,       I   I       ,                   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAACAAAAAAAAACAAAA,AADAADADAAADADAADAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA",
+      "Blocks": "     OQQQQQQQO     ,     OIIQQQIIO     ,    POEIQQQIEOP    ,  G  G GFHFG G  G  ,     J I   I J     ,                   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAGAAAAAAAGAAAAA,AAAAAGAAAAAAAGAAAAA,AAAAAGAAAAAAAGAAAAA,AADAAGADAAADAGAADAA,AAAAAGAAAAAAAGAAAAA,AAAAAAAAAAAAAAAAAAA",
+      "Blocks": "     GQQQQQQQG     ,     GIIQQQIIG     ,    JGEIQQQIEGJ    ,  G  G GFHFG G  G  ,     G I   I G     ,                   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAABAAAAAAAAAAABAAA,AAABAAAAAAAAAAABAAA,AAAAHDDAAAAADDHAAAA,AADAAADDAAADDAAADAA,AAAAAAAGAAAGAAAAAAA,AAAAAAAAAAAAAAAAAAA",
+      "Blocks": "   POMMQQQQQMMOP   ,   POMMOQQQOMMOP   ,  J GGGOQQQOGGG J  ,  G  JGGFHFGGJ  G  ,  J   JG   GJ   J  ,                   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAACAAAAAAAAACAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AADAADDAAAAADDAADAA,AAAAAAAAAAAAAAAAAAA,AAAAAAABAAABAAAAAAA",
+      "Blocks": "    PMQQQQQQQMP    ,    IMIIQQQIIMI    ,  J  OOIQQQIOO  J  , JGJ GGOEEEOGG JGJ ,  J   JO   OJ   J  ,       P   P       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAABAAABAAAAAAA,AAAACAAAAAAAAACAAAA,AAAAACAAAAAAACAAAAA,AADAAAAAAAAAAAAADAA,AAAAAAGDAAADGAAAAAA,AAAAAAAAAAAAAAAAAAA",
+      "Blocks": "      MPQQQPM      ,    P MOJQJOM P    ,  I  PMOQQQOMP  I  , IGI  O FHF O  IGI ,  I   GG   GG   I  ,       J   J       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAAAAAAAAAAAA,AAAAAAAACBCAAAAAAAA,AACAAAAAAAAAAAAACAA,ACDCAAAAAAAAAAACDCA,AACAAAADAAADAAAACAA,AAAAAAAAAAAAAAAAAAA",
+      "Blocks": "       MQQQM       ,       MPPPM       ,  P    MJQJM    P  , PGP  IOFHFOI  PGP ,  P    GJ JG    P  ,       J   J       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAACAAAAACAAAAAA,AAAAAAADAAADAAAAAAA,AAAAAAAAAAAAAAAAAAA",
+      "Blocks": "       MQQQM       ,       MQQQM       ,       MIQIM       ,  I   POEEEOP   I  ,       GI IG       ,       I   I       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAABABAAAAAAAA,AAAAAAAABABAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAADBDAAAAAAAA,AAAAAAAGAAAGAAAAAAA",
+      "Blocks": "       MPQPM       ,       MPQPM       ,       MOQOM       ,  I    MEEEM    I  ,       OGPGO       ,       GJ JG       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAADADAAAAAAAA",
+      "Blocks": "        MQM        ,        MQM        ,        MJM        ,  J     MEM     J  ,       IOEOI       ,        G G        ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAACAAACAAAAAAA,AAAAAAAADADAAAAAAAA",
+      "Blocks": "        MQM        ,        MQM        ,        MIM        ,        MEM        ,       POEOP       ,        GJG        ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAAGAAAAAAAAA,AAAAAAAAAGAAAAAAAAA,AAAAAAAAAGAAAAAAAAA,AAAAAAAAAGAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAADADAAAAAAAA",
+      "Blocks": "        MGM        ,        MGM        ,        MGM        ,        MGM        ,        OEO        ,        GIG        ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAADAAAAAAAAA",
+      "Blocks": "         M         ,         M         ,         M         ,         M         ,        IOI        ,         G         ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAACACAAAAAAAA,AAAAAAAAADAAAAAAAAA",
+      "Blocks": "         O         ,         O         ,         O         ,         O         ,        POP        ,         G         ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAACAAAAAAAAA,AAAAAAAAADAAAAAAAAA",
+      "Blocks": "                   ,                   ,                   ,                   ,         P         ,         G         ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA",
+      "Blocks": "                   ,                   ,                   ,                   ,                   ,         I         ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA,AAAAAAAAAAAAAAAAAAA",
+      "Blocks": "                   ,                   ,                   ,                   ,                   ,         J         ",
+      "Trait": "Standard"
+    }
+  ],
+  "Roofspan": 15
+}

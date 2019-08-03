@@ -1,0 +1,44 @@
+{
+  "Size": {
+    "X": 7,
+    "Y": 7,
+    "Z": 2
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAAAA,AAAAAAA",
+      "Blocks": "IEEEEEI,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA",
+      "Blocks": "IFHHHFI,       ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA",
+      "Blocks": "IFHHHFI,       ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA",
+      "Blocks": "IFHHHFI, J   J ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,ALAAALA",
+      "Blocks": "IFHHHFI, D   D ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AACBCAA",
+      "Blocks": "IEEHEEI, JKKKJ ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "HDAAADH,ALBBBLA",
+      "Blocks": "AGEEEGA, DKKKD ",
+      "Trait": "Standard"
+    }
+  ]
+}

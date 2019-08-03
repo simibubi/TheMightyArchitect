@@ -1,0 +1,35 @@
+{
+  "Size": {
+    "X": 1,
+    "Y": 5,
+    "Z": 1
+  },
+  "ExpandBehaviour": "None",
+  "Layers": [
+    {
+      "Facing": "A",
+      "Blocks": "E",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "A",
+      "Blocks": "F",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "A",
+      "Blocks": "F",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "A",
+      "Blocks": "F",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "A",
+      "Blocks": "E",
+      "Trait": "Standard"
+    }
+  ]
+}

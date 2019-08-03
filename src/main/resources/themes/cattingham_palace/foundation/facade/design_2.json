@@ -1,0 +1,19 @@
+{
+  "Size": {
+    "X": 9,
+    "Y": 2,
+    "Z": 3
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAAAAAA,RARGGGRAR,AATRRRUAA",
+      "Blocks": "BBBBBBBBB,DIDAAADID,  DDDDD  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAA,ACAAAAACA,AAAAAAAAA",
+      "Blocks": "         , K     K ,         ",
+      "Trait": "MaskAbove"
+    }
+  ]
+}

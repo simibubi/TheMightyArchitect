@@ -1,0 +1,25 @@
+{
+  "Size": {
+    "X": 5,
+    "Y": 3,
+    "Z": 3
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA",
+      "Blocks": "     ,I   I,     ",
+      "Trait": "MaskBelow"
+    },
+    {
+      "Facing": "DHHHD,GABAG,AAAAA",
+      "Blocks": "BBBBB,BJKJB,     ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "DDDDD,AAAAA,LAAAL",
+      "Blocks": "GGGGG,AAAAA,D   D",
+      "Trait": "Standard"
+    }
+  ]
+}

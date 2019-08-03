@@ -1,0 +1,25 @@
+{
+  "Radius": 1,
+  "Size": {
+    "X": 5,
+    "Y": 3,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Facing": "ASASA,TAAAU,AAAAA,TAAAU,ARARA",
+      "Blocks": " D D ,DBBBD, BQB ,DBBBD, D D ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AMAMA,NAAAO,AADAA,NAAAO,ALALA",
+      "Blocks": " DID ,DBBBD,IBNBI,DBBBD, DID ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AACAA,AAAAA,CAAAC,AAAAA,AACAA",
+      "Blocks": "  K  ,     ,K   K,     ,  K  ",
+      "Trait": "MaskAbove"
+    }
+  ]
+}

@@ -1,7 +1,6 @@
 package com.simibubi.mightyarchitect.control.compose.planner;
 
 import com.simibubi.mightyarchitect.control.ArchitectManager;
-import com.simibubi.mightyarchitect.control.design.ThemeStatistics;
 
 import net.minecraft.util.text.TextFormatting;
 
@@ -17,9 +16,7 @@ public class StackTool extends AbstractRoomFaceSelectionTool {
 	public boolean handleMouseWheel(int scroll) {
 		if (selectedStack != null) {
 			if (scroll > 0) {
-				model.getTheme().getStatistics();
-				if (selectedStack.floors() < ThemeStatistics.MAX_FLOORS)
-					selectedStack.increase();
+				RoomTool.increaseMatchingOthers(ArchitectManager.getModel().getGroundPlan(), selectedStack);
 				return true;
 			} else {
 				selectedStack.decrease();

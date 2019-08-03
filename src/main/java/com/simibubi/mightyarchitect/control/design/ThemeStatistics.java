@@ -178,6 +178,10 @@ public class ThemeStatistics {
 
 	public DesignType fallbackRoof(Room room, boolean tower) {
 		DesignType desired = room.roofType;
+		
+		if (!tower && room.quadFacadeRoof && room.width != room.length)
+			room.quadFacadeRoof = false;
+		
 		if (!tower && desired == DesignType.ROOF) {
 			if (hasGables && Math.min(room.width, room.length) <= MaxGableRoof
 					&& Math.min(room.width, room.length) >= MinGableRoof)

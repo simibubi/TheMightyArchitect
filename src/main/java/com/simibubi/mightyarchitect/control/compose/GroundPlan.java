@@ -30,9 +30,6 @@ public class GroundPlan {
 				return;
 			 
 			stack.forEach(room -> {
-				if (room.designLayer.isExterior())
-					return;
-				
 				interior.add(room.getInterior());				
 			});
 		});

@@ -1,0 +1,49 @@
+{
+  "Size": {
+    "X": 9,
+    "Y": 8,
+    "Z": 2
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAAAAAA,AAAAAAAAA",
+      "Blocks": "IEEEEEEEI,         ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAA,AAAAAAAAA",
+      "Blocks": "IEFHFHFEI,         ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAAAAAAA,AAAAAAAAA",
+      "Blocks": "IEFHFHFEI,         ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAAAAAAA,AAAAAAAAA",
+      "Blocks": "IEFHFHFEI,         ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAAAAAA,AAAAAAAAA",
+      "Blocks": "IEFHFHFEI, J     J ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAA,AAAAAAAAA",
+      "Blocks": "IEEEEEEEI, J     J ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "HDDDDDDDH,ALBABABLA",
+      "Blocks": "AGGGGGGGA, DK K KD ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAA,AAACACAAA",
+      "Blocks": "         ,   K K   ",
+      "Trait": "MaskAbove"
+    }
+  ]
+}

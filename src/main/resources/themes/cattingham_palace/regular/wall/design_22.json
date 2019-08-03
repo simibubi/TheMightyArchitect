@@ -1,0 +1,45 @@
+{
+  "Size": {
+    "X": 7,
+    "Y": 7,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Facing": "AAAAAAA,AAAAAAA",
+      "Blocks": "EEEEEEE,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA",
+      "Blocks": "EFHHHFE,       ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA",
+      "Blocks": "EFHHHFE,       ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA",
+      "Blocks": "EFHHHFE, J   J ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA",
+      "Blocks": "EFHHHFE, I   I ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,ACCBCCA",
+      "Blocks": "EEEHEEE, KKKKK ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA",
+      "Blocks": "EEEEEEE,       ",
+      "Trait": "Standard"
+    }
+  ]
+}

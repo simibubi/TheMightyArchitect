@@ -1,0 +1,35 @@
+{
+  "Radius": 1,
+  "Size": {
+    "X": 5,
+    "Y": 5,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Facing": "ASASA,TARAU,AUATA,TASAU,ARARA",
+      "Blocks": " L L ,LJLJL, L L ,LJLJL, L L ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": "     , J J ,     , J J ,     ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": "     , J J ,     , J J ,     ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": "     , I I ,     , I I ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,ADMDA,ANAOA,ADLDA,AAAAA",
+      "Blocks": "     , ADA , D D , ADA ,     ",
+      "Trait": "Standard"
+    }
+  ]
+}

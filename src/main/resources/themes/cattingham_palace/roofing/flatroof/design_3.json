@@ -1,0 +1,45 @@
+{
+  "Size": {
+    "X": 8,
+    "Y": 7,
+    "Z": 8
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAAAAA,AAAAAAAA,AAAAAAAA,AAAAAAAA,AAAAAAAA,AAAAAAAA,AAAAAAAA,AAAAAAAA",
+      "Blocks": "        ,        , J      ,        ,        , J      ,  I  J  ,        ",
+      "Trait": "MaskBelow"
+    },
+    {
+      "Facing": "AAGAAAAA,AAGAAAAA,AAGAAAAA,AAGAAAAA,AAGDAAAA,AAAHHHHH,AADAAAAA,AAAAAAAA",
+      "Blocks": "  GQQQQQ,  GQQQQQ, IGQQQQQ,  GQQQQQ,  GGQQQQ, IIGGGGG,  G  I  ,        ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "ACAGAAAA,ACAGAAAA,ADAGAAAA,ACAGDAAA,ACAAHHHH,ADAAAAAA,AADCCDCC,AAAAAAAA",
+      "Blocks": " PMGQQQQ, PMGQQQQ, GMGQQQQ, PMGGQQQ, PMMGGGG, GOMMMMM, JGPPGPP,  J     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "ACAAAAAA,ACAAAAAA,ADAAAAAA,ACAAAAAA,ACAAAAAA,ADCAAAAA,AADCCDCC,AAAAAAAA",
+      "Blocks": " P MMMMM, P MMMMM, G MMMMM, P MMMMM, P IMMMM, GP     , IGPPGPP,  I     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAACAAA,AAAACAAA,AAAACAAA,AAAADCCC,AAAAAAAA,AACAAAAA,ACDCAAAA,AACAAAAA",
+      "Blocks": "    P   ,    P   , J  P   ,    GPPP,        , JP     , PGP J  ,  P     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAA,AAAAAAAA,AAAAAAAA,AAAAAAAA,AAAAAAAA,AAAAAAAA,AAAAAAAA,AAAAAAAA",
+      "Blocks": "        ,        ,        ,    J   ,        ,        ,  I     ,        ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAA,AAAAAAAA,AAAAAAAA,AAAAAAAA,AAAAAAAA,AAAAAAAA,AAAAAAAA,AAAAAAAA",
+      "Blocks": "        ,        ,        ,        ,        ,        ,  J     ,        ",
+      "Trait": "Standard"
+    }
+  ],
+  "Margin": 2
+}

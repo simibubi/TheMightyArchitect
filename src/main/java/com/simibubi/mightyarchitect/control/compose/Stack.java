@@ -48,8 +48,13 @@ public class Stack {
 			Room newRoom = highest().stack();
 			if (highest().designLayer == DesignLayer.Foundation) {
 				newRoom.designLayer = DesignLayer.Regular;
-				newRoom.height = Math.max(highest().height, Math.min(4, theme.getMaxFloorHeight()));
 			}
+			int defaultHeightForFloor = theme.getDefaultHeightForFloor(rooms.size());
+
+			if (defaultHeightForFloor != -1)
+				newRoom.height = defaultHeightForFloor;
+			else
+				newRoom.height = Math.max(highest().height, Math.min(4, theme.getMaxFloorHeight()));
 			rooms.add(newRoom);
 		}
 	}
@@ -58,6 +63,7 @@ public class Stack {
 		if (!rooms.isEmpty()) {
 			if (rooms.size() > 1) {
 				rooms.get(rooms.size() - 2).roofType = highest().roofType;
+				rooms.get(rooms.size() - 2).quadFacadeRoof = highest().quadFacadeRoof;
 			}
 			rooms.remove(highest());
 		}
@@ -97,7 +103,7 @@ public class Stack {
 	public int getMinWidth() {
 		return theme.getStatistics().MinRoomLength;
 	}
-	
+
 	public DesignType getRoofType() {
 		return highest().roofType;
 	}

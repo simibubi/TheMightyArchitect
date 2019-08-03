@@ -1,0 +1,60 @@
+{
+  "Radius": 1,
+  "Size": {
+    "X": 5,
+    "Y": 10,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Facing": "AUATA,RDDDR,ADADA,SDDDS,AUATA",
+      "Blocks": "BD DB,DGGGD, GQG ,DGGGD,BD DB",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AOANA,LDDDL,ADADA,MDDDM,AOANA",
+      "Blocks": "ID DI,DGGGD, GQG ,DGGGD,ID DI",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "CACAC,AAAAA,CAAAC,AAAAA,CACAC",
+      "Blocks": "K K K, BBB ,KBQBK, BBB ,K K K",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": "     , BIB , IQI , BIB ,     ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": "     , BIB , IQI , BIB ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": " J J ,JBIBJ, IQI ,JBIBJ, J J ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": " J J ,JBIBJ, IQI ,JBIBJ, J J ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": " I I ,IBIBI, IQI ,IBIBI, I I ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AGAGA,HAAAH,AAAAA,HAAAH,AGAGA",
+      "Blocks": " A A ,ABBBA, BQB ,ABBBA, A A ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AMMMA,NAAAO,NADAO,NAAAO,ALLLA",
+      "Blocks": " DDD ,DBBBD,DBNBD,DBBBD, DDD ",
+      "Trait": "Standard"
+    }
+  ]
+}

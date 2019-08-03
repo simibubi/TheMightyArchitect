@@ -1,0 +1,35 @@
+{
+  "Size": {
+    "X": 3,
+    "Y": 5,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Facing": "ASA,RAR",
+      "Blocks": "JLJ,L L",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAA,AAA",
+      "Blocks": "J J,   ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAA,AAA",
+      "Blocks": "J J,   ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "ABA,BAB",
+      "Blocks": "IKI,K K",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAA,ACA",
+      "Blocks": "   , K ",
+      "Trait": "MaskAbove"
+    }
+  ]
+}

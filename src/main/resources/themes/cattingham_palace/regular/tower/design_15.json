@@ -1,0 +1,30 @@
+{
+  "Radius": 3,
+  "Size": {
+    "X": 7,
+    "Y": 4,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAAAA,ADAAADA,AAAAAAA,AAAAAAA,AAAAAAA,ADAAADA,AAAAAAA",
+      "Blocks": "  EEE  , GQQQG ,EQQQQQE,EQQQQQE,EQQQQQE, GQQQG ,  EEE  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,ADAAADA,AAAAAAA,AAAAAAA,AAAAAAA,ADAAADA,AAAAAAA",
+      "Blocks": " JFHFJ ,JGQQQGJ,FQQQQQF,HQQQQQH,FQQQQQF,JGQQQGJ, JFHFJ ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAAAAA,ADAAADA,AAAAAAA,AAAAAAA,AAAAAAA,ADAAADA,AAAAAAA",
+      "Blocks": " JFHFJ ,JGQQQGJ,FQQQQQF,HQQQQQH,FQQQQQF,JGQQQGJ, JFHFJ ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "ACAAACA,CDDDDDC,ADDDDDA,ADDDDDA,ADDDDDA,CDDDDDC,ACAAACA",
+      "Blocks": " KEEEK ,KGNNNGK,ENNNNNE,ENNNNNE,ENNNNNE,KGNNNGK, KEEEK ",
+      "Trait": "Standard"
+    }
+  ]
+}

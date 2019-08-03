@@ -10,6 +10,9 @@ public enum ArchitectPhases {
 	/** No active architect process, don't do anything. */
 	Empty(new PhaseEmpty(), "Choose a theme:"),
 	
+	/** Pressed escape or left world, don't do anything. */
+	Paused(new PhasePaused(), "Architect was Paused"),
+	
 	/** Ground Plan is being drawn by the user. */
 	Composing(new PhaseComposing(), "Compose Mode"),
 	

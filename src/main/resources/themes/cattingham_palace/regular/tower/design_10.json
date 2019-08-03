@@ -1,0 +1,60 @@
+{
+  "Radius": 2,
+  "Size": {
+    "X": 7,
+    "Y": 10,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "  I I  ,  EEE  ,IEQQQEI, EQQQE ,IEQQQEI,  EEE  ,  I I  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "  J J  ,  FHF  ,JFQQQFJ, HQQQH ,JFQQQFJ,  FHF  ,  J J  ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "  J J  ,  FHF  ,JFQQQFJ, HQQQH ,JFQQQFJ,  FHF  ,  J J  ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "  J J  , JFHFJ ,JFQQQFJ, HQQQH ,JFQQQFJ, JFHFJ ,  J J  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "  J J  , IEEEI ,JEQQQEJ, EQQQE ,JEQQQEJ, IEEEI ,  J J  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,ACAAACA,AAAAAAA,AAAAAAA,AAAAAAA,ACAAACA,AAAAAAA",
+      "Blocks": "  J J  , KFHFK ,JFQQQFJ, HQQQH ,JFQQQFJ, KFHFK ,  J J  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "  J J  ,  FHF  ,JFQQQFJ, HQQQH ,JFQQQFJ,  FHF  ,  J J  ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "  I I  ,  EEE  ,IEQQQEI, EQQQE ,IEQQQEI,  EEE  ,  I I  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AADADAA,AADHDAA,DDDDDDD,AGDDDGA,DDDDDDD,AADHDAA,AADADAA",
+      "Blocks": "  AJA  , JGGGJ ,AGNNNGA,JGNNNGJ,AGNNNGA, JGGGJ ,  AJA  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAACAAA,ACAAACA,AAAAAAA,CAAAAAC,AAAAAAA,ACAAACA,AAACAAA",
+      "Blocks": "   K   , K   K ,       ,K     K,       , K   K ,   K   ",
+      "Trait": "MaskAbove"
+    }
+  ]
+}

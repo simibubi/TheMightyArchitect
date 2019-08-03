@@ -1,0 +1,55 @@
+{
+  "Size": {
+    "X": 7,
+    "Y": 9,
+    "Z": 3
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Facing": "AAAAAAA,AABBBAA,AAAAAAA",
+      "Blocks": "       , JKKKJ ,       ",
+      "Trait": "MaskBelow"
+    },
+    {
+      "Facing": "AAAAAAA,AAUATAA,AARRRAA",
+      "Blocks": "EEEEEEE, IL LI ,  LLL  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,ACAAACA,AAAAAAA",
+      "Blocks": "EEFHFEE, K   K ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "EEFHFEE,       ,       ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "EEFHFEE,       ,       ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "EEFHFEE,       ,       ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "EEEEEEE,I     I,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,ABBABBA,AAAAAAA",
+      "Blocks": "EEEEEEE,BKK KKB,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAACAAA,AAAAAAA",
+      "Blocks": "       ,   K   ,       ",
+      "Trait": "MaskAbove"
+    }
+  ]
+}

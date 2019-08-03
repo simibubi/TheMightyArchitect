@@ -1,0 +1,34 @@
+{
+  "Size": {
+    "X": 3,
+    "Y": 5,
+    "Z": 3
+  },
+  "Layers": [
+    {
+      "Facing": "AUA,RAA,AAA",
+      "Blocks": "AD ,D  ,   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAA,AAA,AAA",
+      "Blocks": "A  , I ,   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAA,ADA,AAA",
+      "Blocks": "A  , G ,   ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAA,ADA,AAA",
+      "Blocks": "A  , G ,   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "DHA,GAO,ALA",
+      "Blocks": "GB ,BAD, D ",
+      "Trait": "Standard"
+    }
+  ]
+}

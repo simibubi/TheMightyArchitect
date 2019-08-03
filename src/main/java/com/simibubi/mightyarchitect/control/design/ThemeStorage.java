@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,13 +26,16 @@ public class ThemeStorage {
 
 	public enum IncludedThemes {
 
-		Medieval("medieval"), Fallback("fallback_theme"), Modern("modern"), TownHouse("town_house");
+		Medieval("medieval", 3, 5), Fallback("fallback_theme", 3, 4), Modern("modern", 2, 4),
+		TownHouse("town_house", 4, 5), Cattingham("cattingham_palace", 7, 2, 6);
 
 		public DesignTheme theme;
 		public String themeFolder;
+		public List<Integer> heights;
 
-		private IncludedThemes(String themeFolder) {
+		private IncludedThemes(String themeFolder, Integer... floorHeights) {
 			this.themeFolder = themeFolder;
+			this.heights = Arrays.asList(floorHeights);
 		}
 	}
 
@@ -49,7 +53,7 @@ public class ThemeStorage {
 		for (IncludedThemes theme : IncludedThemes.values()) {
 
 			if (theme.theme == null)
-				theme.theme = loadInternalTheme(theme.themeFolder);
+				theme.theme = loadInternalTheme(theme.themeFolder).withHeightSequence(theme.heights);
 
 			if (theme == IncludedThemes.Fallback)
 				continue;
@@ -178,9 +182,9 @@ public class ThemeStorage {
 		String folderPath = "themes";
 
 		try {
-			if (!Files.isDirectory(Paths.get(folderPath))) 
+			if (!Files.isDirectory(Paths.get(folderPath)))
 				Files.createDirectory(Paths.get(folderPath));
-			
+
 			DirectoryStream<Path> newDirectoryStream = Files.newDirectoryStream(Paths.get(folderPath));
 			for (Path path : newDirectoryStream) {
 				String themeFolder = path.getFileName().toString();

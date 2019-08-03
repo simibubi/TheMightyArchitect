@@ -22,7 +22,7 @@ public class DesignPicker {
 		roomDesigns = new HashMap<>();
 		roofDesigns = new HashMap<>();
 	}
-	
+
 	public void reset() {
 		rerollAll();
 	}
@@ -59,12 +59,12 @@ public class DesignPicker {
 						DesignHelper.addTowerRoof(provider, designList, theme, roofLayer, stack, false);
 						break;
 					}
-
-					if (room.width == room.length) {
+					if (room.quadFacadeRoof) {
 						DesignHelper.addNormalCrossRoof(provider, designList, theme, roofLayer, stack);
-					} else {
-						DesignHelper.addNormalRoof(provider, designList, theme, roofLayer, stack);
+						break;
 					}
+
+					DesignHelper.addNormalRoof(provider, designList, theme, roofLayer, stack);
 					break;
 
 				case FLAT_ROOF:
@@ -86,13 +86,13 @@ public class DesignPicker {
 		sketch.interior = groundPlan.getInterior();
 		return sketch;
 	}
-	
+
 	public RoomDesignMapping getCachedRoom(Room room) {
 		if (roomDesigns.containsKey(room))
 			return roomDesigns.get(room);
 		return null;
 	}
-	
+
 	public Design getCachedRoof(Stack stack) {
 		if (roofDesigns.containsKey(stack))
 			return roofDesigns.get(stack);
@@ -118,15 +118,15 @@ public class DesignPicker {
 		stack.forEach(this::rerollRoom);
 		rerollRoof(stack);
 	}
-	
+
 	public void putRoom(Room room, RoomDesignMapping mapping) {
 		roomDesigns.put(room, mapping);
 	}
-	
+
 	public void putRoof(Stack stack, Design roof) {
 		roofDesigns.put(stack, roof);
 	}
-	
+
 	public void setTheme(DesignTheme theme) {
 		this.theme = theme;
 	}

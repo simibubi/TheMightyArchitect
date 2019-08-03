@@ -16,34 +16,42 @@ public class RoofTool extends AbstractRoomFaceSelectionTool {
 
 	@Override
 	public boolean handleMouseWheel(int scroll) {
-		if (selectedStack != null) {
-			Room room = selectedStack.highest();
-			switch (room.roofType) {
-			case FLAT_ROOF:
-				room.roofType = DesignType.NONE;
-				break;
-			default:
-			case NONE:
-				room.roofType = DesignType.ROOF;
-				break;
-			case ROOF:
+		if (selectedStack == null)
+			return super.handleMouseWheel(scroll);
+
+		Room room = selectedStack.highest();
+
+		if (room.roofType == DesignType.ROOF) {
+			if (!(selectedStack instanceof CylinderStack) && !room.quadFacadeRoof && room.width == room.length) {
+				room.quadFacadeRoof = true;
+			} else {
 				room.roofType = DesignType.FLAT_ROOF;
-				break;
+				room.quadFacadeRoof = false;
 			}
-			room.roofType = model.getTheme().getStatistics().fallbackRoof(room, selectedStack instanceof CylinderStack);
-			return true;
+
+		} else if (room.roofType == DesignType.FLAT_ROOF) {
+			room.roofType = DesignType.NONE;
+
+		} else if (room.roofType == DesignType.NONE) {
+			room.roofType = DesignType.ROOF;
+
 		}
 
-		return super.handleMouseWheel(scroll);
+		room.roofType = model.getTheme().getStatistics().fallbackRoof(room, selectedStack instanceof CylinderStack);
+		return true;
+
 	}
 
 	@Override
 	public void updateSelection() {
 		super.updateSelection();
 
-		if (selectedStack != null) {
+		if (selectedStack == null)
+			return;
+		if (selectedStack.highest().quadFacadeRoof)
+			status("Roof Type: " + TextFormatting.AQUA + "4-Facade Gable Roof");
+		else
 			status("Roof Type: " + TextFormatting.AQUA + selectedStack.highest().roofType.getDisplayName());
-		}
 	}
 
 	@Override

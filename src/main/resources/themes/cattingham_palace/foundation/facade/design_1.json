@@ -1,0 +1,14 @@
+{
+  "Size": {
+    "X": 7,
+    "Y": 1,
+    "Z": 3
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAAAA,RRHHHRR,ATRRRUA",
+      "Blocks": "BBBBBBB,DDAAADD, DDDDD ",
+      "Trait": "Standard"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "Size": {
+    "X": 3,
+    "Y": 3,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Facing": "DDD,GCG",
+      "Blocks": "BBB,BKB",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "DDD,AAA",
+      "Blocks": "BBB,J J",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "DDD,LBL",
+      "Blocks": "GGG,DKD",
+      "Trait": "Standard"
+    }
+  ]
+}

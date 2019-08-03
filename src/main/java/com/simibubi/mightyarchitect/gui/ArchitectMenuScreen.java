@@ -3,11 +3,14 @@ package com.simibubi.mightyarchitect.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.glfw.GLFW;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.simibubi.mightyarchitect.TheMightyArchitect;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.ArchitectMenu;
 import com.simibubi.mightyarchitect.control.ArchitectMenu.KeyBindList;
+import com.simibubi.mightyarchitect.control.phase.ArchitectPhases;
 
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
@@ -82,23 +85,46 @@ public class ArchitectMenuScreen extends Screen {
 	@Override
 	public boolean keyPressed(int keyCode, int p_keyPressed_2_, int p_keyPressed_3_) {
 		super.keyPressed(keyCode, p_keyPressed_2_, p_keyPressed_3_);
-		
+		boolean hideOnClose = ArchitectManager.inPhase(ArchitectPhases.Empty)
+				|| ArchitectManager.inPhase(ArchitectPhases.Paused);
+
+		if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
+			if (hideOnClose)
+				setVisible(false);
+			minecraft.displayGuiScreen(null);
+			return true;
+		}
+
 		if (keyCode == TheMightyArchitect.COMPOSE.getKey().getKeyCode()) {
+			if (hideOnClose)
+				setVisible(false);
 			minecraft.displayGuiScreen(null);
 			return true;
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean charTyped(char p_charTyped_1_, int p_charTyped_2_) {
+		boolean hideOnClose = ArchitectManager.inPhase(ArchitectPhases.Empty)
+				|| ArchitectManager.inPhase(ArchitectPhases.Paused);
+		
 		if (ArchitectMenu.handleMenuInput(p_charTyped_1_)) {
+			if (ArchitectManager.inPhase(ArchitectPhases.Paused))
+				setVisible(false);
 			minecraft.displayGuiScreen(null);
-			return true;			
+			return true;
 		}
+		if (p_charTyped_1_ == 'e') {
+			if (hideOnClose)
+				setVisible(false);
+			minecraft.displayGuiScreen(null);
+			return true;
+		}
+
 		return super.charTyped(p_charTyped_1_, p_charTyped_2_);
 	}
-	
+
 	private void draw(float partialTicks) {
 		MainWindow mainWindow = Minecraft.getInstance().mainWindow;
 
@@ -107,14 +133,13 @@ public class ArchitectMenuScreen extends Screen {
 
 		GlStateManager.pushMatrix();
 		GlStateManager.translatef(0, yShift(partialTicks), 0);
-		
+
 		ScreenResources gray = ScreenResources.GRAY;
 		GlStateManager.enableBlend();
 		GlStateManager.color4f(1, 1, 1, 3 / 4f);
 
 		Minecraft.getInstance().getTextureManager().bindTexture(gray.location);
-		blit(x, y, gray.startX, gray.startY, menuWidth, menuHeight, gray.width,
-				gray.height);
+		blit(x, y, gray.startX, gray.startY, menuWidth, menuHeight, gray.width, gray.height);
 		GlStateManager.color4f(1, 1, 1, 1);
 
 		int yPos = y + 4;
@@ -122,9 +147,12 @@ public class ArchitectMenuScreen extends Screen {
 
 		FontRenderer font = Minecraft.getInstance().fontRenderer;
 		if (!focused)
-		font.drawString("Press " + TheMightyArchitect.COMPOSE.getLocalizedName().toUpperCase() + " to focus", xPos,
-				yPos - 14, 0xEEEEEE);
-		font.drawString(title, xPos, yPos, 0xEEEEEE);
+			font.drawStringWithShadow("Press " + TheMightyArchitect.COMPOSE.getLocalizedName().toUpperCase() + " to focus", xPos,
+					yPos - 14, 0xEEEEEE);
+		else
+			font.drawStringWithShadow("Press " + TheMightyArchitect.COMPOSE.getLocalizedName().toUpperCase() + " to close", xPos,
+					yPos - 14, 0xDDDDDD);
+		font.drawStringWithShadow(title, xPos, yPos, 0xEEEEEE);
 
 		yPos += 4;
 		for (String key : keybinds.getKeys()) {
@@ -132,16 +160,16 @@ public class ArchitectMenuScreen extends Screen {
 				yPos += font.FONT_HEIGHT / 2;
 				continue;
 			}
-			
+
 			yPos += font.FONT_HEIGHT;
-			font.drawString("[" + key + "] " + keybinds.get(key), xPos, yPos, 0xEEEEEE);
-			font.drawString(">", xPos - 12, yPos, 0xCCDDFF);
+			font.drawStringWithShadow("[" + key + "] " + keybinds.get(key), xPos, yPos, 0xCCDDFF);
+			font.drawStringWithShadow(">", xPos - 12, yPos, 0xCCDDFF);
 		}
 
 		yPos += 4;
 		yPos += font.FONT_HEIGHT;
 		for (String text : tooltip) {
-			int lines = Minecraft.getInstance().fontRenderer.listFormattedStringToWidth(text, menuWidth -8).size();
+			int lines = Minecraft.getInstance().fontRenderer.listFormattedStringToWidth(text, menuWidth - 8).size();
 			font.drawSplitString(text, xPos, yPos, menuWidth - 8, 0xEEEEEE);
 			yPos += font.FONT_HEIGHT * lines + 2;
 		}

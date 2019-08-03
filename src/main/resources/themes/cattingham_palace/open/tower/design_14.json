@@ -1,0 +1,50 @@
+{
+  "Radius": 3,
+  "Size": {
+    "X": 9,
+    "Y": 8,
+    "Z": 9
+  },
+  "Layers": [
+    {
+      "Facing": "AAASSSAAA,AASUATSAA,ATAAAAAUA,TRAAAAARU,TAAAAAAAU,TSAAAAASU,ATAAAAAUA,AARUATRAA,AAARRRAAA",
+      "Blocks": "   LLL   ,  LLILL  , LI   IL ,LL     LL,LI     IL,LL     LL, LI   IL ,  LLILL  ,   LLL   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA",
+      "Blocks": "         ,    I    ,  I   I  ,         , I     I ,         ,  I   I  ,    I    ,         ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA",
+      "Blocks": "         ,    J    ,  J   J  ,         , J     J ,         ,  J   J  ,    J    ,         ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA",
+      "Blocks": "         ,    J    ,  J   J  ,         , J     J ,         ,  J   J  ,    J    ,         ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA",
+      "Blocks": "         ,    J    ,  J   J  ,         , J     J ,         ,  J   J  ,    J    ,         ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA",
+      "Blocks": "         ,    J    ,  J   J  ,         , J     J ,         ,  J   J  ,    J    ,         ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA",
+      "Blocks": "         ,    I    ,  I   I  ,         , I     I ,         ,  I   I  ,    I    ,         ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAMAAAA,AANMDMOAA,AMDAAADMA,ANAAAAAOA,NDAAAAADO,ANAAAAAOA,ALDAAADLA,AANLDLOAA,AAAALAAAA",
+      "Blocks": "    L    ,  DDADD  , DA   AD , D     D ,LA     AL, D     D , DA   AD ,  DDADD  ,    L    ",
+      "Trait": "Standard"
+    }
+  ]
+}

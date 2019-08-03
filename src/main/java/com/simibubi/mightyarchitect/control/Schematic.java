@@ -234,5 +234,9 @@ public class Schematic {
 	public DesignTheme getTheme() {
 		return groundPlan.theme;
 	}
+	
+	public boolean isEmpty() {
+		return groundPlan == null;
+	}
 
 }

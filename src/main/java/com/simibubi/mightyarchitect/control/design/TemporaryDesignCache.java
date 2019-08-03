@@ -58,4 +58,9 @@ public class TemporaryDesignCache {
 			return design;
 		}
 	}
+	
+	public Random getRandom() {
+		return random;
+	}
+	
 }

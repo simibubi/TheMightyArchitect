@@ -1,0 +1,55 @@
+{
+  "Radius": 2,
+  "Size": {
+    "X": 7,
+    "Y": 9,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Facing": "AAUATAA,ADDDDDA,RDAAADR,ADAAADA,SDAAADS,ADDDDDA,AAUATAA",
+      "Blocks": " ID DI ,IAGGGAI,DGQQQGD, GQQQG ,DGQQQGD,IAGGGAI, ID DI ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "ACOANCA,CDDDDDC,LDAAADL,ADAAADA,MDAAADM,CDDDDDC,ACOANCA",
+      "Blocks": " KD DK ,KAGGGAK,DGQQQGD, GQQQG ,DGQQQGD,KAGGGAK, KD DK ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AACCCAA,AAAAAAA,CAAAAAC,CAAAAAC,CAAAAAC,AAAAAAA,AACCCAA",
+      "Blocks": "  KKK  , IBBBI ,KBQQQBK,KBQQQBK,KBQQQBK, IBBBI ,  KKK  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       , JBIBJ , BQQQB , IQQQI , BQQQB , JBIBJ ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       , JBIBJ , BQQQB , IQQQI , BQQQB , JBIBJ ,       ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       , JBIBJ , BQQQB , IQQQI , BQQQB , JBIBJ ,       ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "  J J  , IBBBI ,JBQQQBJ, BQQQB ,JBQQQBJ, IBBBI ,  J J  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAGAGAA,ADAAADA,HAAAAAH,AAAAAAA,HAAAAAH,ADAAADA,AAGAGAA",
+      "Blocks": "  A A  , GBBBG ,ABQQQBA, BQQQB ,ABQQQBA, GBBBG ,  A A  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAMMMAA,ADAAADA,NADDDAO,NADDDAO,NADDDAO,ADAAADA,AALLLAA",
+      "Blocks": "  DDD  , ABBBA ,DBNNNBD,DBNNNBD,DBNNNBD, ABBBA ,  DDD  ",
+      "Trait": "Standard"
+    }
+  ]
+}

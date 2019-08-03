@@ -1,0 +1,70 @@
+{
+  "Radius": 2,
+  "Size": {
+    "X": 7,
+    "Y": 12,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Facing": "AABABAA,AADDDAA,BDAAADB,ADAAADA,BDAAADB,AADDDAA,AABABAA",
+      "Blocks": "  POP  , OGGGO ,PG   GP,OG   GO,PG   GP, OGGGO ,  POP  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AADDDAA,ADAAADA,ADAAADA,ADAAADA,AADDDAA,AAAAAAA",
+      "Blocks": "   I   , JGGGJ , GM MG ,IG   GI, GM MG , JGGGJ ,   I   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "   J   ,  IMI  , IM MI ,JM   MJ, IM MI ,  IMI  ,   J   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,   I   ,  MMM  , IM MI ,  MMM  ,   I   ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,       ,  IMI  ,  MMM  ,  IMI  ,       ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,       ,   I   ,  IMI  ,   I   ,       ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,       ,   I   ,  IMI  ,   I   ,       ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,       ,       ,   M   ,       ,       ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,       ,       ,   M   ,       ,       ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,       ,       ,   I   ,       ,       ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,       ,       ,   I   ,       ,       ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,       ,       ,   J   ,       ,       ,       ",
+      "Trait": "Standard"
+    }
+  ]
+}

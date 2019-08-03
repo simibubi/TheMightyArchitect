@@ -44,6 +44,7 @@ public class ToolSelectionScreen extends Screen {
 
 	private void draw(float partialTicks) {
 		MainWindow mainWindow = Minecraft.getInstance().mainWindow;
+		FontRenderer font = minecraft.fontRenderer;
 
 		int x = (mainWindow.getScaledWidth() - w) / 2 + 15;
 		int y = mainWindow.getScaledHeight() - h - 75;
@@ -54,16 +55,18 @@ public class ToolSelectionScreen extends Screen {
 		ScreenResources gray = ScreenResources.GRAY;
 		GlStateManager.enableBlend();
 		GlStateManager.color4f(1, 1, 1, focused ? 7 / 8f : 1 / 2f);
-
 		Minecraft.getInstance().getTextureManager().bindTexture(gray.location);
-		blit(x - 15, y, gray.startX, gray.startY, w, h, gray.width, gray.height);
 		float toolTipAlpha = yOffset / 10;
+
+		// render main box
+		blit(x - 15, y, gray.startX, gray.startY, w, h, gray.width, gray.height);
 		
-		FontRenderer font = minecraft.fontRenderer;
+		// render tools
 		List<String> toolTip = tools.get(selection).getDescription();
 		int stringAlphaComponent = ((int) (toolTipAlpha * 0xFF)) << 24;
 		
 		if (toolTipAlpha > 0.25f) {
+			Minecraft.getInstance().getTextureManager().bindTexture(gray.location);
 			GlStateManager.color4f(.7f, .7f, .8f, toolTipAlpha);
 			blit(x - 15, y + 30, gray.startX, gray.startY, w, h + 22, gray.width, gray.height);
 			GlStateManager.color4f(1, 1, 1, 1);

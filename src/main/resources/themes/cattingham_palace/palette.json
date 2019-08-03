@@ -1,0 +1,115 @@
+{
+  "Palette": {
+    "OUTER_THICK": {
+      "Properties": {
+        "east": "false",
+        "waterlogged": "false",
+        "south": "false",
+        "north": "false",
+        "west": "false",
+        "up": "true"
+      },
+      "Name": "minecraft:cobblestone_wall"
+    },
+    "OUTER_FLAT": {
+      "Properties": {
+        "half": "bottom",
+        "waterlogged": "false",
+        "powered": "false",
+        "facing": "south",
+        "open": "true"
+      },
+      "Name": "minecraft:jungle_trapdoor"
+    },
+    "INNER_PRIMARY": {
+      "Name": "minecraft:white_concrete"
+    },
+    "HEAVY_POST": {
+      "Properties": {
+        "half": "bottom",
+        "waterlogged": "false",
+        "shape": "straight",
+        "facing": "north"
+      },
+      "Name": "minecraft:spruce_stairs"
+    },
+    "ROOF_PRIMARY": {
+      "Name": "minecraft:cobblestone"
+    },
+    "INNER_DETAIL": {
+      "Properties": {
+        "axis": "y"
+      },
+      "Name": "minecraft:acacia_wood"
+    },
+    "ROOF_SLAB": {
+      "Properties": {
+        "waterlogged": "false",
+        "type": "bottom"
+      },
+      "Name": "minecraft:stone_brick_slab"
+    },
+    "WINDOW": {
+      "Properties": {
+        "east": "false",
+        "waterlogged": "false",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:glass_pane"
+    },
+    "Name": "Standard Cattingham",
+    "HEAVY_PRIMARY": {
+      "Properties": {
+        "axis": "y"
+      },
+      "Name": "minecraft:stripped_spruce_log"
+    },
+    "FLOOR": {
+      "Properties": {
+        "axis": "y"
+      },
+      "Name": "minecraft:stripped_oak_wood"
+    },
+    "HEAVY_SECONDARY": {
+      "Name": "minecraft:polished_andesite"
+    },
+    "ROOF_DETAIL": {
+      "Name": "minecraft:stone_bricks"
+    },
+    "INNER_SECONDARY": {
+      "Name": "minecraft:white_concrete_powder"
+    },
+    "OUTER_SLAB": {
+      "Properties": {
+        "waterlogged": "false",
+        "type": "bottom"
+      },
+      "Name": "minecraft:smooth_stone_slab"
+    },
+    "HEAVY_WINDOW": {
+      "Properties": {
+        "east": "false",
+        "waterlogged": "false",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:light_gray_stained_glass_pane"
+    },
+    "CLEAR": {
+      "Name": "minecraft:barrier"
+    },
+    "OUTER_THIN": {
+      "Properties": {
+        "east": "false",
+        "waterlogged": "false",
+        "south": "false",
+        "north": "false",
+        "west": "false"
+      },
+      "Name": "minecraft:dark_oak_fence"
+    }
+  }
+}

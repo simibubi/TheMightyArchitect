@@ -41,7 +41,7 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 	@Override
 	public void updateSelection() {
 		super.updateSelection();
-		
+
 		ClientPlayerEntity player = Minecraft.getInstance().player;
 		transparentStacks.clear();
 
@@ -148,11 +148,11 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 			});
 
 		}
-		
+
 		renderRoof();
-		
+
 	}
-	
+
 	protected void renderRoof() {
 		GroundPlan groundPlan = model.getGroundPlan();
 		BlockPos anchor = model.getAnchor();
@@ -177,15 +177,15 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 				DesignType roofType = room.roofType;
 				if (stack instanceof CylinderStack && roofType == DesignType.ROOF)
 					roofType = DesignType.TOWER_ROOF;
-					
-				
+
+				boolean alongZ = w >= l;
 				switch (roofType) {
 				case TOWER_ROOF:
 					bufferBuilder.pos(x, y + h, z).endVertex();
 					bufferBuilder.pos(x + w / 2, y + h + w, z + l / 2).endVertex();
 					bufferBuilder.pos(x, y + h, z + l).endVertex();
 					Tessellator.getInstance().draw();
-					
+
 					bufferBuilder.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION);
 					bufferBuilder.pos(x + w, y + h, z + l).endVertex();
 					bufferBuilder.pos(x + w / 2, y + h + w, z + l / 2).endVertex();
@@ -202,25 +202,29 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 					bufferBuilder.pos(x, y + h, z).endVertex();
 					break;
 				case ROOF:
+					boolean q = room.quadFacadeRoof;
 					bufferBuilder.pos(x, y + h, z).endVertex();
-					if (w >= l) 
+					if (alongZ || q)
 						bufferBuilder.pos(x, y + h + l / 2, z + l / 2).endVertex();
 					bufferBuilder.pos(x, y + h, z + l).endVertex();
-					if (w < l) 
+					if (!alongZ || q)
 						bufferBuilder.pos(x + w / 2, y + h + w / 2, z + l).endVertex();
 					bufferBuilder.pos(x + w, y + h, z + l).endVertex();
-					if (w >= l) 
+					if (alongZ || q)
 						bufferBuilder.pos(x + w, y + h + l / 2, z + l / 2).endVertex();
 					bufferBuilder.pos(x + w, y + h, z).endVertex();
-					if (w < l) 
+					if (!alongZ || q)
 						bufferBuilder.pos(x + w / 2, y + h + w / 2, z).endVertex();
 					bufferBuilder.pos(x, y + h, z).endVertex();
-					Tessellator.getInstance().draw();
-					bufferBuilder.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION);
-					if (w < l) {
+					if (!alongZ || q) {
+						Tessellator.getInstance().draw();
+						bufferBuilder.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION);
 						bufferBuilder.pos(x + w / 2, y + h + w / 2, z + l).endVertex();
 						bufferBuilder.pos(x + w / 2, y + h + w / 2, z).endVertex();
-					} else {
+					}
+					if (alongZ || q) {
+						Tessellator.getInstance().draw();
+						bufferBuilder.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION);
 						bufferBuilder.pos(x, y + h + l / 2, z + l / 2).endVertex();
 						bufferBuilder.pos(x + w, y + h + l / 2, z + l / 2).endVertex();
 					}
@@ -229,7 +233,7 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 				case NONE:
 					break;
 				}
-				
+
 				Tessellator.getInstance().draw();
 			});
 

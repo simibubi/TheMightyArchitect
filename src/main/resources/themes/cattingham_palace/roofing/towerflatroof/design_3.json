@@ -1,0 +1,20 @@
+{
+  "Radius": 2,
+  "Size": {
+    "X": 7,
+    "Y": 2,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Facing": "ABAAABA,BDDDDDB,ADAAADA,ADAAADA,ADAAADA,BDDDDDB,ABAAABA",
+      "Blocks": " PI IP ,PGGGGGP,IGMMMGI, GMMMG ,IGMMMGI,PGGGGGP, PI IP ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AACACAA,AAAAAAA,CAAAAAC,AAAAAAA,CAAAAAC,AAAAAAA,AACACAA",
+      "Blocks": "  POP  , JJJJJ ,PJ   JP,OJ   JO,PJ   JP, JJJJJ ,  POP  ",
+      "Trait": "Standard"
+    }
+  ]
+}

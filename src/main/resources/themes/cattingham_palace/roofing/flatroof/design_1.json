@@ -1,0 +1,45 @@
+{
+  "Size": {
+    "X": 5,
+    "Y": 7,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Facing": "AAGAA,AAGDA,AAAHH,AADAA,AAAAA",
+      "Blocks": "  GQQ,  GGQ,  IGG,  GI ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "ABAAA,ABAAA,AACAA,AADCB,AAAAA",
+      "Blocks": " POMQ, POMM,  POO, JGPP,  J  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AACAA,AAAAA,AAAAC,AADAA,AAAAA",
+      "Blocks": "  PMQ,   MM,    P, IGI ,  I  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AACAA,ACDCA,AACAA",
+      "Blocks": "   MM,   IM,  P  , PGP ,  P  ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAACA,AAAAA,AAAAA,AAAAA",
+      "Blocks": "    O,   P ,     ,  I  ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": "     ,     ,     ,  I  ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": "     ,     ,     ,  J  ,     ",
+      "Trait": "Standard"
+    }
+  ],
+  "Margin": 2
+}

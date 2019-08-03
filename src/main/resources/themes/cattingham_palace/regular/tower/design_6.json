@@ -1,0 +1,40 @@
+{
+  "Radius": 2,
+  "Size": {
+    "X": 7,
+    "Y": 6,
+    "Z": 7
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,  EEE  , EQQQE , EQQQE , EQQQE ,  EEE  ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,  FHF  , FQQQF , HQQQH , FQQQF ,  FHF  ,       ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,  FHF  , FQQQF , HQQQH , FQQQF ,  FHF  ,       ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       ,  FHF  , FQQQF , HQQQH , FQQQF ,  FHF  ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,AAAAAAA,AADDDAA,AADDDAA,AADDDAA,AAAAAAA,AAAAAAA",
+      "Blocks": "       , IEEEI , ENNNE , ENNNE , ENNNE , IEEEI ,       ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAA,ACAAACA,AAAAAAA,AAAAAAA,AAAAAAA,ACAAACA,AAAAAAA",
+      "Blocks": "       , K   K ,       ,       ,       , K   K ,       ",
+      "Trait": "MaskAbove"
+    }
+  ]
+}

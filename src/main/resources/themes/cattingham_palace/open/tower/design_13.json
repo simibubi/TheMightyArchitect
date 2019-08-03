@@ -1,0 +1,30 @@
+{
+  "Radius": 3,
+  "Size": {
+    "X": 9,
+    "Y": 4,
+    "Z": 9
+  },
+  "Layers": [
+    {
+      "Facing": "AAASSSAAA,AASUATSAA,ATAAAAAUA,TRAAAAARU,TAAAAAAAU,TSAAAAASU,ATAAAAAUA,AARUATRAA,AAARRRAAA",
+      "Blocks": "   LLL   ,  LLJLL  , LJ   JL ,LL     LL,LJ     JL,LL     LL, LJ   JL ,  LLJLL  ,   LLL   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA",
+      "Blocks": "         ,    J    ,  J   J  ,         , J     J ,         ,  J   J  ,    J    ,         ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA",
+      "Blocks": "         ,    I    ,  I   I  ,         , I     I ,         ,  I   I  ,    I    ,         ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAA,AAABABAAA,AAAAAAAAA,ABAAAAABA,AAAAAAAAA,ABAAAAABA,AAAAAAAAA,AAABABAAA,AAAAAAAAA",
+      "Blocks": "         ,   KBK   ,  B   B  , K     K , B     B , K     K ,  B   B  ,   KBK   ,         ",
+      "Trait": "Standard"
+    }
+  ]
+}

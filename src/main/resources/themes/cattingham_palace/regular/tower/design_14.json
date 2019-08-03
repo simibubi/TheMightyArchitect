@@ -1,0 +1,50 @@
+{
+  "Radius": 3,
+  "Size": {
+    "X": 9,
+    "Y": 8,
+    "Z": 9
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAAAAAA,AAAAAAAAA,AADAAADAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AADAAADAA,AAAAAAAAA,AAAAAAAAA",
+      "Blocks": "         ,   EEE   ,  GQQQG  , EQQQQQE , EQQQQQE , EQQQQQE ,  GQQQG  ,   EEE   ,         ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAA,AAAAAAAAA,AADAAADAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AADAAADAA,AAAAAAAAA,AAAAAAAAA",
+      "Blocks": "         ,   FHF   ,  GQQQG  , FQQQQQF , HQQQQQH , FQQQQQF ,  GQQQG  ,   FHF   ,         ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAAAAAAA,AAAAAAAAA,AADAAADAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AADAAADAA,AAAAAAAAA,AAAAAAAAA",
+      "Blocks": "         ,   FHF   ,  GQQQG  , FQQQQQF , HQQQQQH , FQQQQQF ,  GQQQG  ,   FHF   ,         ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAA,AAAAAAAAA,AADAAADAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AADAAADAA,AAAAAAAAA,AAAAAAAAA",
+      "Blocks": "         ,  JFHFJ  , JGQQQGJ , FQQQQQF , HQQQQQH , FQQQQQF , JGQQQGJ ,  JFHFJ  ,         ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAMBMAAA,AAHAAAHAA,AGDAAADGA,NAAAAAAAO,BAAAAAAAB,NAAAAAAAO,AGDAAADGA,AAHAAAHAA,AAALBLAAA",
+      "Blocks": "   DKD   ,  AEEEA  , AGQQQGA ,DEQQQQQED,KEQQQQQEK,DEQQQQQED, AGQQQGA ,  AEEEA  ,   DKD   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAAAAAA,AAAAAAAAA,AADAAADAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AADAAADAA,AAAAAAAAA,AAAAAAAAA",
+      "Blocks": "   J J   ,  IFHF   , IGQQQG  ,JFQQQQQFJ, HQQQQQH ,JFQQQQQFJ, IGQQQGI ,  IFHFI  ,   J J   ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAAAAAA,AAAAAAAAA,AADAAADAA,AAAAAAAAA,AAAAAAAAA,AAAAAAAAA,AADAAADAA,AAAAAAAAA,AAAAAAAAA",
+      "Blocks": "   J J   ,  IFHFI  , IGQQQGI ,JFQQQQQFJ, HQQQQQH ,JFQQQQQFJ, IGQQQGI ,  IFHFI  ,   J J   ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAMBMAAA,AAHAAAHAA,AGDDDDDGA,NADDDDDAO,BADDDDDAB,NADDDDDAO,AGDDDDDGA,AAHAAAHAA,AAALBLAAA",
+      "Blocks": "   DKD   ,  AEEEA  , AGNNNGA ,DENNNNNED,KENNNNNEK,DENNNNNED, AGNNNGA ,  AEEEA  ,   DKD   ",
+      "Trait": "Standard"
+    }
+  ]
+}

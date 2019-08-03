@@ -117,6 +117,14 @@ public class DesignHelper {
 			designProvider.cacheRoom(room, new RoomDesignMapping(wallA, wallB, corner));
 		}
 
+		// Open Arcs layer - try to have similar walls
+		if (layer == DesignLayer.Open) {
+			if (wallA.fitsHorizontally(length - 2))
+				wallB = wallA;
+			else if (wallB.fitsHorizontally(width - 2))
+				wallA = wallB;
+		}
+
 		BlockPos cornerZ = start.add(0, 0, length - 1);
 		BlockPos cornerXZ = start.add(width - 1, 0, length - 1);
 		BlockPos cornerX = start.add(width - 1, 0, 0);

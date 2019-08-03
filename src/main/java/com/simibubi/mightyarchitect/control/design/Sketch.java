@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import com.google.common.collect.ImmutableList;
 import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.control.design.partials.Design.DesignInstance;
 import com.simibubi.mightyarchitect.control.palette.BlockOrientation;
@@ -48,36 +49,46 @@ public class Sketch {
 
 	private void clean(Map<BlockPos, PaletteBlockInfo> blocks, Map<BlockPos, PaletteBlockInfo> blocks2) {
 		Set<BlockPos> toRemove = new HashSet<>();
-		
-		for (BlockPos pos : blocks.keySet()) {
-			if (blocks.get(pos).palette == Palette.CLEAR) {
-				toRemove.add(pos);
-			} else {
-				for (Room room : interior) {
-					if (room.contains(pos))
-						toRemove.add(pos);
-				}
-			}
-		}
-		for (BlockPos pos : blocks2.keySet()) {
-			if (blocks2.get(pos).palette == Palette.CLEAR) {
-				toRemove.add(pos);
-			} else {
-				for (Room room : interior) {
-					if (room.contains(pos))
-						toRemove.add(pos);
+
+		for (Map<BlockPos, PaletteBlockInfo> paletteLayer : ImmutableList.of(blocks, blocks2)) {
+			for (BlockPos pos : paletteLayer.keySet()) {
+				
+				if (paletteLayer.get(pos).palette == Palette.CLEAR) {
+					toRemove.add(pos);
+				} else {
+					for (Room room : interior) {
+						if (room.designLayer.isExterior())
+							continue;
+						if (room.contains(pos))
+							toRemove.add(pos);
+					}
 				}
 			}
 		}
 		
-		
-		toRemove.forEach(e -> blocks.remove(e));
-		toRemove.forEach(e -> blocks2.remove(e));
-		toRemove.clear();
+		toRemove.forEach(e -> {
+			blocks.remove(e);
+			blocks2.remove(e);
+		});
 	}
 
 	private void addFloors(Map<BlockPos, PaletteBlockInfo> primary, Map<BlockPos, PaletteBlockInfo> secondary) {
 		for (Room cuboid : interior) {
+			
+			boolean trimAbove = false;
+			for (Room trim : interior) {
+				if (trimAbove)
+					continue;
+				if (trim.height > 1)
+					continue;
+				if (trim.y != cuboid.y + cuboid.height)
+					continue;
+				if (trim.x <= cuboid.x && trim.z <= cuboid.z && trim.x + trim.width >= cuboid.x + cuboid.width && trim.z + trim.length >= cuboid.z + cuboid.length)
+					trimAbove = true;				
+			}
+			if (trimAbove)
+				continue;
+			
 			List<Room> checked = new LinkedList<>();
 			
 			interior.forEach(other -> {

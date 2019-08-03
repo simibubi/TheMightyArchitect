@@ -1,0 +1,30 @@
+{
+  "Radius": 1,
+  "Size": {
+    "X": 5,
+    "Y": 4,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Facing": "ASASA,TAAAU,AAAAA,TAAAU,ARARA",
+      "Blocks": " DID ,DBBBD,IBQBI,DBBBD, DID ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,ADADA,AAAAA,ADADA,AAAAA",
+      "Blocks": "  I  , ABA ,IBQBI, ABA ,  I  ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "BMAMB,NAHAO,AGDGA,NAHAO,BLALB",
+      "Blocks": "KDIDK,DBABD,IANAI,DBABD,KDIDK",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AACAA,AAAAA,CAAAC,AAAAA,AACAA",
+      "Blocks": "  K  ,     ,K   K,     ,  K  ",
+      "Trait": "MaskAbove"
+    }
+  ]
+}

@@ -137,6 +137,20 @@ public class ArchitectMenu {
 				return true;
 			}
 			break;
+			
+		case Paused:
+			switch (c) {
+			case 'r':
+				ArchitectManager.enterPhase(ArchitectPhases.Composing);
+				return true;
+			case 'd':
+				ArchitectManager.unload();
+				ArchitectManager.openMenu();
+				return false;
+			case 'c':
+				return true;
+			}
+			break;
 
 		case ListForEdit:
 			switch (c) {
@@ -268,6 +282,13 @@ public class ArchitectMenu {
 			keybinds.put("O", "Open Theme Folder");
 			keybinds.lineBreak();
 			keybinds.put("C", "Cancel");
+			break;
+			
+		case Paused:
+			keybinds.put("R", "Recover");
+			keybinds.put("D", "Discard");
+			keybinds.lineBreak();
+			keybinds.put("C", "Close");
 			break;
 			
 		case ListForEdit:

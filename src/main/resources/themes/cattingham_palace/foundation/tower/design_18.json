@@ -1,0 +1,20 @@
+{
+  "Radius": 4,
+  "Size": {
+    "X": 11,
+    "Y": 2,
+    "Z": 11
+  },
+  "Layers": [
+    {
+      "Facing": "AAAASDSAAAA,ADSSDDDSSDA,ATDDDDDDDUA,ATDDDDDDDUA,TDDDDDDDDDU,DDDDDDDDDDD,TDDDDDDDDDU,ATDDDDDDDUA,ATDDDDDDDUA,ADRRDDDRRDA,AAAARDRAAAA",
+      "Blocks": "    DAD    , ADDAAADDA , DAANNNAAD , DANNNNNAD ,DANNNNNNNAD,AANNNNNNNAA,DANNNNNNNAD, DANNNNNAD , DAANNNAAD , ADDAAADDA ,    DAD    ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAACAAAAA,ACAAAAAAACA,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,CAAAAAAAAAC,AAAAAAAAAAA,AAAAAAAAAAA,AAAAAAAAAAA,ACAAAAAAACA,AAAAACAAAAA",
+      "Blocks": "     K     , K       K ,           ,           ,           ,K         K,           ,           ,           , K       K ,     K     ",
+      "Trait": "MaskAbove"
+    }
+  ]
+}

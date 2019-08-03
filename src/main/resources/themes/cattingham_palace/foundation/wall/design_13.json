@@ -1,0 +1,45 @@
+{
+  "Size": {
+    "X": 3,
+    "Y": 7,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Facing": "DDD,DAD",
+      "Blocks": "GGG,G G",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "DDD,AAA",
+      "Blocks": "GGG,I I",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "DDD,AAA",
+      "Blocks": "BBB,J J",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "DDD,AAA",
+      "Blocks": "BBB,   ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "DDD,AAA",
+      "Blocks": "BBB,   ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAA,BAB",
+      "Blocks": "AAA,K K",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "DDD,LLL",
+      "Blocks": "GGG,DDD",
+      "Trait": "Standard"
+    }
+  ]
+}

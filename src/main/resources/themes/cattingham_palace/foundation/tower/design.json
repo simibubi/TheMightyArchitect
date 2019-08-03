@@ -1,0 +1,35 @@
+{
+  "Radius": 1,
+  "Size": {
+    "X": 5,
+    "Y": 5,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAA,ADHDA,AGAGA,ADHDA,AAAAA",
+      "Blocks": " I I ,IGGGI, GQG ,IGGGI, I I ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": "     , BBB , BQB , BBB ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA,AAAAA,AAAAA,AAAAA",
+      "Blocks": "     , BIB , IQI , BIB ,     ",
+      "Trait": "CloneThrice"
+    },
+    {
+      "Facing": "AABAA,AAAAA,BAAAB,AAAAA,AABAA",
+      "Blocks": " JKJ ,JBBBJ,KBQBK,JBBBJ, JKJ ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AMGMA,NAAAO,HAHAH,NAAAO,ALGLA",
+      "Blocks": " DAD ,DBBBD,ABNBA,DBBBD, DAD ",
+      "Trait": "Standard"
+    }
+  ]
+}

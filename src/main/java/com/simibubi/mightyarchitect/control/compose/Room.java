@@ -12,6 +12,7 @@ public class Room extends Cuboid {
 	public DesignType roofType;
 	public char styleGroup;
 	public boolean secondaryPalette;
+	public boolean quadFacadeRoof;
 	public int layer;
 	
 	public Room(BlockPos origin, BlockPos size) {
@@ -23,6 +24,7 @@ public class Room extends Cuboid {
 		styleGroup = 'A';
 		designLayer = DesignLayer.Regular;
 		roofType = DesignType.ROOF;
+		quadFacadeRoof = Math.abs(width) == Math.abs(length);
 		secondaryPalette = false;
 	}
 	
@@ -30,6 +32,7 @@ public class Room extends Cuboid {
 		Room clone = new Room(getOrigin(), getSize());
 		clone.styleGroup = styleGroup;
 		clone.roofType = roofType;
+		clone.quadFacadeRoof = quadFacadeRoof;
 		clone.secondaryPalette = secondaryPalette;
 		return clone;
 	}
@@ -40,6 +43,7 @@ public class Room extends Cuboid {
 		clone.z += 1;
 		clone.width -= 2;
 		clone.length -= 2;
+		clone.designLayer = designLayer;
 		clone.secondaryPalette = secondaryPalette;
 		return clone;
 	}
@@ -47,7 +51,9 @@ public class Room extends Cuboid {
 	public Room stack() {
 		Room clone = clone();
 		clone.y += height;
+		clone.height = Math.max(4, height);
 		this.roofType = DesignType.NONE;
+		this.quadFacadeRoof = false;
 		return clone;
 	}
 

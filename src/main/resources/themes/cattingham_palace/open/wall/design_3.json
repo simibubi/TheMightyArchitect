@@ -1,0 +1,65 @@
+{
+  "Size": {
+    "X": 5,
+    "Y": 11,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Facing": "DSSSD,AAAAA",
+      "Blocks": "ALLLA,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA",
+      "Blocks": "I   I,     ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAA,AAAAA",
+      "Blocks": "I   I,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA",
+      "Blocks": "I   I,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA",
+      "Blocks": "I   I,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA",
+      "Blocks": "I   I,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA",
+      "Blocks": "B   B,     ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAA,AAAAA",
+      "Blocks": "I   I,J   J",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AAAAA",
+      "Blocks": "B   B,J   J",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "DOAND,GBABG",
+      "Blocks": "AD DA,AK KA",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,AACAA",
+      "Blocks": "     ,  K  ",
+      "Trait": "MaskAbove"
+    }
+  ]
+}

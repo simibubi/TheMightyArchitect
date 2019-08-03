@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 import org.apache.commons.io.IOUtils;
+import org.lwjgl.glfw.GLFW;
 
 import com.simibubi.mightyarchitect.AllPackets;
 import com.simibubi.mightyarchitect.TheMightyArchitect;
@@ -65,7 +66,7 @@ public class ArchitectManager {
 	}
 
 	public static void compose(DesignTheme theme) {
-		if (getModel().getGroundPlan() == null) {
+		if (getModel().isEmpty()) {
 			getModel().setGroundPlan(new GroundPlan(theme));
 		}
 		enterPhase(ArchitectPhases.Composing);
@@ -76,7 +77,7 @@ public class ArchitectManager {
 	}
 
 	public static void unload() {
-		if (model.getGroundPlan() != null)
+		if (!model.isEmpty())
 			model.getTheme().getDesignPicker().reset();
 
 		enterPhase(ArchitectPhases.Empty);
@@ -254,9 +255,13 @@ public class ArchitectManager {
 
 	@SubscribeEvent
 	public static void onClientTick(ClientTickEvent event) {
-		if (Minecraft.getInstance().world != null) {
-			phase.getPhaseHandler().update();
+		if (Minecraft.getInstance().world == null) {
+			if (!inPhase(ArchitectPhases.Paused) && !model.isEmpty())
+				enterPhase(ArchitectPhases.Paused);
+			return;
 		}
+		
+		phase.getPhaseHandler().update();
 		menu.onClientTick();
 
 	}
@@ -289,21 +294,31 @@ public class ArchitectManager {
 
 	@SubscribeEvent
 	public static void onKeyTyped(KeyInputEvent event) {
+		if (event.getKey() == GLFW.GLFW_KEY_ESCAPE && event.getAction() == Keyboard.PRESS) {
+			if (inPhase(ArchitectPhases.Composing) || inPhase(ArchitectPhases.Previewing)) {
+				enterPhase(ArchitectPhases.Paused);
+				menu.setVisible(false);
+			}
+			return;
+		}
 		if (Minecraft.getInstance().currentScreen != null)
 			return;
 		if (TheMightyArchitect.COMPOSE.isPressed()) {
-			if (menu.isFocused())
-				return;
-
-			menu.updateContents();
-			ScreenHelper.open(menu);
-			menu.setFocused(true);
-			menu.setVisible(true);
+			if (!menu.isFocused())
+				openMenu();
 			return;
 		}
 
 		boolean released = event.getAction() == Keyboard.RELEASE;
 		phase.getPhaseHandler().onKey(event.getKey(), released);
+	}
+
+	public static void openMenu() {
+		menu.updateContents();
+		ScreenHelper.open(menu);
+		menu.setFocused(true);
+		menu.setVisible(true);
+		return;
 	}
 
 	@SubscribeEvent

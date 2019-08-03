@@ -1,0 +1,55 @@
+{
+  "Radius": 1,
+  "Size": {
+    "X": 5,
+    "Y": 9,
+    "Z": 5
+  },
+  "Layers": [
+    {
+      "Facing": "AAAAA,ADHDA,AGAGA,ADHDA,AAAAA",
+      "Blocks": "     , GGG , GQG , GGG ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,ADADA,AAAAA,ADADA,AAAAA",
+      "Blocks": "     , GHG , HQH , GHG ,     ",
+      "Trait": "CloneOnce"
+    },
+    {
+      "Facing": "AAAAA,ADADA,AAAAA,ADADA,AAAAA",
+      "Blocks": "     , GHG , HQH , GHG ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,ADADA,AAAAA,ADADA,AAAAA",
+      "Blocks": "     , GHG , HQH , GHG ,     ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAA,ADHDA,AGAGA,ADHDA,AAAAA",
+      "Blocks": "     , GGG , GQG , GGG ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAAAA,ADADA,AAAAA,ADADA,AAAAA",
+      "Blocks": "     , GHG , HQH , GHG ,     ",
+      "Trait": "Optional"
+    },
+    {
+      "Facing": "AAAAA,ADADA,AAAAA,ADADA,AAAAA",
+      "Blocks": "     , GHG , HQH , GHG ,     ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AMAMA,NDHDO,AGAGA,NDHDO,ALALA",
+      "Blocks": " L L ,LGGGL, GQG ,LGGGL, L L ",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AMGMA,NDDDO,HDDDH,NDDDO,ALGLA",
+      "Blocks": " DAD ,DAAAD,AANAA,DAAAD, DAD ",
+      "Trait": "Standard"
+    }
+  ]
+}

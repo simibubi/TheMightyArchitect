@@ -1,0 +1,25 @@
+{
+  "Size": {
+    "X": 3,
+    "Y": 3,
+    "Z": 2
+  },
+  "ExpandBehaviour": "MergedRepeat",
+  "Layers": [
+    {
+      "Facing": "AAA,AAA",
+      "Blocks": "   ,J J",
+      "Trait": "MaskBelow"
+    },
+    {
+      "Facing": "DDD,LBL",
+      "Blocks": "GGG,DKD",
+      "Trait": "Standard"
+    },
+    {
+      "Facing": "AAA,AAA",
+      "Blocks": "   ,   ",
+      "Trait": "MaskAbove"
+    }
+  ]
+}

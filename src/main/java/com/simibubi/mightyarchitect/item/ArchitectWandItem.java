@@ -40,7 +40,7 @@ public class ArchitectWandItem extends Item {
 
 		if (player.isSneaking()) {
 			DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
-				resetVisualization();
+				openGui();
 			});
 			return ActionResultType.SUCCESS;
 		}
@@ -75,7 +75,7 @@ public class ArchitectWandItem extends Item {
 		} else {
 			if (!ArchitectManager.inPhase(ArchitectPhases.EditingThemes))
 				return;
-			DistExecutor.runWhenOn(Dist.CLIENT, () -> this::openGui);
+			DistExecutor.runWhenOn(Dist.CLIENT, () -> this::resetVisualization);
 		}
 	}
 
@@ -96,15 +96,17 @@ public class ArchitectWandItem extends Item {
 			return;
 
 		if (playerIn.isSneaking()) {
-			resetVisualization();
+			openGui();
 
 		} else {
-			openGui();
+			resetVisualization();
 		}
 	}
 	
 	@OnlyIn(value = Dist.CLIENT)
 	private void openGui() {
+		if (!ArchitectManager.inPhase(ArchitectPhases.EditingThemes))
+			return;
 		ScreenHelper.open(new DesignExporterScreen());
 	}
 

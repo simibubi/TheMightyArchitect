@@ -16,6 +16,8 @@ import net.minecraft.nbt.StringNBT;
 
 public class DesignTheme {
 
+	private static final List<Integer> defaultHeightSequence = ImmutableList.of(2, 4);
+
 	private String filePath;
 	private String displayName;
 	private String designer;
@@ -25,6 +27,7 @@ public class DesignTheme {
 	private PaletteDefinition defaultSecondaryPalette;
 	private ThemeStatistics statistics;
 	private int maxFloorHeight;
+	private List<Integer> heightSequence;
 
 	private List<DesignLayer> roomLayers;
 	private List<DesignLayer> layers;
@@ -38,11 +41,17 @@ public class DesignTheme {
 		this.designPicker.setTheme(this);
 		imported = false;
 		maxFloorHeight = 10;
+		heightSequence = defaultHeightSequence;
 	}
 
 	public DesignTheme withLayers(DesignLayer... designLayers) {
 		layers = ImmutableList.copyOf(designLayers);
 		updateRoomLayers();
+		return this;
+	}
+
+	public DesignTheme withHeightSequence(List<Integer> seq) {
+		this.heightSequence = seq;
 		return this;
 	}
 
@@ -67,6 +76,10 @@ public class DesignTheme {
 
 	public String getDisplayName() {
 		return displayName;
+	}
+
+	public int getDefaultHeightForFloor(int floor) {
+		return heightSequence.size() <= floor ? -1 : heightSequence.get(floor);
 	}
 
 	public DesignPicker getDesignPicker() {
@@ -187,11 +200,11 @@ public class DesignTheme {
 	public void setDefaultPalette(PaletteDefinition defaultPalette) {
 		this.defaultPalette = defaultPalette;
 	}
-	
+
 	public PaletteDefinition getDefaultSecondaryPalette() {
 		return defaultSecondaryPalette;
 	}
-	
+
 	public void setDefaultSecondaryPalette(PaletteDefinition defaultSecondaryPalette) {
 		this.defaultSecondaryPalette = defaultSecondaryPalette;
 	}

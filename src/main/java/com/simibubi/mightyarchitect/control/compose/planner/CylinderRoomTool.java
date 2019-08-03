@@ -82,8 +82,6 @@ public class CylinderRoomTool extends RoomTool {
 		
 		ThemeStatistics stats = theme.getStatistics();
 		boolean hasFoundation = theme.getLayers().contains(DesignLayer.Foundation);
-		
-		room.height = hasFoundation? 2 : Math.min(4, theme.getMaxFloorHeight());
 		room.designLayer = hasFoundation ? DesignLayer.Foundation : DesignLayer.Regular;
 		
 		int radius = (room.width - 1) / 2;
@@ -108,6 +106,9 @@ public class CylinderRoomTool extends RoomTool {
 		}
 				
 		lastAddedStack = new CylinderStack(room);
+		if (!adjustHeightForIntersection(groundPlan, room))
+			room.height = theme.getDefaultHeightForFloor(0);
+		
 		groundPlan.addStack(lastAddedStack);
 		firstPosition = null;
 		return "New Tower has been added";

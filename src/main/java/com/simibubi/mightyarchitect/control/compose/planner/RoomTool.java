@@ -1,5 +1,6 @@
 package com.simibubi.mightyarchitect.control.compose.planner;
 
+import org.apache.commons.lang3.mutable.MutableObject;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
@@ -33,6 +34,10 @@ public class RoomTool extends GroundPlanningToolBase {
 		firstPosition = null;
 		toolModeNoCtrl = "3-Grid";
 		toolModeCtrl = "5-Grid";
+		
+		// Deleted using stack tool
+		if (lastAddedStack != null && lastAddedStack.floors() == 0)
+			lastAddedStack = null;
 	}
 
 	@Override
@@ -59,8 +64,6 @@ public class RoomTool extends GroundPlanningToolBase {
 		DesignTheme theme = groundPlan.theme;
 		ThemeStatistics stats = theme.getStatistics();
 		boolean hasFoundation = theme.getLayers().contains(DesignLayer.Foundation);
-
-		room.height = hasFoundation ? 2 : Math.min(4, theme.getMaxFloorHeight());
 		room.designLayer = hasFoundation ? DesignLayer.Foundation : DesignLayer.Regular;
 
 		int facadeWidth = Math.min(room.width, room.length);
@@ -85,9 +88,52 @@ public class RoomTool extends GroundPlanningToolBase {
 		}
 
 		lastAddedStack = new Stack(room);
+		if (!adjustHeightForIntersection(groundPlan, room))
+			room.height = theme.getDefaultHeightForFloor(0);
+
 		groundPlan.addStack(lastAddedStack);
 		firstPosition = null;
 		return "New Room has been added";
+	}
+
+	protected boolean adjustHeightForIntersection(GroundPlan groundPlan, Room room) {
+		final MutableObject<Room> biggestRoom = new MutableObject<>();
+		if (room.height == 0)
+			room.height = 1;
+
+		groundPlan.forEachRoom(r -> {
+			if (r.intersects(room) && !(r.y + r.height <= room.y || room.y + room.height <= r.y)
+					&& (biggestRoom.getValue() == null
+							|| biggestRoom.getValue().width * biggestRoom.getValue().length < r.width * r.length)) {
+				biggestRoom.setValue(r);
+			}
+		});
+
+		if (biggestRoom.getValue() != null) {
+			room.height = (biggestRoom.getValue().y + biggestRoom.getValue().height) - room.y;
+			if (room.height > groundPlan.theme.getMaxFloorHeight())
+				room.height -= biggestRoom.getValue().height;
+			return true;
+		}
+
+		return false;
+	}
+
+	public static void increaseMatchingOthers(GroundPlan groundPlan, Stack stack) {
+		stack.increase();
+		Room added = stack.highest();
+		final MutableObject<Room> biggestRoom = new MutableObject<>();
+		groundPlan.forEachRoom(r -> {
+			if (r == added)
+				return;
+			if (r.intersects(added) && r.y <= added.y && r.y + r.height > added.y && (biggestRoom.getValue() == null
+					|| biggestRoom.getValue().width * biggestRoom.getValue().length < r.width * r.length)) {
+				biggestRoom.setValue(r);
+			}
+		});
+		if (biggestRoom.getValue() != null) {
+			added.height = (biggestRoom.getValue().y + biggestRoom.getValue().height) - added.y;
+		}
 	}
 
 	@Override
@@ -96,7 +142,7 @@ public class RoomTool extends GroundPlanningToolBase {
 			return false;
 
 		if (scroll > 0) {
-			lastAddedStack.increase();
+			increaseMatchingOthers(ArchitectManager.getModel().getGroundPlan(), lastAddedStack);
 		} else {
 			lastAddedStack.decrease();
 			if (lastAddedStack.floors() == 0) {
@@ -122,21 +168,21 @@ public class RoomTool extends GroundPlanningToolBase {
 
 		int xSize = size.getX();
 		int zSize = size.getZ();
-		
+
 		if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL)) {
 			// 5-Grid
-			int xr = (xSize + ((xSize > 0)? 2 : -2)) % 4;
+			int xr = (xSize + ((xSize > 0) ? 2 : -2)) % 4;
 			if (xr < 0)
 				xr += 4;
-			else 
+			else
 				xr = 4 - xr;
 			if (xr != 0) {
 				selectedPosition = selectedPosition.east(xSize > 0 ? xr : -xr);
 			}
-			int zr = (zSize + ((zSize > 0)? 2 : -2)) % 4;
+			int zr = (zSize + ((zSize > 0) ? 2 : -2)) % 4;
 			if (zr < 0)
 				zr += 4;
-			else 
+			else
 				zr = 4 - zr;
 			if (zr != 0) {
 				selectedPosition = selectedPosition.south(zSize > 0 ? zr : -zr);
