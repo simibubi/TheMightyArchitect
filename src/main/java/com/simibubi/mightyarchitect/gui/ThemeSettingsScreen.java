@@ -9,11 +9,11 @@ import com.simibubi.mightyarchitect.control.design.DesignLayer;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.design.ThemeStorage;
-import com.simibubi.mightyarchitect.gui.widgets.Label;
+import com.simibubi.mightyarchitect.gui.widgets.IconButton;
 import com.simibubi.mightyarchitect.gui.widgets.Indicator;
 import com.simibubi.mightyarchitect.gui.widgets.Indicator.State;
+import com.simibubi.mightyarchitect.gui.widgets.Label;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollInput;
-import com.simibubi.mightyarchitect.gui.widgets.IconButton;
 
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.util.text.StringTextComponent;

@@ -10,8 +10,8 @@ import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.phase.export.PhaseEditTheme;
 import com.simibubi.mightyarchitect.gui.widgets.Label;
-import com.simibubi.mightyarchitect.gui.widgets.SelectionScrollInput;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollInput;
+import com.simibubi.mightyarchitect.gui.widgets.SelectionScrollInput;
 
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.AtlasTexture;

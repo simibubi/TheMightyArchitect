@@ -12,12 +12,11 @@ import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.ThemeStorage;
 import com.simibubi.mightyarchitect.control.design.ThemeValidator;
 import com.simibubi.mightyarchitect.control.phase.ArchitectPhases;
+import com.simibubi.mightyarchitect.gui.ScreenHelper;
+import com.simibubi.mightyarchitect.gui.TextInputPromptScreen;
 import com.simibubi.mightyarchitect.gui.ThemeSettingsScreen;
 
 import net.minecraft.util.Util;
-
-import com.simibubi.mightyarchitect.gui.ScreenHelper;
-import com.simibubi.mightyarchitect.gui.TextInputPromptScreen;
 
 public class ArchitectMenu {
 

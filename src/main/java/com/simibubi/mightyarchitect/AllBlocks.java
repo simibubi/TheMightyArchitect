@@ -1,8 +1,8 @@
 package com.simibubi.mightyarchitect;
 
 import com.simibubi.mightyarchitect.block.DesignAnchorBlock;
-import com.simibubi.mightyarchitect.block.SliceMarkerBlock;
 import com.simibubi.mightyarchitect.block.IJustForRendering;
+import com.simibubi.mightyarchitect.block.SliceMarkerBlock;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
