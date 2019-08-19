@@ -47,10 +47,10 @@ public class ToolSelectionScreen extends Screen {
 		FontRenderer font = minecraft.fontRenderer;
 
 		int x = (mainWindow.getScaledWidth() - w) / 2 + 15;
-		int y = mainWindow.getScaledHeight() - h - 75;
+		int y = 15;
 
 		GlStateManager.pushMatrix();
-		GlStateManager.translatef(0, -yOffset, focused? 100 : 0);
+		GlStateManager.translatef(0, 0, focused? 100 : 0);
 
 		ScreenResources gray = ScreenResources.GRAY;
 		GlStateManager.enableBlend();
@@ -118,6 +118,8 @@ public class ToolSelectionScreen extends Screen {
 	}
 
 	public void renderPassive(float partialTicks) {
+		if (Minecraft.getInstance().currentScreen != null)
+			return;
 		draw(partialTicks);
 	}
 

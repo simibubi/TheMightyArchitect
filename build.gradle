@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = 'mc1.14.4_v0.4.5'
+version = 'mc1.14.4_v0.4.6'
 group = 'com.simibubi.mightyarchitect' 
 archivesBaseName = 'mightyarchitect'
 
@@ -58,7 +58,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.0.45'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.0.49'
 }
 
 jar {

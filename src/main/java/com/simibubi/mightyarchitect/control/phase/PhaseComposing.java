@@ -11,7 +11,8 @@ import com.simibubi.mightyarchitect.control.helpful.Shaders;
 import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
 import com.simibubi.mightyarchitect.gui.ToolSelectionScreen;
 
-import net.minecraftforge.client.event.RenderGameOverlayEvent.Post;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 
 public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 
@@ -27,10 +28,10 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 		activeTool = Tools.Room;
 		activeTool.getTool().init();
 		List<Tools> groundPlanningTools = Tools.getGroundPlanningTools();
-		
+
 		if (!getModel().getTheme().getStatistics().hasTowers)
 			groundPlanningTools.remove(Tools.Cylinder);
-		
+
 		toolSelection = new ToolSelectionScreen(groundPlanningTools, callback);
 
 		ShaderManager.setActiveShader(Shaders.Blueprint);
@@ -96,7 +97,10 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 	}
 
 	@Override
-	public void renderGameOverlay(Post event) {
+	public void renderGameOverlay(Pre event) {
+		if (Minecraft.getInstance().currentScreen != null)
+			return;
+		
 		toolSelection.renderPassive(event.getPartialTicks());
 		activeTool.getTool().renderOverlay();
 	}
@@ -104,8 +108,7 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 	@Override
 	public List<String> getToolTip() {
 		return ImmutableList.of(
-				"Draw the layout of your build, adding rooms, towers and other. Modify their position, size and roof using the Tools.",
-				"Use [" + TheMightyArchitect.TOOL_MENU.getLocalizedName().toUpperCase() + "]+Scroll to switch tools.");
+				"Draw the layout of your build, adding rooms, towers and other. Modify their position, size and roof using the Tools.");
 	}
 
 }

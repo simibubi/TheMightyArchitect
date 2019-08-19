@@ -330,8 +330,8 @@ public class ArchitectManager {
 	}
 
 	@SubscribeEvent
-	public static void onDrawGameOverlay(RenderGameOverlayEvent.Post event) {
-		if (event.getType() != ElementType.HOTBAR)
+	public static void onDrawGameOverlay(RenderGameOverlayEvent.Pre event) {
+		if (event.getType() != ElementType.ALL)
 			return;
 
 		IArchitectPhase phaseHandler = phase.getPhaseHandler();

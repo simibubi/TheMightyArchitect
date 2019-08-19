@@ -11,7 +11,7 @@ import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
 import com.simibubi.mightyarchitect.gui.ToolSelectionScreen;
 
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.Post;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 public class PhasePreviewing extends PhaseBase implements IRenderGameOverlay {
 
@@ -94,7 +94,7 @@ public class PhasePreviewing extends PhaseBase implements IRenderGameOverlay {
 	}
 
 	@Override
-	public void renderGameOverlay(Post event) {
+	public void renderGameOverlay(RenderGameOverlayEvent.Pre event) {
 		toolSelection.renderPassive(event.getPartialTicks());
 		activeTool.getTool().renderOverlay();
 	}

@@ -4,6 +4,6 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 public interface IRenderGameOverlay {
 
-	public void renderGameOverlay(RenderGameOverlayEvent.Post event);
+	public void renderGameOverlay(RenderGameOverlayEvent.Pre event);
 	
 }

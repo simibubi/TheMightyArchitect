@@ -108,7 +108,7 @@ public class ArchitectMenuScreen extends Screen {
 	public boolean charTyped(char p_charTyped_1_, int p_charTyped_2_) {
 		boolean hideOnClose = ArchitectManager.inPhase(ArchitectPhases.Empty)
 				|| ArchitectManager.inPhase(ArchitectPhases.Paused);
-		
+
 		if (ArchitectMenu.handleMenuInput(p_charTyped_1_)) {
 			if (ArchitectManager.inPhase(ArchitectPhases.Paused))
 				setVisible(false);
@@ -127,12 +127,25 @@ public class ArchitectMenuScreen extends Screen {
 
 	private void draw(float partialTicks) {
 		MainWindow mainWindow = Minecraft.getInstance().mainWindow;
-
 		int x = mainWindow.getScaledWidth() - menuWidth - 10;
 		int y = mainWindow.getScaledHeight() - menuHeight;
 
+		int mouseX = (int) (Minecraft.getInstance().mouseHelper.getMouseX() / mainWindow.getGuiScaleFactor());
+		int mouseY = (int) (Minecraft.getInstance().mouseHelper.getMouseY() / mainWindow.getGuiScaleFactor());
+
+		boolean sideways = false;
+		if ((mainWindow.getScaledWidth() - 182) / 2 < menuWidth + 20) {
+			sideways = true;
+			y -= 24;
+		}
+
 		GlStateManager.pushMatrix();
-		GlStateManager.translatef(0, yShift(partialTicks), 0);
+		float shift = yShift(partialTicks);
+		float sidewaysShift = shift * ((float) menuWidth / (float) menuHeight) + (!focused ? 40 + menuHeight / 4f : 0)
+				+ 8;
+		GlStateManager.translatef(sideways ? sidewaysShift : 0, sideways ? 0 : shift, 0);
+		mouseX -= sideways ? sidewaysShift : 0;
+		mouseY -= sideways ? 0 : shift;
 
 		ScreenResources gray = ScreenResources.GRAY;
 		GlStateManager.enableBlend();
@@ -146,13 +159,30 @@ public class ArchitectMenuScreen extends Screen {
 		int xPos = x + 4;
 
 		FontRenderer font = Minecraft.getInstance().fontRenderer;
-		if (!focused)
-			font.drawStringWithShadow("Press " + TheMightyArchitect.COMPOSE.getLocalizedName().toUpperCase() + " to focus", xPos,
-					yPos - 14, 0xEEEEEE);
-		else
-			font.drawStringWithShadow("Press " + TheMightyArchitect.COMPOSE.getLocalizedName().toUpperCase() + " to close", xPos,
+		if (!focused) {
+			if (sideways) {
+				if (visible) {
+					String string = "Press " + TheMightyArchitect.COMPOSE.getLocalizedName().toUpperCase()
+							+ " for Menu";
+					font.drawStringWithShadow(string,
+							mainWindow.getScaledWidth() - font.getStringWidth(string) - 15 - sidewaysShift, yPos - 14,
+							0xEEEEEE);
+				}
+			} else {
+				font.drawStringWithShadow(
+						"Press " + TheMightyArchitect.COMPOSE.getLocalizedName().toUpperCase() + " to focus", xPos,
+						yPos - 14, 0xEEEEEE);
+			}
+		} else {
+			String string = "Press " + TheMightyArchitect.COMPOSE.getLocalizedName().toUpperCase() + " to close";
+			font.drawStringWithShadow(string,
+					sideways ? Math.min(xPos,
+							mainWindow.getScaledWidth() - font.getStringWidth(string) - 15 - sidewaysShift) : xPos,
 					yPos - 14, 0xDDDDDD);
+		}
 		font.drawStringWithShadow(title, xPos, yPos, 0xEEEEEE);
+
+		boolean hoveredHorizontally = x <= mouseX && mouseX <= x + menuWidth && focused;
 
 		yPos += 4;
 		for (String key : keybinds.getKeys()) {
@@ -162,8 +192,9 @@ public class ArchitectMenuScreen extends Screen {
 			}
 
 			yPos += font.FONT_HEIGHT;
-			font.drawStringWithShadow("[" + key + "] " + keybinds.get(key), xPos, yPos, 0xCCDDFF);
-			font.drawStringWithShadow(">", xPos - 12, yPos, 0xCCDDFF);
+			int color = hoveredHorizontally && yPos < mouseY && mouseY <= yPos + font.FONT_HEIGHT ? 0xFFFFFF : 0xCCDDFF;
+			font.drawStringWithShadow("[" + key + "] " + keybinds.get(key), xPos, yPos, color);
+			font.drawStringWithShadow(">", xPos - 12, yPos, color);
 		}
 
 		yPos += 4;
@@ -175,6 +206,44 @@ public class ArchitectMenuScreen extends Screen {
 		}
 
 		GlStateManager.popMatrix();
+	}
+
+	@Override
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		if (button != 0 || !visible || !focused)
+			return super.mouseClicked(mouseX, mouseY, button);
+
+		MainWindow mainWindow = Minecraft.getInstance().mainWindow;
+		int x = mainWindow.getScaledWidth() - menuWidth - 10;
+		int y = mainWindow.getScaledHeight() - menuHeight;
+
+		boolean sideways = false;
+		if ((mainWindow.getScaledWidth() - 182) / 2 < menuWidth + 20) {
+			sideways = true;
+			mouseY += 24;
+		}
+
+		float shift = yShift(0);
+		mouseX -= sideways ? shift * 2 : 0;
+		mouseY -= sideways ? 0 : shift;
+
+		boolean hoveredHorizontally = x <= mouseX && mouseX <= x + menuWidth;
+
+		int yPos = y + 4;
+		yPos += 4;
+		for (String key : keybinds.getKeys()) {
+			if (key.isEmpty()) {
+				yPos += font.FONT_HEIGHT / 2;
+				continue;
+			}
+
+			yPos += font.FONT_HEIGHT;
+			if (hoveredHorizontally && yPos < mouseY && mouseY <= yPos + font.FONT_HEIGHT) {
+				charTyped(key.toLowerCase().charAt(0), GLFW.GLFW_PRESS);
+			}
+		}
+
+		return true;
 	}
 
 	@Override
