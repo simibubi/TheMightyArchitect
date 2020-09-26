@@ -39,9 +39,9 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
-import net.minecraftforge.client.event.GuiScreenEvent.MouseScrollEvent;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.client.event.InputEvent.MouseInputEvent;
+import net.minecraftforge.client.event.InputEvent.MouseScrollEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -267,9 +267,7 @@ public class ArchitectManager {
 	}
 
 	@SubscribeEvent
-	public static void onMouseScrolled(MouseScrollEvent.Post event) {
-		if (event.getGui() != null)
-			return;
+	public static void onMouseScrolled(MouseScrollEvent event) {
 		if (Minecraft.getInstance().currentScreen != null)
 			return;
 		if (phase.getPhaseHandler().onScroll((int) Math.signum(event.getScrollDelta())))

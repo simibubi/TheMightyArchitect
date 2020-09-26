@@ -54,7 +54,6 @@ public class TheMightyArchitect {
 			TOOL_MENU = new KeyBinding("Tool Menu (Hold)", Keyboard.LALT, NAME);
 			ClientRegistry.registerKeyBinding(COMPOSE);
 			ClientRegistry.registerKeyBinding(TOOL_MENU);
-			ScrollFixer.init();
 		});
 	}
 

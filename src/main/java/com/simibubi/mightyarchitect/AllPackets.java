@@ -1,5 +1,6 @@
 package com.simibubi.mightyarchitect;
 
+import com.google.common.base.Predicates;
 import com.simibubi.mightyarchitect.networking.InstantPrintPacket;
 import com.simibubi.mightyarchitect.networking.PlaceSignPacket;
 import com.simibubi.mightyarchitect.networking.SetHotbarItemPacket;
@@ -10,12 +11,13 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 public class AllPackets {
 
-	public static final SimpleChannel channel = NetworkRegistry.newSimpleChannel(
-			new ResourceLocation(TheMightyArchitect.ID, "simple_channel"), () -> "1", v -> v.equals("1"), v -> v.equals("1"));
+	public static SimpleChannel channel;
 
 	public static void registerPackets() {
-		int i = 0;
+		channel = NetworkRegistry.newSimpleChannel(new ResourceLocation(TheMightyArchitect.ID, "simple_channel"),
+				() -> "1", Predicates.alwaysTrue(), v -> v.equals("1"));
 
+		int i = 0;
 		channel.registerMessage(i++, InstantPrintPacket.class, InstantPrintPacket::toBytes, InstantPrintPacket::new,
 				InstantPrintPacket::handle);
 		channel.registerMessage(i++, PlaceSignPacket.class, PlaceSignPacket::toBytes, PlaceSignPacket::new,

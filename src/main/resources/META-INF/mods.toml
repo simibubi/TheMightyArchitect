@@ -4,7 +4,7 @@ loaderVersion="[28,)"
 
 [[mods]] 
 modId="mightyarchitect"
-version="0.4.6"
+version="0.5"
 displayName="The Mighty Architect" 
 #updateJSONURL=""
 authors="simibubi" 

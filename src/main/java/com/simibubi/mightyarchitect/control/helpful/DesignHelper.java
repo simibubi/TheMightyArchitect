@@ -83,11 +83,11 @@ public class DesignHelper {
 			corner = designs.corner;
 
 			// Size changed
-			if (!wallA.fitsHorizontally(width - 2) || !wallA.fitsVertically(height))
+			if (wallA == null || !wallA.fitsHorizontally(width - 2) || !wallA.fitsVertically(height))
 				wallA = null;
-			if (!wallB.fitsHorizontally(length - 2) || !wallB.fitsVertically(height))
+			if (wallB == null || !wallB.fitsHorizontally(length - 2) || !wallB.fitsVertically(height))
 				wallB = null;
-			if (!corner.fitsVertically(height))
+			if (corner == null || !corner.fitsVertically(height))
 				corner = null;
 
 		}
