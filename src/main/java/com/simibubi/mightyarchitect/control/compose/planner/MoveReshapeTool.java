@@ -1,10 +1,13 @@
 package com.simibubi.mightyarchitect.control.compose.planner;
 
+import java.util.List;
+
 import org.lwjgl.glfw.GLFW;
 
 import com.simibubi.mightyarchitect.control.compose.CylinderStack;
+import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.control.design.ThemeStatistics;
-import com.simibubi.mightyarchitect.control.helpful.Keyboard;
+import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
@@ -19,11 +22,25 @@ public class MoveReshapeTool extends AbstractRoomFaceSelectionTool {
 	}
 
 	@Override
+	protected boolean isRoomHighlighted(Room room) {
+		boolean isSelected = super.isRoomHighlighted(room);
+		if (isSelected)
+			return true;
+		if (selectedStack == null || selectedRoom == null)
+			return false;
+		List<Room> rooms = selectedStack.getRooms();
+		if (!rooms.contains(selectedRoom) || !rooms.contains(room))
+			return false;
+		return rooms.indexOf(selectedRoom) <= rooms.indexOf(room);
+	}
+
+	@Override
 	public boolean handleMouseWheel(int scroll) {
 		if (selectedRoom != null) {
 			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL)) {
 				// Resize
-				ThemeStatistics statistics = model.getTheme().getStatistics();
+				ThemeStatistics statistics = model.getTheme()
+					.getStatistics();
 				selectedStack.forRoomAndEachAbove(selectedRoom, room -> {
 					BlockPos diff = BlockPos.ZERO.offset(selectedFace, scroll);
 
@@ -44,7 +61,8 @@ public class MoveReshapeTool extends AbstractRoomFaceSelectionTool {
 						return;
 					}
 
-					int faceDirection = selectedFace.getAxisDirection().getOffset();
+					int faceDirection = selectedFace.getAxisDirection()
+						.getOffset();
 					int newWidth = room.width - 2 * diff.getX() * faceDirection;
 					int newLength = room.length - 2 * diff.getZ() * faceDirection;
 
@@ -58,10 +76,10 @@ public class MoveReshapeTool extends AbstractRoomFaceSelectionTool {
 					room.z += diff.getZ() * faceDirection;
 					room.length = newLength;
 				});
-				selectedStack.highest().roofType = statistics.fallbackRoof(selectedStack.highest(),
-						selectedStack instanceof CylinderStack);
+				selectedStack.highest().roofType =
+					statistics.fallbackRoof(selectedStack.highest(), selectedStack instanceof CylinderStack);
 				status("Size: " + TextFormatting.AQUA + selectedRoom.width + TextFormatting.WHITE + "x"
-						+ TextFormatting.AQUA + selectedRoom.length);
+					+ TextFormatting.AQUA + selectedRoom.length);
 			} else {
 				// Move
 				selectedStack.forRoomAndEachAbove(selectedRoom, room -> {
@@ -69,7 +87,7 @@ public class MoveReshapeTool extends AbstractRoomFaceSelectionTool {
 					room.move(-diff.getX(), 0, -diff.getZ());
 				});
 				status("Position: " + TextFormatting.AQUA + selectedRoom.x + TextFormatting.WHITE + ", "
-						+ TextFormatting.AQUA + selectedRoom.z);
+					+ TextFormatting.AQUA + selectedRoom.z);
 			}
 			return true;
 		}

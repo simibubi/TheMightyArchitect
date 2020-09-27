@@ -4,11 +4,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.TemplateBlockAccess;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.text.ITextComponent;
@@ -30,6 +32,7 @@ public class PrintingToMultiplayer extends PhaseBase {
 	@Override
 	public void whenEntered() {
 		remaining = new LinkedList<>(((TemplateBlockAccess) getModel().getMaterializedSketch()).getAllPositions());
+		remaining.sort((o1, o2) -> Integer.compare(o1.getY(), o2.getY()));
 		Minecraft.getInstance().player.sendChatMessage("/setblock checking permission for 'The Mighty Architect'.");
 		cooldown = 500;
 		approved = false;
@@ -55,7 +58,7 @@ public class PrintingToMultiplayer extends PhaseBase {
 
 				if (minecraft.world.getBlockState(pos) == state)
 					continue;
-				if (!minecraft.world.func_217350_a(state, pos, ISelectionContext.forEntity(minecraft.player)))
+				if (!minecraft.world.canPlace(state, pos, ISelectionContext.forEntity(minecraft.player)))
 					continue;
 
 				String blockstring = state.toString().replaceFirst("Block\\{", "").replaceFirst("\\}", "");
@@ -106,7 +109,7 @@ public class PrintingToMultiplayer extends PhaseBase {
 	}
 
 	@Override
-	public void render() {
+	public void render(MatrixStack ms, IRenderTypeBuffer buffer) {
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer.Builder;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -43,21 +44,21 @@ public class SliceMarkerBlock extends Block {
 	}
 
 	@Override
-	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn,
+	public ActionResultType onUse(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn,
 			BlockRayTraceResult hit) {
 		if (hit.getFace().getAxis() == Axis.Y)
-			return false;
+			return ActionResultType.PASS;
 		if (AllItems.ARCHITECT_WAND.typeOf(player.getHeldItem(handIn)))
-			return false;
+			return ActionResultType.PASS;
 		if (worldIn.isRemote)
-			return true;
+			return ActionResultType.SUCCESS;
 
 		DesignSliceTrait currentTrait = state.get(VARIANT);
 		DesignSliceTrait newTrait = currentTrait.cycle(player.isSneaking() ? -1 : 1);
 		worldIn.setBlockState(pos, state.with(VARIANT, newTrait));
 		player.sendStatusMessage(new StringTextComponent(newTrait.getDescription()), true);
 
-		return true;
+		return ActionResultType.SUCCESS;
 	}
 
 }

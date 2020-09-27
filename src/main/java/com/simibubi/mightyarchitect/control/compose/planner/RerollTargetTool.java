@@ -3,7 +3,7 @@ package com.simibubi.mightyarchitect.control.compose.planner;
 import org.lwjgl.glfw.GLFW;
 
 import com.simibubi.mightyarchitect.control.ArchitectManager;
-import com.simibubi.mightyarchitect.control.helpful.Keyboard;
+import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
 
 import net.minecraft.util.Direction;
 

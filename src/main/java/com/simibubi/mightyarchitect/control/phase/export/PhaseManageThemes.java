@@ -4,7 +4,10 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.simibubi.mightyarchitect.control.phase.PhaseBase;
+
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 
 public class PhaseManageThemes extends PhaseBase {
 
@@ -19,7 +22,7 @@ public class PhaseManageThemes extends PhaseBase {
 	}
 
 	@Override
-	public void render() {
+	public void render(MatrixStack ms, IRenderTypeBuffer buffer) {
 
 	}
 

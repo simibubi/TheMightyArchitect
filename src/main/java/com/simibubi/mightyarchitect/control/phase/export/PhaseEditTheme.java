@@ -1,29 +1,30 @@
 package com.simibubi.mightyarchitect.control.phase.export;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import org.lwjgl.opengl.GL11;
+import java.util.function.Function;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.simibubi.mightyarchitect.AllSpecialTextures;
+import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.compose.Cuboid;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.design.DesignType;
-import com.simibubi.mightyarchitect.control.helpful.BuildingHelper;
-import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
-import com.simibubi.mightyarchitect.control.helpful.TessellatorTextures;
 import com.simibubi.mightyarchitect.control.phase.PhaseBase;
+import com.simibubi.mightyarchitect.foundation.utility.BuildingHelper;
+import com.simibubi.mightyarchitect.foundation.utility.outliner.AABBOutline;
+import com.simibubi.mightyarchitect.foundation.utility.outliner.BlockClusterOutline;
+import com.simibubi.mightyarchitect.foundation.utility.outliner.Outline;
 
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
 public class PhaseEditTheme extends PhaseBase {
 
 	public static Cuboid selectedDesign;
-	public static Cuboid effectiveSelectedDesign;
+	public static Outline effectiveSelectedDesign;
 	public static int effectiveHeight;
 
 	public String frontText;
@@ -47,6 +48,7 @@ public class PhaseEditTheme extends PhaseBase {
 
 	@Override
 	public void update() {
+		tickOutlines();
 		if (lastType == DesignExporter.type)
 			return;
 
@@ -89,67 +91,37 @@ public class PhaseEditTheme extends PhaseBase {
 
 	}
 
-	@Override
-	public void render() {
+	static final Object effectiveDesignKey = new Object();
+	static final Object textKey1 = new Object();
+	static final Object textKey2 = new Object();
+	static final Object textKey3 = new Object();
+	static final Object textKey4 = new Object();
+
+	private void tickOutlines() {
 		if (selectedDesign == null)
 			return;
-		TessellatorHelper.prepareForDrawing();
-		TessellatorTextures.Selection.bind();
-		GlStateManager.enableAlphaTest();
-		GlStateManager.enableBlend();
-		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+
+		MightyClient.outliner.chaseAABB("editThemeSelection", selectedDesign.toAABB());
+
+		if (effectiveSelectedDesign != null)
+			MightyClient.outliner.show(effectiveDesignKey, effectiveSelectedDesign)
+				.withFaceTexture(AllSpecialTextures.HIGHLIGHT_CHECKERED)
+				.lineWidth(1 / 16f);
+
 		Cuboid selection = selectedDesign;
+		float hw = selection.width / 2f;
+		float hl = selection.length / 2f;
 
-		TessellatorHelper.walls(bufferBuilder, selection.getOrigin(), selection.getSize().down(selection.height - 1),
-				1 / 16f, false, true);
-		Tessellator.getInstance().draw();
-		
-		bufferBuilder.begin(3, DefaultVertexFormats.POSITION_COLOR);
-		GlStateManager.lineWidth(2.0F);
-        GlStateManager.disableTexture();
-        GlStateManager.depthMask(false);
-        WorldRenderer.drawBoundingBox(bufferBuilder, selection.x - 1/8f, selection.y + 1/16f, selection.z - 1/8f, selection.x + selection.width + 1/8f, selection.y + selection.height + 1/16f, selection.z + selection.length + 1/8f, 1, 1, 1, 0.6f);
-		Tessellator.getInstance().draw();
-		GlStateManager.enableTexture();
-		GlStateManager.depthMask(true);
-		
-		if (effectiveSelectedDesign != null) {
-			TessellatorTextures.Exporter.bind();
-			bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-			
-			if (DesignExporter.type == DesignType.TOWER || DesignExporter.type == DesignType.TOWER_FLAT_ROOF || DesignExporter.type == DesignType.TOWER_ROOF) {
-				int radius = DesignExporter.designParameter;
-				BlockPos center = selection.getCenter().down(selection.height / 2);
-				for (BlockPos pos : BuildingHelper.getCircle(center, radius)) {
-					TessellatorHelper.cube(bufferBuilder, pos, BlockPos.ZERO.add(1, effectiveSelectedDesign.height, 1),
-							1 / 32d, true, false);	
-				}
-			} else {
-				Cuboid effectiveSelection = effectiveSelectedDesign;
-				TessellatorHelper.cube(bufferBuilder, effectiveSelection.getOrigin(), effectiveSelection.getSize(),
-						1 / 32d, true, false);				
-			}
-			Tessellator.getInstance().draw();			
-		}
+		chaseText(textKey1, selection.x + hw, selection.y + .5f, selection.z - 1, backText);
+		chaseText(textKey2, selection.x + hw, selection.y + .5f, selection.z + selection.length + 1, frontText);
+		chaseText(textKey3, selection.x + selection.width + 1, selection.y + .5f, selection.z + hl, rightText);
+		chaseText(textKey4, selection.x - 1, selection.y + .5f, selection.z + hl, leftText);
+	}
 
-		if (backText != null)
-			TessellatorHelper.drawString(backText, selection.x + selection.width / 2f, selection.y + .5f,
-					selection.z - 1, false, false);
-
-		if (frontText != null)
-			TessellatorHelper.drawString(frontText, selection.x + selection.width / 2f, selection.y + .5f,
-					selection.z + selection.length + 1, false, false);
-
-		if (rightText != null)
-			TessellatorHelper.drawString(rightText, selection.x + selection.width + 1, selection.y + .5f,
-					selection.z + selection.length / 2f, false, false);
-
-		if (leftText != null)
-			TessellatorHelper.drawString(leftText, selection.x - 1, selection.y + .5f,
-					selection.z + selection.length / 2f, false, false);
-
-		TessellatorHelper.cleanUpAfterDrawing();
+	private void chaseText(Object key, float x, float y, float z, String text) {
+		MightyClient.outliner.chaseText(key, new Vec3d(x, y, z), text)
+		.disableNormals()
+			.colored(0xffffff);
 	}
 
 	@Override
@@ -160,49 +132,58 @@ public class PhaseEditTheme extends PhaseBase {
 	@Override
 	public List<String> getToolTip() {
 		return ImmutableList.of("Right click the origin marker of your designs to scan them.",
-				"Don't forget to pick the correct traits (type, layer, size) for the next design!");
+			"Don't forget to pick the correct traits (type, layer, size) for the next design!");
 	}
 
 	public static void setVisualization(Cuboid bounds) {
+		MightyClient.outliner.remove(effectiveDesignKey);
+
 		selectedDesign = bounds;
 		effectiveSelectedDesign = null;
-		
 		if (selectedDesign == null)
 			return;
 
+		Function<Cuboid, Outline> outlineFunc = c -> new AABBOutline(c.toAABB());
 		switch (DesignExporter.type) {
 		case CORNER:
-			effectiveSelectedDesign = new Cuboid(selectedDesign.getOrigin(), 1, selectedDesign.height, 1);
+			effectiveSelectedDesign = outlineFunc.apply(new Cuboid(selectedDesign.getOrigin(), 1, effectiveHeight, 1));
 			break;
 		case WALL:
 		case FACADE:
-			effectiveSelectedDesign = new Cuboid(selectedDesign.getOrigin(), selectedDesign.width,
-					selectedDesign.height, 1);
+			effectiveSelectedDesign =
+				outlineFunc.apply(new Cuboid(selectedDesign.getOrigin(), selectedDesign.width, effectiveHeight, 1));
 			break;
 		case FLAT_ROOF:
 			int margin = DesignExporter.designParameter;
-			effectiveSelectedDesign = new Cuboid(selectedDesign.getOrigin().east(margin),
-					selectedDesign.getSize().add(-margin, 0, -margin));
+			effectiveSelectedDesign = outlineFunc.apply(new Cuboid(selectedDesign.getOrigin()
+				.east(margin),
+				selectedDesign.getSize()
+					.add(-margin, 0, -margin)));
 			break;
 		case ROOF:
 			int span = DesignExporter.designParameter;
-			margin = (selectedDesign.width - span) /2;
-			effectiveSelectedDesign = new Cuboid(selectedDesign.getOrigin().add(margin, 0, 0),
-					selectedDesign.width - 2 * margin, selectedDesign.height, 3);
+			margin = (selectedDesign.width - span) / 2;
+			effectiveSelectedDesign = outlineFunc.apply(new Cuboid(selectedDesign.getOrigin()
+				.add(margin, 0, 0), selectedDesign.width - 2 * margin, selectedDesign.height, 3));
 			break;
 		case TOWER:
 		case TOWER_FLAT_ROOF:
 		case TOWER_ROOF:
 			int radius = DesignExporter.designParameter;
 			margin = (selectedDesign.width - (radius * 2 + 1)) / 2;
-			effectiveSelectedDesign = new Cuboid(selectedDesign.getOrigin().add(margin, 0, margin),
-					selectedDesign.getSize().add(-2 * margin, 0, -2 * margin));
+			BlockPos center = selectedDesign.getCenter()
+				.down(selectedDesign.height / 2);
+			List<BlockPos> cylinderSet = new ArrayList<>();
+			for (int i = 0; i < effectiveHeight; i++) {
+				final int offset = i;
+				BuildingHelper.getCircle(center, radius)
+					.forEach(pos -> cylinderSet.add(pos.up(offset)));
+			}
+			effectiveSelectedDesign = new BlockClusterOutline(cylinderSet);
 			break;
 		default:
 			break;
 		}
-		
-		effectiveSelectedDesign.height = effectiveHeight;
 	}
 
 	public static boolean isVisualizing() {
@@ -214,5 +195,8 @@ public class PhaseEditTheme extends PhaseBase {
 		effectiveSelectedDesign = null;
 		effectiveHeight = 0;
 	}
+
+	@Override
+	public void render(MatrixStack ms, IRenderTypeBuffer buffer) {}
 
 }

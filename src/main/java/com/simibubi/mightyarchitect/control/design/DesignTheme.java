@@ -160,8 +160,8 @@ public class DesignTheme {
 		ListNBT layers = new ListNBT();
 		ListNBT types = new ListNBT();
 
-		this.layers.forEach(layer -> layers.add(new StringNBT(layer.name())));
-		this.types.forEach(type -> types.add(new StringNBT(type.name())));
+		this.layers.forEach(layer -> layers.add(StringNBT.of(layer.name())));
+		this.types.forEach(type -> types.add(StringNBT.of(type.name())));
 
 		compound.put("Layers", layers);
 		compound.put("Types", types);

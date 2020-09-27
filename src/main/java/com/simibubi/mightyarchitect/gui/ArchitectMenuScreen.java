@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.simibubi.mightyarchitect.TheMightyArchitect;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.ArchitectMenu;
 import com.simibubi.mightyarchitect.control.ArchitectMenu.KeyBindList;
@@ -95,7 +95,7 @@ public class ArchitectMenuScreen extends Screen {
 			return true;
 		}
 
-		if (keyCode == TheMightyArchitect.COMPOSE.getKey().getKeyCode()) {
+		if (keyCode == MightyClient.COMPOSE.getKey().getKeyCode()) {
 			if (hideOnClose)
 				setVisible(false);
 			minecraft.displayGuiScreen(null);
@@ -108,7 +108,6 @@ public class ArchitectMenuScreen extends Screen {
 	public boolean charTyped(char p_charTyped_1_, int p_charTyped_2_) {
 		boolean hideOnClose = ArchitectManager.inPhase(ArchitectPhases.Empty)
 				|| ArchitectManager.inPhase(ArchitectPhases.Paused);
-
 		if (ArchitectMenu.handleMenuInput(p_charTyped_1_)) {
 			if (ArchitectManager.inPhase(ArchitectPhases.Paused))
 				setVisible(false);
@@ -126,7 +125,7 @@ public class ArchitectMenuScreen extends Screen {
 	}
 
 	private void draw(float partialTicks) {
-		MainWindow mainWindow = Minecraft.getInstance().mainWindow;
+		MainWindow mainWindow = Minecraft.getInstance().getWindow();
 		int x = mainWindow.getScaledWidth() - menuWidth - 10;
 		int y = mainWindow.getScaledHeight() - menuHeight;
 
@@ -139,21 +138,21 @@ public class ArchitectMenuScreen extends Screen {
 			y -= 24;
 		}
 
-		GlStateManager.pushMatrix();
+		RenderSystem.pushMatrix();
 		float shift = yShift(partialTicks);
 		float sidewaysShift = shift * ((float) menuWidth / (float) menuHeight) + (!focused ? 40 + menuHeight / 4f : 0)
 				+ 8;
-		GlStateManager.translatef(sideways ? sidewaysShift : 0, sideways ? 0 : shift, 0);
+		RenderSystem.translatef(sideways ? sidewaysShift : 0, sideways ? 0 : shift, 0);
 		mouseX -= sideways ? sidewaysShift : 0;
 		mouseY -= sideways ? 0 : shift;
 
 		ScreenResources gray = ScreenResources.GRAY;
-		GlStateManager.enableBlend();
-		GlStateManager.color4f(1, 1, 1, 3 / 4f);
+		RenderSystem.enableBlend();
+		RenderSystem.color4f(1, 1, 1, 3 / 4f);
 
 		Minecraft.getInstance().getTextureManager().bindTexture(gray.location);
 		blit(x, y, gray.startX, gray.startY, menuWidth, menuHeight, gray.width, gray.height);
-		GlStateManager.color4f(1, 1, 1, 1);
+		RenderSystem.color4f(1, 1, 1, 1);
 
 		int yPos = y + 4;
 		int xPos = x + 4;
@@ -162,7 +161,7 @@ public class ArchitectMenuScreen extends Screen {
 		if (!focused) {
 			if (sideways) {
 				if (visible) {
-					String string = "Press " + TheMightyArchitect.COMPOSE.getLocalizedName().toUpperCase()
+					String string = "Press " + MightyClient.COMPOSE.getLocalizedName().toUpperCase()
 							+ " for Menu";
 					font.drawStringWithShadow(string,
 							mainWindow.getScaledWidth() - font.getStringWidth(string) - 15 - sidewaysShift, yPos - 14,
@@ -170,11 +169,11 @@ public class ArchitectMenuScreen extends Screen {
 				}
 			} else {
 				font.drawStringWithShadow(
-						"Press " + TheMightyArchitect.COMPOSE.getLocalizedName().toUpperCase() + " to focus", xPos,
+						"Press " + MightyClient.COMPOSE.getLocalizedName().toUpperCase() + " to focus", xPos,
 						yPos - 14, 0xEEEEEE);
 			}
 		} else {
-			String string = "Press " + TheMightyArchitect.COMPOSE.getLocalizedName().toUpperCase() + " to close";
+			String string = "Press " + MightyClient.COMPOSE.getLocalizedName().toUpperCase() + " to close";
 			font.drawStringWithShadow(string,
 					sideways ? Math.min(xPos,
 							mainWindow.getScaledWidth() - font.getStringWidth(string) - 15 - sidewaysShift) : xPos,
@@ -205,7 +204,7 @@ public class ArchitectMenuScreen extends Screen {
 			yPos += font.FONT_HEIGHT * lines + 2;
 		}
 
-		GlStateManager.popMatrix();
+		RenderSystem.popMatrix();
 	}
 
 	@Override
@@ -213,7 +212,7 @@ public class ArchitectMenuScreen extends Screen {
 		if (button != 0 || !visible || !focused)
 			return super.mouseClicked(mouseX, mouseY, button);
 
-		MainWindow mainWindow = Minecraft.getInstance().mainWindow;
+		MainWindow mainWindow = Minecraft.getInstance().getWindow();
 		int x = mainWindow.getScaledWidth() - menuWidth - 10;
 		int y = mainWindow.getScaledHeight() - menuHeight;
 

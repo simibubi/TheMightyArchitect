@@ -38,6 +38,7 @@ void main(){
 
     // Re-scale to full range
     centerLuma = centerLuma * (LumaLevel / (LumaLevel - 1.0));
+	centerLuma = centerLuma * .5 + .25;
 
     // Blend with outline
     // centerLuma = centerLuma * sumLuma;

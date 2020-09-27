@@ -3,10 +3,12 @@ package com.simibubi.mightyarchitect.control.phase;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.simibubi.mightyarchitect.TheMightyArchitect;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.simibubi.mightyarchitect.MightyClient;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
@@ -23,7 +25,7 @@ public class PhasePaused extends PhaseBase {
 				false);
 		player.sendStatusMessage(
 				new StringTextComponent("You can continue composing with [" + TextFormatting.AQUA
-						+ TheMightyArchitect.COMPOSE.getLocalizedName().toUpperCase() + TextFormatting.WHITE + "]"),
+						+ MightyClient.COMPOSE.getLocalizedName().toUpperCase() + TextFormatting.WHITE + "]"),
 				false);
 	}
 
@@ -33,7 +35,7 @@ public class PhasePaused extends PhaseBase {
 	}
 
 	@Override
-	public void render() {
+	public void render(MatrixStack ms, IRenderTypeBuffer buffer) {
 
 	}
 

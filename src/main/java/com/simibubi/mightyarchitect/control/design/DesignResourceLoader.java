@@ -14,7 +14,7 @@ import java.util.Set;
 
 import com.simibubi.mightyarchitect.TheMightyArchitect;
 import com.simibubi.mightyarchitect.control.design.partials.Design;
-import com.simibubi.mightyarchitect.control.helpful.FilesHelper;
+import com.simibubi.mightyarchitect.foundation.utility.FilesHelper;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;

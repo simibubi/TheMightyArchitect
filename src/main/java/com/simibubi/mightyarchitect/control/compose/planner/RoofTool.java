@@ -37,7 +37,9 @@ public class RoofTool extends AbstractRoomFaceSelectionTool {
 
 		}
 
-		room.roofType = model.getTheme().getStatistics().fallbackRoof(room, selectedStack instanceof CylinderStack);
+		room.roofType = model.getTheme()
+			.getStatistics()
+			.fallbackRoof(room, selectedStack instanceof CylinderStack);
 		return true;
 
 	}
@@ -54,9 +56,5 @@ public class RoofTool extends AbstractRoomFaceSelectionTool {
 			status("Roof Type: " + TextFormatting.AQUA + selectedStack.highest().roofType.getDisplayName());
 	}
 
-	@Override
-	public void renderGroundPlan() {
-		super.renderGroundPlan();
-	}
 
 }

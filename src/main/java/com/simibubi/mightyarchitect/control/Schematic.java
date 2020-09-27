@@ -21,7 +21,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.ILightReader;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.Template.BlockInfo;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -90,7 +90,7 @@ public class Schematic {
 		return secondaryPalette;
 	}
 
-	public IBlockReader getMaterializedSketch() {
+	public ILightReader getMaterializedSketch() {
 		return materializedSketch;
 	}
 

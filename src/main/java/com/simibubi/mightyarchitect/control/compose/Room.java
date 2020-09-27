@@ -14,7 +14,7 @@ public class Room extends Cuboid {
 	public boolean secondaryPalette;
 	public boolean quadFacadeRoof;
 	public int layer;
-	
+
 	public Room(BlockPos origin, BlockPos size) {
 		this(origin, size.getX(), size.getY(), size.getZ());
 	}
@@ -27,7 +27,7 @@ public class Room extends Cuboid {
 		quadFacadeRoof = Math.abs(width) == Math.abs(length);
 		secondaryPalette = false;
 	}
-	
+
 	public Room clone() {
 		Room clone = new Room(getOrigin(), getSize());
 		clone.styleGroup = styleGroup;
@@ -48,10 +48,11 @@ public class Room extends Cuboid {
 		return clone;
 	}
 
-	public Room stack() {
+	public Room stack(boolean exactCopy) {
 		Room clone = clone();
 		clone.y += height;
-		clone.height = Math.max(4, height);
+		if (!exactCopy)
+			clone.height = Math.max(4, height);
 		this.roofType = DesignType.NONE;
 		this.quadFacadeRoof = false;
 		return clone;
@@ -60,6 +61,5 @@ public class Room extends Cuboid {
 	public Axis getOrientation() {
 		return (width > length) ? Axis.X : Axis.Z;
 	}
-
 
 }

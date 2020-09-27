@@ -1,8 +1,9 @@
-package com.simibubi.mightyarchitect.control.helpful;
+package com.simibubi.mightyarchitect.foundation.utility;
 
 import com.simibubi.mightyarchitect.TheMightyArchitect;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.shader.ShaderGroup;
 import net.minecraft.util.ResourceLocation;
 
 public enum Shaders {
@@ -17,8 +18,9 @@ public enum Shaders {
 
 	public boolean isActive() {
 		Minecraft mc = Minecraft.getInstance();
-		return mc.gameRenderer.isShaderActive()
-				&& mc.gameRenderer.getShaderGroup().getShaderGroupName().equals(location.toString());
+		ShaderGroup shaderGroup = mc.gameRenderer.getShaderGroup();
+		return shaderGroup != null && shaderGroup.getShaderGroupName()
+			.equals(location.toString());
 	}
 
 	public void setActive(boolean active) {

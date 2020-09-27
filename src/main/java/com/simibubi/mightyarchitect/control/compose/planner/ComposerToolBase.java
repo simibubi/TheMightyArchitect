@@ -2,15 +2,15 @@ package com.simibubi.mightyarchitect.control.compose.planner;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.Schematic;
 import com.simibubi.mightyarchitect.control.compose.GroundPlan;
 import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.control.compose.Stack;
-import com.simibubi.mightyarchitect.control.helpful.Keyboard;
-import com.simibubi.mightyarchitect.control.helpful.RaycastHelper;
-import com.simibubi.mightyarchitect.control.helpful.RaycastHelper.PredicateTraceResult;
+import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
+import com.simibubi.mightyarchitect.foundation.utility.RaycastHelper;
+import com.simibubi.mightyarchitect.foundation.utility.RaycastHelper.PredicateTraceResult;
 
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
@@ -89,28 +89,29 @@ public abstract class ComposerToolBase implements IComposerTool {
 	
 	@Override
 	public void renderOverlay() {
-		GlStateManager.pushMatrix();
-		MainWindow mainWindow = Minecraft.getInstance().mainWindow;
-		GlStateManager.translated(mainWindow.getScaledWidth() / 2, mainWindow.getScaledHeight() / 2 - 3, 0);
-		GlStateManager.translated(25,
-				-MathHelper.lerp(Minecraft.getInstance().getRenderPartialTicks(), lastToolModeYOffset, toolModeYOffset),
+		RenderSystem.pushMatrix();
+		Minecraft mc = Minecraft.getInstance();
+		MainWindow mainWindow = mc.getWindow();
+		RenderSystem.translated(mainWindow.getScaledWidth() / 2, mainWindow.getScaledHeight() / 2 - 3, 0);
+		RenderSystem.translated(25,
+				-MathHelper.lerp(mc.getRenderPartialTicks(), lastToolModeYOffset, toolModeYOffset),
 				0);
 
 		if (toolModeNoCtrl != null) {
 			int color = 0xFFFFFFFF;
 			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL))
 				color = 0x66AACCFF;
-			Minecraft.getInstance().fontRenderer.drawStringWithShadow(toolModeNoCtrl, 0, 0, color);
+			mc.fontRenderer.drawStringWithShadow(toolModeNoCtrl, 0, 0, color);
 		}
 		if (toolModeCtrl != null) {
 			int color = 0xFFFFFFFF;
 			if (!Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL))
 				color = 0x66AACCFF;
-			Minecraft.getInstance().fontRenderer.drawStringWithShadow(toolModeCtrl, 0, 12, color);
+			mc.fontRenderer.drawStringWithShadow(toolModeCtrl, 0, 12, color);
 		}
 
-		GlStateManager.color4f(1, 1, 1, 1);
-		GlStateManager.popMatrix();
+		RenderSystem.color4f(1, 1, 1, 1);
+		RenderSystem.popMatrix();
 	}
 	
 	protected void status(String message) {

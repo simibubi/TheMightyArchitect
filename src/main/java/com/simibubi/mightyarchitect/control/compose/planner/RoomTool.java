@@ -2,9 +2,9 @@ package com.simibubi.mightyarchitect.control.compose.planner;
 
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL11;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.simibubi.mightyarchitect.AllSpecialTextures;
+import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.compose.Cuboid;
 import com.simibubi.mightyarchitect.control.compose.GroundPlan;
@@ -14,19 +14,20 @@ import com.simibubi.mightyarchitect.control.design.DesignLayer;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.design.ThemeStatistics;
-import com.simibubi.mightyarchitect.control.helpful.Keyboard;
-import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
-import com.simibubi.mightyarchitect.control.helpful.TessellatorTextures;
+import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
 
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
 public class RoomTool extends GroundPlanningToolBase {
 
 	protected BlockPos firstPosition;
 	protected Stack lastAddedStack;
+
+	protected Object textKey1 = new Object();
+	protected Object textKey2 = new Object();
+	protected Object textKey3 = new Object();
+	protected Object textKey4 = new Object();
 
 	@Override
 	public void init() {
@@ -34,7 +35,7 @@ public class RoomTool extends GroundPlanningToolBase {
 		firstPosition = null;
 		toolModeNoCtrl = "3-Grid";
 		toolModeCtrl = "5-Grid";
-		
+
 		// Deleted using stack tool
 		if (lastAddedStack != null && lastAddedStack.floors() == 0)
 			lastAddedStack = null;
@@ -52,7 +53,8 @@ public class RoomTool extends GroundPlanningToolBase {
 			return "First position marked";
 
 		} else {
-			return createRoom(ArchitectManager.getModel().getGroundPlan());
+			return createRoom(ArchitectManager.getModel()
+				.getGroundPlan());
 		}
 	}
 
@@ -63,7 +65,8 @@ public class RoomTool extends GroundPlanningToolBase {
 
 		DesignTheme theme = groundPlan.theme;
 		ThemeStatistics stats = theme.getStatistics();
-		boolean hasFoundation = theme.getLayers().contains(DesignLayer.Foundation);
+		boolean hasFoundation = theme.getLayers()
+			.contains(DesignLayer.Foundation);
 		room.designLayer = hasFoundation ? DesignLayer.Foundation : DesignLayer.Regular;
 
 		int facadeWidth = Math.min(room.width, room.length);
@@ -93,7 +96,7 @@ public class RoomTool extends GroundPlanningToolBase {
 
 		groundPlan.addStack(lastAddedStack);
 		firstPosition = null;
-		return "New Room has been added";
+		return "Scroll UP to add floors, DOWN to undo";
 	}
 
 	protected boolean adjustHeightForIntersection(GroundPlan groundPlan, Room room) {
@@ -103,8 +106,8 @@ public class RoomTool extends GroundPlanningToolBase {
 
 		groundPlan.forEachRoom(r -> {
 			if (r.intersects(room) && !(r.y + r.height <= room.y || room.y + room.height <= r.y)
-					&& (biggestRoom.getValue() == null
-							|| biggestRoom.getValue().width * biggestRoom.getValue().length < r.width * r.length)) {
+				&& (biggestRoom.getValue() == null
+					|| biggestRoom.getValue().width * biggestRoom.getValue().length < r.width * r.length)) {
 				biggestRoom.setValue(r);
 			}
 		});
@@ -127,7 +130,7 @@ public class RoomTool extends GroundPlanningToolBase {
 			if (r == added)
 				return;
 			if (r.intersects(added) && r.y <= added.y && r.y + r.height > added.y && (biggestRoom.getValue() == null
-					|| biggestRoom.getValue().width * biggestRoom.getValue().length < r.width * r.length)) {
+				|| biggestRoom.getValue().width * biggestRoom.getValue().length < r.width * r.length)) {
 				biggestRoom.setValue(r);
 			}
 		});
@@ -142,11 +145,14 @@ public class RoomTool extends GroundPlanningToolBase {
 			return false;
 
 		if (scroll > 0) {
-			increaseMatchingOthers(ArchitectManager.getModel().getGroundPlan(), lastAddedStack);
+			increaseMatchingOthers(ArchitectManager.getModel()
+				.getGroundPlan(), lastAddedStack);
 		} else {
 			lastAddedStack.decrease();
 			if (lastAddedStack.floors() == 0) {
-				ArchitectManager.getModel().getGroundPlan().remove(lastAddedStack);
+				ArchitectManager.getModel()
+					.getGroundPlan()
+					.remove(lastAddedStack);
 				lastAddedStack = null;
 			}
 		}
@@ -199,48 +205,48 @@ public class RoomTool extends GroundPlanningToolBase {
 		}
 	}
 
+	static Object outlineKey = new Object();
+
 	@Override
-	public void renderTool() {
-		if (selectedPosition == null) {
+	public void tickToolOutlines() {
+		if (selectedPosition == null)
 			return;
-		}
 
-		BlockPos anchor = ArchitectManager.getModel().getAnchor();
-		BlockPos selectedPos = (anchor != null) ? selectedPosition.add(anchor) : selectedPosition;
-		BlockPos firstPos = (firstPosition != null) ? firstPosition.add(anchor) : null;
+		BlockPos anchor = ArchitectManager.getModel()
+			.getAnchor();
+		BlockPos cursorPos = (anchor != null) ? selectedPosition.add(anchor) : selectedPosition;
+		BlockPos previouslySelectedPos = (firstPosition != null) ? firstPosition.add(anchor) : cursorPos;
 
-		TessellatorTextures.Selection.bind();
-		GlStateManager.enableAlphaTest();
-		GlStateManager.enableBlend();
-		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		BlockPos size = cursorPos.subtract(previouslySelectedPos);
+		Cuboid selection = new Cuboid(previouslySelectedPos, size.getX(), 1, size.getZ());
+		selection.width += 1;
+		selection.length += 1;
 
-		TessellatorHelper.walls(bufferBuilder, selectedPos, new BlockPos(1, 1, 1), 0.125, false, true);
+		MightyClient.outliner.chaseAABB(outlineKey, selection.toAABB())
+			.withFaceTexture(AllSpecialTextures.CHECKERED)
+			.colored(0);
 
-		if (firstPos != null) {
-			BlockPos size = selectedPos.subtract(firstPos);
-			Cuboid selection = new Cuboid(firstPos, size.getX(), 1, size.getZ());
-			selection.width += 1;
-			selection.length += 1;
-			TessellatorHelper.walls(bufferBuilder, selection.getOrigin(), selection.getSize(), -0.125, false, true);
-			Tessellator.getInstance().draw();
+		if (firstPosition == null)
+			return;
+		drawTextAroundBounds(selection);
+	}
 
-			TessellatorHelper.drawString("" + selection.width, selection.x + selection.width / 2f, selection.y + .5f,
-					selection.z - 1, true, false);
+	protected void drawTextAroundBounds(Cuboid selection) {
+		float hw = selection.width / 2f;
+		float hl = selection.length / 2f;
 
-			TessellatorHelper.drawString("" + selection.width, selection.x + selection.width / 2f, selection.y + .5f,
-					selection.z + selection.length + 1, true, false);
+		chaseText(textKey1, selection.x + hw, selection.y + .5f, selection.z - 1, "" + selection.width + "m");
+		chaseText(textKey2, selection.x + hw, selection.y + .5f, selection.z + selection.length + 1, "" + selection.width + "m");
+		chaseText(textKey3, selection.x + selection.width + 1, selection.y + .5f, selection.z + hl, "" + selection.length + "m");
+		chaseText(textKey4, selection.x - 1, selection.y + .5f, selection.z + hl, "" + selection.length + "m");
+	}
 
-			TessellatorHelper.drawString("" + selection.length, selection.x + selection.width + 1, selection.y + .5f,
-					selection.z + selection.length / 2f, true, false);
-
-			TessellatorHelper.drawString("" + selection.length, selection.x - 1, selection.y + .5f,
-					selection.z + selection.length / 2f, true, false);
-
-		} else {
-			Tessellator.getInstance().draw();
-		}
-
+	private void chaseText(Object key, float x, float y, float z, String text) {
+		MightyClient.outliner.chaseText(key, new Vec3d(x, y, z), text)
+			.colored(0)
+			.coloredFaces(0xffffff)
+			.disableNormals()
+			.withFaceTexture(AllSpecialTextures.BLANK);
 	}
 
 }

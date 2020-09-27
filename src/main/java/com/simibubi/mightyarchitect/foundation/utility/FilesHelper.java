@@ -1,4 +1,4 @@
-package com.simibubi.mightyarchitect.control.helpful;
+package com.simibubi.mightyarchitect.foundation.utility;
 
 import java.io.BufferedReader;
 import java.io.IOException;

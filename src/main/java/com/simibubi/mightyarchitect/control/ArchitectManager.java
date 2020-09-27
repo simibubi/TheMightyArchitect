@@ -9,20 +9,21 @@ import java.nio.file.StandardOpenOption;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.glfw.GLFW;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.simibubi.mightyarchitect.AllPackets;
-import com.simibubi.mightyarchitect.TheMightyArchitect;
+import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.compose.GroundPlan;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.ThemeStorage;
-import com.simibubi.mightyarchitect.control.helpful.FilesHelper;
-import com.simibubi.mightyarchitect.control.helpful.Keyboard;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 import com.simibubi.mightyarchitect.control.palette.PaletteStorage;
 import com.simibubi.mightyarchitect.control.phase.ArchitectPhases;
 import com.simibubi.mightyarchitect.control.phase.IArchitectPhase;
 import com.simibubi.mightyarchitect.control.phase.IDrawBlockHighlights;
 import com.simibubi.mightyarchitect.control.phase.IRenderGameOverlay;
+import com.simibubi.mightyarchitect.foundation.utility.FilesHelper;
+import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
 import com.simibubi.mightyarchitect.gui.ArchitectMenuScreen;
 import com.simibubi.mightyarchitect.gui.DesignExporterScreen;
 import com.simibubi.mightyarchitect.gui.PalettePickerScreen;
@@ -32,19 +33,18 @@ import com.simibubi.mightyarchitect.gui.ThemeSettingsScreen;
 import com.simibubi.mightyarchitect.networking.InstantPrintPacket;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.client.event.InputEvent.MouseInputEvent;
 import net.minecraftforge.client.event.InputEvent.MouseScrollEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -66,9 +66,8 @@ public class ArchitectManager {
 	}
 
 	public static void compose(DesignTheme theme) {
-		if (getModel().isEmpty()) {
+		if (getModel().isEmpty())
 			getModel().setGroundPlan(new GroundPlan(theme));
-		}
 		enterPhase(ArchitectPhases.Composing);
 	}
 
@@ -78,7 +77,9 @@ public class ArchitectManager {
 
 	public static void unload() {
 		if (!model.isEmpty())
-			model.getTheme().getDesignPicker().reset();
+			model.getTheme()
+				.getDesignPicker()
+				.reset();
 
 		enterPhase(ArchitectPhases.Empty);
 		resetSchematic();
@@ -86,9 +87,10 @@ public class ArchitectManager {
 		if (testRun) {
 			testRun = false;
 			editTheme(DesignExporter.theme);
-		} else {
-			menu.setVisible(false);
+			return;
 		}
+
+		menu.setVisible(false);
 	}
 
 	public static void design() {
@@ -99,14 +101,16 @@ public class ArchitectManager {
 			return;
 		}
 
-		model.setSketch(groundPlan.theme.getDesignPicker().assembleSketch(groundPlan, model.seed));
+		model.setSketch(groundPlan.theme.getDesignPicker()
+			.assembleSketch(groundPlan, model.seed));
 		enterPhase(ArchitectPhases.Previewing);
 	}
 
 	public static void reAssemble() {
 		GroundPlan groundPlan = model.getGroundPlan();
-		model.setSketch(groundPlan.theme.getDesignPicker().assembleSketch(groundPlan, model.seed));
-		SchematicHologram.getInstance().schematicChanged();
+		model.setSketch(groundPlan.theme.getDesignPicker()
+			.assembleSketch(groundPlan, model.seed));
+		MightyClient.renderer.update();
 	}
 
 	public static void createPalette(boolean primary) {
@@ -135,17 +139,15 @@ public class ArchitectManager {
 		Minecraft mc = Minecraft.getInstance();
 
 		if (mc.isSingleplayer()) {
-			for (InstantPrintPacket packet : getModel().getPackets()) {
+			for (InstantPrintPacket packet : getModel().getPackets())
 				AllPackets.channel.sendToServer(packet);
-			}
-			SchematicHologram.reset();
+			MightyClient.renderer.setActive(false);
 			status("Printed result into world.");
 			unload();
-
-		} else {
-			enterPhase(ArchitectPhases.PrintingToMultiplayer);
+			return;
 		}
 
+		enterPhase(ArchitectPhases.PrintingToMultiplayer);
 	}
 
 	public static void writeToFile(String name) {
@@ -164,7 +166,8 @@ public class ArchitectManager {
 		OutputStream outputStream = null;
 		try {
 			outputStream = Files.newOutputStream(Paths.get(filepath), StandardOpenOption.CREATE);
-			CompoundNBT nbttagcompound = getModel().writeToTemplate().writeToNBT(new CompoundNBT());
+			CompoundNBT nbttagcompound = getModel().writeToTemplate()
+				.writeToNBT(new CompoundNBT());
 			CompressedStreamTools.writeCompressed(nbttagcompound, outputStream);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -175,9 +178,10 @@ public class ArchitectManager {
 		status("Saved as " + filepath);
 
 		BlockPos pos = model.getAnchor()
-				.add(((TemplateBlockAccess) model.getMaterializedSketch()).getBounds().getOrigin());
+			.add(((TemplateBlockAccess) model.getMaterializedSketch()).getBounds()
+				.getOrigin());
 		StringTextComponent component = new StringTextComponent("Deploy Schematic at: " + TextFormatting.BLUE + "["
-				+ pos.getX() + "," + pos.getY() + "," + pos.getZ() + "]");
+			+ pos.getX() + "," + pos.getY() + "," + pos.getZ() + "]");
 		Minecraft.getInstance().player.sendMessage(component);
 		unload();
 	}
@@ -260,8 +264,9 @@ public class ArchitectManager {
 				enterPhase(ArchitectPhases.Paused);
 			return;
 		}
-		
-		phase.getPhaseHandler().update();
+
+		phase.getPhaseHandler()
+			.update();
 		menu.onClientTick();
 
 	}
@@ -270,15 +275,15 @@ public class ArchitectManager {
 	public static void onMouseScrolled(MouseScrollEvent event) {
 		if (Minecraft.getInstance().currentScreen != null)
 			return;
-		if (phase.getPhaseHandler().onScroll((int) Math.signum(event.getScrollDelta())))
+		if (phase.getPhaseHandler()
+			.onScroll((int) Math.signum(event.getScrollDelta())))
 			event.setCanceled(true);
 	}
 
-	@SubscribeEvent
-	public static void render(RenderWorldLastEvent event) {
-		if (Minecraft.getInstance().world != null) {
-			phase.getPhaseHandler().render();
-		}
+	public static void render(MatrixStack ms, IRenderTypeBuffer buffer) {
+		if (Minecraft.getInstance().world != null)
+			phase.getPhaseHandler()
+				.render(ms, buffer);
 	}
 
 	@SubscribeEvent
@@ -287,7 +292,8 @@ public class ArchitectManager {
 			return;
 		if (event.getAction() != Keyboard.PRESS)
 			return;
-		phase.getPhaseHandler().onClick(event.getButton());
+		phase.getPhaseHandler()
+			.onClick(event.getButton());
 	}
 
 	@SubscribeEvent
@@ -301,14 +307,15 @@ public class ArchitectManager {
 		}
 		if (Minecraft.getInstance().currentScreen != null)
 			return;
-		if (TheMightyArchitect.COMPOSE.isPressed()) {
+		if (MightyClient.COMPOSE.isPressed()) {
 			if (!menu.isFocused())
 				openMenu();
 			return;
 		}
 
 		boolean released = event.getAction() == Keyboard.RELEASE;
-		phase.getPhaseHandler().onKey(event.getKey(), released);
+		phase.getPhaseHandler()
+			.onKey(event.getKey(), released);
 	}
 
 	public static void openMenu() {
@@ -319,12 +326,10 @@ public class ArchitectManager {
 		return;
 	}
 
-	@SubscribeEvent
-	public static void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
+	public static void tickBlockHighlightOutlines() {
 		IArchitectPhase phaseHandler = phase.getPhaseHandler();
-		if (phaseHandler instanceof IDrawBlockHighlights) {
-			((IDrawBlockHighlights) phaseHandler).onBlockHighlight(event);
-		}
+		if (phaseHandler instanceof IDrawBlockHighlights)
+			((IDrawBlockHighlights) phaseHandler).tickHighlightOutlines();
 	}
 
 	@SubscribeEvent
@@ -341,8 +346,7 @@ public class ArchitectManager {
 	}
 
 	@SubscribeEvent
-	public static void onItemRightClick(PlayerInteractEvent.RightClickBlock event) {
-	}
+	public static void onItemRightClick(PlayerInteractEvent.RightClickBlock event) {}
 
 	public static void resetSchematic() {
 		model = new Schematic();

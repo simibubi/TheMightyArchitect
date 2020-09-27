@@ -2,7 +2,8 @@ package com.simibubi.mightyarchitect.control.compose.planner;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.simibubi.mightyarchitect.control.helpful.Keyboard;
+import com.simibubi.mightyarchitect.control.compose.Room;
+import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
 
 import net.minecraft.util.text.TextFormatting;
 
@@ -20,8 +21,10 @@ public class HeightTool extends AbstractRoomFaceSelectionTool {
 		if (selectedRoom != null) {
 			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL)) {
 				// Resize
-				if (selectedRoom.height + scroll > model.getTheme().getMaxFloorHeight()) {
-					selectedRoom.height = model.getTheme().getMaxFloorHeight();
+				if (selectedRoom.height + scroll > model.getTheme()
+					.getMaxFloorHeight()) {
+					selectedRoom.height = model.getTheme()
+						.getMaxFloorHeight();
 					status("Height: " + TextFormatting.AQUA + selectedRoom.height + TextFormatting.WHITE + "m (max)");
 					return true;
 				}
@@ -47,6 +50,13 @@ public class HeightTool extends AbstractRoomFaceSelectionTool {
 		}
 
 		return super.handleMouseWheel(scroll);
+	}
+
+	@Override
+	protected boolean isRoomHighlighted(Room room) {
+		return super.isRoomHighlighted(room)
+			|| (!Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL) && selectedStack != null && selectedStack.getRooms()
+				.contains(room));
 	}
 
 	@Override

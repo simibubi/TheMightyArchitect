@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import javax.annotation.Nullable;
+
+import com.simibubi.mightyarchitect.AllSpecialTextures;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
@@ -19,11 +22,12 @@ public class Stack {
 
 	public Stack(Room room) {
 		rooms = new ArrayList<>();
-		theme = ArchitectManager.getModel().getGroundPlan().theme;
+		theme = ArchitectManager.getModel()
+			.getGroundPlan().theme;
 
 		if (room.designLayer == DesignLayer.None) {
-			room.designLayer = theme.getLayers().contains(DesignLayer.Foundation) ? DesignLayer.Foundation
-					: DesignLayer.Regular;
+			room.designLayer = theme.getLayers()
+				.contains(DesignLayer.Foundation) ? DesignLayer.Foundation : DesignLayer.Regular;
 		}
 
 		rooms.add(room);
@@ -44,19 +48,36 @@ public class Stack {
 	}
 
 	public void increase() {
-		if (rooms.size() < ThemeStatistics.MAX_FLOORS) {
-			Room newRoom = highest().stack();
-			if (highest().designLayer == DesignLayer.Foundation) {
-				newRoom.designLayer = DesignLayer.Regular;
-			}
-			int defaultHeightForFloor = theme.getDefaultHeightForFloor(rooms.size());
+		insertNewAt(rooms.size(), false);
+	}
 
-			if (defaultHeightForFloor != -1)
-				newRoom.height = defaultHeightForFloor;
-			else
-				newRoom.height = Math.max(highest().height, Math.min(4, theme.getMaxFloorHeight()));
-			rooms.add(newRoom);
+	@Nullable
+	public Room insertNewAt(int index, boolean exactCopy) {
+		if (rooms.size() >= ThemeStatistics.MAX_FLOORS)
+			return null;
+
+		Room reference = rooms.get(Math.max(0, index - 1));
+		Room newRoom = reference.stack(exactCopy);
+		if (reference.designLayer == DesignLayer.Foundation)
+			newRoom.designLayer = DesignLayer.Regular;
+		if (!exactCopy) {
+			int defaultHeightForFloor = theme.getDefaultHeightForFloor(rooms.size());
+			newRoom.height = defaultHeightForFloor != -1 ? defaultHeightForFloor
+				: Math.max(reference.height, Math.min(4, theme.getMaxFloorHeight()));
 		}
+
+		rooms.add(index, newRoom);
+		forEachAbove(newRoom, r -> r.move(0, newRoom.height, 0));
+		return newRoom;
+	}
+
+	public void removeRoom(Room room) {
+		if (room == highest()) {
+			decrease();
+			return;
+		}
+		forEachAbove(room, r -> r.move(0, -room.height, 0));
+		rooms.remove(room);
 	}
 
 	public void decrease() {
@@ -70,11 +91,13 @@ public class Stack {
 	}
 
 	public void forEachAbove(Room anchor, Consumer<? super Room> action) {
-		rooms.subList(rooms.indexOf(anchor) + 1, rooms.size()).forEach(action);
+		rooms.subList(rooms.indexOf(anchor) + 1, rooms.size())
+			.forEach(action);
 	}
 
 	public void forRoomAndEachAbove(Room anchor, Consumer<? super Room> action) {
-		rooms.subList(rooms.indexOf(anchor), rooms.size()).forEach(action);
+		rooms.subList(rooms.indexOf(anchor), rooms.size())
+			.forEach(action);
 	}
 
 	public void forEach(Consumer<? super Room> action) {
@@ -106,6 +129,20 @@ public class Stack {
 
 	public DesignType getRoofType() {
 		return highest().roofType;
+	}
+
+	public AllSpecialTextures getTextureOf(Room room) {
+		switch (room.designLayer) {
+		case Foundation:
+			return AllSpecialTextures.FOUNDATION;
+		case None:
+		case Open:
+		case Regular:
+		case Roofing:
+		case Special:
+		default:
+			return AllSpecialTextures.NORMAL;
+		}
 	}
 
 }

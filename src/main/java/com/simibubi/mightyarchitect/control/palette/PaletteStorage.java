@@ -16,7 +16,7 @@ import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.simibubi.mightyarchitect.TheMightyArchitect;
-import com.simibubi.mightyarchitect.control.helpful.FilesHelper;
+import com.simibubi.mightyarchitect.foundation.utility.FilesHelper;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.JsonToNBT;

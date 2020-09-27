@@ -1,12 +1,21 @@
-package com.simibubi.mightyarchitect.control.helpful;
-
-import com.simibubi.mightyarchitect.TheMightyArchitect;
+package com.simibubi.mightyarchitect;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
-public enum TessellatorTextures {
+public enum AllSpecialTextures {
 
+	BLANK("blank.png"),
+	CHECKERED("checkerboard.png"),
+	THIN_CHECKERED("thin_checkerboard.png"),
+	HIGHLIGHT_CHECKERED("highlighted_checkerboard.png"),
+	SELECTION("selection.png"),
+	
+	FOUNDATION("foundation.png"),
+	NORMAL("normal.png"),
+	TOWER_FOUNDATION("tower_foundation.png"),
+	TOWER_NORMAL("tower_normal.png"),
+	
     Room("inner.png"),
     RoomTransparent("inner_transparent.png"),
     SelectedRoom("inner_selected.png"),
@@ -21,7 +30,7 @@ public enum TessellatorTextures {
 
     private ResourceLocation location;
 
-    private TessellatorTextures(String filename) {
+    private AllSpecialTextures(String filename) {
         location = new ResourceLocation(TheMightyArchitect.ID,
                 "textures/block/marker/" + filename);
     }
@@ -29,5 +38,9 @@ public enum TessellatorTextures {
     public void bind() {
         Minecraft.getInstance().getTextureManager().bindTexture(location);
     }
+    
+    public ResourceLocation getLocation() {
+		return location;
+	}
 
 }

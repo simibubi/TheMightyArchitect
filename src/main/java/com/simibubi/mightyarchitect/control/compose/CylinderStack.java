@@ -1,5 +1,6 @@
 package com.simibubi.mightyarchitect.control.compose;
 
+import com.simibubi.mightyarchitect.AllSpecialTextures;
 import com.simibubi.mightyarchitect.control.design.DesignType;
 
 public class CylinderStack extends Stack {
@@ -26,6 +27,21 @@ public class CylinderStack extends Stack {
 			return DesignType.TOWER_ROOF;
 		default:
 			return roofType;
+		}
+	}
+	
+	@Override
+	public AllSpecialTextures getTextureOf(Room room) {
+		switch (room.designLayer) {
+		case Foundation:
+			return AllSpecialTextures.TOWER_FOUNDATION;
+		case None:
+		case Open:
+		case Regular:
+		case Roofing:
+		case Special:
+		default:
+			return AllSpecialTextures.TOWER_NORMAL;
 		}
 	}
 	

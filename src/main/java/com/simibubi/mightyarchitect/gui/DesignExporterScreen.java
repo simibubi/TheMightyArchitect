@@ -3,7 +3,7 @@ package com.simibubi.mightyarchitect.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
@@ -12,9 +12,6 @@ import com.simibubi.mightyarchitect.control.phase.export.PhaseEditTheme;
 import com.simibubi.mightyarchitect.gui.widgets.Label;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollInput;
 import com.simibubi.mightyarchitect.gui.widgets.SelectionScrollInput;
-
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 
 public class DesignExporterScreen extends AbstractSimiScreen {
 
@@ -226,36 +223,17 @@ public class DesignExporterScreen extends AbstractSimiScreen {
 	@Override
 	protected void renderWindow(int mouseX, int mouseY, float partialTicks) {
 		ScreenResources.EXPORTER.draw(this, topLeftX, topLeftY);
-
-		minecraft.getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
-		GlStateManager.pushLightingAttributes();
-		GlStateManager.pushMatrix();
-
-		RenderHelper.enableStandardItemLighting();
-		GlStateManager.enableBlend();
-		GlStateManager.enableRescaleNormal();
-		GlStateManager.enableAlphaTest();
-		GlStateManager.alphaFunc(516, 0.1F);
-		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-		GlStateManager.translatef((this.width - this.sWidth) / 2 + 250, 220, 100);
-		GlStateManager.rotatef(-30, .4f, 0, -.2f);
-		GlStateManager.rotatef(90 + 0.2f * animationProgress, 0, 1, 0);
-		GlStateManager.scalef(100, -100, 100);
-		itemRenderer.renderItem(minecraft.player.getHeldItemMainhand(),
-				itemRenderer.getModelWithOverrides(minecraft.player.getHeldItemMainhand()));
-//		itemRenderer.renderItemIntoGUI(minecraft.player.getHeldItemMainhand(), 0, 0);
-
-		GlStateManager.disableAlphaTest();
-		GlStateManager.disableRescaleNormal();
-		GlStateManager.disableLighting();
-		GlStateManager.popMatrix();
-		GlStateManager.popAttributes();
+		
+		RenderSystem.pushMatrix();
+		RenderSystem.translatef((this.width - this.sWidth) / 2 + 250, 220, 100);
+		RenderSystem.rotatef(-30, .4f, 0, -.2f);
+		RenderSystem.rotatef(90 + 0.2f * animationProgress, 0, 1, 0);
+		RenderSystem.scalef(100, -100, 100);
+		GuiGameElement.of(minecraft.player.getHeldItemMainhand()).render();
+		RenderSystem.popMatrix();
 
 		int color = ScreenResources.FONT_COLOR;
 		font.drawString("Export custom Designs", topLeftX + 10, topLeftY + 10, color);
-
 		font.drawString("Theme", topLeftX + 10, topLeftY + 28, color);
 		font.drawString("Building Layer", topLeftX + 10, topLeftY + 48, color);
 		font.drawString("Design Type", topLeftX + 10, topLeftY + 68, color);

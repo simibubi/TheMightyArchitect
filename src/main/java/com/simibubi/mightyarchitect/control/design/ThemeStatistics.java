@@ -3,7 +3,7 @@ package com.simibubi.mightyarchitect.control.design;
 import java.util.Random;
 
 import com.simibubi.mightyarchitect.control.compose.Room;
-import com.simibubi.mightyarchitect.control.helpful.DesignHelper;
+import com.simibubi.mightyarchitect.foundation.utility.DesignHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.StringTextComponent;

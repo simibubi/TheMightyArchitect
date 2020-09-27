@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import com.simibubi.mightyarchitect.control.helpful.DesignHelper;
+import com.simibubi.mightyarchitect.foundation.utility.DesignHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;

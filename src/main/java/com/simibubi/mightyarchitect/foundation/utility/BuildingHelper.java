@@ -1,4 +1,4 @@
-package com.simibubi.mightyarchitect.control.helpful;
+package com.simibubi.mightyarchitect.foundation.utility;
 
 import java.util.HashSet;
 import java.util.Set;

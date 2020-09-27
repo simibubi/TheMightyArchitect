@@ -11,11 +11,11 @@ import com.simibubi.mightyarchitect.control.compose.Cuboid;
 import com.simibubi.mightyarchitect.control.design.DesignSlice.DesignSliceTrait;
 import com.simibubi.mightyarchitect.control.design.partials.Wall;
 import com.simibubi.mightyarchitect.control.design.partials.Wall.ExpandBehaviour;
-import com.simibubi.mightyarchitect.control.helpful.FilesHelper;
 import com.simibubi.mightyarchitect.control.palette.BlockOrientation;
 import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 import com.simibubi.mightyarchitect.control.phase.export.PhaseEditTheme;
+import com.simibubi.mightyarchitect.foundation.utility.FilesHelper;
 import com.simibubi.mightyarchitect.networking.PlaceSignPacket;
 
 import net.minecraft.block.BlockState;

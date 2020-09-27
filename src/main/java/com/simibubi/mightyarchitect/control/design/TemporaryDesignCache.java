@@ -9,7 +9,7 @@ import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.control.compose.Stack;
 import com.simibubi.mightyarchitect.control.design.DesignPicker.RoomDesignMapping;
 import com.simibubi.mightyarchitect.control.design.partials.Design;
-import com.simibubi.mightyarchitect.control.helpful.DesignHelper;
+import com.simibubi.mightyarchitect.foundation.utility.DesignHelper;
 
 public class TemporaryDesignCache {
 	Map<Vector<Integer>, Design> designs;

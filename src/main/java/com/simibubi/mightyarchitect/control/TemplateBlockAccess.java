@@ -10,10 +10,12 @@ import java.util.function.Predicate;
 
 import com.google.common.collect.ImmutableMap;
 import com.simibubi.mightyarchitect.control.compose.Cuboid;
+import com.simibubi.mightyarchitect.foundation.WrappedWorld;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
@@ -26,29 +28,21 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EmptyTickList;
 import net.minecraft.world.ITickList;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.LightType;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
-import net.minecraft.world.border.WorldBorder;
-import net.minecraft.world.chunk.AbstractChunkProvider;
-import net.minecraft.world.chunk.ChunkStatus;
-import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.gen.Heightmap.Type;
-import net.minecraft.world.storage.WorldInfo;
 
-public class TemplateBlockAccess implements IWorld {
+public class TemplateBlockAccess extends WrappedWorld {
 
 	private Map<BlockPos, BlockState> blocks;
 	private Cuboid bounds;
 	private BlockPos anchor;
 	
 	public TemplateBlockAccess(Map<BlockPos, BlockState> blocks, Cuboid bounds, BlockPos anchor) {
+		super(Minecraft.getInstance().world);
 		this.blocks = blocks;
 		this.bounds = bounds;
 		this.anchor = anchor;
@@ -99,7 +93,7 @@ public class TemplateBlockAccess implements IWorld {
 	}
 
 	@Override
-	public int getLightFor(LightType type, BlockPos pos) {
+	public int getLight(BlockPos p_201696_1_) {
 		return 10;
 	}
 
@@ -120,13 +114,13 @@ public class TemplateBlockAccess implements IWorld {
 	}
 
 	@Override
-	public int getLightSubtracted(BlockPos pos, int amount) {
-		return 0;
+	public int getLightLevel(LightType p_226658_1_, BlockPos p_226658_2_) {
+		return 10;
 	}
-
+	
 	@Override
-	public IChunk getChunk(int x, int z, ChunkStatus requiredStatus, boolean nonnull) {
-		return null;
+	public int getLightValue(BlockPos p_217298_1_) {
+		return 10;
 	}
 
 	@Override
@@ -142,26 +136,6 @@ public class TemplateBlockAccess implements IWorld {
 	@Override
 	public int getSkylightSubtracted() {
 		return 0;
-	}
-
-	@Override
-	public WorldBorder getWorldBorder() {
-		return null;
-	}
-
-	@Override
-	public boolean isRemote() {
-		return false;
-	}
-
-	@Override
-	public int getSeaLevel() {
-		return 0;
-	}
-
-	@Override
-	public Dimension getDimension() {
-		return null;
 	}
 
 	@Override
@@ -186,11 +160,6 @@ public class TemplateBlockAccess implements IWorld {
 	}
 
 	@Override
-	public long getSeed() {
-		return 0;
-	}
-
-	@Override
 	public ITickList<Block> getPendingBlockTicks() {
 		return EmptyTickList.get();
 	}
@@ -201,37 +170,12 @@ public class TemplateBlockAccess implements IWorld {
 	}
 
 	@Override
-	public World getWorld() {
-		return null;
-	}
-
-	@Override
-	public WorldInfo getWorldInfo() {
-		return null;
-	}
-
-	@Override
-	public DifficultyInstance getDifficultyForLocation(BlockPos pos) {
-		return null;
-	}
-
-	@Override
-	public AbstractChunkProvider getChunkProvider() {
-		return null;
-	}
-
-	@Override
 	public Random getRandom() {
 		return new Random();
 	}
 
 	@Override
 	public void notifyNeighbors(BlockPos pos, Block blockIn) {
-	}
-
-	@Override
-	public BlockPos getSpawnPoint() {
-		return null;
 	}
 
 	@Override

@@ -3,6 +3,9 @@ package com.simibubi.mightyarchitect.control.phase;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 
 public class PhaseEmpty extends PhaseBase {
 
@@ -19,7 +22,7 @@ public class PhaseEmpty extends PhaseBase {
 	}
 
 	@Override
-	public void render() {
+	public void render(MatrixStack ms, IRenderTypeBuffer buffer) {
 	}
 
 	@Override

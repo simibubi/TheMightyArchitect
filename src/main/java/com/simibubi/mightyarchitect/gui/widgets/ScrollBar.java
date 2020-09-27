@@ -1,6 +1,6 @@
 package com.simibubi.mightyarchitect.gui.widgets;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.simibubi.mightyarchitect.gui.ScreenResources;
 
 import net.minecraft.client.Minecraft;
@@ -17,7 +17,7 @@ public class ScrollBar extends AbstractGui {
 
 	public ScrollBar(int x, int span) {
 		this.x = x;
-		this.y = (-ScreenResources.SCROLLBAR_AXIS.height + Minecraft.getInstance().mainWindow.getScaledHeight()) / 2;
+		this.y = (-ScreenResources.SCROLLBAR_AXIS.height + Minecraft.getInstance().getWindow().getScaledHeight()) / 2;
 		this.span = span;
 		scale = span / 200f;
 		position = 1;
@@ -31,7 +31,7 @@ public class ScrollBar extends AbstractGui {
 	public void render(Screen screen) {
 		if (!active)
 			return;
-		GlStateManager.color4f(1, 1, 1, 1);
+		RenderSystem.color4f(1, 1, 1, 1);
 
 		ScreenResources.SCROLLBAR_AXIS.draw(screen, x, y);
 
@@ -42,11 +42,11 @@ public class ScrollBar extends AbstractGui {
 		ScreenResources.SCROLLBAR_CAP.draw(screen, widgetX, barY);
 		ScreenResources.SCROLLBAR_CAP.draw(screen, widgetX, barY + barSize - 6);
 
-		GlStateManager.pushMatrix();
-		GlStateManager.translated(widgetX, barY + 6, 0);
-		GlStateManager.scalef(1, (barSize - 12) / 16f, 1);
+		RenderSystem.pushMatrix();
+		RenderSystem.translated(widgetX, barY + 6, 0);
+		RenderSystem.scalef(1, (barSize - 12) / 16f, 1);
 		ScreenResources.SCROLLBAR_BACKGROUND.draw(screen, 0, 0);
-		GlStateManager.popMatrix();
+		RenderSystem.popMatrix();
 	}
 
 	public float getYShift() {

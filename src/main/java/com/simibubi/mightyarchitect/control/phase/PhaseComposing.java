@@ -1,17 +1,17 @@
 package com.simibubi.mightyarchitect.control.phase;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 import com.google.common.collect.ImmutableList;
-import com.simibubi.mightyarchitect.TheMightyArchitect;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.compose.planner.Tools;
-import com.simibubi.mightyarchitect.control.helpful.ShaderManager;
-import com.simibubi.mightyarchitect.control.helpful.Shaders;
-import com.simibubi.mightyarchitect.control.helpful.TessellatorHelper;
+import com.simibubi.mightyarchitect.foundation.utility.ShaderManager;
+import com.simibubi.mightyarchitect.foundation.utility.Shaders;
 import com.simibubi.mightyarchitect.gui.ToolSelectionScreen;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 
 public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
@@ -21,19 +21,16 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 
 	@Override
 	public void whenEntered() {
-		final Consumer<Tools> callback = tool -> {
-			equipTool(tool);
-		};
-
 		activeTool = Tools.Room;
-		activeTool.getTool().init();
+		activeTool.getTool()
+			.init();
 		List<Tools> groundPlanningTools = Tools.getGroundPlanningTools();
 
-		if (!getModel().getTheme().getStatistics().hasTowers)
+		if (!getModel().getTheme()
+			.getStatistics().hasTowers)
 			groundPlanningTools.remove(Tools.Cylinder);
 
-		toolSelection = new ToolSelectionScreen(groundPlanningTools, callback);
-
+		toolSelection = new ToolSelectionScreen(groundPlanningTools, this::equipTool);
 		ShaderManager.setActiveShader(Shaders.Blueprint);
 	}
 
@@ -41,26 +38,34 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 		if (tool == activeTool)
 			return;
 		activeTool = tool;
-		activeTool.getTool().init();
+		activeTool.getTool()
+			.init();
 	}
 
 	@Override
 	public void update() {
-		activeTool.getTool().updateSelection();
+		activeTool.getTool()
+			.updateSelection();
 		toolSelection.update();
+		activeTool.getTool()
+			.tickGroundPlanOutlines();
+		activeTool.getTool()
+			.tickToolOutlines();
 	}
 
 	@Override
 	public void onClick(int button) {
-		if (button == 1) {
-			String message = activeTool.getTool().handleRightClick();
-			sendStatusMessage(message);
-		}
+		if (button != 1)
+			return;
+		String message = activeTool.getTool()
+			.handleRightClick();
+		sendStatusMessage(message);
 	}
 
 	@Override
 	public void onKey(int key, boolean released) {
-		if (key != TheMightyArchitect.TOOL_MENU.getKey().getKeyCode())
+		if (key != MightyClient.TOOL_MENU.getKey()
+			.getKeyCode())
 			return;
 
 		if (released && toolSelection.focused) {
@@ -80,16 +85,12 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 			return true;
 		}
 
-		return activeTool.getTool().handleMouseWheel(amount);
+		return activeTool.getTool()
+			.handleMouseWheel(amount);
 	}
 
 	@Override
-	public void render() {
-		TessellatorHelper.prepareForDrawing();
-		activeTool.getTool().renderGroundPlan();
-		activeTool.getTool().renderTool();
-		TessellatorHelper.cleanUpAfterDrawing();
-	}
+	public void render(MatrixStack ms, IRenderTypeBuffer buffer) {}
 
 	@Override
 	public void whenExited() {
@@ -100,15 +101,16 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 	public void renderGameOverlay(Pre event) {
 		if (Minecraft.getInstance().currentScreen != null)
 			return;
-		
+
 		toolSelection.renderPassive(event.getPartialTicks());
-		activeTool.getTool().renderOverlay();
+		activeTool.getTool()
+			.renderOverlay();
 	}
 
 	@Override
 	public List<String> getToolTip() {
 		return ImmutableList.of(
-				"Draw the layout of your build, adding rooms, towers and other. Modify their position, size and roof using the Tools.");
+			"Draw the layout of your build, adding rooms, towers and other. Modify their position, size and roof using the Tools.");
 	}
 
 }

@@ -2,7 +2,7 @@ package com.simibubi.mightyarchitect.gui.widgets;
 
 import java.util.function.Consumer;
 
-import com.simibubi.mightyarchitect.control.helpful.Keyboard;
+import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
 
 import net.minecraft.util.text.TextFormatting;
 
@@ -192,18 +192,18 @@ public class ScrollInput extends AbstractSimiWidget {
 //	}
 //
 //	public void draw(Screen screen, int mouseX, int mouseY) {
-//		GlStateManager.pushLightingAttributes();
+//		RenderSystem.pushLightingAttributes();
 //		if (enabled && isHovered(mouseX, mouseY)) {
-//			GlStateManager.pushMatrix();
-//			GlStateManager.translated(mouseX, mouseY,0);
+//			RenderSystem.pushMatrix();
+//			RenderSystem.translated(mouseX, mouseY,0);
 //			if (tooltipContent.isPresent())
 //				screen.renderTooltip(getToolTip(), 0, 0);
 //			else
 //				screen.renderTooltip(TextFormatting.BLUE + title, 0, 0);
-//			GlStateManager.popMatrix();
+//			RenderSystem.popMatrix();
 //		}
 //
-//		GlStateManager.popAttributes();
+//		RenderSystem.popAttributes();
 //	}
 //
 //	public List<String> getToolTip() {

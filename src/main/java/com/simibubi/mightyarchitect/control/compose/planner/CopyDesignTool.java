@@ -5,18 +5,18 @@ import java.util.function.Consumer;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.compose.CylinderStack;
 import com.simibubi.mightyarchitect.control.design.DesignPicker;
 import com.simibubi.mightyarchitect.control.design.DesignPicker.RoomDesignMapping;
 import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.design.partials.Design;
-import com.simibubi.mightyarchitect.control.helpful.Keyboard;
+import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
 
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Direction.Axis;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 
@@ -43,73 +43,84 @@ public class CopyDesignTool extends WallDecorationToolBase {
 		super.updateSelectedRooms();
 
 		if (selectedRoom != null) {
-			boolean zInCorner = selectedPos.getZ() == selectedRoom.z
-					|| selectedPos.getZ() == selectedRoom.z + selectedRoom.length - 1;
-			boolean xInCorner = selectedPos.getX() == selectedRoom.x
-					|| selectedPos.getX() == selectedRoom.x + selectedRoom.width - 1;
+			boolean zInCorner =
+				selectedPos.getZ() == selectedRoom.z || selectedPos.getZ() == selectedRoom.z + selectedRoom.length - 1;
+			boolean xInCorner =
+				selectedPos.getX() == selectedRoom.x || selectedPos.getX() == selectedRoom.x + selectedRoom.width - 1;
 			boolean pasting = !Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL);
 			selectingCorners = (xInCorner && zInCorner && !(selectedStack instanceof CylinderStack))
-					|| copiedDesignType == DesignType.CORNER && pasting;
+				|| copiedDesignType == DesignType.CORNER && pasting;
 			selectingCorners = selectingCorners && !(copiedDesignType == DesignType.WALL && pasting);
 		}
 	}
 
 	@Override
-	public void renderTool() {
+	public void tickToolOutlines() {
 		if (selectedRoom == null) {
-			super.renderTool();
+			super.tickToolOutlines();
 			return;
 		}
 		if (selectedStack instanceof CylinderStack) {
-			super.renderTool();
+			super.tickToolOutlines();
 			return;
 		}
-		if (selectedFace.getAxis().isVertical()) {
-			super.renderTool();
+		if (selectedFace.getAxis()
+			.isVertical()) {
+			super.tickToolOutlines();
 			return;
 		}
 
-		GlStateManager.lineWidth(5);
-		GlStateManager.color4f(1, 1, 1, 1);
-		GlStateManager.disableTexture();
+		BlockPos origin = selectedRoom.getOrigin()
+			.add(model.getAnchor());
 
-		BlockPos origin = selectedRoom.getOrigin().add(model.getAnchor());
-
+		// Outline corners
 		if (selectingCorners) {
-			// Outline corners
 			Consumer<BlockPos> renderCorner = pos -> {
-				WorldRenderer.drawBoundingBox(pos.getX() - 1 / 4d, pos.getY() - 1 / 16d, pos.getZ() - 1 / 4d,
-						pos.getX() + 5 / 4d, pos.getY() + selectedRoom.height + 2 / 16d, pos.getZ() + 5 / 4d, 1, 1, 1,
-						1);
+				MightyClient.outliner
+					.showAABB(pos,
+						new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1,
+							pos.getY() + selectedRoom.height, pos.getZ() + 1))
+					.lineWidth(1 / 8f);
 			};
 
 			renderCorner.accept(origin);
 			renderCorner.accept(origin.east(selectedRoom.width - 1));
 			renderCorner.accept(origin.south(selectedRoom.length - 1));
-			renderCorner.accept(origin.east(selectedRoom.width - 1).south(selectedRoom.length - 1));
-
-		} else {
-			// Outline Walls
-			BiConsumer<BlockPos, BlockPos> renderWall = (start, size) -> {
-				BlockPos end = start.add(size);
-				WorldRenderer.drawBoundingBox(start.getX() - 1 / 2d, start.getY() - 1 / 16d, start.getZ() - 1 / 2d,
-						end.getX() - 1 / 2d, end.getY() + 1 / 16d, end.getZ() - 1 / 2d, 1, 1, 1, 1);
-			};
-
-			if (selectedFace.getAxis() == Axis.X) {
-				renderWall.accept(origin.south(1), selectedRoom.getSize().west(selectedRoom.width - 1).north(1));
-				renderWall.accept(origin.east(selectedRoom.width).south(1),
-						selectedRoom.getSize().west(selectedRoom.width - 1).north(1));
-			} else {
-				renderWall.accept(origin.east(1), selectedRoom.getSize().north(selectedRoom.length - 1).west(1));
-				renderWall.accept(origin.south(selectedRoom.length).east(1),
-						selectedRoom.getSize().north(selectedRoom.length - 1).west(1));
-
-			}
+			renderCorner.accept(origin.east(selectedRoom.width - 1)
+				.south(selectedRoom.length - 1));
+			return;
 		}
 
-		GlStateManager.lineWidth(1);
-		GlStateManager.enableTexture();
+		// Outline Walls
+		BiConsumer<BlockPos, BlockPos> renderWall = (start, size) -> {
+			BlockPos end = start.add(size);
+			MightyClient.outliner
+				.showAABB(start,
+					new AxisAlignedBB(start.getX() - 1 / 2d, start.getY(), start.getZ() - 1 / 2d, end.getX() - 1 / 2d,
+						end.getY(), end.getZ() - 1 / 2d))
+				.lineWidth(1 / 8f);
+		};
+
+		if (selectedFace.getAxis() == Axis.X) {
+			renderWall.accept(origin.south(1), selectedRoom.getSize()
+				.west(selectedRoom.width - 1)
+				.north(1));
+			renderWall.accept(origin.east(selectedRoom.width)
+				.south(1),
+				selectedRoom.getSize()
+					.west(selectedRoom.width - 1)
+					.north(1));
+		} else {
+			renderWall.accept(origin.east(1), selectedRoom.getSize()
+				.north(selectedRoom.length - 1)
+				.west(1));
+			renderWall.accept(origin.south(selectedRoom.length)
+				.east(1),
+				selectedRoom.getSize()
+					.north(selectedRoom.length - 1)
+					.west(1));
+
+		}
 
 	}
 
@@ -120,7 +131,8 @@ public class CopyDesignTool extends WallDecorationToolBase {
 		if (copiedDesign == null && !keyDown)
 			return TextFormatting.RED + "Ctrl+Click to copy a Design";
 
-		DesignPicker designPicker = model.getTheme().getDesignPicker();
+		DesignPicker designPicker = model.getTheme()
+			.getDesignPicker();
 
 		if (keyDown && selectedRoom != null) {
 			if (selectedFace == Direction.UP && selectedRoom == selectedStack.highest()) {
@@ -146,7 +158,8 @@ public class CopyDesignTool extends WallDecorationToolBase {
 
 		if (!keyDown && selectedRoom != null) {
 			// paste design
-			if (DesignType.roofTypes().contains(copiedDesignType)) {
+			if (DesignType.roofTypes()
+				.contains(copiedDesignType)) {
 				if (selectedStack.getRoofType() != copiedDesignType)
 					return TextFormatting.RED + "Roof types have to match.";
 				int facadeWidth = Math.min(selectedStack.highest().width, selectedStack.highest().length);
@@ -185,7 +198,8 @@ public class CopyDesignTool extends WallDecorationToolBase {
 			if (copiedDesignType == DesignType.WALL) {
 				if (selectedStack instanceof CylinderStack)
 					return TextFormatting.RED + "Room shapes have to match.";
-				if (selectedFace.getAxis().isVertical())
+				if (selectedFace.getAxis()
+					.isVertical())
 					return TextFormatting.RED + "Cannot apply Wall vertically.";
 
 				int wallWidth = selectedFace.getAxis() == Axis.Z ? selectedRoom.width - 2 : selectedRoom.length - 2;

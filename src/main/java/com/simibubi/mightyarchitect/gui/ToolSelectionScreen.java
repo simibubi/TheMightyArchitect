@@ -3,8 +3,8 @@ package com.simibubi.mightyarchitect.gui;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.simibubi.mightyarchitect.TheMightyArchitect;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.compose.planner.Tools;
 
 import net.minecraft.client.MainWindow;
@@ -43,18 +43,18 @@ public class ToolSelectionScreen extends Screen {
 	}
 
 	private void draw(float partialTicks) {
-		MainWindow mainWindow = Minecraft.getInstance().mainWindow;
+		MainWindow mainWindow = Minecraft.getInstance().getWindow();
 		FontRenderer font = minecraft.fontRenderer;
 
 		int x = (mainWindow.getScaledWidth() - w) / 2 + 15;
 		int y = 15;
 
-		GlStateManager.pushMatrix();
-		GlStateManager.translatef(0, 0, focused? 100 : 0);
+		RenderSystem.pushMatrix();
+		RenderSystem.translatef(0, 0, focused? 100 : 0);
 
 		ScreenResources gray = ScreenResources.GRAY;
-		GlStateManager.enableBlend();
-		GlStateManager.color4f(1, 1, 1, focused ? 7 / 8f : 1 / 2f);
+		RenderSystem.enableBlend();
+		RenderSystem.color4f(1, 1, 1, focused ? 7 / 8f : 1 / 2f);
 		Minecraft.getInstance().getTextureManager().bindTexture(gray.location);
 		float toolTipAlpha = yOffset / 10;
 
@@ -67,9 +67,9 @@ public class ToolSelectionScreen extends Screen {
 		
 		if (toolTipAlpha > 0.25f) {
 			Minecraft.getInstance().getTextureManager().bindTexture(gray.location);
-			GlStateManager.color4f(.7f, .7f, .8f, toolTipAlpha);
+			RenderSystem.color4f(.7f, .7f, .8f, toolTipAlpha);
 			blit(x - 15, y + 30, gray.startX, gray.startY, w, h + 22, gray.width, gray.height);
-			GlStateManager.color4f(1, 1, 1, 1);
+			RenderSystem.color4f(1, 1, 1, 1);
 			
 			if (toolTip.size() > 0)
 				drawString(font, toolTip.get(0), x - 10, y + 35, 0xEEEEEE + stringAlphaComponent);
@@ -81,33 +81,33 @@ public class ToolSelectionScreen extends Screen {
 				drawString(font, toolTip.get(3), x - 10, y + 69, 0xCCCCDD + stringAlphaComponent);
 		}
 
-		GlStateManager.color4f(1, 1, 1, 1);
-		String translationKey = TheMightyArchitect.TOOL_MENU.getLocalizedName().toUpperCase();
-		int width = minecraft.mainWindow.getScaledWidth();
+		RenderSystem.color4f(1, 1, 1, 1);
+		String translationKey = MightyClient.TOOL_MENU.getLocalizedName().toUpperCase();
+		int width = minecraft.getWindow().getScaledWidth();
 		if (!focused)
 			drawCenteredString(minecraft.fontRenderer, "Hold [" + translationKey + "] to focus", width/2, y - 10, 0xCCDDFF);
 		else
 			drawCenteredString(minecraft.fontRenderer, "[SCROLL] to Cycle", width/2, y - 10, 0xCCDDFF);
 		
 		for (int i = 0; i < tools.size(); i++) {
-			GlStateManager.pushMatrix();
+			RenderSystem.pushMatrix();
 
 			float alpha = focused ? 1 : .2f;
 			if (i == selection) {
-				GlStateManager.translatef(0, -10, 0);
+				RenderSystem.translatef(0, -10, 0);
 				drawCenteredString(minecraft.fontRenderer, tools.get(i).getDisplayName(), x + i * 50 + 24, y + 28,
 						0xCCDDFF);
 				alpha = 1;
 			}
-			GlStateManager.color4f(0, 0, 0, alpha);
+			RenderSystem.color4f(0, 0, 0, alpha);
 			tools.get(i).getIcon().draw(this, x + i * 50 + 16, y + 12);
-			GlStateManager.color4f(1, 1, 1, alpha);
+			RenderSystem.color4f(1, 1, 1, alpha);
 			tools.get(i).getIcon().draw(this, x + i * 50 + 16, y + 11);
 
-			GlStateManager.popMatrix();
+			RenderSystem.popMatrix();
 		}
 
-		GlStateManager.popMatrix();
+		RenderSystem.popMatrix();
 	}
 
 	public void update() {

@@ -1,4 +1,4 @@
-package com.simibubi.mightyarchitect.control.helpful;
+package com.simibubi.mightyarchitect.foundation.utility;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.InputMappings;
@@ -24,7 +24,7 @@ public class Keyboard {
 	public static final int G = 71;
 
 	public static boolean isKeyDown(int key) {
-		return InputMappings.isKeyDown(Minecraft.getInstance().mainWindow.getHandle(), key);
+		return InputMappings.isKeyDown(Minecraft.getInstance().getWindow().getHandle(), key);
 	}
 	
 }

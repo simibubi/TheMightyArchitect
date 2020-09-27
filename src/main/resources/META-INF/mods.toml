@@ -27,6 +27,6 @@ description='''Design elaborate buildings within a minute! [G] is the default ke
 [[dependencies.mightyarchitect]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.14.4]"
+    versionRange="[1.15.2]"
     ordering="NONE"
     side="BOTH"

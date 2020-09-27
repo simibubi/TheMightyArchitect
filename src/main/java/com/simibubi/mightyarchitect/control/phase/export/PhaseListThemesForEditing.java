@@ -3,13 +3,15 @@ package com.simibubi.mightyarchitect.control.phase.export;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.simibubi.mightyarchitect.control.phase.PhaseBase;
+
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 
 public class PhaseListThemesForEditing extends PhaseBase {
 
 	@Override
 	public void whenEntered() {
-		
 	}
 
 	@Override
@@ -18,7 +20,7 @@ public class PhaseListThemesForEditing extends PhaseBase {
 	}
 
 	@Override
-	public void render() {
+	public void render(MatrixStack ms, IRenderTypeBuffer buffer) {
 		
 	}
 

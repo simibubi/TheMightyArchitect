@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.simibubi.mightyarchitect.control.helpful.FilesHelper;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
+import com.simibubi.mightyarchitect.foundation.utility.FilesHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;

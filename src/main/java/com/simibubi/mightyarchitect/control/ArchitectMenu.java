@@ -16,6 +16,7 @@ import com.simibubi.mightyarchitect.gui.ScreenHelper;
 import com.simibubi.mightyarchitect.gui.TextInputPromptScreen;
 import com.simibubi.mightyarchitect.gui.ThemeSettingsScreen;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.Util;
 
 public class ArchitectMenu {
@@ -40,8 +41,9 @@ public class ArchitectMenu {
 			switch (c) {
 
 			case 'f':
-				TextInputPromptScreen gui = new TextInputPromptScreen(result -> ArchitectManager.finishPalette(result), result -> {
-				});
+				TextInputPromptScreen gui =
+					new TextInputPromptScreen(result -> ArchitectManager.finishPalette(result), result -> {
+					});
 				gui.setButtonTextConfirm("Save and Apply");
 				gui.setButtonTextAbort("Cancel");
 				gui.setTitle("Enter a name for your Palette:");
@@ -60,21 +62,21 @@ public class ArchitectMenu {
 
 		case Empty:
 			switch (c) {
-			
+
 			case 'c':
 				ArchitectManager.unload();
 				return true;
-				
+
 			case 'm':
 				ArchitectManager.manageThemes();
 				return false;
-				
+
 			case 'r':
 				ThemeStorage.reloadExternal();
 				ArchitectManager.status("Reloaded Themes");
 				ArchitectManager.enterPhase(ArchitectPhases.Empty);
 				return false;
-				
+
 			default:
 				int index = c - '1';
 				ThemeStorage.reloadExternal();
@@ -99,9 +101,11 @@ public class ArchitectMenu {
 				return true;
 
 			case 's':
-				if (test) return false;
-				TextInputPromptScreen gui = new TextInputPromptScreen(result -> ArchitectManager.writeToFile(result), result -> {
-				});
+				if (test)
+					return false;
+				TextInputPromptScreen gui =
+					new TextInputPromptScreen(result -> ArchitectManager.writeToFile(result), result -> {
+					});
 				gui.setButtonTextConfirm("Save Schematic");
 				gui.setButtonTextAbort("Cancel");
 				gui.setTitle("Enter a name for your Build:");
@@ -110,7 +114,10 @@ public class ArchitectMenu {
 				return true;
 
 			case 'p':
-				if (test) return false;
+				if (test)
+					return false;
+				if (!Minecraft.getInstance().player.isCreative())
+					return false;
 				ArchitectManager.print();
 				return true;
 
@@ -125,18 +132,20 @@ public class ArchitectMenu {
 			case 'n':
 				ArchitectManager.createTheme();
 				return true;
-			case 'e':
+			case 't':
 				ArchitectManager.enterPhase(ArchitectPhases.ListForEdit);
 				return false;
 			case 'o':
-				Util.getOSType().openFile(Paths.get("themes/").toFile());
+				Util.getOSType()
+					.openFile(Paths.get("themes/")
+						.toFile());
 				return false;
 			case 'c':
 				ArchitectManager.unload();
 				return true;
 			}
 			break;
-			
+
 		case Paused:
 			switch (c) {
 			case 'r':
@@ -170,19 +179,19 @@ public class ArchitectMenu {
 
 		case EditingThemes:
 			switch (c) {
-			
+
 			case '1':
 				ArchitectKits.ExporterToolkit();
 				return true;
-				
+
 			case '2':
 				ArchitectKits.FoundationToolkit();
 				return true;
-				
+
 			case '3':
 				ArchitectKits.RegularToolkit();
 				return true;
-				
+
 			case '4':
 				ArchitectKits.RoofingToolkit();
 				return true;
@@ -190,21 +199,21 @@ public class ArchitectMenu {
 			case 'd':
 				ArchitectManager.pickScanPalette();
 				return true;
-			
+
 			case 't':
 				ScreenHelper.open(new ThemeSettingsScreen());
 				return true;
-				
+
 			case 'e':
 				String file = ThemeStorage.exportThemeFullyAsFile(DesignExporter.theme, true);
-				ArchitectManager.status("Exported Theme as " + file);				
+				ArchitectManager.status("Exported Theme as " + file);
 				return false;
-				
+
 			case 'j':
 				file = ThemeStorage.exportThemeFullyAsFile(DesignExporter.theme, false);
 				ArchitectManager.status("Exported Theme as " + file);
 				return false;
-				
+
 			case 'r':
 				DesignExporter.theme.clearDesigns();
 				ThemeStorage.exportTheme(DesignExporter.theme);
@@ -234,20 +243,20 @@ public class ArchitectMenu {
 		KeyBindList keybinds = new KeyBindList();
 
 		switch (ArchitectManager.getPhase()) {
-		
+
 		case Composing:
 			keybinds.put("F", "Finish");
 			keybinds.lineBreak();
 			keybinds.put("U", "Unload");
 			break;
-			
+
 		case CreatingPalette:
 			keybinds.put("F", "Save Palette");
 			keybinds.put("D", "Discard Palette");
 			keybinds.lineBreak();
 			keybinds.put("U", "Unload");
 			break;
-			
+
 		case Empty:
 			List<DesignTheme> allThemes = ThemeStorage.getAllThemes();
 			for (DesignTheme theme : allThemes) {
@@ -258,38 +267,39 @@ public class ArchitectMenu {
 			keybinds.put("M", "Manage Themes...");
 			keybinds.put("C", "Cancel");
 			break;
-			
+
 		case Previewing:
 			keybinds.put("E", "Edit Ground Plan");
 			keybinds.put("C", "Choose a Palette");
 			keybinds.lineBreak();
-			
+
 			if (!ArchitectManager.testRun) {
 				keybinds.put("S", "Save as Schematic");
-				keybinds.put("P", "Print blocks into world");
+				if (Minecraft.getInstance().player.isCreative())
+					keybinds.put("P", "Print blocks into world");
 				keybinds.lineBreak();
-				keybinds.put("U", "Unload");				
+				keybinds.put("U", "Unload");
 			} else {
-				keybinds.put("U", "Exit Test Run");								
+				keybinds.put("U", "Exit Test Run");
 			}
-			
+
 			break;
-			
+
 		case ManagingThemes:
 			keybinds.put("N", "Create new Theme");
-			keybinds.put("E", "Edit an existing Theme");
+			keybinds.put("T", "Edit an existing Theme");
 			keybinds.put("O", "Open Theme Folder");
 			keybinds.lineBreak();
 			keybinds.put("C", "Cancel");
 			break;
-			
+
 		case Paused:
 			keybinds.put("R", "Recover");
 			keybinds.put("D", "Discard");
 			keybinds.lineBreak();
 			keybinds.put("C", "Close");
 			break;
-			
+
 		case ListForEdit:
 			allThemes = ThemeStorage.getCreated();
 			for (DesignTheme theme : allThemes) {
@@ -298,7 +308,7 @@ public class ArchitectMenu {
 			keybinds.lineBreak();
 			keybinds.put("C", "Cancel");
 			break;
-			
+
 		case EditingThemes:
 			keybinds.put("1", "Equip Exporter Tools");
 			keybinds.put("2", "Equip Foundation Blocks");
@@ -346,15 +356,15 @@ public class ArchitectMenu {
 		public float size() {
 			float size = 0;
 			for (String key : keys) {
-				size += (key.isEmpty())? 0.5f : 1;
+				size += (key.isEmpty()) ? 0.5f : 1;
 			}
 			return size;
 		}
-		
+
 		public List<String> getKeys() {
 			return keys;
 		}
-		
+
 		public String get(String key) {
 			return descriptions.get(key);
 		}
