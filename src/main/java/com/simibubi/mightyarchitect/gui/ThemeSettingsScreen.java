@@ -3,6 +3,7 @@ package com.simibubi.mightyarchitect.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
@@ -47,7 +48,7 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 	public void init() {
 		super.init();
 		setWindowSize(ScreenResources.THEME_EDITOR.width, ScreenResources.THEME_EDITOR.height);
-		
+
 		// init text inputs
 		toggleButtons = new ArrayList<>();
 		inputs = new ArrayList<>();
@@ -56,12 +57,12 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 		int y = topLeftY + 14;
 		int id = 0;
 
-		inputName = new TextFieldWidget(font, x, y, 104, 8, "");
+		inputName = new TextFieldWidget(textRenderer, x, y, 104, 8, new StringTextComponent(""));
 		inputName.setText(theme.getDisplayName());
 		inputName.changeFocus(false);
 		inputs.add(inputName);
 
-		inputAuthor = new TextFieldWidget(font, x, y + 20, 104, 8, "");
+		inputAuthor = new TextFieldWidget(textRenderer, x, y + 20, 104, 8, new StringTextComponent(""));
 		inputAuthor.setText(theme.getDesigner());
 		inputAuthor.changeFocus(false);
 		inputs.add(inputAuthor);
@@ -95,7 +96,8 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 		button.setToolTip("Foundation Style");
 		toggleButtons.add(button);
 		guiIndicator = new Indicator(x, y - 5, "");
-		guiIndicator.state = theme.getLayers().contains(DesignLayer.Foundation) ? State.ON : State.OFF;
+		guiIndicator.state = theme.getLayers()
+			.contains(DesignLayer.Foundation) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
 
 		x += 20;
@@ -104,7 +106,8 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 		button.setToolTip("Open Arcs Style");
 		toggleButtons.add(button);
 		guiIndicator = new Indicator(x, y - 5, "");
-		guiIndicator.state = theme.getLayers().contains(DesignLayer.Open) ? State.ON : State.OFF;
+		guiIndicator.state = theme.getLayers()
+			.contains(DesignLayer.Open) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
 
 		x += 20;
@@ -113,7 +116,8 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 		button.setToolTip("Special Layer");
 		toggleButtons.add(button);
 		guiIndicator = new Indicator(x, y - 5, "");
-		guiIndicator.state = theme.getLayers().contains(DesignLayer.Special) ? State.ON : State.OFF;
+		guiIndicator.state = theme.getLayers()
+			.contains(DesignLayer.Special) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
 
 		x = topLeftX + 10;
@@ -133,7 +137,8 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 		button.setToolTip("Flat Roofs");
 		toggleButtons.add(button);
 		guiIndicator = new Indicator(x, y - 5, "");
-		guiIndicator.state = theme.getTypes().contains(DesignType.FLAT_ROOF) ? State.ON : State.OFF;
+		guiIndicator.state = theme.getTypes()
+			.contains(DesignType.FLAT_ROOF) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
 
 		x += 20;
@@ -142,7 +147,8 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 		button.setToolTip("Gable Roofs");
 		toggleButtons.add(button);
 		guiIndicator = new Indicator(x, y - 5, "");
-		guiIndicator.state = theme.getTypes().contains(DesignType.ROOF) ? State.ON : State.OFF;
+		guiIndicator.state = theme.getTypes()
+			.contains(DesignType.ROOF) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
 
 		x += 40;
@@ -152,7 +158,8 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 		button.setToolTip("Enable Towers");
 		toggleButtons.add(button);
 		guiIndicator = new Indicator(x, y - 5, "");
-		guiIndicator.state = theme.getTypes().contains(DesignType.TOWER) ? State.ON : State.OFF;
+		guiIndicator.state = theme.getTypes()
+			.contains(DesignType.TOWER) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
 
 		x += 20;
@@ -161,7 +168,8 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 		button.setToolTip("Flat Tower Roofs");
 		toggleButtons.add(button);
 		guiIndicator = new Indicator(x, y - 5, "");
-		guiIndicator.state = theme.getTypes().contains(DesignType.TOWER_FLAT_ROOF) ? State.ON : State.OFF;
+		guiIndicator.state = theme.getTypes()
+			.contains(DesignType.TOWER_FLAT_ROOF) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
 
 		x += 20;
@@ -170,24 +178,27 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 		button.setToolTip("Conical Tower Roofs");
 		toggleButtons.add(button);
 		guiIndicator = new Indicator(x, y - 5, "");
-		guiIndicator.state = theme.getTypes().contains(DesignType.TOWER_ROOF) ? State.ON : State.OFF;
+		guiIndicator.state = theme.getTypes()
+			.contains(DesignType.TOWER_ROOF) ? State.ON : State.OFF;
 		indicators.add(guiIndicator);
 
-		labelRoomHeight = new Label(topLeftX + (theme.getMaxFloorHeight() > 9 ? 102 : 106), topLeftY + 162, "")
-				.withShadow();
-		labelRoomHeight.text = theme.getMaxFloorHeight() + "m";
+		labelRoomHeight =
+			new Label(topLeftX + (theme.getMaxFloorHeight() > 9 ? 102 : 106), topLeftY + 162, "").withShadow();
+		labelRoomHeight.setText(theme.getMaxFloorHeight() + "m");
 
 		areaRoomHeight = new ScrollInput(topLeftX + 100, topLeftY + 157, 22, 18).withRange(3, 16)
-				.titled("Maximum Height").setState(theme.getMaxFloorHeight()).calling(position -> {
-					labelRoomHeight.text = position + "m";
-					labelRoomHeight.x = position > 9 ? topLeftX + 102 : topLeftX + 106;
-				});
+			.titled("Maximum Height")
+			.setState(theme.getMaxFloorHeight())
+			.calling(position -> {
+				labelRoomHeight.setText(position + "m");
+				labelRoomHeight.x = position > 9 ? topLeftX + 102 : topLeftX + 106;
+			});
 		widgets.add(areaRoomHeight);
 		widgets.add(labelRoomHeight);
 
 		confirm = new IconButton(topLeftX + 172, topLeftY + 157, ScreenResources.ICON_CONFIRM);
 		toggleButtons.add(confirm);
-		
+
 		widgets.addAll(indicators);
 		widgets.addAll(inputs);
 		widgets.addAll(toggleButtons);
@@ -195,7 +206,7 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 
 	@Override
 	public boolean mouseClicked(double x, double y, int button) {
-		
+
 		if (button == 0) {
 			for (IconButton button2 : toggleButtons) {
 				if (button2.isHovered()) {
@@ -204,16 +215,16 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 				}
 			}
 		}
-		
+
 		return super.mouseClicked(x, y, button);
 	}
-	
+
 	protected void buttonClicked(IconButton button) {
 		if (button == confirm) {
-			minecraft.displayGuiScreen(null);
+			client.displayGuiScreen(null);
 			return;
 		}
-		
+
 		int index = toggleButtons.indexOf(button);
 
 		// not modifiable
@@ -257,28 +268,30 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 	}
 
 	@Override
-	public void renderWindow(int mouseX, int mouseY, float partialTicks) {
-		ScreenResources.THEME_EDITOR.draw(this, topLeftX, topLeftY);
+	public void renderWindow(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
+		ScreenResources.THEME_EDITOR.draw(ms, this, topLeftX, topLeftY);
 
 		int x = topLeftX + 10;
 		int y = topLeftY + 14;
 
-		font.drawString("Theme name", x, y, ScreenResources.FONT_COLOR);
-		font.drawString("Designer", x, y + 20, ScreenResources.FONT_COLOR);
+		textRenderer.draw(ms, "Theme name", x, y, ScreenResources.FONT_COLOR);
+		textRenderer.draw(ms, "Designer", x, y + 20, ScreenResources.FONT_COLOR);
 
 		y = topLeftY + 75;
 
-		font.drawString("Styles included", x, y - 17, ScreenResources.FONT_COLOR);
-		font.drawString("Shapes and Roof Types included", x, y + 32, ScreenResources.FONT_COLOR);
-		font.drawString("Max. Room Height", x, y + 87, ScreenResources.FONT_COLOR);
+		textRenderer.draw(ms, "Styles included", x, y - 17, ScreenResources.FONT_COLOR);
+		textRenderer.draw(ms, "Shapes and Roof Types included", x, y + 32, ScreenResources.FONT_COLOR);
+		textRenderer.draw(ms, "Max. Room Height", x, y + 87, ScreenResources.FONT_COLOR);
 	}
 
 	@Override
 	public void removed() {
 		super.removed();
-		if (!inputName.getText().isEmpty())
+		if (!inputName.getText()
+			.isEmpty())
 			theme.setDisplayName(inputName.getText());
-		if (!inputAuthor.getText().isEmpty())
+		if (!inputAuthor.getText()
+			.isEmpty())
 			theme.setDesigner(inputAuthor.getText());
 
 		theme.setMaxFloorHeight(areaRoomHeight.getState());
@@ -319,7 +332,7 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 		ThemeStorage.exportTheme(theme);
 		ThemeStorage.reloadExternal();
 		ArchitectManager.editTheme(theme);
-		minecraft.player.sendStatusMessage(new StringTextComponent("Theme settings have been updated."), true);
+		client.player.sendStatusMessage(new StringTextComponent("Theme settings have been updated."), true);
 	}
 
 	private boolean roofLayerExists() {

@@ -3,6 +3,7 @@ package com.simibubi.mightyarchitect.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
@@ -56,7 +57,7 @@ public class DesignExporterScreen extends AbstractSimiScreen {
 		widgets.clear();
 
 		List<DesignLayer> layers = theme.getLayers();
-		labelTheme.text = theme.getDisplayName();
+		labelTheme.setText(theme.getDisplayName());
 
 		if (!layers.contains(layer))
 			layer = DesignLayer.Regular;
@@ -78,8 +79,10 @@ public class DesignExporterScreen extends AbstractSimiScreen {
 //		scrollAreas.add(scrollAreaLayer);
 
 		scrollAreaLayer = new SelectionScrollInput(topLeftX + 93, topLeftY + 45, 90, 14).forOptions(layerOptions)
-				.titled("Layer").writingTo(labelLayer).setState(layers.indexOf(layer))
-				.calling(position -> initTypeScrollArea(theme, layers.get(position), DesignExporter.type));
+			.titled("Layer")
+			.writingTo(labelLayer)
+			.setState(layers.indexOf(layer))
+			.calling(position -> initTypeScrollArea(theme, layers.get(position), DesignExporter.type));
 
 		widgets.add(labelTheme);
 		widgets.add(labelLayer);
@@ -134,10 +137,13 @@ public class DesignExporterScreen extends AbstractSimiScreen {
 //		labelType.text = type.getDisplayName();
 
 		scrollAreaType = new SelectionScrollInput(topLeftX + 93, topLeftY + 65, 90, 14).forOptions(typeOptions)
-				.titled("Design Type").writingTo(labelType).setState(types.indexOf(type)).calling(position -> {
-					DesignExporter.type = types.get(position);
-					initAdditionalDataScrollArea(types.get(position));
-				});
+			.titled("Design Type")
+			.writingTo(labelType)
+			.setState(types.indexOf(type))
+			.calling(position -> {
+				DesignExporter.type = types.get(position);
+				initAdditionalDataScrollArea(types.get(position));
+			});
 
 		widgets.add(scrollAreaType);
 		initAdditionalDataScrollArea(type);
@@ -161,29 +167,32 @@ public class DesignExporterScreen extends AbstractSimiScreen {
 					additionalDataValue = type.getMinSize();
 				if (additionalDataValue > type.getMaxSize())
 					additionalDataValue = type.getMaxSize();
-				labelAdditionalData.text = additionalDataValue + "m";
+				labelAdditionalData.setText(additionalDataValue + "m");
 
 				if (type == DesignType.ROOF) {
 					int min = (type.getMinSize() - 1) / 2;
 					int max = (type.getMaxSize() - 1) / 2;
 
 					scrollAreaAdditionalData = new ScrollInput(topLeftX + 93, topLeftY + 85, 90, 14).withRange(min, max)
-							.setState((additionalDataValue - 1) / 2).writingTo(labelAdditionalData)
-							.calling(position -> {
-								additionalDataValue = position * 2 + 1;
-								labelAdditionalData.text = position * 2 + 1 + "m";
-							});
-					labelAdditionalData.text = additionalDataValue + "m";
+						.setState((additionalDataValue - 1) / 2)
+						.writingTo(labelAdditionalData)
+						.calling(position -> {
+							additionalDataValue = position * 2 + 1;
+							labelAdditionalData.setText(position * 2 + 1 + "m");
+						});
+					labelAdditionalData.setText(additionalDataValue + "m");
 
 				} else {
 					int min = type.getMinSize();
 					int max = type.getMaxSize();
 
-					scrollAreaAdditionalData = new ScrollInput(topLeftX + 93, topLeftY + 85, 90, 14)
-							.withRange(min, max + 1).setState(additionalDataValue).writingTo(labelAdditionalData)
+					scrollAreaAdditionalData =
+						new ScrollInput(topLeftX + 93, topLeftY + 85, 90, 14).withRange(min, max + 1)
+							.setState(additionalDataValue)
+							.writingTo(labelAdditionalData)
 							.calling(position -> {
 								additionalDataValue = position;
-								labelAdditionalData.text = position + "m";
+								labelAdditionalData.setText(position + "m");
 							});
 				}
 
@@ -195,9 +204,11 @@ public class DesignExporterScreen extends AbstractSimiScreen {
 				if (additionalDataValue >= subtypeOptions.size())
 					additionalDataValue = 0;
 
-				labelAdditionalData.text = subtypeOptions.get(additionalDataValue);
-				scrollAreaAdditionalData = new SelectionScrollInput(topLeftX + 93, topLeftY + 85, 90, 14)
-						.forOptions(subtypeOptions).writingTo(labelAdditionalData).setState(additionalDataValue)
+				labelAdditionalData.setText(subtypeOptions.get(additionalDataValue));
+				scrollAreaAdditionalData =
+					new SelectionScrollInput(topLeftX + 93, topLeftY + 85, 90, 14).forOptions(subtypeOptions)
+						.writingTo(labelAdditionalData)
+						.setState(additionalDataValue)
 						.calling(p -> additionalDataValue = p);
 			}
 
@@ -208,7 +219,7 @@ public class DesignExporterScreen extends AbstractSimiScreen {
 
 			additionalDataValue = -1;
 			additionalDataKey = "";
-			labelAdditionalData.text = "";
+			labelAdditionalData.setText("");
 			scrollAreaAdditionalData = null;
 
 		}
@@ -221,29 +232,31 @@ public class DesignExporterScreen extends AbstractSimiScreen {
 	}
 
 	@Override
-	protected void renderWindow(int mouseX, int mouseY, float partialTicks) {
-		ScreenResources.EXPORTER.draw(this, topLeftX, topLeftY);
-		
+	protected void renderWindow(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
+		ScreenResources.EXPORTER.draw(ms, this, topLeftX, topLeftY);
+
 		RenderSystem.pushMatrix();
 		RenderSystem.translatef((this.width - this.sWidth) / 2 + 250, 220, 100);
 		RenderSystem.rotatef(-30, .4f, 0, -.2f);
 		RenderSystem.rotatef(90 + 0.2f * animationProgress, 0, 1, 0);
 		RenderSystem.scalef(100, -100, 100);
-		GuiGameElement.of(minecraft.player.getHeldItemMainhand()).render();
+		GuiGameElement.of(client.player.getHeldItemMainhand())
+			.render(ms);
 		RenderSystem.popMatrix();
 
 		int color = ScreenResources.FONT_COLOR;
-		font.drawString("Export custom Designs", topLeftX + 10, topLeftY + 10, color);
-		font.drawString("Theme", topLeftX + 10, topLeftY + 28, color);
-		font.drawString("Building Layer", topLeftX + 10, topLeftY + 48, color);
-		font.drawString("Design Type", topLeftX + 10, topLeftY + 68, color);
-		font.drawString(additionalDataKey, topLeftX + 10, topLeftY + 88, color);
+		textRenderer.draw(ms, "Export custom Designs", topLeftX + 10, topLeftY + 10, color);
+		textRenderer.draw(ms, "Theme", topLeftX + 10, topLeftY + 28, color);
+		textRenderer.draw(ms, "Building Layer", topLeftX + 10, topLeftY + 48, color);
+		textRenderer.draw(ms, "Design Type", topLeftX + 10, topLeftY + 68, color);
+		textRenderer.draw(ms, additionalDataKey, topLeftX + 10, topLeftY + 88, color);
 	}
 
 	@Override
 	public void removed() {
 		DesignTheme theme = DesignExporter.theme;
-		DesignExporter.layer = theme.getLayers().get(scrollAreaLayer.getState());
+		DesignExporter.layer = theme.getLayers()
+			.get(scrollAreaLayer.getState());
 
 		List<DesignType> types = new ArrayList<>(theme.getTypes());
 

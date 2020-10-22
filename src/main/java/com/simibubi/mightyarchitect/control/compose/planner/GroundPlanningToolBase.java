@@ -23,7 +23,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 public abstract class GroundPlanningToolBase extends ComposerToolBase {
 
@@ -236,7 +236,7 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 
 	}
 
-	private Vec3d prevVertex;
+	private Vector3d prevVertex;
 	private int vertexCounter;
 	private String key;
 
@@ -246,8 +246,8 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 	}
 
 	GroundPlanningToolBase vertex(double x, double y, double z, List<OutlineParams> lines) {
-		Vec3d previousVec = prevVertex;
-		prevVertex = new Vec3d(x, y, z);
+		Vector3d previousVec = prevVertex;
+		prevVertex = new Vector3d(x, y, z);
 		if (previousVec == null)
 			return this;
 		lines.add(MightyClient.outliner.chaseLine(key + vertexCounter, previousVec, prevVertex));

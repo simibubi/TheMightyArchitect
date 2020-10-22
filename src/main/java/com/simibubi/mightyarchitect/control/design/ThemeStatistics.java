@@ -39,12 +39,15 @@ public class ThemeStatistics {
 	public static ThemeStatistics evaluate(DesignTheme theme) {
 		ThemeStatistics stats = new ThemeStatistics();
 
-		if (!theme.getTypes().contains(DesignType.TOWER_FLAT_ROOF))
+		if (!theme.getTypes()
+			.contains(DesignType.TOWER_FLAT_ROOF))
 			stats.hasFlatTowerRoof = false;
-		if (!theme.getTypes().contains(DesignType.TOWER_ROOF))
+		if (!theme.getTypes()
+			.contains(DesignType.TOWER_ROOF))
 			stats.hasConicalRoof = false;
 
-		if (theme.getTypes().contains(DesignType.TOWER)) {
+		if (theme.getTypes()
+			.contains(DesignType.TOWER)) {
 			// Determine min and max radius
 			stats.MinTowerRadius = stats.MaxRoomLength;
 			stats.MaxTowerRadius = 0;
@@ -86,7 +89,8 @@ public class ThemeStatistics {
 			stats.hasTowers = false;
 		}
 
-		if (theme.getTypes().contains(DesignType.ROOF)) {
+		if (theme.getTypes()
+			.contains(DesignType.ROOF)) {
 
 			// Determine min and max gable span
 			DesignQuery roofQuery = new DesignQuery(theme, DesignLayer.Roofing, DesignType.ROOF);
@@ -113,7 +117,8 @@ public class ThemeStatistics {
 			stats.MinGableRoof = stats.MaxRoomLength;
 		}
 
-		if (theme.getTypes().contains(DesignType.FLAT_ROOF)) {
+		if (theme.getTypes()
+			.contains(DesignType.FLAT_ROOF)) {
 			DesignQuery roofQuery = new DesignQuery(theme, DesignLayer.Roofing, DesignType.FLAT_ROOF);
 
 			if (!designExists(roofQuery)) {
@@ -173,18 +178,18 @@ public class ThemeStatistics {
 	}
 
 	private void chat(String message) {
-		Minecraft.getInstance().player.sendMessage(new StringTextComponent(message));
+		Minecraft.getInstance().player.sendStatusMessage(new StringTextComponent(message), false);
 	}
 
 	public DesignType fallbackRoof(Room room, boolean tower) {
 		DesignType desired = room.roofType;
-		
+
 		if (!tower && room.quadFacadeRoof && room.width != room.length)
 			room.quadFacadeRoof = false;
-		
+
 		if (!tower && desired == DesignType.ROOF) {
 			if (hasGables && Math.min(room.width, room.length) <= MaxGableRoof
-					&& Math.min(room.width, room.length) >= MinGableRoof)
+				&& Math.min(room.width, room.length) >= MinGableRoof)
 				return desired;
 			if (hasFlatRoof && Math.min(room.width, room.length) >= MinFlatRoof)
 				return DesignType.FLAT_ROOF;

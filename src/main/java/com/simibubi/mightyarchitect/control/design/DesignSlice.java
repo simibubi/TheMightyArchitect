@@ -31,7 +31,7 @@ public class DesignSlice {
 		}
 		
 		@Override
-		public String getName() {
+		public String getString() {
 			return name().toLowerCase();
 		}
 		

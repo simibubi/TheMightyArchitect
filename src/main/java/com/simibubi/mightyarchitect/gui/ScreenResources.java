@@ -1,5 +1,6 @@
 package com.simibubi.mightyarchitect.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.simibubi.mightyarchitect.TheMightyArchitect;
 
 import net.minecraft.client.Minecraft;
@@ -84,9 +85,13 @@ public enum ScreenResources {
 		this.startX = startX; this.startY = startY;
 	}
 	
-	public void draw(AbstractGui screen, int i, int j) {
+	public void draw(MatrixStack ms, AbstractGui screen, int i, int j) {
+		bind();
+		screen.drawTexture(ms, i, j, startX, startY, width, height);
+	}
+
+	public void bind() {
 		Minecraft.getInstance().getTextureManager().bindTexture(location);
-		screen.blit(i, j, startX, startY, width, height);
 	}
 
 }

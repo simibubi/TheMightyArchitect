@@ -1,7 +1,5 @@
 package com.simibubi.mightyarchitect.control;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,12 +17,8 @@ import com.simibubi.mightyarchitect.networking.InstantPrintPacket;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ILightReader;
 import net.minecraft.world.gen.feature.template.Template;
-import net.minecraft.world.gen.feature.template.Template.BlockInfo;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 public class Schematic {
 
@@ -90,7 +84,7 @@ public class Schematic {
 		return secondaryPalette;
 	}
 
-	public ILightReader getMaterializedSketch() {
+	public TemplateBlockAccess getMaterializedSketch() {
 		return materializedSketch;
 	}
 
@@ -139,10 +133,12 @@ public class Schematic {
 
 	public void materializeSketch() {
 		if (primaryPalette == null) {
-			primaryPalette = groundPlan.theme.getDefaultPalette().clone();
-			secondaryPalette = groundPlan.theme.getDefaultSecondaryPalette().clone();
+			primaryPalette = groundPlan.theme.getDefaultPalette()
+				.clone();
+			secondaryPalette = groundPlan.theme.getDefaultSecondaryPalette()
+				.clone();
 		}
-		
+
 		materializeSketch(primaryPalette, secondaryPalette);
 	}
 
@@ -150,19 +146,23 @@ public class Schematic {
 		bounds = null;
 
 		HashMap<BlockPos, BlockState> blockMap = new HashMap<>();
-		assembledSketch.get(0).forEach((pos, paletteInfo) -> {
-			BlockState state = primary.get(paletteInfo);
-			blockMap.put(pos, state);
-			checkBounds(pos);
-		});
-		assembledSketch.get(1).forEach((pos, paletteInfo) -> {
-			if (!assembledSketch.get(0).containsKey(pos)
-					|| !assembledSketch.get(0).get(pos).palette.isPrefferedOver(paletteInfo.palette)) {
-				BlockState state = secondary.get(paletteInfo);
+		assembledSketch.get(0)
+			.forEach((pos, paletteInfo) -> {
+				BlockState state = primary.get(paletteInfo);
 				blockMap.put(pos, state);
 				checkBounds(pos);
-			}
-		});
+			});
+		assembledSketch.get(1)
+			.forEach((pos, paletteInfo) -> {
+				if (!assembledSketch.get(0)
+					.containsKey(pos)
+					|| !assembledSketch.get(0)
+						.get(pos).palette.isPrefferedOver(paletteInfo.palette)) {
+					BlockState state = secondary.get(paletteInfo);
+					blockMap.put(pos, state);
+					checkBounds(pos);
+				}
+			});
 
 		materializedSketch = new TemplateBlockAccess(blockMap, bounds, anchor);
 	}
@@ -188,7 +188,8 @@ public class Schematic {
 			bounds.z = z;
 		}
 
-		BlockPos maxPos = bounds.getOrigin().add(bounds.getSize());
+		BlockPos maxPos = bounds.getOrigin()
+			.add(bounds.getSize());
 		if (x >= maxPos.getX())
 			bounds.width = x - bounds.x + 1;
 		if (y >= maxPos.getY())
@@ -199,27 +200,17 @@ public class Schematic {
 
 	public Template writeToTemplate() {
 		final Template template = new Template();
-		template.setAuthor(Minecraft.getInstance().player.getName().getFormattedText());
+		template.setAuthor(Minecraft.getInstance().player.getName()
+			.getString());
 
-		try {
-			Field fBlocks = ObfuscationReflectionHelper.findField(Template.class, "field_204769_a");
-			Field fSize = ObfuscationReflectionHelper.findField(Template.class, "field_186272_c");
-			
-			Object objectBlocks = fBlocks.get(template);
-			fSize.set(template, bounds.getSize());
-			@SuppressWarnings("unchecked")
-			List<List<BlockInfo>> blocks = (List<List<Template.BlockInfo>>) objectBlocks;
-			
-			List<BlockInfo> added = new ArrayList<>();
-			
-			materializedSketch.getBlockMap()
-			.forEach((pos, state) -> added.add(new BlockInfo(pos.subtract(bounds.getOrigin()), state, new CompoundNBT())));
-			blocks.add(added);
-			
-		} catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		
+		materializedSketch.localMode(true);
+		template.takeBlocksFromWorld(materializedSketch, materializedSketch.getBounds()
+			.getOrigin(),
+			materializedSketch.getBounds()
+				.getSize(),
+			false, null);
+		materializedSketch.localMode(false);
+
 		return template;
 	}
 
@@ -230,11 +221,11 @@ public class Schematic {
 	public boolean isEditingPrimary() {
 		return editingPrimary;
 	}
-	
+
 	public DesignTheme getTheme() {
 		return groundPlan.theme;
 	}
-	
+
 	public boolean isEmpty() {
 		return groundPlan == null;
 	}

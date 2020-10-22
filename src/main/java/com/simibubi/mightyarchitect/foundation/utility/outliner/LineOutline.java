@@ -6,14 +6,14 @@ import com.simibubi.mightyarchitect.foundation.utility.VecHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class LineOutline extends Outline {
 
-	protected Vec3d start = Vec3d.ZERO;
-	protected Vec3d end = Vec3d.ZERO;
+	protected Vector3d start = Vector3d.ZERO;
+	protected Vector3d end = Vector3d.ZERO;
 
-	public LineOutline set(Vec3d start, Vec3d end) {
+	public LineOutline set(Vector3d start, Vector3d end) {
 		this.start = start;
 		this.end = end;
 		return this;
@@ -26,12 +26,12 @@ public class LineOutline extends Outline {
 
 	public static class ChasingLineOutline extends LineOutline {
 
-		protected Vec3d prevStart = Vec3d.ZERO;
-		protected Vec3d prevEnd = Vec3d.ZERO;
-		protected Vec3d targetStart = Vec3d.ZERO;
-		protected Vec3d targetEnd = Vec3d.ZERO;
+		protected Vector3d prevStart = Vector3d.ZERO;
+		protected Vector3d prevEnd = Vector3d.ZERO;
+		protected Vector3d targetStart = Vector3d.ZERO;
+		protected Vector3d targetEnd = Vector3d.ZERO;
 
-		public ChasingLineOutline target(Vec3d start, Vec3d end) {
+		public ChasingLineOutline target(Vector3d start, Vector3d end) {
 			if (end.distanceTo(targetStart) + start.distanceTo(targetEnd) < end.distanceTo(targetEnd)
 				+ start.distanceTo(targetStart)) {
 				this.targetEnd = start;
@@ -44,7 +44,7 @@ public class LineOutline extends Outline {
 		}
 
 		@Override
-		public LineOutline set(Vec3d start, Vec3d end) {
+		public LineOutline set(Vector3d start, Vector3d end) {
 			prevEnd = end;
 			prevStart = start;
 			return super.set(start, end);
@@ -82,7 +82,7 @@ public class LineOutline extends Outline {
 		}
 
 		@Override
-		public LineOutline set(Vec3d start, Vec3d end) {
+		public LineOutline set(Vector3d start, Vector3d end) {
 			if (!end.equals(this.end))
 				super.set(start, end);
 			return this;
@@ -93,7 +93,7 @@ public class LineOutline extends Outline {
 			float pt = Minecraft.getInstance()
 				.getRenderPartialTicks();
 			float distanceToTarget = 1 - MathHelper.lerp(pt, prevProgress, progress);
-			Vec3d start = end.add(this.start.subtract(end)
+			Vector3d start = end.add(this.start.subtract(end)
 				.scale(distanceToTarget));
 			renderCuboidLine(ms, buffer, start, end);
 		}

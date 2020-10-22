@@ -10,7 +10,7 @@
 //import net.minecraft.client.renderer.Tessellator;
 //import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 //import net.minecraft.util.math.BlockPos;
-//import net.minecraft.util.math.Vec3d;
+//import net.minecraft.util.math.Vector3d;
 //
 //public class TessellatorHelper {
 //
@@ -25,7 +25,7 @@
 //        RenderSystem.color4f(1, 1, 1, 1);
 //
 //        ActiveRenderInfo renderInfo = mc.gameRenderer.getActiveRenderInfo();
-//        Vec3d view = renderInfo.getProjectedView();
+//        Vector3d view = renderInfo.getProjectedView();
 //        RenderSystem.translated(-view.x, -view.y, -view.z);
 //    }
 //
@@ -165,10 +165,10 @@
 //            double u1 = (mirrorTexture) ? l : 0;
 //            double u2 = (mirrorTexture) ? 0 : l;
 //
-//            TessellatorHelper.posTexShift(bufferBuilder, new Vec3d(xs, ys2, zs1), pos.south(l), u2, h);
-//            TessellatorHelper.posTexShift(bufferBuilder, new Vec3d(xs, ys1, zs1), pos.south(l).up(h), u2, 0);
-//            TessellatorHelper.posTexShift(bufferBuilder, new Vec3d(xs, ys1, zs2), pos.up(h), u1, 0);
-//            TessellatorHelper.posTexShift(bufferBuilder, new Vec3d(xs, ys2, zs2), pos, u1, h);
+//            TessellatorHelper.posTexShift(bufferBuilder, Vector3d.of(xs, ys2, zs1), pos.south(l), u2, h);
+//            TessellatorHelper.posTexShift(bufferBuilder, Vector3d.of(xs, ys1, zs1), pos.south(l).up(h), u2, 0);
+//            TessellatorHelper.posTexShift(bufferBuilder, Vector3d.of(xs, ys1, zs2), pos.up(h), u1, 0);
+//            TessellatorHelper.posTexShift(bufferBuilder, Vector3d.of(xs, ys2, zs2), pos, u1, h);
 //
 //        } else if (h == 0) { // XZ plane -> L has to be positive
 //
@@ -182,10 +182,10 @@
 //            double u1 = (mirrorTexture) ? w : 0;
 //            double u2 = (mirrorTexture) ? 0 : w;
 //
-//            TessellatorHelper.posTexShift(bufferBuilder, new Vec3d(xs2, ys, zs1), pos.south(l), u1, l);
-//            TessellatorHelper.posTexShift(bufferBuilder, new Vec3d(xs2, ys, zs2), pos, u1, 0);
-//            TessellatorHelper.posTexShift(bufferBuilder, new Vec3d(xs1, ys, zs2), pos.east(w), u2, 0);
-//            TessellatorHelper.posTexShift(bufferBuilder, new Vec3d(xs1, ys, zs1), pos.east(w).south(l), u2, l);
+//            TessellatorHelper.posTexShift(bufferBuilder, Vector3d.of(xs2, ys, zs1), pos.south(l), u1, l);
+//            TessellatorHelper.posTexShift(bufferBuilder, Vector3d.of(xs2, ys, zs2), pos, u1, 0);
+//            TessellatorHelper.posTexShift(bufferBuilder, Vector3d.of(xs1, ys, zs2), pos.east(w), u2, 0);
+//            TessellatorHelper.posTexShift(bufferBuilder, Vector3d.of(xs1, ys, zs1), pos.east(w).south(l), u2, l);
 //
 //        } else if (l == 0) { // XY plane -> H has to be positive
 //
@@ -201,15 +201,15 @@
 //            double u1 = (mirrorTexture) ? w : 0;
 //            double u2 = (mirrorTexture) ? 0 : w;
 //
-//            TessellatorHelper.posTexShift(bufferBuilder, new Vec3d(xs2, ys2, zs), pos, u1, h);
-//            TessellatorHelper.posTexShift(bufferBuilder, new Vec3d(xs2, ys1, zs), pos.up(h), u1, 0);
-//            TessellatorHelper.posTexShift(bufferBuilder, new Vec3d(xs1, ys1, zs), pos.east(w).up(h), u2, 0);
-//            TessellatorHelper.posTexShift(bufferBuilder, new Vec3d(xs1, ys2, zs), pos.east(w), u2, h);
+//            TessellatorHelper.posTexShift(bufferBuilder, Vector3d.of(xs2, ys2, zs), pos, u1, h);
+//            TessellatorHelper.posTexShift(bufferBuilder, Vector3d.of(xs2, ys1, zs), pos.up(h), u1, 0);
+//            TessellatorHelper.posTexShift(bufferBuilder, Vector3d.of(xs1, ys1, zs), pos.east(w).up(h), u2, 0);
+//            TessellatorHelper.posTexShift(bufferBuilder, Vector3d.of(xs1, ys2, zs), pos.east(w), u2, h);
 //
 //        }
 //    }
 //
-//    private static void posTexShift(BufferBuilder bufferBuilder, Vec3d shift, BlockPos pos, double u, double v) {
+//    private static void posTexShift(BufferBuilder bufferBuilder, Vector3d shift, BlockPos pos, double u, double v) {
 //        bufferBuilder.pos(shift.x + pos.getX(), shift.y + pos.getY(), shift.z + pos.getZ()).tex(u, v).endVertex();
 //    }
 //

@@ -86,7 +86,7 @@ public class ArchitectKits {
 		setHotbarItem(slot,
 				stack.setDisplayName(new StringTextComponent(TextFormatting.RESET + "" + TextFormatting.GOLD
 						+ palette.getDisplayName() + TextFormatting.WHITE + " (" + TextFormatting.GRAY
-						+ stack.getDisplayName().getFormattedText() + TextFormatting.WHITE + ")")));
+						+ stack.getDisplayName().getString() + TextFormatting.WHITE + ")")));
 	}
 
 }

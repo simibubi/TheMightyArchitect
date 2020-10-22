@@ -3,6 +3,7 @@ package com.simibubi.mightyarchitect.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.simibubi.mightyarchitect.gui.widgets.AbstractSimiWidget;
 
 import net.minecraft.client.gui.screen.Screen;
@@ -28,14 +29,14 @@ public abstract class AbstractSimiScreen extends Screen {
 	}
 
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
-		renderBackground();
-		renderWindow(mouseX, mouseY, partialTicks);
+	public void render(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
+		renderBackground(ms);
+		renderWindow(ms, mouseX, mouseY, partialTicks);
 		for (Widget widget : widgets)
-			widget.render(mouseX, mouseY, partialTicks);
-		renderWindowForeground(mouseX, mouseY, partialTicks);
+			widget.render(ms, mouseX, mouseY, partialTicks);
+		renderWindowForeground(ms, mouseX, mouseY, partialTicks);
 		for (Widget widget : widgets)
-			widget.renderToolTip(mouseX, mouseY);
+			widget.renderToolTip(ms, mouseX, mouseY);
 	}
 
 	@Override
@@ -87,16 +88,15 @@ public abstract class AbstractSimiScreen extends Screen {
 		return false;
 	}
 
-	protected abstract void renderWindow(int mouseX, int mouseY, float partialTicks);
+	protected abstract void renderWindow(MatrixStack ms, int mouseX, int mouseY, float partialTicks);
 
-	protected void renderWindowForeground(int mouseX, int mouseY, float partialTicks) {
+	protected void renderWindowForeground(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
 		for (Widget widget : widgets) {
 			if (!widget.isHovered())
 				continue;
-			
-			if (widget instanceof AbstractSimiWidget && !((AbstractSimiWidget) widget).getToolTip().isEmpty()) {
-				renderTooltip(((AbstractSimiWidget) widget).getToolTip(), mouseX, mouseY);
-			}
+			if (widget instanceof AbstractSimiWidget && !((AbstractSimiWidget) widget).getToolTip()
+				.isEmpty())
+				renderTooltip(ms, ((AbstractSimiWidget) widget).getToolTip(), mouseX, mouseY);
 		}
 	}
 

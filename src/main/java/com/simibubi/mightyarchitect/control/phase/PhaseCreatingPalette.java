@@ -1,7 +1,5 @@
 package com.simibubi.mightyarchitect.control.phase;
 
-import static net.minecraft.entity.player.PlayerEntity.REACH_DISTANCE;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,10 +21,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.common.ForgeMod;
 
 public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlights {
 
@@ -43,7 +41,7 @@ public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlig
 		changed = new boolean[16];
 
 		palette = model.getCreatedPalette();
-		center = world.getHeight(Heightmap.Type.WORLD_SURFACE, minecraft.player.getPosition());
+		center = world.getHeight(Heightmap.Type.WORLD_SURFACE, minecraft.player.getBlockPos());
 		grid = new HashMap<>();
 
 		for (int i = 0; i < 16; i++) {
@@ -131,12 +129,11 @@ public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlig
 	public void tickHighlightOutlines() {
 		BlockPos targetBlock = null;
 
-		RayTraceResult raytrace =
-			RaycastHelper.rayTraceRange(minecraft.world, minecraft.player, minecraft.player.getAttribute(REACH_DISTANCE)
-				.getValue());
+		RayTraceResult raytrace = RaycastHelper.rayTraceRange(minecraft.world, minecraft.player,
+			minecraft.player.getAttributeValue(ForgeMod.REACH_DISTANCE.get()));
 		if (raytrace != null && raytrace.getType() == Type.BLOCK) {
 			targetBlock = new BlockPos(raytrace.getHitVec());
-			if (grid.containsKey(targetBlock)) 
+			if (grid.containsKey(targetBlock))
 				sendStatusMessage(grid.get(targetBlock)
 					.getDisplayName());
 		}

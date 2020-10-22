@@ -8,7 +8,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import com.google.common.collect.ImmutableMap;
 import com.simibubi.mightyarchitect.control.compose.Cuboid;
 import com.simibubi.mightyarchitect.foundation.WrappedWorld;
 
@@ -19,15 +18,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.IFluidState;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.EmptyTickList;
 import net.minecraft.world.ITickList;
 import net.minecraft.world.LightType;
@@ -40,7 +37,8 @@ public class TemplateBlockAccess extends WrappedWorld {
 	private Map<BlockPos, BlockState> blocks;
 	private Cuboid bounds;
 	private BlockPos anchor;
-	
+	private boolean localMode;
+
 	public TemplateBlockAccess(Map<BlockPos, BlockState> blocks, Cuboid bounds, BlockPos anchor) {
 		super(Minecraft.getInstance().world);
 		this.blocks = blocks;
@@ -48,7 +46,11 @@ public class TemplateBlockAccess extends WrappedWorld {
 		this.anchor = anchor;
 		updateBlockstates();
 	}
-	
+
+	public void localMode(boolean local) {
+		this.localMode = local;
+	}
+
 	private void updateBlockstates() {
 		Set<BlockPos> keySet = new HashSet<>(blocks.keySet());
 		keySet.forEach(pos -> {
@@ -62,7 +64,7 @@ public class TemplateBlockAccess extends WrappedWorld {
 	public Set<BlockPos> getAllPositions() {
 		return blocks.keySet();
 	}
-	
+
 	@Override
 	public TileEntity getTileEntity(BlockPos pos) {
 		return null;
@@ -70,7 +72,7 @@ public class TemplateBlockAccess extends WrappedWorld {
 
 	@Override
 	public BlockState getBlockState(BlockPos globalPos) {
-		BlockPos pos = globalPos.subtract(anchor);
+		BlockPos pos = localMode ? globalPos : globalPos.subtract(anchor);
 		if (getBounds().contains(pos) && blocks.containsKey(pos)) {
 			return blocks.get(pos);
 		} else {
@@ -83,18 +85,14 @@ public class TemplateBlockAccess extends WrappedWorld {
 	}
 
 	@Override
-	public IFluidState getFluidState(BlockPos pos) {
-		return new FluidState(Fluids.EMPTY, ImmutableMap.of());
-	}
-
-	@Override
 	public Biome getBiome(BlockPos pos) {
-		return Biomes.THE_VOID;
+		return getRegistryManager().get(Registry.BIOME_KEY)
+			.get(Biomes.THE_VOID);
 	}
 
 	@Override
 	public int getLight(BlockPos p_201696_1_) {
-		return 10;
+		return 0xF;
 	}
 
 	@Override
@@ -104,7 +102,7 @@ public class TemplateBlockAccess extends WrappedWorld {
 
 	@Override
 	public <T extends Entity> List<T> getEntitiesWithinAABB(Class<? extends T> arg0, AxisAlignedBB arg1,
-			Predicate<? super T> arg2) {
+		Predicate<? super T> arg2) {
 		return Collections.emptyList();
 	}
 
@@ -114,13 +112,13 @@ public class TemplateBlockAccess extends WrappedWorld {
 	}
 
 	@Override
-	public int getLightLevel(LightType p_226658_1_, BlockPos p_226658_2_) {
-		return 10;
+	public int getLightLevel(LightType lt, BlockPos p_226658_2_) {
+		return lt == LightType.BLOCK ? 12 : 14;
 	}
-	
+
 	@Override
-	public int getLightValue(BlockPos p_217298_1_) {
-		return 10;
+	public int getLightValue(BlockPos pos) {
+		return super.getLightValue(pos);
 	}
 
 	@Override
@@ -130,12 +128,7 @@ public class TemplateBlockAccess extends WrappedWorld {
 
 	@Override
 	public int getHeight(Type heightmapType, int x, int z) {
-		return 0;
-	}
-
-	@Override
-	public int getSkylightSubtracted() {
-		return 0;
+		return 256;
 	}
 
 	@Override
@@ -154,8 +147,8 @@ public class TemplateBlockAccess extends WrappedWorld {
 	}
 
 	@Override
-	public boolean setBlockState(BlockPos arg0, BlockState arg1, int arg2) {
-		blocks.put(arg0.subtract(anchor), arg1);
+	public boolean setBlockState(BlockPos pos, BlockState state, int p_241211_3_, int p_241211_4_) {
+		blocks.put(localMode ? pos : pos.subtract(anchor), state);
 		return true;
 	}
 
@@ -175,22 +168,21 @@ public class TemplateBlockAccess extends WrappedWorld {
 	}
 
 	@Override
-	public void notifyNeighbors(BlockPos pos, Block blockIn) {
-	}
+	public void notifyNeighborsOfStateChange(BlockPos p_195593_1_, Block p_195593_2_) {}
+
+	@Override
+	public void notifyBlockUpdate(BlockPos pos, BlockState oldState, BlockState newState, int flags) {}
 
 	@Override
 	public void playSound(PlayerEntity player, BlockPos pos, SoundEvent soundIn, SoundCategory category, float volume,
-			float pitch) {
-	}
+		float pitch) {}
 
 	@Override
 	public void addParticle(IParticleData particleData, double x, double y, double z, double xSpeed, double ySpeed,
-			double zSpeed) {
-	}
+		double zSpeed) {}
 
 	@Override
-	public void playEvent(PlayerEntity player, int type, BlockPos pos, int data) {
-	}
+	public void playEvent(PlayerEntity player, int type, BlockPos pos, int data) {}
 
 	public Cuboid getBounds() {
 		return bounds;

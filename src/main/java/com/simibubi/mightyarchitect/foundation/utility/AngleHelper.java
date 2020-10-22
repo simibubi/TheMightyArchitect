@@ -2,9 +2,9 @@ package com.simibubi.mightyarchitect.foundation.utility;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Direction.Axis;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

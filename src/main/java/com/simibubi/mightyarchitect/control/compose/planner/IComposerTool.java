@@ -1,5 +1,7 @@
 package com.simibubi.mightyarchitect.control.compose.planner;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 public interface IComposerTool {
 	
 	static Object toolOutlineKey = new Object();
@@ -11,6 +13,6 @@ public interface IComposerTool {
 	public void tickGroundPlanOutlines();
 	
 	public void updateSelection();
-	public void renderOverlay();
+	public void renderOverlay(MatrixStack ms);
 	public void init();
 }

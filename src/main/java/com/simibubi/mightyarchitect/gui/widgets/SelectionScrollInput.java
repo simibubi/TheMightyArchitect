@@ -3,11 +3,14 @@ package com.simibubi.mightyarchitect.gui.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
 public class SelectionScrollInput extends ScrollInput {
 
 	protected List<String> options;
+	protected ITextComponent scrollToSelect = new StringTextComponent("Scroll to Select");
 
 	public SelectionScrollInput(int xIn, int yIn, int widthIn, int heightIn) {
 		super(xIn, yIn, widthIn, heightIn);
@@ -23,9 +26,9 @@ public class SelectionScrollInput extends ScrollInput {
 
 	@Override
 	protected void writeToLabel() {
-		displayLabel.text = options.get(state);
+		displayLabel.text = new StringTextComponent(options.get(state));
 	}
-	
+
 	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
 		return super.mouseScrolled(mouseX, mouseY, -delta);
@@ -33,15 +36,24 @@ public class SelectionScrollInput extends ScrollInput {
 
 	@Override
 	protected void updateTooltip() {
-		super.updateTooltip();
+		toolTip.clear();
+		toolTip.add(title.copy()
+			.formatted(TextFormatting.BLUE));
 		for (int i = min; i < max; i++) {
-			StringBuilder result = new StringBuilder();
 			if (i == state)
-				result.append(TextFormatting.WHITE).append("-> ").append(options.get(i));
+				toolTip.add(StringTextComponent.EMPTY.copy()
+					.append("-> ")
+					.append(options.get(i))
+					.formatted(TextFormatting.WHITE));
 			else
-				result.append(TextFormatting.GRAY).append("> ").append(options.get(i));
-			toolTip.add(result.toString());
+				toolTip.add(StringTextComponent.EMPTY.copy()
+					.append("> ")
+					.append(options.get(i))
+					.formatted(TextFormatting.GRAY));
 		}
+		toolTip.add(StringTextComponent.EMPTY.copy()
+			.append(scrollToSelect)
+			.formatted(TextFormatting.ITALIC, TextFormatting.DARK_GRAY));
 	}
 
 }

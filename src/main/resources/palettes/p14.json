@@ -2,11 +2,11 @@
   "Palette": {
     "OUTER_THICK": {
       "Properties": {
-        "east": "false",
+        "east": "none",
         "waterlogged": "false",
-        "south": "false",
-        "north": "false",
-        "west": "false",
+        "south": "none",
+        "north": "none",
+        "west": "none",
         "up": "true"
       },
       "Name": "minecraft:mossy_cobblestone_wall"
@@ -85,11 +85,11 @@
     },
     "HEAVY_WINDOW": {
       "Properties": {
-        "east": "false",
+        "east": "none",
         "waterlogged": "false",
-        "south": "false",
-        "north": "false",
-        "west": "false",
+        "south": "none",
+        "north": "none",
+        "west": "none",
         "up": "true"
       },
       "Name": "minecraft:diorite_wall"

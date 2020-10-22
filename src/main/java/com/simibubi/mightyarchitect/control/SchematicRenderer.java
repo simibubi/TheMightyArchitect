@@ -2,8 +2,6 @@ package com.simibubi.mightyarchitect.control;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,7 +20,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ILightReader;
+import net.minecraft.world.IBlockDisplayReader;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.data.EmptyModelData;
 
@@ -69,6 +67,7 @@ public class SchematicRenderer {
 	public void render(MatrixStack ms, IRenderTypeBuffer buffer) {
 		if (!active)
 			return;
+
 		ms.push();
 		ms.translate(anchor.getX(), anchor.getY(), anchor.getZ());
 		buffer.getBuffer(RenderType.getSolid());
@@ -78,6 +77,7 @@ public class SchematicRenderer {
 			SuperByteBuffer superByteBuffer = bufferCache.get(layer);
 			superByteBuffer.renderInto(ms, buffer.getBuffer(layer));
 		}
+
 		ms.pop();
 	}
 
@@ -85,14 +85,14 @@ public class SchematicRenderer {
 		usedBlockRenderLayers.clear();
 		startedBufferBuilders.clear();
 
-		final ILightReader blockAccess = schematic.getMaterializedSketch();
+		final IBlockDisplayReader blockAccess = schematic.getMaterializedSketch();
 		final BlockRendererDispatcher blockRendererDispatcher = minecraft.getBlockRendererDispatcher();
 
-		List<BlockState> blockstates = new LinkedList<>();
 		Map<RenderType, BufferBuilder> buffers = new HashMap<>();
 		MatrixStack ms = new MatrixStack();
 
-		BlockPos.func_229383_a_(schematic.getLocalBounds().toMBB())
+		BlockPos.stream(schematic.getLocalBounds()
+			.toMBB())
 			.forEach(localPos -> {
 				ms.push();
 				MatrixStacker.of(ms)
@@ -114,7 +114,6 @@ public class SchematicRenderer {
 						minecraft.world.rand, EmptyModelData.INSTANCE)) {
 						usedBlockRenderLayers.add(blockRenderLayer);
 					}
-					blockstates.add(state);
 				}
 
 				ForgeHooksClient.setRenderLayer(null);

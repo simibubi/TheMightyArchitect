@@ -2,26 +2,29 @@ package com.simibubi.mightyarchitect.gui.widgets;
 
 import java.util.function.Consumer;
 
-import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
-
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 
 public class ScrollInput extends AbstractSimiWidget {
 
 	protected Consumer<Integer> onScroll;
 	protected int state;
-	protected String title = "Choose an option";
 	protected Label displayLabel;
-
+	protected ITextComponent title = new StringTextComponent("Choose an Option");
+	protected ITextComponent scrollToModify = new StringTextComponent("Scroll to Modify");
 	protected int min, max;
+	protected int shiftStep;
 
 	public ScrollInput(int xIn, int yIn, int widthIn, int heightIn) {
 		super(xIn, yIn, widthIn, heightIn);
 		state = 0;
 		min = 0;
 		max = 1;
+		shiftStep = 5;
 	}
-	
+
 	public ScrollInput withRange(int min, int max) {
 		this.min = min;
 		this.max = max;
@@ -33,8 +36,13 @@ public class ScrollInput extends AbstractSimiWidget {
 		return this;
 	}
 
+	public ScrollInput removeCallback() {
+		this.onScroll = null;
+		return this;
+	}
+
 	public ScrollInput titled(String title) {
-		this.title = title;
+		this.title = new StringTextComponent(title);
 		updateTooltip();
 		return this;
 	}
@@ -58,20 +66,29 @@ public class ScrollInput extends AbstractSimiWidget {
 		return this;
 	}
 
+	public ScrollInput withShiftStep(int step) {
+		shiftStep = step;
+		return this;
+	}
+
 	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-		if (!isHovered)
+		if (!hovered)
 			return false;
 
 		int priorState = state;
-		int step = (int) Math.signum(delta) * (Keyboard.isKeyDown(Keyboard.LSHIFT) ? 5 : 1);
+		boolean shifted = Screen.hasShiftDown();
+		int step = (int) Math.signum(delta);
 
 		state += step;
+		if (shifted)
+			state -= state % shiftStep;
+
 		clampState();
-		
+
 		if (priorState != state)
 			onChanged();
-		
+
 		return priorState != state;
 	}
 
@@ -81,159 +98,25 @@ public class ScrollInput extends AbstractSimiWidget {
 		if (state < min)
 			state = min;
 	}
-	
-	protected void onChanged() {
+
+	public void onChanged() {
 		if (displayLabel != null)
 			writeToLabel();
 		if (onScroll != null)
 			onScroll.accept(state);
 		updateTooltip();
 	}
-	
+
 	protected void writeToLabel() {
-		displayLabel.text = "" + state;
+		displayLabel.text = new StringTextComponent(String.valueOf(state));
 	}
 
 	protected void updateTooltip() {
 		toolTip.clear();
-		toolTip.add(TextFormatting.BLUE + title);
+		toolTip.add(title.copy()
+			.formatted(TextFormatting.BLUE));
+		toolTip.add(scrollToModify.copy()
+			.formatted(TextFormatting.ITALIC, TextFormatting.DARK_GRAY));
 	}
-	
-//	public interface IScrollAction {
-//		public void onScroll(int position);
-//	}
-//
-//	public interface ICancelableScrollAction extends IScrollAction {
-//		public void onScroll(int position);
-//
-//		public boolean canScroll(int position);
-//	}
-//
-//	private int x, y, width, height;
-//	private IScrollAction action;
-//	public boolean enabled;
-//	private Optional<List<String>> tooltipContent;
-//	private int min, max;
-//	private boolean limitless;
-//	private boolean numeric;
-//
-//	public ScrollArea(List<String> options, IScrollAction action) {
-//		this(0, options.size(), action);
-//		this.tooltipContent = Optional.of(options);
-//		updateTooltip();
-//	}
-//
-//	public ScrollArea(int min, int max, IScrollAction action) {
-//		this(action);
-//		this.limitless = false;
-//		this.min = min;
-//		this.max = max;
-//	}
-//
-//	public ScrollArea(IScrollAction action) {
-//		this.enabled = true;
-//		this.action = action;
-//		this.tooltipContent = Optional.absent();
-//		this.limitless = true;
-//		this.numeric = false;
-//	}
-//
-//	public void setBounds(int x, int y, int width, int height) {
-//		this.x = x;
-//		this.y = y;
-//		this.width = width;
-//		this.height = height;
-//	}
-//	
-//	public void setState(int state) {
-//		currentState = state;
-//		updateTooltip();
-//	}
-//
-//	public int getState() {
-//		return currentState;
-//	}
-//
-//	public boolean isHovered(double x, double y) {
-//		return (x > this.x && x < this.x + this.width && y > this.y && y < this.y + this.height);
-//	}
-//
-//	public void tryScroll(double mouseX, double mouseY, int amount) {
-//		if (enabled && isHovered(mouseX, mouseY)) {
-//			scroll(numeric? -amount : amount);
-//		}
-//	}
-//	
-//	public void setNumeric(boolean numeric) {
-//		this.numeric = numeric;
-//	}
-//
-//	private void scroll(int amount) {
-//		if (enabled) {
-//
-//			if (limitless) {
-//				if (!(action instanceof ICancelableScrollAction)
-//						|| ((ICancelableScrollAction) action).canScroll(amount))
-//					action.onScroll(amount);
-//				return;
-//			}
-//
-//			if (!(action instanceof ICancelableScrollAction)
-//					|| ((ICancelableScrollAction) action).canScroll(currentState + amount)) {
-//				currentState += amount;
-//				if (currentState < min)
-//					currentState = min;
-//				if (currentState >= max)
-//					currentState = max - 1;
-//				updateTooltip();
-//				action.onScroll(currentState);
-//			}
-//		}
-//	}
-//
-//	public void draw(Screen screen, int mouseX, int mouseY) {
-//		RenderSystem.pushLightingAttributes();
-//		if (enabled && isHovered(mouseX, mouseY)) {
-//			RenderSystem.pushMatrix();
-//			RenderSystem.translated(mouseX, mouseY,0);
-//			if (tooltipContent.isPresent())
-//				screen.renderTooltip(getToolTip(), 0, 0);
-//			else
-//				screen.renderTooltip(TextFormatting.BLUE + title, 0, 0);
-//			RenderSystem.popMatrix();
-//		}
-//
-//		RenderSystem.popAttributes();
-//	}
-//
-//	public List<String> getToolTip() {
-//		return tooltip;
-//	}
-//
-//	public void setTitle(String title) {
-//		this.title = title;
-//		updateTooltip();
-//	}
-//
-//	private void updateTooltip() {
-//		tooltip = new LinkedList<>();
-//		tooltip.add(TextFormatting.BLUE + title);
-//
-//		if (tooltipContent.isPresent()) {
-//			for (int i = min; i < max; i++) {
-//				StringBuilder result = new StringBuilder();
-//				if (i == currentState)
-//					result.append(TextFormatting.WHITE).append("-> ").append(tooltipContent.get().get(i));
-//				else
-//					result.append(TextFormatting.GRAY).append("> ").append(tooltipContent.get().get(i));
-//				tooltip.add(result.toString());
-//			}
-//
-//		}
-//	}
-//
-//	public boolean isNumeric() {
-//		return numeric;
-//	}
 
 }

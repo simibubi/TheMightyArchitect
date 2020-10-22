@@ -10,6 +10,7 @@ import org.apache.commons.io.IOUtils;
 import org.lwjgl.glfw.GLFW;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.simibubi.mightyarchitect.AllPackets;
 import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.compose.GroundPlan;
@@ -182,7 +183,7 @@ public class ArchitectManager {
 				.getOrigin());
 		StringTextComponent component = new StringTextComponent("Deploy Schematic at: " + TextFormatting.BLUE + "["
 			+ pos.getX() + "," + pos.getY() + "," + pos.getZ() + "]");
-		Minecraft.getInstance().player.sendMessage(component);
+		Minecraft.getInstance().player.sendStatusMessage(component, false);
 		unload();
 	}
 
@@ -334,7 +335,7 @@ public class ArchitectManager {
 
 	@SubscribeEvent
 	public static void onDrawGameOverlay(RenderGameOverlayEvent.Pre event) {
-		if (event.getType() != ElementType.ALL)
+		if (event.getType() != ElementType.HOTBAR)
 			return;
 
 		IArchitectPhase phaseHandler = phase.getPhaseHandler();
@@ -343,6 +344,8 @@ public class ArchitectManager {
 		}
 
 		menu.drawPassive();
+		RenderSystem.enableBlend();
+		RenderSystem.enableTexture();
 	}
 
 	@SubscribeEvent

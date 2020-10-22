@@ -2,6 +2,7 @@ package com.simibubi.mightyarchitect.control.compose.planner;
 
 import org.lwjgl.glfw.GLFW;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.Schematic;
@@ -88,7 +89,7 @@ public abstract class ComposerToolBase implements IComposerTool {
 	}
 	
 	@Override
-	public void renderOverlay() {
+	public void renderOverlay(MatrixStack ms) {
 		RenderSystem.pushMatrix();
 		Minecraft mc = Minecraft.getInstance();
 		MainWindow mainWindow = mc.getWindow();
@@ -101,13 +102,13 @@ public abstract class ComposerToolBase implements IComposerTool {
 			int color = 0xFFFFFFFF;
 			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL))
 				color = 0x66AACCFF;
-			mc.fontRenderer.drawStringWithShadow(toolModeNoCtrl, 0, 0, color);
+			mc.fontRenderer.drawWithShadow(ms, toolModeNoCtrl, 0, 0, color);
 		}
 		if (toolModeCtrl != null) {
 			int color = 0xFFFFFFFF;
 			if (!Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL))
 				color = 0x66AACCFF;
-			mc.fontRenderer.drawStringWithShadow(toolModeCtrl, 0, 12, color);
+			mc.fontRenderer.drawWithShadow(ms, toolModeCtrl, 0, 12, color);
 		}
 
 		RenderSystem.color4f(1, 1, 1, 1);

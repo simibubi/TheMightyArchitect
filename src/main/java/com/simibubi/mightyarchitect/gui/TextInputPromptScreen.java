@@ -4,8 +4,12 @@ import java.util.function.Consumer;
 
 import org.lwjgl.glfw.GLFW;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 public class TextInputPromptScreen extends AbstractSimiScreen {
 
@@ -16,9 +20,9 @@ public class TextInputPromptScreen extends AbstractSimiScreen {
 	private Button confirm;
 	private Button abort;
 
-	private String buttonTextConfirm;
-	private String buttonTextAbort;
-	private String title;
+	private ITextComponent buttonTextConfirm;
+	private ITextComponent buttonTextAbort;
+	private ITextComponent title;
 
 	private boolean confirmed;
 
@@ -27,8 +31,8 @@ public class TextInputPromptScreen extends AbstractSimiScreen {
 		this.callback = callBack;
 		this.abortCallback = abortCallback;
 
-		buttonTextConfirm = "Confirm";
-		buttonTextAbort = "Abort";
+		buttonTextConfirm = new StringTextComponent("Confirm");
+		buttonTextAbort = new StringTextComponent("Abort");
 		confirmed = false;
 	}
 
@@ -37,7 +41,8 @@ public class TextInputPromptScreen extends AbstractSimiScreen {
 		super.init();
 		setWindowSize(ScreenResources.TEXT_INPUT.width, ScreenResources.TEXT_INPUT.height + 30);
 
-		this.nameField = new TextFieldWidget(font, topLeftX + 33, topLeftY + 26, 128, 8, "");
+		this.nameField =
+			new TextFieldWidget(textRenderer, topLeftX + 33, topLeftY + 26, 128, 8, new StringTextComponent(""));
 		this.nameField.setTextColor(-1);
 		this.nameField.setDisabledTextColour(-1);
 		this.nameField.setEnableBackgroundDrawing(false);
@@ -47,11 +52,11 @@ public class TextInputPromptScreen extends AbstractSimiScreen {
 		confirm = new Button(topLeftX - 5, topLeftY + 50, 100, 20, buttonTextConfirm, button -> {
 			callback.accept(nameField.getText());
 			confirmed = true;
-			minecraft.displayGuiScreen(null);
+			client.displayGuiScreen(null);
 		});
 
 		abort = new Button(topLeftX + 100, topLeftY + 50, 100, 20, buttonTextAbort, button -> {
-			minecraft.displayGuiScreen(null);
+			client.displayGuiScreen(null);
 		});
 
 		widgets.add(confirm);
@@ -60,10 +65,10 @@ public class TextInputPromptScreen extends AbstractSimiScreen {
 	}
 
 	@Override
-	public void renderWindow(int mouseX, int mouseY, float partialTicks) {
-		ScreenResources.TEXT_INPUT.draw(this, topLeftX, topLeftY);
-		font.drawString(title, topLeftX + (sWidth / 2) - (font.getStringWidth(title) / 2), topLeftY + 11,
-				ScreenResources.FONT_COLOR);
+	public void renderWindow(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
+		ScreenResources.TEXT_INPUT.draw(ms, this, topLeftX, topLeftY);
+		textRenderer.draw(ms, title, topLeftX + (sWidth / 2) - (textRenderer.getWidth(title) / 2), topLeftY + 11,
+			ScreenResources.FONT_COLOR);
 	}
 
 	@Override
@@ -74,15 +79,15 @@ public class TextInputPromptScreen extends AbstractSimiScreen {
 	}
 
 	public void setButtonTextConfirm(String buttonTextConfirm) {
-		this.buttonTextConfirm = buttonTextConfirm;
+		this.buttonTextConfirm = new StringTextComponent(buttonTextConfirm);
 	}
 
 	public void setButtonTextAbort(String buttonTextAbort) {
-		this.buttonTextAbort = buttonTextAbort;
+		this.buttonTextAbort = new StringTextComponent(buttonTextAbort);
 	}
 
 	public void setTitle(String title) {
-		this.title = title;
+		this.title = new StringTextComponent(title);
 	}
 
 	@Override

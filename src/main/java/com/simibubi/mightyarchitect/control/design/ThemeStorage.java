@@ -26,8 +26,11 @@ public class ThemeStorage {
 
 	public enum IncludedThemes {
 
-		Medieval("medieval", 3, 5), Fallback("fallback_theme", 3, 4), Modern("modern", 2, 4),
-		TownHouse("town_house", 4, 5), Cattingham("cattingham_palace", 7, 2, 6);
+		Medieval("medieval", 3, 5),
+		Fallback("fallback_theme", 3, 4),
+		Modern("modern", 2, 4),
+		TownHouse("town_house", 4, 5),
+		Cattingham("cattingham_palace", 7, 2, 6);
 
 		public DesignTheme theme;
 		public String themeFolder;
@@ -85,13 +88,14 @@ public class ThemeStorage {
 	public static DesignTheme createTheme(String name) {
 		if (name.isEmpty())
 			name = "My Theme";
-		DesignTheme theme = new DesignTheme(name, Minecraft.getInstance().player.getName().getFormattedText());
+		DesignTheme theme = new DesignTheme(name, Minecraft.getInstance().player.getName()
+			.getString());
 		theme.setFilePath(FilesHelper.slug(name));
 		theme.setImported(true);
 		theme.setDefaultPalette(PaletteDefinition.defaultPalette());
 		theme.setDefaultSecondaryPalette(PaletteDefinition.defaultPalette());
-		return theme.withLayers(DesignLayer.Regular, DesignLayer.Roofing, DesignLayer.Foundation).withTypes(
-				DesignType.WALL, DesignType.CORNER, DesignType.ROOF, DesignType.FACADE, DesignType.FLAT_ROOF);
+		return theme.withLayers(DesignLayer.Regular, DesignLayer.Roofing, DesignLayer.Foundation)
+			.withTypes(DesignType.WALL, DesignType.CORNER, DesignType.ROOF, DesignType.FACADE, DesignType.FLAT_ROOF);
 	}
 
 	public static void exportTheme(DesignTheme theme) {
@@ -105,11 +109,12 @@ public class ThemeStorage {
 		FilesHelper.saveTagCompoundAsJson(theme.asTagCompound(), filepath);
 
 		String palettePath = folderPath + "/" + foldername + "/palette.json";
-		FilesHelper.saveTagCompoundAsJson(theme.getDefaultPalette().writeToNBT(new CompoundNBT()), palettePath);
+		FilesHelper.saveTagCompoundAsJson(theme.getDefaultPalette()
+			.writeToNBT(new CompoundNBT()), palettePath);
 
 		String palette2Path = folderPath + "/" + foldername + "/palette2.json";
-		FilesHelper.saveTagCompoundAsJson(theme.getDefaultSecondaryPalette().writeToNBT(new CompoundNBT()),
-				palette2Path);
+		FilesHelper.saveTagCompoundAsJson(theme.getDefaultSecondaryPalette()
+			.writeToNBT(new CompoundNBT()), palette2Path);
 	}
 
 	public static String exportThemeFullyAsFile(DesignTheme theme, boolean compressed) {
@@ -118,11 +123,13 @@ public class ThemeStorage {
 		CompoundNBT massiveThemeTag = new CompoundNBT();
 
 		massiveThemeTag.put("Theme", theme.asTagCompound());
-		massiveThemeTag.put("Palette", theme.getDefaultPalette().writeToNBT(new CompoundNBT()));
-		massiveThemeTag.put("SecondaryPalette", theme.getDefaultSecondaryPalette().writeToNBT(new CompoundNBT()));
+		massiveThemeTag.put("Palette", theme.getDefaultPalette()
+			.writeToNBT(new CompoundNBT()));
+		massiveThemeTag.put("SecondaryPalette", theme.getDefaultSecondaryPalette()
+			.writeToNBT(new CompoundNBT()));
 
-		Map<DesignLayer, Map<DesignType, Set<CompoundNBT>>> designFiles = DesignResourceLoader
-				.loadThemeFromFolder(theme);
+		Map<DesignLayer, Map<DesignType, Set<CompoundNBT>>> designFiles =
+			DesignResourceLoader.loadThemeFromFolder(theme);
 
 		CompoundNBT layers = new CompoundNBT();
 		for (DesignLayer layer : theme.getLayers()) {
@@ -131,11 +138,13 @@ public class ThemeStorage {
 
 			CompoundNBT types = new CompoundNBT();
 			for (DesignType type : theme.getTypes()) {
-				if (!designFiles.get(layer).containsKey(type))
+				if (!designFiles.get(layer)
+					.containsKey(type))
 					continue;
 
 				ListNBT designs = new ListNBT();
-				for (CompoundNBT tag : designFiles.get(layer).get(type))
+				for (CompoundNBT tag : designFiles.get(layer)
+					.get(type))
 					designs.add(tag);
 				types.put(type.name(), designs);
 			}
@@ -187,7 +196,8 @@ public class ThemeStorage {
 
 			DirectoryStream<Path> newDirectoryStream = Files.newDirectoryStream(Paths.get(folderPath));
 			for (Path path : newDirectoryStream) {
-				String themeFolder = path.getFileName().toString();
+				String themeFolder = path.getFileName()
+					.toString();
 
 				CompoundNBT themeCompound;
 				CompoundNBT paletteCompound;
@@ -202,7 +212,7 @@ public class ThemeStorage {
 					if (themeFolder.endsWith(".theme")) {
 						try {
 							InputStream inputStream = Files.newInputStream(Paths.get(folderPath + "/" + themeFolder),
-									StandardOpenOption.READ);
+								StandardOpenOption.READ);
 							themeFile = CompressedStreamTools.readCompressed(inputStream);
 							inputStream.close();
 						} catch (IOException e) {
@@ -220,8 +230,8 @@ public class ThemeStorage {
 				} else {
 					themeCompound = FilesHelper.loadJsonAsNBT(folderPath + "/" + themeFolder + "/theme.json");
 					paletteCompound = FilesHelper.loadJsonAsNBT(folderPath + "/" + themeFolder + "/palette.json");
-					secondaryPaletteCompound = FilesHelper
-							.loadJsonAsNBT(folderPath + "/" + themeFolder + "/palette2.json");
+					secondaryPaletteCompound =
+						FilesHelper.loadJsonAsNBT(folderPath + "/" + themeFolder + "/palette2.json");
 				}
 
 				if (themeCompound == null)

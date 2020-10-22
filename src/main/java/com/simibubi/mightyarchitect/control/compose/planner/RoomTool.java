@@ -17,7 +17,7 @@ import com.simibubi.mightyarchitect.control.design.ThemeStatistics;
 import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
 
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class RoomTool extends GroundPlanningToolBase {
 
@@ -242,7 +242,7 @@ public class RoomTool extends GroundPlanningToolBase {
 	}
 
 	private void chaseText(Object key, float x, float y, float z, String text) {
-		MightyClient.outliner.chaseText(key, new Vec3d(x, y, z), text)
+		MightyClient.outliner.chaseText(key, new Vector3d(x, y, z), text)
 			.colored(0)
 			.coloredFaces(0xffffff)
 			.disableNormals()

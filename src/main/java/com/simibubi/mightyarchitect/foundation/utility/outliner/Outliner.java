@@ -16,7 +16,7 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class Outliner {
 
@@ -24,7 +24,7 @@ public class Outliner {
 
 	// Facade
 
-	public OutlineParams showLine(Object slot, Vec3d start, Vec3d end) {
+	public OutlineParams showLine(Object slot, Vector3d start, Vector3d end) {
 		if (!outlines.containsKey(slot)) {
 			LineOutline outline = new LineOutline();
 			outlines.put(slot, new OutlineEntry(outline));
@@ -35,7 +35,7 @@ public class Outliner {
 		return entry.outline.getParams();
 	}
 	
-	public OutlineParams chaseLine(Object slot, Vec3d start, Vec3d end) {
+	public OutlineParams chaseLine(Object slot, Vector3d start, Vector3d end) {
 		if (!outlines.containsKey(slot)) {
 			ChasingLineOutline outline = new ChasingLineOutline();
 			outline.set(start, end);
@@ -47,7 +47,7 @@ public class Outliner {
 		return entry.outline.getParams();
 	}
 	
-	public OutlineParams chaseText(Object slot, Vec3d location, String text) {
+	public OutlineParams chaseText(Object slot, Vector3d location, String text) {
 		if (!outlines.containsKey(slot)) {
 			OutlinedText outline = new OutlinedText();
 			outline.set(location);
@@ -61,7 +61,7 @@ public class Outliner {
 		return entry.outline.getParams();
 	}
 
-	public OutlineParams endChasingLine(Object slot, Vec3d start, Vec3d end, float chasingProgress) {
+	public OutlineParams endChasingLine(Object slot, Vector3d start, Vector3d end, float chasingProgress) {
 		if (!outlines.containsKey(slot)) {
 			EndChasingLineOutline outline = new EndChasingLineOutline();
 			outlines.put(slot, new OutlineEntry(outline));

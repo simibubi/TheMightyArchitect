@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.simibubi.mightyarchitect.TheMightyArchitect;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.TemplateBlockAccess;
 
@@ -85,6 +86,9 @@ public class PrintingToMultiplayer extends PhaseBase {
 				ITextComponent iTextComponent = checking.get(0);
 				if (iTextComponent instanceof TranslationTextComponent) {
 					String test = ((TranslationTextComponent) iTextComponent).getKey();
+					
+				TheMightyArchitect.logger.info(test);
+					
 					if (test.equals("command.unknown.command")) {
 						cooldown = 0;
 						event.setMessage(new StringTextComponent(

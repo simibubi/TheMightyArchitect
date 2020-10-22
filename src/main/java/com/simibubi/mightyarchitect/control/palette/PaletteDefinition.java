@@ -12,7 +12,7 @@ import net.minecraft.block.TrapDoorBlock;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.IProperty;
+import net.minecraft.state.Property;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Direction.Axis;
@@ -141,9 +141,9 @@ public class PaletteDefinition {
 		BlockState state = definition.get(paletteInfo.palette);
 		state = state == null ? Blocks.AIR.getDefaultState() : paletteInfo.apply(state);
 
-		Collection<IProperty<?>> properties = state.getProperties();
+		Collection<Property<?>> properties = state.getProperties();
 
-		for (IProperty<?> property : properties) {
+		for (Property<?> property : properties) {
 			if (property instanceof DirectionProperty) {
 				Direction facing = (Direction) state.get(property);
 				if (facing.getAxis() == Axis.Y)

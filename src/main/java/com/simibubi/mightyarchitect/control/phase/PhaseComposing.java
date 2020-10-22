@@ -102,9 +102,10 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 		if (Minecraft.getInstance().currentScreen != null)
 			return;
 
-		toolSelection.renderPassive(event.getPartialTicks());
+		MatrixStack ms = event.getMatrixStack();
+		toolSelection.renderPassive(ms, event.getPartialTicks());
 		activeTool.getTool()
-			.renderOverlay();
+			.renderOverlay(ms);
 	}
 
 	@Override

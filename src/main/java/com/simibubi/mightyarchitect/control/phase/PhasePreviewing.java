@@ -100,9 +100,10 @@ public class PhasePreviewing extends PhaseBase implements IRenderGameOverlay {
 
 	@Override
 	public void renderGameOverlay(RenderGameOverlayEvent.Pre event) {
-		toolSelection.renderPassive(event.getPartialTicks());
+		MatrixStack ms = event.getMatrixStack();
+		toolSelection.renderPassive(ms, event.getPartialTicks());
 		activeTool.getTool()
-			.renderOverlay();
+			.renderOverlay(ms);
 	}
 
 	@Override

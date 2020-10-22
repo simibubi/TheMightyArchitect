@@ -76,7 +76,9 @@ public class DesignExporter {
 			changed = true;
 		}
 
-		BlockPos size = layerDefAnchor.west().subtract(anchor.east()).add(1, height, 1);
+		BlockPos size = layerDefAnchor.west()
+			.subtract(anchor.east())
+			.add(1, height, 1);
 
 		boolean visualizing = PhaseEditTheme.isVisualizing();
 		Cuboid bounds = new Cuboid(anchor.east(), size);
@@ -105,14 +107,16 @@ public class DesignExporter {
 			StringBuilder data = new StringBuilder();
 			for (int z = 0; z < size.getZ(); z++) {
 				for (int x = 0; x < size.getX(); x++) {
-					BlockPos pos = anchor.east().add(x, y, z);
+					BlockPos pos = anchor.east()
+						.add(x, y, z);
 					BlockState blockState = worldIn.getBlockState(pos);
 					Palette block = scanningPalette.scan(blockState);
 
 					if (block == null && blockState.getBlock() != Blocks.AIR) {
-						Minecraft.getInstance().player.sendMessage(new StringTextComponent(
-								blockState.getBlock().getTranslationKey() + " @" + pos.getX() + "," + pos.getY() + ","
-										+ pos.getZ() + " does not belong to the Scanner Palette"));
+						Minecraft.getInstance().player.sendStatusMessage(
+							new StringTextComponent(blockState.getBlock()
+							.getTranslationKey() + " @" + pos.getX() + "," + pos.getY() + "," + pos.getZ()
+							+ " does not belong to the Scanner Palette"), false);
 						return "Export failed";
 					}
 
@@ -126,8 +130,8 @@ public class DesignExporter {
 			StringBuilder orientationStrip = new StringBuilder();
 			for (int z = 0; z < size.getZ(); z++) {
 				for (int x = 0; x < size.getX(); x++) {
-					BlockOrientation orientation = BlockOrientation
-							.byState(worldIn.getBlockState(anchor.east().add(x, y, z)));
+					BlockOrientation orientation = BlockOrientation.byState(worldIn.getBlockState(anchor.east()
+						.add(x, y, z)));
 					orientationStrip.append(orientation.asChar());
 				}
 				if (z < size.getZ() - 1)
@@ -181,9 +185,11 @@ public class DesignExporter {
 		String designPath = "";
 
 		BlockPos signPos = anchor.up();
-		if (worldIn.getBlockState(signPos).getBlock() == Blocks.SPRUCE_SIGN) {
+		if (worldIn.getBlockState(signPos)
+			.getBlock() == Blocks.SPRUCE_SIGN) {
 			SignTileEntity sign = (SignTileEntity) worldIn.getTileEntity(signPos);
-			filename = sign.signText[1].getString();
+			filename = sign.getText(1)
+				.getString();
 			designPath = typePath + "/" + filename;
 
 		} else {
@@ -191,15 +197,15 @@ public class DesignExporter {
 			while (index < 2048) {
 				filename = "design" + ((index == 0) ? "" : "_" + index) + ".json";
 				designPath = typePath + "/" + filename;
-				if (TheMightyArchitect.class.getClassLoader().getResource(designPath) == null
-						&& !Files.exists(Paths.get(designPath)))
+				if (TheMightyArchitect.class.getClassLoader()
+					.getResource(designPath) == null && !Files.exists(Paths.get(designPath)))
 					break;
 				index++;
 			}
 		}
 
-		AllPackets.channel.sendToServer(
-				new PlaceSignPacket(layer.getDisplayName().substring(0, 1) + ". " + type.getDisplayName(), filename, signPos));
+		AllPackets.channel.sendToServer(new PlaceSignPacket(layer.getDisplayName()
+			.substring(0, 1) + ". " + type.getDisplayName(), filename, signPos));
 		FilesHelper.saveTagCompoundAsJson(compound, designPath);
 		return designPath;
 		//
@@ -209,9 +215,11 @@ public class DesignExporter {
 	public static void setTheme(DesignTheme theme) {
 		DesignExporter.theme = theme;
 		scanningPalette = theme.getDefaultPalette();
-		if (layer == null || !theme.getLayers().contains(layer))
+		if (layer == null || !theme.getLayers()
+			.contains(layer))
 			layer = DesignLayer.Regular;
-		if (type == null || !theme.getTypes().contains(type))
+		if (type == null || !theme.getTypes()
+			.contains(type))
 			type = DesignType.WALL;
 		changed = true;
 	}
@@ -225,7 +233,9 @@ public class DesignExporter {
 	}
 
 	private static int markerValueAt(World worldIn, BlockPos pos) {
-		return worldIn.getBlockState(pos).get(SliceMarkerBlock.VARIANT).ordinal();
+		return worldIn.getBlockState(pos)
+			.get(SliceMarkerBlock.VARIANT)
+			.ordinal();
 	}
 
 }

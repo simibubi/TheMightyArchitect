@@ -13,14 +13,23 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = 'mc1.15.2_v0.5'
+version = 'mc1.16.3_v0.5'
 group = 'com.simibubi.mightyarchitect' 
 archivesBaseName = 'mightyarchitect'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' 
 
+
+repositories {
+    maven {
+        //location of the maven for mixed mappings
+        name = "tterrag maven"
+        url = "https://maven.tterrag.com/"
+    }
+}
+
 minecraft {
-    mappings channel: 'snapshot', version: '20200301-mixed-1.15.2'
+    mappings channel: 'snapshot', version: '20200920-mixed-1.16.3'
     
     runs {
 		client {
@@ -58,7 +67,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.15.2-31.2.41'
+    minecraft 'net.minecraftforge:forge:1.16.3-34.1.17'
 }
 
 jar {

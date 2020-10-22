@@ -19,7 +19,7 @@ import com.simibubi.mightyarchitect.foundation.utility.outliner.Outline;
 
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class PhaseEditTheme extends PhaseBase {
 
@@ -119,7 +119,7 @@ public class PhaseEditTheme extends PhaseBase {
 	}
 
 	private void chaseText(Object key, float x, float y, float z, String text) {
-		MightyClient.outliner.chaseText(key, new Vec3d(x, y, z), text)
+		MightyClient.outliner.chaseText(key, new Vector3d(x, y, z), text)
 		.disableNormals()
 			.colored(0xffffff);
 	}

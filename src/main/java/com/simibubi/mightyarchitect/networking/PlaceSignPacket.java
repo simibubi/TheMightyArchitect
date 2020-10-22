@@ -40,8 +40,8 @@ public class PlaceSignPacket {
 			World entityWorld = context.get().getSender().getEntityWorld();
 			entityWorld.setBlockState(position, Blocks.SPRUCE_SIGN.getDefaultState());
 			SignTileEntity sign = (SignTileEntity) entityWorld.getTileEntity(position);
-			sign.signText[0] = new StringTextComponent(text1);
-			sign.signText[1] = new StringTextComponent(text2);
+			sign.setText(0, new StringTextComponent(text1));
+			sign.setText(1, new StringTextComponent(text2));
 		});
 	}
 	

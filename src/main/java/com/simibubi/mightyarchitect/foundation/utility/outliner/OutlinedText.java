@@ -7,29 +7,29 @@ import com.simibubi.mightyarchitect.foundation.utility.VecHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class OutlinedText extends Outline {
 
 	private String text;
-	Vec3d targetLocation;
-	Vec3d location;
-	Vec3d prevLocation;
+	Vector3d targetLocation;
+	Vector3d location;
+	Vector3d prevLocation;
 
 	public OutlinedText() {
 		setText("");
-		targetLocation = Vec3d.ZERO;
-		location = Vec3d.ZERO;
-		prevLocation = Vec3d.ZERO;
+		targetLocation = Vector3d.ZERO;
+		location = Vector3d.ZERO;
+		prevLocation = Vector3d.ZERO;
 	}
 
-	public void set(Vec3d location) {
+	public void set(Vector3d location) {
 		prevLocation = this.location = location;
 	}
 
-	public void target(Vec3d location) {
+	public void target(Vector3d location) {
 		targetLocation = location;
 	}
 
@@ -47,7 +47,7 @@ public class OutlinedText extends Outline {
 		
 		Minecraft mc = Minecraft.getInstance();
 		float pt = mc.getRenderPartialTicks();
-		Vec3d vec = VecHelper.lerp(prevLocation, location, pt);
+		Vector3d vec = VecHelper.lerp(prevLocation, location, pt);
 		EntityRendererManager renderManager = mc.getRenderManager();
 		FontRenderer fontrenderer = renderManager.getFontRenderer();
 		float stringLength = fontrenderer.getStringWidth(text);
@@ -68,10 +68,10 @@ public class OutlinedText extends Outline {
 		float h = fontrenderer.FONT_HEIGHT;
 
 		ms.push();
-		Vec3d v1 = new Vec3d(-f + 2, -scaleMod * (h - 1), 0);
-		Vec3d v2 = new Vec3d(-f + 2, scaleMod, 0);
-		Vec3d v3 = new Vec3d(f - 2, scaleMod, 0);
-		Vec3d v4 = new Vec3d(f - 2, -scaleMod * (h - 1), 0);
+		Vector3d v1 = new Vector3d(-f + 2, -scaleMod * (h - 1), 0);
+		Vector3d v2 = new Vector3d(-f + 2, scaleMod, 0);
+		Vector3d v3 = new Vector3d(f - 2, scaleMod, 0);
+		Vector3d v4 = new Vector3d(f - 2, -scaleMod * (h - 1), 0);
 
 		ms.push();
 		ms.scale(-scaleMod, 1, scaleMod);

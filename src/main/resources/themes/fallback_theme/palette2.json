@@ -2,12 +2,12 @@
   "Palette": {
     "OUTER_THICK": {
       "Properties": {
-        "east": "false",
-        "south": "false",
-        "north": "false",
-        "variant": "cobblestone",
-        "west": "false",
-        "up": "false"
+        "east": "none",
+        "waterlogged": "false",
+        "south": "none",
+        "north": "none",
+        "west": "none",
+        "up": "true"
       },
       "Name": "minecraft:cobblestone_wall"
     },
@@ -27,12 +27,12 @@
     },
     "HEAVY_POST": {
       "Properties": {
-        "east": "false",
-        "south": "false",
-        "north": "false",
-        "variant": "mossy_cobblestone",
-        "west": "false",
-        "up": "false"
+        "east": "none",
+        "waterlogged": "false",
+        "south": "none",
+        "north": "none",
+        "west": "none",
+        "up": "true"
       },
       "Name": "minecraft:cobblestone_wall"
     },
