@@ -14,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -38,8 +39,8 @@ public class MightyClient {
 	public static void init() {
 		AllItems.initColorHandlers();
 		String modName = TheMightyArchitect.NAME;
-		COMPOSE = new KeyBinding("Start composing", Keyboard.G, modName);
-		TOOL_MENU = new KeyBinding("Tool Menu (Hold)", Keyboard.LALT, modName);
+		COMPOSE = new KeyBinding(I18n.format("key.mightyarchitect.compose"), Keyboard.G, modName);
+		TOOL_MENU = new KeyBinding(I18n.format("key.mightyarchitect.tool_menu"), Keyboard.LALT, modName);
 		ClientRegistry.registerKeyBinding(COMPOSE);
 		ClientRegistry.registerKeyBinding(TOOL_MENU);
 	}
