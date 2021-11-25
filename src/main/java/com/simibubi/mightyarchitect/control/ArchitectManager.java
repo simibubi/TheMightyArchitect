@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.glfw.GLFW;
 
@@ -73,7 +75,7 @@ public class ArchitectManager {
 	}
 
 	public static void pauseCompose() {
-		status("Composer paused, use /compose to return.");
+		status(I18n.format("mightyarchitect.manager.composer_paused"));
 	}
 
 	public static void unload() {
@@ -98,7 +100,7 @@ public class ArchitectManager {
 		GroundPlan groundPlan = model.getGroundPlan();
 
 		if (groundPlan.isEmpty()) {
-			status("Draw some rooms before going to the next step!");
+			status(I18n.format("mightyarchitect.manager.design_empty"));
 			return;
 		}
 
@@ -121,7 +123,7 @@ public class ArchitectManager {
 
 	public static void finishPalette(String name) {
 		if (name.isEmpty())
-			name = "My Palette";
+			name = I18n.format("mightyarchitect.manager.palette_name_default");
 
 		PaletteDefinition palette = getModel().getCreatedPalette();
 		palette.setName(name);
@@ -129,7 +131,7 @@ public class ArchitectManager {
 		PaletteStorage.loadAllPalettes();
 
 		getModel().applyCreatedPalette();
-		status("Your new palette has been saved.");
+		status(I18n.format("mightyarchitect.manager.palette_saved"));
 		enterPhase(ArchitectPhases.Previewing);
 	}
 
@@ -143,7 +145,7 @@ public class ArchitectManager {
 			for (InstantPrintPacket packet : getModel().getPackets())
 				AllPackets.channel.sendToServer(packet);
 			MightyClient.renderer.setActive(false);
-			status("Printed result into world.");
+			status(I18n.format("mightyarchitect.manager.print_success"));
 			unload();
 			return;
 		}
@@ -156,7 +158,7 @@ public class ArchitectManager {
 			return;
 
 		if (name.isEmpty())
-			name = "My Build";
+			name = I18n.format("mightyarchitect.manager.build_name_default");
 
 		String folderPath = "schematics";
 
@@ -176,13 +178,15 @@ public class ArchitectManager {
 			if (outputStream != null)
 				IOUtils.closeQuietly(outputStream);
 		}
-		status("Saved as " + filepath);
+		status(I18n.format("mightyarchitect.manager.build_saved_as", filepath));
 
 		BlockPos pos = model.getAnchor()
 			.add(((TemplateBlockAccess) model.getMaterializedSketch()).getBounds()
 				.getOrigin());
-		StringTextComponent component = new StringTextComponent("Deploy Schematic at: " + TextFormatting.BLUE + "["
-			+ pos.getX() + "," + pos.getY() + "," + pos.getZ() + "]");
+		TranslationTextComponent component = new TranslationTextComponent(
+				"mightyarchitect.manager.deploy_schematic_location",
+				TextFormatting.BLUE + "[" + pos.getX() + "," + pos.getY() + "," + pos.getZ() + "]"
+		);
 		Minecraft.getInstance().player.sendStatusMessage(component, false);
 		unload();
 	}
@@ -217,9 +221,9 @@ public class ArchitectManager {
 			ScreenHelper.open(new ThemeSettingsScreen());
 		}, result -> {
 		});
-		gui.setButtonTextConfirm("Create");
-		gui.setButtonTextAbort("Cancel");
-		gui.setTitle("Enter a name for your Theme:");
+		gui.setButtonTextConfirm(I18n.format("mightyarchitect.manager.theme_create"));
+		gui.setButtonTextAbort(I18n.format("mightyarchitect.manager.theme_cancel"));
+		gui.setTitle(I18n.format("mightyarchitect.manager.theme_set_title"));
 
 		ScreenHelper.open(gui);
 	}

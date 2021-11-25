@@ -5,5 +5,17 @@
 	"block.mightyarchitect.design_anchor": "Design Marker",
 
 	"key.mightyarchitect.compose": "Start composing",
-	"key.mightyarchitect.tool_menu": "Tool Menu (Hold)"
+	"key.mightyarchitect.tool_menu": "Tool Menu (Hold)",
+
+	"mightyarchitect.manager.composer_paused": "Composer paused, use /compose to return.",
+	"mightyarchitect.manager.design_empty": "Draw some rooms before going to the next step!",
+	"mightyarchitect.manager.palette_name_default": "My Palette",
+	"mightyarchitect.manager.palette_saved": "Your new palette has been saved.",
+	"mightyarchitect.manager.print_success": "Printed result into world.",
+	"mightyarchitect.manager.build_name_default": "My Build",
+	"mightyarchitect.manager.build_saved_as": "Saved as %s",
+	"mightyarchitect.manager.deploy_schematic_location": "Deploy schematic at: %s",
+	"mightyarchitect.manager.theme_create": "Create",
+	"mightyarchitect.manager.theme_cancel": "Cancel",
+	"mightyarchitect.manager.theme_set_title": "Enter a name for your Theme:"
 }
