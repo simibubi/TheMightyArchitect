@@ -17,6 +17,7 @@ import com.simibubi.mightyarchitect.gui.TextInputPromptScreen;
 import com.simibubi.mightyarchitect.gui.ThemeSettingsScreen;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.Util;
 
 public class ArchitectMenu {
@@ -44,9 +45,9 @@ public class ArchitectMenu {
 				TextInputPromptScreen gui =
 					new TextInputPromptScreen(result -> ArchitectManager.finishPalette(result), result -> {
 					});
-				gui.setButtonTextConfirm("Save and Apply");
-				gui.setButtonTextAbort("Cancel");
-				gui.setTitle("Enter a name for your Palette:");
+				gui.setButtonTextConfirm(I18n.format("mightyarchitect.menu.palette_save"));
+				gui.setButtonTextAbort(I18n.format("mightyarchitect.menu.palette_cancel"));
+				gui.setTitle(I18n.format("mightyarchitect.menu.palette_set_title"));
 				ScreenHelper.open(gui);
 				return false;
 
@@ -73,7 +74,7 @@ public class ArchitectMenu {
 
 			case 'r':
 				ThemeStorage.reloadExternal();
-				ArchitectManager.status("Reloaded Themes");
+				ArchitectManager.status(I18n.format("mightyarchitect.menu.reloaded_themes"));
 				ArchitectManager.enterPhase(ArchitectPhases.Empty);
 				return false;
 
@@ -106,9 +107,9 @@ public class ArchitectMenu {
 				TextInputPromptScreen gui =
 					new TextInputPromptScreen(result -> ArchitectManager.writeToFile(result), result -> {
 					});
-				gui.setButtonTextConfirm("Save Schematic");
-				gui.setButtonTextAbort("Cancel");
-				gui.setTitle("Enter a name for your Build:");
+				gui.setButtonTextConfirm(I18n.format("mightyarchitect.menu.schematic_save"));
+				gui.setButtonTextAbort(I18n.format("mightyarchitect.menu.schematic_cancel"));
+				gui.setTitle(I18n.format("mightyarchitect.menu.schematic_set_title"));
 
 				ScreenHelper.open(gui);
 				return true;
@@ -206,12 +207,12 @@ public class ArchitectMenu {
 
 			case 'e':
 				String file = ThemeStorage.exportThemeFullyAsFile(DesignExporter.theme, true);
-				ArchitectManager.status("Exported Theme as " + file);
+				ArchitectManager.status(I18n.format("mightyarchitect.menu.exported_theme", file));
 				return false;
 
 			case 'j':
 				file = ThemeStorage.exportThemeFullyAsFile(DesignExporter.theme, false);
-				ArchitectManager.status("Exported Theme as " + file);
+				ArchitectManager.status(I18n.format("mightyarchitect.menu.exported_theme", file));
 				return false;
 
 			case 'r':
@@ -245,16 +246,16 @@ public class ArchitectMenu {
 		switch (ArchitectManager.getPhase()) {
 
 		case Composing:
-			keybinds.put("F", "Finish");
+			keybinds.put("F", I18n.format("mightyarchitect.menu.keybinds.finish"));
 			keybinds.lineBreak();
-			keybinds.put("U", "Unload");
+			keybinds.put("U", I18n.format("mightyarchitect.menu.keybinds.unload"));
 			break;
 
 		case CreatingPalette:
-			keybinds.put("F", "Save Palette");
-			keybinds.put("D", "Discard Palette");
+			keybinds.put("F", I18n.format("mightyarchitect.menu.keybinds.palette_save"));
+			keybinds.put("D", I18n.format("mightyarchitect.menu.keybinds.palette_cancel"));
 			keybinds.lineBreak();
-			keybinds.put("U", "Unload");
+			keybinds.put("U", I18n.format("mightyarchitect.menu.keybinds.unload"));
 			break;
 
 		case Empty:
@@ -263,41 +264,41 @@ public class ArchitectMenu {
 				keybinds.put("" + (allThemes.indexOf(theme) + 1), theme.getDisplayName());
 			}
 			keybinds.lineBreak();
-			keybinds.put("R", "Reload Imported");
-			keybinds.put("M", "Manage Themes...");
-			keybinds.put("C", "Cancel");
+			keybinds.put("R", I18n.format("mightyarchitect.menu.keybinds.empty_reload"));
+			keybinds.put("M", I18n.format("mightyarchitect.menu.keybinds.empty_manage_themes"));
+			keybinds.put("C", I18n.format("mightyarchitect.menu.keybinds.cancel"));
 			break;
 
 		case Previewing:
-			keybinds.put("E", "Edit Ground Plan");
-			keybinds.put("C", "Choose a Palette");
+			keybinds.put("E", I18n.format("mightyarchitect.menu.keybinds.previewing_edit"));
+			keybinds.put("C", I18n.format("mightyarchitect.menu.keybinds.previewing_choose_palette"));
 			keybinds.lineBreak();
 
 			if (!ArchitectManager.testRun) {
-				keybinds.put("S", "Save as Schematic");
+				keybinds.put("S", I18n.format("mightyarchitect.menu.keybinds.previewing_save"));
 				if (Minecraft.getInstance().player.isCreative())
-					keybinds.put("P", "Print blocks into world");
+					keybinds.put("P", I18n.format("mightyarchitect.menu.keybinds.previewing_print"));
 				keybinds.lineBreak();
-				keybinds.put("U", "Unload");
+				keybinds.put("U", I18n.format("mightyarchitect.menu.keybinds.unload"));
 			} else {
-				keybinds.put("U", "Exit Test Run");
+				keybinds.put("U", I18n.format("mightyarchitect.menu.keybinds.previewing_exit_test_run"));
 			}
 
 			break;
 
 		case ManagingThemes:
-			keybinds.put("N", "Create new Theme");
-			keybinds.put("T", "Edit an existing Theme");
-			keybinds.put("O", "Open Theme Folder");
+			keybinds.put("N", I18n.format("mightyarchitect.menu.keybinds.themes_new"));
+			keybinds.put("T", I18n.format("mightyarchitect.menu.keybinds.themes_edit"));
+			keybinds.put("O", I18n.format("mightyarchitect.menu.keybinds.themes_open_folder"));
 			keybinds.lineBreak();
-			keybinds.put("C", "Cancel");
+			keybinds.put("C", I18n.format("mightyarchitect.menu.keybinds.cancel"));
 			break;
 
 		case Paused:
-			keybinds.put("R", "Recover");
-			keybinds.put("D", "Discard");
+			keybinds.put("R", I18n.format("mightyarchitect.menu.keybinds.paused_recover"));
+			keybinds.put("D", I18n.format("mightyarchitect.menu.keybinds.paused_discard"));
 			keybinds.lineBreak();
-			keybinds.put("C", "Close");
+			keybinds.put("C", I18n.format("mightyarchitect.menu.keybinds.paused_close"));
 			break;
 
 		case ListForEdit:
@@ -306,23 +307,23 @@ public class ArchitectMenu {
 				keybinds.put("" + (allThemes.indexOf(theme) + 1), theme.getDisplayName());
 			}
 			keybinds.lineBreak();
-			keybinds.put("C", "Cancel");
+			keybinds.put("C", I18n.format("mightyarchitect.menu.keybinds.cancel"));
 			break;
 
 		case EditingThemes:
-			keybinds.put("1", "Equip Exporter Tools");
-			keybinds.put("2", "Equip Foundation Blocks");
-			keybinds.put("3", "Equip Regular Blocks");
-			keybinds.put("4", "Equip Roofing Blocks");
+			keybinds.put("1", I18n.format("mightyarchitect.menu.keybinds.themes_equip_exporter_tools"));
+			keybinds.put("2", I18n.format("mightyarchitect.menu.keybinds.themes_equip_foundation_tools"));
+			keybinds.put("3", I18n.format("mightyarchitect.menu.keybinds.themes_equip_regular_blocks"));
+			keybinds.put("4", I18n.format("mightyarchitect.menu.keybinds.themes_equip_roofing_blocks"));
 			keybinds.lineBreak();
-			keybinds.put("D", "Default palette");
-			keybinds.put("T", "Theme settings");
+			keybinds.put("D", I18n.format("mightyarchitect.menu.keybinds.themes_default_palette"));
+			keybinds.put("T", I18n.format("mightyarchitect.menu.keybinds.themes_settings"));
 			keybinds.lineBreak();
-			keybinds.put("V", "Validate Theme");
-			keybinds.put("R", "Run a Test");
-			keybinds.put("E", "Export Theme compressed");
-			keybinds.put("J", "Export Theme as Json");
-			keybinds.put("F", "Finish editing");
+			keybinds.put("V", I18n.format("mightyarchitect.menu.keybinds.themes_validate"));
+			keybinds.put("R", I18n.format("mightyarchitect.menu.keybinds.themes_run_test"));
+			keybinds.put("E", I18n.format("mightyarchitect.menu.keybinds.themes_export_compressed"));
+			keybinds.put("J", I18n.format("mightyarchitect.menu.keybinds.themes_export_json"));
+			keybinds.put("F", I18n.format("mightyarchitect.menu.keybinds.themes_finish"));
 			break;
 		default:
 			break;
