@@ -3,6 +3,7 @@ package com.simibubi.mightyarchitect.control.compose.planner;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import net.minecraft.client.resources.I18n;
 import org.lwjgl.glfw.GLFW;
 
 import com.simibubi.mightyarchitect.MightyClient;
@@ -31,8 +32,8 @@ public class CopyDesignTool extends WallDecorationToolBase {
 		super.init();
 
 		copiedDesign = null;
-		toolModeNoCtrl = "Paste";
-		toolModeCtrl = "Copy";
+		toolModeNoCtrl = I18n.format("mightyarchitect.planner.paste");
+		toolModeCtrl = I18n.format("mightyarchitect.planner.copy");
 
 		highlightRoom = true;
 		highlightRoof = true;
@@ -129,7 +130,7 @@ public class CopyDesignTool extends WallDecorationToolBase {
 		boolean keyDown = Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL);
 
 		if (copiedDesign == null && !keyDown)
-			return TextFormatting.RED + "Ctrl+Click to copy a Design";
+			return TextFormatting.RED + I18n.format("mightyarchitect.planner.copied_invalid");
 
 		DesignPicker designPicker = model.getTheme()
 			.getDesignPicker();
@@ -153,7 +154,7 @@ public class CopyDesignTool extends WallDecorationToolBase {
 				copiedDesignType = DesignType.WALL;
 			}
 
-			return "Copied " + TextFormatting.GREEN + copiedDesignType.getDisplayName();
+			return I18n.format("mightyarchitect.planner.copied", TextFormatting.GREEN + copiedDesignType.getDisplayName())
 		}
 
 		if (!keyDown && selectedRoom != null) {
@@ -161,10 +162,10 @@ public class CopyDesignTool extends WallDecorationToolBase {
 			if (DesignType.roofTypes()
 				.contains(copiedDesignType)) {
 				if (selectedStack.getRoofType() != copiedDesignType)
-					return TextFormatting.RED + "Roof types have to match.";
+					return TextFormatting.RED + I18n.format("mightyarchitect.planner.roof_doesnt_match");
 				int facadeWidth = Math.min(selectedStack.highest().width, selectedStack.highest().length);
 				if (!copiedDesign.fitsHorizontally(facadeWidth))
-					return TextFormatting.RED + "Roof does not fit.";
+					return TextFormatting.RED + I18n.format("mightyarchitect.planner.roof_doesnt_fit");
 
 				designPicker.putRoof(selectedStack, copiedDesign);
 				return pasteSuccessful();

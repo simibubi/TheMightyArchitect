@@ -58,5 +58,12 @@
 
 	"mightyarchitect.menu.keybinds.paused_recover": "Recover",
 	"mightyarchitect.menu.keybinds.paused_discard": "Discard",
-	"mightyarchitect.menu.keybinds.paused_close": "Close"
+	"mightyarchitect.menu.keybinds.paused_close": "Close",
+
+	"mightyarchitect.planner.copy": "Copy",
+	"mightyarchitect.planner.paste": "Paste",
+	"mightyarchitect.planner.copied_invalid": "Ctrl+Click to copy a Design",
+	"mightyarchitect.planner.copied": "Copied %s",
+	"mightyarchitect.planner.roof_doesnt_match": "Roof types have to match",
+	"mightyarchitect.planner.roof_doesnt_fit": "Roof does not fit."
 }
