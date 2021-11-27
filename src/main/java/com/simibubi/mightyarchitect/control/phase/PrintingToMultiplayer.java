@@ -97,8 +97,6 @@ public class PrintingToMultiplayer extends PhaseBase {
 					}
 					if (test.equals("parsing.int.expected")) {
 						approved = true;
-						Minecraft.getInstance().player
-								.sendChatMessage("/me is printing a structure created by the Mighty Architect.");
 						Minecraft.getInstance().player.sendChatMessage("/gamerule sendCommandFeedback false");
 						Minecraft.getInstance().player.sendChatMessage("/gamerule logAdminCommands false");
 						event.setCanceled(true);
@@ -119,8 +117,6 @@ public class PrintingToMultiplayer extends PhaseBase {
 	@Override
 	public void whenExited() {
 		if (approved) {
-			Minecraft.getInstance().player.sendStatusMessage(new StringTextComponent(TextFormatting.GREEN + "Finished Printing, enjoy!"),
-					false);
 			Minecraft.getInstance().player.sendChatMessage("/gamerule logAdminCommands true");
 			Minecraft.getInstance().player.sendChatMessage("/gamerule sendCommandFeedback true");
 		}
