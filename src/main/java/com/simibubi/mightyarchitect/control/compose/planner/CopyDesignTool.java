@@ -154,7 +154,7 @@ public class CopyDesignTool extends WallDecorationToolBase {
 				copiedDesignType = DesignType.WALL;
 			}
 
-			return I18n.format("mightyarchitect.planner.copied", TextFormatting.GREEN + copiedDesignType.getDisplayName())
+			return I18n.format("mightyarchitect.planner.copied", TextFormatting.GREEN + copiedDesignType.getDisplayName());
 		}
 
 		if (!keyDown && selectedRoom != null) {
