@@ -69,7 +69,7 @@ public class PaletteStorage {
 			JsonReader reader = new JsonReader(Files.newBufferedReader(path));
 			reader.setLenient(true);
 			JsonElement element = Streams.parse(reader);
-			return PaletteDefinition.fromNBT(JsonToNBT.getTagFromJson(element.toString()));
+			return PaletteDefinition.fromNBT(JsonToNBT.parseTag(element.toString()));
 		} catch (IOException | CommandSyntaxException e) {
 			e.printStackTrace();
 		}

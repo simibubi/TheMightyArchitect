@@ -158,13 +158,13 @@ public class PhaseEditTheme extends PhaseBase {
 			effectiveSelectedDesign = outlineFunc.apply(new Cuboid(selectedDesign.getOrigin()
 				.east(margin),
 				selectedDesign.getSize()
-					.add(-margin, 0, -margin)));
+					.offset(-margin, 0, -margin)));
 			break;
 		case ROOF:
 			int span = DesignExporter.designParameter;
 			margin = (selectedDesign.width - span) / 2;
 			effectiveSelectedDesign = outlineFunc.apply(new Cuboid(selectedDesign.getOrigin()
-				.add(margin, 0, 0), selectedDesign.width - 2 * margin, selectedDesign.height, 3));
+				.offset(margin, 0, 0), selectedDesign.width - 2 * margin, selectedDesign.height, 3));
 			break;
 		case TOWER:
 		case TOWER_FLAT_ROOF:
@@ -172,12 +172,12 @@ public class PhaseEditTheme extends PhaseBase {
 			int radius = DesignExporter.designParameter;
 			margin = (selectedDesign.width - (radius * 2 + 1)) / 2;
 			BlockPos center = selectedDesign.getCenter()
-				.down(selectedDesign.height / 2);
+				.below(selectedDesign.height / 2);
 			List<BlockPos> cylinderSet = new ArrayList<>();
 			for (int i = 0; i < effectiveHeight; i++) {
 				final int offset = i;
 				BuildingHelper.getCircle(center, radius)
-					.forEach(pos -> cylinderSet.add(pos.up(offset)));
+					.forEach(pos -> cylinderSet.add(pos.above(offset)));
 			}
 			effectiveSelectedDesign = new BlockClusterOutline(cylinderSet);
 			break;

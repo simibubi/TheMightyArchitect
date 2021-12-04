@@ -37,23 +37,23 @@ public class SelectionScrollInput extends ScrollInput {
 	@Override
 	protected void updateTooltip() {
 		toolTip.clear();
-		toolTip.add(title.copy()
-			.formatted(TextFormatting.BLUE));
+		toolTip.add(title.plainCopy()
+			.withStyle(TextFormatting.BLUE));
 		for (int i = min; i < max; i++) {
 			if (i == state)
-				toolTip.add(StringTextComponent.EMPTY.copy()
+				toolTip.add(StringTextComponent.EMPTY.plainCopy()
 					.append("-> ")
 					.append(options.get(i))
-					.formatted(TextFormatting.WHITE));
+					.withStyle(TextFormatting.WHITE));
 			else
-				toolTip.add(StringTextComponent.EMPTY.copy()
+				toolTip.add(StringTextComponent.EMPTY.plainCopy()
 					.append("> ")
 					.append(options.get(i))
-					.formatted(TextFormatting.GRAY));
+					.withStyle(TextFormatting.GRAY));
 		}
-		toolTip.add(StringTextComponent.EMPTY.copy()
+		toolTip.add(StringTextComponent.EMPTY.plainCopy()
 			.append(scrollToSelect)
-			.formatted(TextFormatting.ITALIC, TextFormatting.DARK_GRAY));
+			.withStyle(TextFormatting.ITALIC, TextFormatting.DARK_GRAY));
 	}
 
 }

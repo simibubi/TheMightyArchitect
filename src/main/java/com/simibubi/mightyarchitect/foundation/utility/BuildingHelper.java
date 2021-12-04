@@ -13,10 +13,10 @@ public class BuildingHelper {
 		int x = radius;
 		int p = (5 - radius * 4) / 4;
 
-		result.add(center.add(x, 0, z));
-		result.add(center.add(-x, 0, z));
-		result.add(center.add(-z, 0, x));
-		result.add(center.add(z, 0, -x));
+		result.add(center.offset(x, 0, z));
+		result.add(center.offset(-x, 0, z));
+		result.add(center.offset(-z, 0, x));
+		result.add(center.offset(z, 0, -x));
 
 		while (z < x) {
 			z++;
@@ -26,15 +26,15 @@ public class BuildingHelper {
 				x--;
 				p += 2 * (z - x) + 1;
 			}
-			result.add(center.add(x, 0, z));
-			result.add(center.add(-x, 0, -z));
-			result.add(center.add(-x, 0, z));
-			result.add(center.add(x, 0, -z));
+			result.add(center.offset(x, 0, z));
+			result.add(center.offset(-x, 0, -z));
+			result.add(center.offset(-x, 0, z));
+			result.add(center.offset(x, 0, -z));
 			
-			result.add(center.add(z, 0, x));
-			result.add(center.add(-z, 0, -x));
-			result.add(center.add(-z, 0, x));
-			result.add(center.add(z, 0, -x));
+			result.add(center.offset(z, 0, x));
+			result.add(center.offset(-z, 0, -x));
+			result.add(center.offset(-z, 0, x));
+			result.add(center.offset(z, 0, -x));
 		}
 		return result;
 	}

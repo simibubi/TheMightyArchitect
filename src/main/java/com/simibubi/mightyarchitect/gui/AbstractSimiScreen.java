@@ -96,7 +96,7 @@ public abstract class AbstractSimiScreen extends Screen {
 				continue;
 			if (widget instanceof AbstractSimiWidget && !((AbstractSimiWidget) widget).getToolTip()
 				.isEmpty())
-				renderTooltip(ms, ((AbstractSimiWidget) widget).getToolTip(), mouseX, mouseY);
+				renderComponentTooltip(ms, ((AbstractSimiWidget) widget).getToolTip(), mouseX, mouseY);
 		}
 	}
 

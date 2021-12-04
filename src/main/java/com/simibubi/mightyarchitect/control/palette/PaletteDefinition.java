@@ -34,9 +34,9 @@ public class PaletteDefinition {
 					.put(Palette.INNER_DETAIL, Blocks.SPRUCE_WOOD).put(Palette.INNER_PRIMARY, Blocks.SPRUCE_PLANKS)
 					.put(Palette.INNER_SECONDARY, Blocks.DARK_OAK_PLANKS)
 					.put(Palette.OUTER_FLAT,
-							Blocks.OAK_TRAPDOOR.getDefaultState()
-									.with(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH)
-									.with(BlockStateProperties.OPEN, true))
+							Blocks.OAK_TRAPDOOR.defaultBlockState()
+									.setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH)
+									.setValue(BlockStateProperties.OPEN, true))
 					.put(Palette.OUTER_SLAB, Blocks.COBBLESTONE_SLAB).put(Palette.OUTER_THICK, Blocks.COBBLESTONE_WALL)
 					.put(Palette.OUTER_THIN, Blocks.SPRUCE_FENCE).put(Palette.ROOF_PRIMARY, Blocks.GRANITE)
 					.put(Palette.FLOOR, Blocks.OAK_PLANKS).put(Palette.ROOF_DETAIL, Blocks.BRICKS)
@@ -51,23 +51,23 @@ public class PaletteDefinition {
 		clone.clear = defaultPalette().clear();
 		clone.definition = new HashMap<>(defaultPalette().getDefinition());
 		definition.forEach((key, value) -> clone.definition.put(key, value));
-		clone.definition.put(Palette.CLEAR, Blocks.BARRIER.getDefaultState());
+		clone.definition.put(Palette.CLEAR, Blocks.BARRIER.defaultBlockState());
 		return clone;
 	}
 
 	public PaletteDefinition(String name) {
 		definition = new HashMap<>();
-		definition.put(Palette.CLEAR, Blocks.BARRIER.getDefaultState());
+		definition.put(Palette.CLEAR, Blocks.BARRIER.defaultBlockState());
 		this.name = name;
 	}
 
 	public PaletteDefinition put(Palette key, Block block) {
-		return put(key, block.getDefaultState());
+		return put(key, block.defaultBlockState());
 	}
 
 	public PaletteDefinition put(Palette key, BlockState block) {
 		if (block.getBlock() instanceof TrapDoorBlock)
-			block = block.with(TrapDoorBlock.OPEN, true);
+			block = block.setValue(TrapDoorBlock.OPEN, true);
 		definition.put(key, block);
 		return this;
 	}
@@ -85,14 +85,14 @@ public class PaletteDefinition {
 	public BlockState get(Palette key) {
 		BlockState iBlockState = get(key, BlockOrientation.NONE);
 		if (iBlockState.getBlock() instanceof LeavesBlock) {
-			iBlockState = iBlockState.with(LeavesBlock.PERSISTENT, true);
+			iBlockState = iBlockState.setValue(LeavesBlock.PERSISTENT, true);
 		}
 		return iBlockState;
 	}
 
 	private BlockState get(Palette key, BlockOrientation orientation) {
 		BlockState iBlockState = definition.get(key);
-		return iBlockState == null ? Blocks.AIR.getDefaultState() : orientation.apply(iBlockState);
+		return iBlockState == null ? Blocks.AIR.defaultBlockState() : orientation.apply(iBlockState);
 	}
 
 	public void setName(String name) {
@@ -133,25 +133,25 @@ public class PaletteDefinition {
 			}
 		}
 		
-		palette.put(Palette.CLEAR, Blocks.BARRIER.getDefaultState());
+		palette.put(Palette.CLEAR, Blocks.BARRIER.defaultBlockState());
 		return palette;
 	}
 
 	public BlockState get(PaletteBlockInfo paletteInfo) {
 		BlockState state = definition.get(paletteInfo.palette);
-		state = state == null ? Blocks.AIR.getDefaultState() : paletteInfo.apply(state);
+		state = state == null ? Blocks.AIR.defaultBlockState() : paletteInfo.apply(state);
 
 		Collection<Property<?>> properties = state.getProperties();
 
 		for (Property<?> property : properties) {
 			if (property instanceof DirectionProperty) {
-				Direction facing = (Direction) state.get(property);
+				Direction facing = (Direction) state.getValue(property);
 				if (facing.getAxis() == Axis.Y)
 					continue;
 
 				if ((paletteInfo.mirrorZ && facing.getAxis() != Axis.Z)
 						|| (paletteInfo.mirrorX && facing.getAxis() != Axis.X))
-					state = state.with((DirectionProperty) property, facing.getOpposite());
+					state = state.setValue((DirectionProperty) property, facing.getOpposite());
 			}
 		}
 

@@ -9,6 +9,8 @@ import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 
+import com.simibubi.mightyarchitect.control.design.partials.Design.DesignInstance;
+
 public class Corner extends Design {
 	
 	@Override
@@ -28,7 +30,7 @@ public class Corner extends Design {
 	@Override
 	protected void getBlocksShifted(DesignInstance instance, Map<BlockPos, PaletteBlockInfo> blocks, BlockPos localShift) {
 		BlockPos position = instance.localAnchor;
-		BlockPos totalShift = localShift.add(0, yShift, 0);
+		BlockPos totalShift = localShift.offset(0, yShift, 0);
 		List<DesignSlice> toPrint = selectPrintedLayers(instance.height);
 
 		for (int y = 0; y < toPrint.size(); y++) {
@@ -38,8 +40,8 @@ public class Corner extends Design {
 					PaletteBlockInfo block = layer.getBlockAt(x, z, instance.rotationY, instance.flippedX);
 					if (block == null)
 						continue;
-					BlockPos pos = rotateAroundZero(new BlockPos(instance.flippedX? - x : x, y, instance.flippedX? z : z).add(totalShift), instance.rotationY)
-							.add(position);
+					BlockPos pos = rotateAroundZero(new BlockPos(instance.flippedX? - x : x, y, instance.flippedX? z : z).offset(totalShift), instance.rotationY)
+							.offset(position);
 					putBlock(blocks, pos, block);
 				}
 			}

@@ -7,6 +7,8 @@ import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 
+import com.simibubi.mightyarchitect.control.design.partials.Design.DesignInstance;
+
 public class TowerRoof extends Tower {
 
 	@Override

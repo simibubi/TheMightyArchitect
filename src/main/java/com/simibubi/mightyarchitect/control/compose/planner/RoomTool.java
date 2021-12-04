@@ -214,8 +214,8 @@ public class RoomTool extends GroundPlanningToolBase {
 
 		BlockPos anchor = ArchitectManager.getModel()
 			.getAnchor();
-		BlockPos cursorPos = (anchor != null) ? selectedPosition.add(anchor) : selectedPosition;
-		BlockPos previouslySelectedPos = (firstPosition != null) ? firstPosition.add(anchor) : cursorPos;
+		BlockPos cursorPos = (anchor != null) ? selectedPosition.offset(anchor) : selectedPosition;
+		BlockPos previouslySelectedPos = (firstPosition != null) ? firstPosition.offset(anchor) : cursorPos;
 
 		BlockPos size = cursorPos.subtract(previouslySelectedPos);
 		Cuboid selection = new Cuboid(previouslySelectedPos, size.getX(), 1, size.getZ());

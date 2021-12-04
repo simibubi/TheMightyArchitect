@@ -43,18 +43,18 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 		ClientPlayerEntity player = Minecraft.getInstance().player;
 		transparentStacks.clear();
 
-		BlockRayTraceResult trace = RaycastHelper.rayTraceRange(player.world, player, 75);
+		BlockRayTraceResult trace = RaycastHelper.rayTraceRange(player.level, player, 75);
 		if (trace != null && trace.getType() == Type.BLOCK) {
 
-			BlockPos hit = new BlockPos(trace.getHitVec());
+			BlockPos hit = new BlockPos(trace.getLocation());
 			makeStacksTransparent(player, hit);
 
-			boolean replaceable = player.world.getBlockState(hit)
-				.isReplaceable(new BlockItemUseContext(new ItemUseContext(player, Hand.MAIN_HAND, trace)));
-			if (trace.getFace()
+			boolean replaceable = player.level.getBlockState(hit)
+				.canBeReplaced(new BlockItemUseContext(new ItemUseContext(player, Hand.MAIN_HAND, trace)));
+			if (trace.getDirection()
 				.getAxis()
 				.isVertical() && !replaceable)
-				hit = hit.offset(trace.getFace());
+				hit = hit.relative(trace.getDirection());
 
 			if (model.getAnchor() == null)
 				selectedPosition = hit;
@@ -117,7 +117,7 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 			stack.forEach(room -> {
 				boolean roomHighlighted = isRoomHighlighted(room);
 				MightyClient.outliner.chaseAABB(room, room.toAABB()
-					.offset(anchor))
+					.move(anchor))
 					.withFaceTexture(roomHighlighted ? AllSpecialTextures.SuperSelectedRoom
 						: stackTransparent ? AllSpecialTextures.SelectedRoom
 							: stackHighlighted ? AllSpecialTextures.SelectedRoom : stack.getTextureOf(room))

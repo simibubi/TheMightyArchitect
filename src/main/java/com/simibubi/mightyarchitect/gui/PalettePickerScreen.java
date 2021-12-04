@@ -35,7 +35,7 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 
 	public PalettePickerScreen(boolean scanPicker) {
 		super();
-		client = Minecraft.getInstance();
+		minecraft = Minecraft.getInstance();
 		this.scanPicker = scanPicker;
 
 	}
@@ -74,9 +74,9 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 			buttonAddPalette = new IconButton(x + (i % 5) * 23, y + (i / 5) * 23, ScreenResources.ICON_ADD);
 			buttonAddPalette.setToolTip(new StringTextComponent("Create Palette"));
 			buttonAddPalette.getToolTip()
-				.add(new StringTextComponent("Will use currently selected").formatted(TextFormatting.GRAY));
+				.add(new StringTextComponent("Will use currently selected").withStyle(TextFormatting.GRAY));
 			buttonAddPalette.getToolTip()
-				.add(new StringTextComponent("Palette as the template.").formatted(TextFormatting.GRAY));
+				.add(new StringTextComponent("Palette as the template.").withStyle(TextFormatting.GRAY));
 			i++;
 			widgets.add(buttonAddPalette);
 		}
@@ -99,12 +99,12 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 
 		if (scanPicker) {
 			if (primary.palette.hasDuplicates())
-				client.player.sendStatusMessage(
+				minecraft.player.displayClientMessage(
 					new StringTextComponent(TextFormatting.RED + "Warning: Ambiguous Scanner Palette "
 						+ TextFormatting.WHITE + "( " + primary.palette.getDuplicates() + " )"),
 					false);
 
-			client.player.sendStatusMessage(new StringTextComponent("Updated Default Palette"), true);
+			minecraft.player.displayClientMessage(new StringTextComponent("Updated Default Palette"), true);
 			DesignExporter.theme.setDefaultPalette(primary.palette);
 			DesignExporter.theme.setDefaultSecondaryPalette(secondary.palette);
 		}
@@ -144,18 +144,18 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 		int color = ScreenResources.FONT_COLOR;
 
 		if (scanPicker) {
-			textRenderer.draw(ms, "Choose a palette for", topLeftX + 8, topLeftY + 10, color);
-			textRenderer.draw(ms, "your theme.", topLeftX + 8, topLeftY + 18, color);
+			font.draw(ms, "Choose a palette for", topLeftX + 8, topLeftY + 10, color);
+			font.draw(ms, "your theme.", topLeftX + 8, topLeftY + 18, color);
 
 		} else {
-			textRenderer.draw(ms, "Palette Picker", topLeftX + 8, topLeftY + 10, color);
-			textRenderer.draw(ms, "Primary", topLeftX + 134, topLeftY + 30, color);
-			textRenderer.draw(ms, "Secondary", topLeftX + 191, topLeftY + 30, color);
+			font.draw(ms, "Palette Picker", topLeftX + 8, topLeftY + 10, color);
+			font.draw(ms, "Primary", topLeftX + 134, topLeftY + 30, color);
+			font.draw(ms, "Secondary", topLeftX + 191, topLeftY + 30, color);
 
 		}
 
-		textRenderer.draw(ms, "Included Palettes", topLeftX + 8, topLeftY + 53, color);
-		textRenderer.draw(ms, "My Palettes", topLeftX + 134, topLeftY + 53, color);
+		font.draw(ms, "Included Palettes", topLeftX + 8, topLeftY + 53, color);
+		font.draw(ms, "My Palettes", topLeftX + 134, topLeftY + 53, color);
 	}
 
 	@Override
@@ -164,7 +164,7 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 			Widget guibutton = this.widgets.get(i);
 
 			if (guibutton.isMouseOver(mouseX, mouseY)) {
-				guibutton.playDownSound(this.client.getSoundHandler());
+				guibutton.playDownSound(this.minecraft.getSoundManager());
 				if (mouseButton == 0)
 					this.buttonClicked(guibutton);
 				if (mouseButton == 1)
@@ -178,7 +178,7 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 	protected void buttonClicked(Widget button) {
 		if (button == buttonOpenFolder) {
 			FilesHelper.createFolderIfMissing("palettes");
-			Util.getOSType()
+			Util.getPlatform()
 				.openFile(Paths.get("palettes/")
 					.toFile());
 		}
@@ -198,7 +198,7 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 		if (!(button instanceof PaletteButton)) {
 			if (button == buttonAddPalette) {
 				ArchitectManager.createPalette(true);
-				client.displayGuiScreen(null);
+				minecraft.setScreen(null);
 			}
 		} else {
 			ArchitectManager.getModel()
@@ -218,7 +218,7 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 
 		if (!(button instanceof PaletteButton)) {
 			ArchitectManager.createPalette(false);
-			client.displayGuiScreen(null);
+			minecraft.setScreen(null);
 		} else {
 			ArchitectManager.getModel()
 				.swapSecondaryPalette(((PaletteButton) button).palette);
@@ -263,12 +263,12 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 		@Override
 		public void renderButton(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
 			super.renderButton(ms, mouseX, mouseY, partialTicks);
-			preview(ms, client);
+			preview(ms, minecraft);
 		}
 
 		@Override
 		public void renderToolTip(MatrixStack ms, int mouseX, int mouseY) {
-			if (hovered) {
+			if (isHovered) {
 				renderTooltip(ms, new StringTextComponent(palette.getName()), mouseX, mouseY);
 				RenderSystem.color4f(1, 1, 1, 1);
 			}

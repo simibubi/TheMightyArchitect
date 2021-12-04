@@ -84,9 +84,9 @@ public class ArchitectKits {
 		BlockState state = DesignExporter.theme.getDefaultPalette().get(palette);
 		ItemStack stack = new ItemStack(state.getBlock().asItem());
 		setHotbarItem(slot,
-				stack.setDisplayName(new StringTextComponent(TextFormatting.RESET + "" + TextFormatting.GOLD
+				stack.setHoverName(new StringTextComponent(TextFormatting.RESET + "" + TextFormatting.GOLD
 						+ palette.getDisplayName() + TextFormatting.WHITE + " (" + TextFormatting.GRAY
-						+ stack.getDisplayName().getString() + TextFormatting.WHITE + ")")));
+						+ stack.getHoverName().getString() + TextFormatting.WHITE + ")")));
 	}
 
 }

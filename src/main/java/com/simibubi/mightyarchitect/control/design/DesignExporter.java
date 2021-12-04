@@ -46,12 +46,12 @@ public class DesignExporter {
 		boolean found = false;
 		for (int range = 1; range < 100 && !found; range++) {
 			for (int i = 0; i <= range; i++) {
-				if (isMarker(worldIn, anchor.add(range, 0, i))) {
-					layerDefAnchor = anchor.add(range, 0, i);
+				if (isMarker(worldIn, anchor.offset(range, 0, i))) {
+					layerDefAnchor = anchor.offset(range, 0, i);
 					found = true;
 					break;
-				} else if (isMarker(worldIn, anchor.add(i, 0, range))) {
-					layerDefAnchor = anchor.add(i, 0, range);
+				} else if (isMarker(worldIn, anchor.offset(i, 0, range))) {
+					layerDefAnchor = anchor.offset(i, 0, range);
 					found = true;
 					break;
 				}
@@ -65,7 +65,7 @@ public class DesignExporter {
 		// Collect information
 		int height = 0;
 		int effectiveHeight = 0;
-		for (BlockPos pos = layerDefAnchor; isMarker(worldIn, pos); pos = pos.up()) {
+		for (BlockPos pos = layerDefAnchor; isMarker(worldIn, pos); pos = pos.above()) {
 			height++;
 			if (DesignSliceTrait.values()[markerValueAt(worldIn, pos)] != DesignSliceTrait.MaskAbove)
 				effectiveHeight++;
@@ -78,7 +78,7 @@ public class DesignExporter {
 
 		BlockPos size = layerDefAnchor.west()
 			.subtract(anchor.east())
-			.add(1, height, 1);
+			.offset(1, height, 1);
 
 		boolean visualizing = PhaseEditTheme.isVisualizing();
 		Cuboid bounds = new Cuboid(anchor.east(), size);
@@ -101,21 +101,21 @@ public class DesignExporter {
 
 		for (int y = 0; y < size.getY(); y++) {
 			CompoundNBT layerTag = new CompoundNBT();
-			DesignSliceTrait trait = DesignSliceTrait.values()[markerValueAt(worldIn, layerDefAnchor.up(y))];
+			DesignSliceTrait trait = DesignSliceTrait.values()[markerValueAt(worldIn, layerDefAnchor.above(y))];
 			layerTag.putString("Trait", trait.name());
 
 			StringBuilder data = new StringBuilder();
 			for (int z = 0; z < size.getZ(); z++) {
 				for (int x = 0; x < size.getX(); x++) {
 					BlockPos pos = anchor.east()
-						.add(x, y, z);
+						.offset(x, y, z);
 					BlockState blockState = worldIn.getBlockState(pos);
 					Palette block = scanningPalette.scan(blockState);
 
 					if (block == null && blockState.getBlock() != Blocks.AIR) {
-						Minecraft.getInstance().player.sendStatusMessage(
+						Minecraft.getInstance().player.displayClientMessage(
 							new StringTextComponent(blockState.getBlock()
-							.getTranslationKey() + " @" + pos.getX() + "," + pos.getY() + "," + pos.getZ()
+							.getDescriptionId() + " @" + pos.getX() + "," + pos.getY() + "," + pos.getZ()
 							+ " does not belong to the Scanner Palette"), false);
 						return "Export failed";
 					}
@@ -131,7 +131,7 @@ public class DesignExporter {
 			for (int z = 0; z < size.getZ(); z++) {
 				for (int x = 0; x < size.getX(); x++) {
 					BlockOrientation orientation = BlockOrientation.byState(worldIn.getBlockState(anchor.east()
-						.add(x, y, z)));
+						.offset(x, y, z)));
 					orientationStrip.append(orientation.asChar());
 				}
 				if (z < size.getZ() - 1)
@@ -184,11 +184,11 @@ public class DesignExporter {
 		String filename = "";
 		String designPath = "";
 
-		BlockPos signPos = anchor.up();
+		BlockPos signPos = anchor.above();
 		if (worldIn.getBlockState(signPos)
 			.getBlock() == Blocks.SPRUCE_SIGN) {
-			SignTileEntity sign = (SignTileEntity) worldIn.getTileEntity(signPos);
-			filename = sign.getText(1)
+			SignTileEntity sign = (SignTileEntity) worldIn.getBlockEntity(signPos);
+			filename = sign.getMessage(1)
 				.getString();
 			designPath = typePath + "/" + filename;
 
@@ -234,7 +234,7 @@ public class DesignExporter {
 
 	private static int markerValueAt(World worldIn, BlockPos pos) {
 		return worldIn.getBlockState(pos)
-			.get(SliceMarkerBlock.VARIANT)
+			.getValue(SliceMarkerBlock.VARIANT)
 			.ordinal();
 	}
 

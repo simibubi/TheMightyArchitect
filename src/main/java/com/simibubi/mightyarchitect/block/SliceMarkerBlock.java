@@ -19,6 +19,8 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class SliceMarkerBlock extends Block {
 
 	public static final BooleanProperty compass = BooleanProperty.create("compass");
@@ -26,37 +28,37 @@ public class SliceMarkerBlock extends Block {
 			DesignSliceTrait.class);
 
 	public SliceMarkerBlock() {
-		super(Properties.create(Material.ROCK));
-		this.setDefaultState(getDefaultState().with(VARIANT, DesignSliceTrait.Standard));
+		super(Properties.of(Material.STONE));
+		this.registerDefaultState(defaultBlockState().setValue(VARIANT, DesignSliceTrait.Standard));
 	}
 
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(compass, VARIANT);
-		super.fillStateContainer(builder);
+		super.createBlockStateDefinition(builder);
 	}
 
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		if (context.getWorld().getBlockState(context.getPos().down()).getBlock() == this)
-			return getDefaultState().with(compass, false);
-		return getDefaultState().with(compass, true);
+		if (context.getLevel().getBlockState(context.getClickedPos().below()).getBlock() == this)
+			return defaultBlockState().setValue(compass, false);
+		return defaultBlockState().setValue(compass, true);
 	}
 
 	@Override
-	public ActionResultType onUse(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn,
+	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn,
 			BlockRayTraceResult hit) {
-		if (hit.getFace().getAxis() == Axis.Y)
+		if (hit.getDirection().getAxis() == Axis.Y)
 			return ActionResultType.PASS;
-		if (AllItems.ARCHITECT_WAND.typeOf(player.getHeldItem(handIn)))
+		if (AllItems.ARCHITECT_WAND.typeOf(player.getItemInHand(handIn)))
 			return ActionResultType.PASS;
-		if (worldIn.isRemote)
+		if (worldIn.isClientSide)
 			return ActionResultType.SUCCESS;
 
-		DesignSliceTrait currentTrait = state.get(VARIANT);
-		DesignSliceTrait newTrait = currentTrait.cycle(player.isSneaking() ? -1 : 1);
-		worldIn.setBlockState(pos, state.with(VARIANT, newTrait));
-		player.sendStatusMessage(new StringTextComponent(newTrait.getDescription()), true);
+		DesignSliceTrait currentTrait = state.getValue(VARIANT);
+		DesignSliceTrait newTrait = currentTrait.cycle(player.isShiftKeyDown() ? -1 : 1);
+		worldIn.setBlockAndUpdate(pos, state.setValue(VARIANT, newTrait));
+		player.displayClientMessage(new StringTextComponent(newTrait.getDescription()), true);
 
 		return ActionResultType.SUCCESS;
 	}

@@ -42,21 +42,21 @@ public class TextInputPromptScreen extends AbstractSimiScreen {
 		setWindowSize(ScreenResources.TEXT_INPUT.width, ScreenResources.TEXT_INPUT.height + 30);
 
 		this.nameField =
-			new TextFieldWidget(textRenderer, topLeftX + 33, topLeftY + 26, 128, 8, new StringTextComponent(""));
+			new TextFieldWidget(font, topLeftX + 33, topLeftY + 26, 128, 8, new StringTextComponent(""));
 		this.nameField.setTextColor(-1);
-		this.nameField.setDisabledTextColour(-1);
-		this.nameField.setEnableBackgroundDrawing(false);
-		this.nameField.setMaxStringLength(35);
+		this.nameField.setTextColorUneditable(-1);
+		this.nameField.setBordered(false);
+		this.nameField.setMaxLength(35);
 		this.nameField.changeFocus(true);
 
 		confirm = new Button(topLeftX - 5, topLeftY + 50, 100, 20, buttonTextConfirm, button -> {
-			callback.accept(nameField.getText());
+			callback.accept(nameField.getValue());
 			confirmed = true;
-			client.displayGuiScreen(null);
+			minecraft.setScreen(null);
 		});
 
 		abort = new Button(topLeftX + 100, topLeftY + 50, 100, 20, buttonTextAbort, button -> {
-			client.displayGuiScreen(null);
+			minecraft.setScreen(null);
 		});
 
 		widgets.add(confirm);
@@ -67,14 +67,14 @@ public class TextInputPromptScreen extends AbstractSimiScreen {
 	@Override
 	public void renderWindow(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
 		ScreenResources.TEXT_INPUT.draw(ms, this, topLeftX, topLeftY);
-		textRenderer.draw(ms, title, topLeftX + (sWidth / 2) - (textRenderer.getWidth(title) / 2), topLeftY + 11,
+		font.draw(ms, title, topLeftX + (sWidth / 2) - (font.width(title) / 2), topLeftY + 11,
 			ScreenResources.FONT_COLOR);
 	}
 
 	@Override
 	public void removed() {
 		if (!confirmed)
-			abortCallback.accept(nameField.getText());
+			abortCallback.accept(nameField.getValue());
 		super.removed();
 	}
 

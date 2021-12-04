@@ -83,7 +83,7 @@ public class FilesHelper {
 			JsonElement element = Streams.parse(reader);
 			reader.close();
 			inputStream.close();
-			return JsonToNBT.getTagFromJson(element.toString());
+			return JsonToNBT.parseTag(element.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (CommandSyntaxException e) {

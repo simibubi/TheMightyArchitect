@@ -49,13 +49,13 @@ public enum BlockOrientation {
 		if (!hasFacing())
 			return this;
 
-		if (facing.getHorizontalIndex() == -1)
+		if (facing.get2DDataValue() == -1)
 			return this;
 
 		Direction facing2 = facing;
 
 		for (; angle > -360; angle -= 90) {
-			facing2 = facing2.rotateY();
+			facing2 = facing2.getClockWise();
 		}
 
 		return valueOf(half, facing2);
@@ -72,30 +72,30 @@ public enum BlockOrientation {
 		Half half = null;
 		Direction facing = null;
 
-		if (state.contains(BlockStateProperties.HALF))
-			half = state.get(BlockStateProperties.HALF);
+		if (state.hasProperty(BlockStateProperties.HALF))
+			half = state.getValue(BlockStateProperties.HALF);
 
-		if (state.contains(BlockStateProperties.SLAB_TYPE) && state.get(BlockStateProperties.SLAB_TYPE) != SlabType.DOUBLE)
-			half = state.get(BlockStateProperties.SLAB_TYPE) == SlabType.BOTTOM ? Half.BOTTOM : Half.TOP;
+		if (state.hasProperty(BlockStateProperties.SLAB_TYPE) && state.getValue(BlockStateProperties.SLAB_TYPE) != SlabType.DOUBLE)
+			half = state.getValue(BlockStateProperties.SLAB_TYPE) == SlabType.BOTTOM ? Half.BOTTOM : Half.TOP;
 
-		if (state.contains(BlockStateProperties.FACING))
-			facing = state.get(BlockStateProperties.FACING);
+		if (state.hasProperty(BlockStateProperties.FACING))
+			facing = state.getValue(BlockStateProperties.FACING);
 
-		if (state.contains(BlockStateProperties.FACING_EXCEPT_UP))
-			facing = state.get(BlockStateProperties.FACING_EXCEPT_UP);
+		if (state.hasProperty(BlockStateProperties.FACING_HOPPER))
+			facing = state.getValue(BlockStateProperties.FACING_HOPPER);
 
-		if (state.contains(BlockStateProperties.HORIZONTAL_FACING))
-			facing = state.get(BlockStateProperties.HORIZONTAL_FACING);
+		if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING))
+			facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
 
 		if (state.getBlock() instanceof TrapDoorBlock)
 			facing = facing.getOpposite();
 
-		if (state.contains(BlockStateProperties.AXIS))
-			facing = Direction.getFacingFromAxis(AxisDirection.POSITIVE, state.get(BlockStateProperties.AXIS));
+		if (state.hasProperty(BlockStateProperties.AXIS))
+			facing = Direction.get(AxisDirection.POSITIVE, state.getValue(BlockStateProperties.AXIS));
 
-		if (state.contains(BlockStateProperties.HORIZONTAL_AXIS))
-			facing = Direction.getFacingFromAxis(AxisDirection.POSITIVE,
-					state.get(BlockStateProperties.HORIZONTAL_AXIS));
+		if (state.hasProperty(BlockStateProperties.HORIZONTAL_AXIS))
+			facing = Direction.get(AxisDirection.POSITIVE,
+					state.getValue(BlockStateProperties.HORIZONTAL_AXIS));
 
 		return valueOf(half, facing);
 	}
@@ -110,36 +110,36 @@ public enum BlockOrientation {
 
 	public BlockState apply(BlockState state, boolean forceAxis) {
 		BlockState newState = state;
-		newState = newState.rotate(Minecraft.getInstance().world, BlockPos.ZERO, getRotation());
+		newState = newState.rotate(Minecraft.getInstance().level, BlockPos.ZERO, getRotation());
 
-		if (hasHalf() && state.contains(BlockStateProperties.HALF))
-			newState = newState.with(BlockStateProperties.HALF, half);
+		if (hasHalf() && state.hasProperty(BlockStateProperties.HALF))
+			newState = newState.setValue(BlockStateProperties.HALF, half);
 
-		if (hasHalf() && state.contains(SlabBlock.TYPE))
-			if (state.get(SlabBlock.TYPE) != SlabType.DOUBLE)
-				newState = newState.with(SlabBlock.TYPE, half == Half.TOP ? SlabType.TOP : SlabType.BOTTOM);
+		if (hasHalf() && state.hasProperty(SlabBlock.TYPE))
+			if (state.getValue(SlabBlock.TYPE) != SlabType.DOUBLE)
+				newState = newState.setValue(SlabBlock.TYPE, half == Half.TOP ? SlabType.TOP : SlabType.BOTTOM);
 
-		if (hasFacing() && state.contains(BlockStateProperties.FACING))
-			if (state.get(BlockStateProperties.FACING).getAxis().isVertical() && forceAxis)
-				newState = newState.with(BlockStateProperties.FACING, facing);
+		if (hasFacing() && state.hasProperty(BlockStateProperties.FACING))
+			if (state.getValue(BlockStateProperties.FACING).getAxis().isVertical() && forceAxis)
+				newState = newState.setValue(BlockStateProperties.FACING, facing);
 
-		if (hasFacing() && state.contains(BlockStateProperties.FACING_EXCEPT_UP))
-			if (state.get(BlockStateProperties.FACING_EXCEPT_UP).getAxis().isVertical() && forceAxis)
-				newState = newState.with(BlockStateProperties.FACING_EXCEPT_UP, facing);
+		if (hasFacing() && state.hasProperty(BlockStateProperties.FACING_HOPPER))
+			if (state.getValue(BlockStateProperties.FACING_HOPPER).getAxis().isVertical() && forceAxis)
+				newState = newState.setValue(BlockStateProperties.FACING_HOPPER, facing);
 
 //		if (forceAxis && newState.getBlock() instanceof TrapDoorBlock)
 //			newState = newState.rotate(Rotation.CLOCKWISE_180);
 
-		if (hasFacing() && state.contains(BlockStateProperties.AXIS)) {
-			Axis axis = state.get(BlockStateProperties.AXIS);
+		if (hasFacing() && state.hasProperty(BlockStateProperties.AXIS)) {
+			Axis axis = state.getValue(BlockStateProperties.AXIS);
 			if (axis == Axis.Y && forceAxis)
-				newState = newState.with(BlockStateProperties.AXIS, facing.getAxis());
+				newState = newState.setValue(BlockStateProperties.AXIS, facing.getAxis());
 		}
 
-		if (hasFacing() && state.contains(BlockStateProperties.HORIZONTAL_AXIS)) {
-			Axis axis = state.get(BlockStateProperties.HORIZONTAL_AXIS);
+		if (hasFacing() && state.hasProperty(BlockStateProperties.HORIZONTAL_AXIS)) {
+			Axis axis = state.getValue(BlockStateProperties.HORIZONTAL_AXIS);
 			if (axis == Axis.Y && forceAxis)
-				newState = newState.with(BlockStateProperties.HORIZONTAL_AXIS, facing.getAxis());
+				newState = newState.setValue(BlockStateProperties.HORIZONTAL_AXIS, facing.getAxis());
 		}
 
 		return newState;
@@ -179,7 +179,7 @@ public enum BlockOrientation {
 
 	@Override
 	public String toString() {
-		return "Orientation: " + (hasHalf() ? half.getString() + " " : "Solid ") + (hasFacing() ? facing.getString() : "");
+		return "Orientation: " + (hasHalf() ? half.getSerializedName() + " " : "Solid ") + (hasFacing() ? facing.getSerializedName() : "");
 	}
 
 	public BlockState apply(BlockState iBlockState) {

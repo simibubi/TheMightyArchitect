@@ -35,7 +35,7 @@ public abstract class PhaseBase implements IArchitectPhase {
 		if (message == null) 
 			return;
 		
-		minecraft.player.sendStatusMessage(new StringTextComponent(message), true);
+		minecraft.player.displayClientMessage(new StringTextComponent(message), true);
 	}
 
 	

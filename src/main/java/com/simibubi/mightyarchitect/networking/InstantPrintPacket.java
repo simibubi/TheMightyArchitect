@@ -29,7 +29,7 @@ public class InstantPrintPacket {
 		Map<BlockPos, BlockState> blocks = new HashMap<>();
 		int size = buf.readInt();
 		for (int i = 0; i < size; i++) {
-			CompoundNBT blockTag = buf.readCompoundTag();
+			CompoundNBT blockTag = buf.readNbt();
 			BlockPos pos = buf.readBlockPos();
 			blocks.put(pos, NBTUtil.readBlockState(blockTag));
 		}
@@ -39,7 +39,7 @@ public class InstantPrintPacket {
 	public void toBytes(PacketBuffer buf) {
 		buf.writeInt(blocks.size);
 		blocks.blocks.forEach((pos, state) -> {
-			buf.writeCompoundTag(NBTUtil.writeBlockState(state));
+			buf.writeNbt(NBTUtil.writeBlockState(state));
 			buf.writeBlockPos(pos);
 		});
 	}
@@ -48,7 +48,7 @@ public class InstantPrintPacket {
 		Context ctx = context.get();
 		ctx.enqueueWork(() -> {
 			blocks.blocks.forEach((pos, state) -> {
-				ctx.getSender().getEntityWorld().setBlockState(pos, state, 3);
+				ctx.getSender().getCommandSenderWorld().setBlock(pos, state, 3);
 			});
 		});
     }
@@ -64,7 +64,7 @@ public class InstantPrintPacket {
 				packets.add(new InstantPrintPacket(new BunchOfBlocks(currentMap)));
 				currentMap = new HashMap<>(BunchOfBlocks.MAX_SIZE);
 			}
-			currentMap.put(posList.get(i).add(anchor), blockMap.get(posList.get(i)));
+			currentMap.put(posList.get(i).offset(anchor), blockMap.get(posList.get(i)));
 		}
 		packets.add(new InstantPrintPacket(new BunchOfBlocks(currentMap)));
 		

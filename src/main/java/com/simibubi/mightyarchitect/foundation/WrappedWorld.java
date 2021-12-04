@@ -30,8 +30,8 @@ public class WrappedWorld extends World {
 	protected World world;
 
 	public WrappedWorld(World world) {
-		super((ISpawnWorldInfo) world.getWorldInfo(), world.getRegistryKey(), world.getDimension(),
-			() -> world.getProfiler(), world.isRemote, false, 0);
+		super((ISpawnWorldInfo) world.getLevelData(), world.dimension(), world.dimensionType(),
+			() -> world.getProfiler(), world.isClientSide, false, 0);
 		this.world = world;
 	}
 
@@ -41,45 +41,45 @@ public class WrappedWorld extends World {
 	}
 
 	@Override
-	public boolean hasBlockState(BlockPos p_217375_1_, Predicate<BlockState> p_217375_2_) {
-		return world.hasBlockState(p_217375_1_, p_217375_2_);
+	public boolean isStateAtPosition(BlockPos p_217375_1_, Predicate<BlockState> p_217375_2_) {
+		return world.isStateAtPosition(p_217375_1_, p_217375_2_);
 	}
 
 	@Override
-	public TileEntity getTileEntity(BlockPos pos) {
-		return world.getTileEntity(pos);
+	public TileEntity getBlockEntity(BlockPos pos) {
+		return world.getBlockEntity(pos);
 	}
 
 	@Override
-	public boolean setBlockState(BlockPos pos, BlockState newState, int flags) {
-		return world.setBlockState(pos, newState, flags);
+	public boolean setBlock(BlockPos pos, BlockState newState, int flags) {
+		return world.setBlock(pos, newState, flags);
 	}
 
 	@Override
-	public int getLight(BlockPos pos) {
+	public int getMaxLocalRawBrightness(BlockPos pos) {
 		return 15;
 	}
 
 	@Override
-	public void notifyBlockUpdate(BlockPos pos, BlockState oldState, BlockState newState, int flags) {
-		world.notifyBlockUpdate(pos, oldState, newState, flags);
+	public void sendBlockUpdated(BlockPos pos, BlockState oldState, BlockState newState, int flags) {
+		world.sendBlockUpdated(pos, oldState, newState, flags);
 	}
 
 	@Override
-	public ITickList<Block> getPendingBlockTicks() {
-		return world.getPendingBlockTicks();
+	public ITickList<Block> getBlockTicks() {
+		return world.getBlockTicks();
 	}
 
 	@Override
-	public ITickList<Fluid> getPendingFluidTicks() {
-		return world.getPendingFluidTicks();
+	public ITickList<Fluid> getLiquidTicks() {
+		return world.getLiquidTicks();
 	}
 
 	@Override
-	public void playEvent(PlayerEntity player, int type, BlockPos pos, int data) {}
+	public void levelEvent(PlayerEntity player, int type, BlockPos pos, int data) {}
 
 	@Override
-	public List<? extends PlayerEntity> getPlayers() {
+	public List<? extends PlayerEntity> players() {
 		return Collections.emptyList();
 	}
 
@@ -88,11 +88,11 @@ public class WrappedWorld extends World {
 		float volume, float pitch) {}
 
 	@Override
-	public void playMovingSound(PlayerEntity p_217384_1_, Entity p_217384_2_, SoundEvent p_217384_3_,
+	public void playSound(PlayerEntity p_217384_1_, Entity p_217384_2_, SoundEvent p_217384_3_,
 		SoundCategory p_217384_4_, float p_217384_5_, float p_217384_6_) {}
 
 	@Override
-	public Entity getEntityByID(int id) {
+	public Entity getEntity(int id) {
 		return null;
 	}
 
@@ -102,21 +102,21 @@ public class WrappedWorld extends World {
 	}
 
 	@Override
-	public boolean addEntity(Entity entityIn) {
-		entityIn.setWorld(world);
-		return world.addEntity(entityIn);
+	public boolean addFreshEntity(Entity entityIn) {
+		entityIn.setLevel(world);
+		return world.addFreshEntity(entityIn);
 	}
 
 	@Override
-	public void registerMapData(MapData mapDataIn) {}
+	public void setMapData(MapData mapDataIn) {}
 
 	@Override
-	public int getNextMapId() {
+	public int getFreeMapId() {
 		return 0;
 	}
 
 	@Override
-	public void sendBlockBreakProgress(int breakerId, BlockPos pos, int progress) {}
+	public void destroyBlockProgress(int breakerId, BlockPos pos, int progress) {}
 
 	@Override
 	public Scoreboard getScoreboard() {
@@ -129,28 +129,28 @@ public class WrappedWorld extends World {
 	}
 
 	@Override
-	public Biome getGeneratorStoredBiome(int p_225604_1_, int p_225604_2_, int p_225604_3_) {
-		return world.getGeneratorStoredBiome(p_225604_1_, p_225604_2_, p_225604_3_);
+	public Biome getUncachedNoiseBiome(int p_225604_1_, int p_225604_2_, int p_225604_3_) {
+		return world.getUncachedNoiseBiome(p_225604_1_, p_225604_2_, p_225604_3_);
 	}
 
 	@Override
-	public AbstractChunkProvider getChunkProvider() {
-		return world.getChunkProvider();
+	public AbstractChunkProvider getChunkSource() {
+		return world.getChunkSource();
 	}
 
 	@Override
-	public DynamicRegistries getRegistryManager() {
-		return world.getRegistryManager();
+	public DynamicRegistries registryAccess() {
+		return world.registryAccess();
 	}
 
 	@Override
-	public float getBrightness(Direction p_230487_1_, boolean p_230487_2_) {
+	public float getShade(Direction p_230487_1_, boolean p_230487_2_) {
 		return 1;
 	}
 
 	@Override
-	public ITagCollectionSupplier getTags() {
-		return world.getTags();
+	public ITagCollectionSupplier getTagManager() {
+		return world.getTagManager();
 	}
 
 	public World getWorld() {

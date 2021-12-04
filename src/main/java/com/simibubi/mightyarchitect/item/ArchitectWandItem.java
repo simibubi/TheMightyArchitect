@@ -24,35 +24,37 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 
+import net.minecraft.item.Item.Properties;
+
 public class ArchitectWandItem extends Item {
 
 	public ArchitectWandItem(Properties properties) {
-		super(properties.maxStackSize(1).rarity(Rarity.RARE));
+		super(properties.stacksTo(1).rarity(Rarity.RARE));
 	}
 
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context) {
+	public ActionResultType useOn(ItemUseContext context) {
 		PlayerEntity player = context.getPlayer();
-		World world = context.getWorld();
+		World world = context.getLevel();
 
-		if (!world.isRemote)
+		if (!world.isClientSide)
 			return ActionResultType.SUCCESS;
 
-		if (player.isSneaking()) {
+		if (player.isShiftKeyDown()) {
 			DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
 				openGui();
 			});
 			return ActionResultType.SUCCESS;
 		}
 
-		BlockPos anchor = context.getPos();
+		BlockPos anchor = context.getClickedPos();
 		BlockState blockState = world.getBlockState(anchor);
 
 		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
 			handleUseOnDesignAnchor(player, world, anchor, blockState);
 		});
 
-		player.getCooldownTracker().setCooldown(this, 5);
+		player.getCooldowns().addCooldown(this, 5);
 		return ActionResultType.SUCCESS;
 	}
 
@@ -69,7 +71,7 @@ public class ArchitectWandItem extends Item {
 
 			String name = DesignExporter.exportDesign(world, anchor);
 			if (!name.isEmpty()) {
-				player.sendStatusMessage(new StringTextComponent(name), true);
+				player.displayClientMessage(new StringTextComponent(name), true);
 			}
 
 		} else {
@@ -80,14 +82,14 @@ public class ArchitectWandItem extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		if (worldIn.isRemote) {
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		if (worldIn.isClientSide) {
 			DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
 				handleRightClick(worldIn, playerIn, handIn);
 			});
-			playerIn.getCooldownTracker().setCooldown(this, 5);
+			playerIn.getCooldowns().addCooldown(this, 5);
 		}
-		return super.onItemRightClick(worldIn, playerIn, handIn);
+		return super.use(worldIn, playerIn, handIn);
 	}
 
 	@OnlyIn(value = Dist.CLIENT)
@@ -95,7 +97,7 @@ public class ArchitectWandItem extends Item {
 		if (!ArchitectManager.inPhase(ArchitectPhases.EditingThemes))
 			return;
 
-		if (playerIn.isSneaking()) {
+		if (playerIn.isShiftKeyDown()) {
 			openGui();
 
 		} else {

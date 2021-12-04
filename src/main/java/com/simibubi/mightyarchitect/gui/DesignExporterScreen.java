@@ -240,16 +240,16 @@ public class DesignExporterScreen extends AbstractSimiScreen {
 		RenderSystem.rotatef(-30, .4f, 0, -.2f);
 		RenderSystem.rotatef(90 + 0.2f * animationProgress, 0, 1, 0);
 		RenderSystem.scalef(100, -100, 100);
-		GuiGameElement.of(client.player.getHeldItemMainhand())
+		GuiGameElement.of(minecraft.player.getMainHandItem())
 			.render(ms);
 		RenderSystem.popMatrix();
 
 		int color = ScreenResources.FONT_COLOR;
-		textRenderer.draw(ms, "Export custom Designs", topLeftX + 10, topLeftY + 10, color);
-		textRenderer.draw(ms, "Theme", topLeftX + 10, topLeftY + 28, color);
-		textRenderer.draw(ms, "Building Layer", topLeftX + 10, topLeftY + 48, color);
-		textRenderer.draw(ms, "Design Type", topLeftX + 10, topLeftY + 68, color);
-		textRenderer.draw(ms, additionalDataKey, topLeftX + 10, topLeftY + 88, color);
+		font.draw(ms, "Export custom Designs", topLeftX + 10, topLeftY + 10, color);
+		font.draw(ms, "Theme", topLeftX + 10, topLeftY + 28, color);
+		font.draw(ms, "Building Layer", topLeftX + 10, topLeftY + 48, color);
+		font.draw(ms, "Design Type", topLeftX + 10, topLeftY + 68, color);
+		font.draw(ms, additionalDataKey, topLeftX + 10, topLeftY + 88, color);
 	}
 
 	@Override

@@ -65,7 +65,7 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 	@Override
 	public void onKey(int key, boolean released) {
 		if (key != MightyClient.TOOL_MENU.getKey()
-			.getKeyCode())
+			.getValue())
 			return;
 
 		if (released && toolSelection.focused) {
@@ -99,7 +99,7 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 
 	@Override
 	public void renderGameOverlay(Pre event) {
-		if (Minecraft.getInstance().currentScreen != null)
+		if (Minecraft.getInstance().screen != null)
 			return;
 
 		MatrixStack ms = event.getMatrixStack();

@@ -44,7 +44,7 @@ public class PhasePreviewing extends PhaseBase implements IRenderGameOverlay {
 	@Override
 	public void onClick(int button) {
 		if (button == 1) {
-			if (Minecraft.getInstance().currentScreen == null) {
+			if (Minecraft.getInstance().screen == null) {
 				String message = activeTool.getTool()
 					.handleRightClick();
 				sendStatusMessage(message);
@@ -55,7 +55,7 @@ public class PhasePreviewing extends PhaseBase implements IRenderGameOverlay {
 	@Override
 	public void onKey(int key, boolean released) {
 		if (key != MightyClient.TOOL_MENU.getKey()
-			.getKeyCode())
+			.getValue())
 			return;
 
 		if (released && toolSelection.focused) {

@@ -47,7 +47,7 @@ public class ArchitectMenuScreen extends Screen {
 	}
 
 	public void updateContents() {
-		int textRendererheight = Minecraft.getInstance().fontRenderer.FONT_HEIGHT;
+		int textRendererheight = Minecraft.getInstance().font.lineHeight;
 
 		// update tooltips and keybinds
 		tooltip = ArchitectManager.getPhase()
@@ -65,7 +65,7 @@ public class ArchitectMenuScreen extends Screen {
 
 		menuHeight += 4;
 		for (String s : tooltip)
-			menuHeight += Minecraft.getInstance().fontRenderer.getWordWrappedHeight(s, menuWidth - 8) + 2;
+			menuHeight += Minecraft.getInstance().font.wordWrapHeight(s, menuWidth - 8) + 2;
 
 		adjustTarget();
 	}
@@ -83,7 +83,7 @@ public class ArchitectMenuScreen extends Screen {
 
 		// NOT FOCUSED
 		draw(new MatrixStack(), Minecraft.getInstance()
-			.getRenderPartialTicks());
+			.getFrameTime());
 	}
 
 	@Override
@@ -95,15 +95,15 @@ public class ArchitectMenuScreen extends Screen {
 		if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
 			if (hideOnClose)
 				setVisible(false);
-			client.displayGuiScreen(null);
+			minecraft.setScreen(null);
 			return true;
 		}
 
 		if (keyCode == MightyClient.COMPOSE.getKey()
-			.getKeyCode()) {
+			.getValue()) {
 			if (hideOnClose)
 				setVisible(false);
-			client.displayGuiScreen(null);
+			minecraft.setScreen(null);
 			return true;
 		}
 		return false;
@@ -116,13 +116,13 @@ public class ArchitectMenuScreen extends Screen {
 		if (ArchitectMenu.handleMenuInput(p_charTyped_1_)) {
 			if (ArchitectManager.inPhase(ArchitectPhases.Paused))
 				setVisible(false);
-			client.displayGuiScreen(null);
+			minecraft.setScreen(null);
 			return true;
 		}
 		if (p_charTyped_1_ == 'e') {
 			if (hideOnClose)
 				setVisible(false);
-			client.displayGuiScreen(null);
+			minecraft.setScreen(null);
 			return true;
 		}
 
@@ -132,14 +132,14 @@ public class ArchitectMenuScreen extends Screen {
 	private void draw(MatrixStack ms, float partialTicks) {
 		MainWindow mainWindow = Minecraft.getInstance()
 			.getWindow();
-		int x = mainWindow.getScaledWidth() - menuWidth - 10;
-		int y = mainWindow.getScaledHeight() - menuHeight;
+		int x = mainWindow.getGuiScaledWidth() - menuWidth - 10;
+		int y = mainWindow.getGuiScaledHeight() - menuHeight;
 
-		int mouseX = (int) (Minecraft.getInstance().mouseHelper.getMouseX() / mainWindow.getGuiScaleFactor());
-		int mouseY = (int) (Minecraft.getInstance().mouseHelper.getMouseY() / mainWindow.getGuiScaleFactor());
+		int mouseX = (int) (Minecraft.getInstance().mouseHandler.xpos() / mainWindow.getGuiScale());
+		int mouseY = (int) (Minecraft.getInstance().mouseHandler.ypos() / mainWindow.getGuiScale());
 
 		boolean sideways = false;
-		if ((mainWindow.getScaledWidth() - 182) / 2 < menuWidth + 20) {
+		if ((mainWindow.getGuiScaledWidth() - 182) / 2 < menuWidth + 20) {
 			sideways = true;
 			y -= 24;
 		}
@@ -158,65 +158,65 @@ public class ArchitectMenuScreen extends Screen {
 
 		Minecraft.getInstance()
 			.getTextureManager()
-			.bindTexture(gray.location);
+			.bind(gray.location);
 		RenderSystem.enableTexture();
-		drawTexture(ms, x, y, gray.startX, gray.startY, menuWidth, menuHeight, gray.width, gray.height);
+		blit(ms, x, y, gray.startX, gray.startY, menuWidth, menuHeight, gray.width, gray.height);
 		RenderSystem.color4f(1, 1, 1, 1);
 
 		int yPos = y + 4;
 		int xPos = x + 4;
 
-		FontRenderer textRenderer = Minecraft.getInstance().fontRenderer;
-		String compose = MightyClient.COMPOSE.getBoundKeyLocalizedText()
+		FontRenderer textRenderer = Minecraft.getInstance().font;
+		String compose = MightyClient.COMPOSE.getTranslatedKeyMessage()
 			.getString()
 			.toUpperCase();
 		if (!focused) {
 			if (sideways) {
 				if (visible) {
 					String string = "Press " + compose.toUpperCase() + " for Menu";
-					textRenderer.drawWithShadow(ms, string,
-						mainWindow.getScaledWidth() - textRenderer.getStringWidth(string) - 15 - sidewaysShift,
+					textRenderer.drawShadow(ms, string,
+						mainWindow.getGuiScaledWidth() - textRenderer.width(string) - 15 - sidewaysShift,
 						yPos - 14, 0xEEEEEE);
 				}
 			} else {
-				textRenderer.drawWithShadow(ms, "Press " + compose.toUpperCase() + " to focus", xPos, yPos - 14,
+				textRenderer.drawShadow(ms, "Press " + compose.toUpperCase() + " to focus", xPos, yPos - 14,
 					0xEEEEEE);
 			}
 		} else {
 			String string = "Press " + compose + " to close";
-			textRenderer.drawWithShadow(ms, string,
+			textRenderer.drawShadow(ms, string,
 				sideways
 					? Math.min(xPos,
-						mainWindow.getScaledWidth() - textRenderer.getStringWidth(string) - 15 - sidewaysShift)
+						mainWindow.getGuiScaledWidth() - textRenderer.width(string) - 15 - sidewaysShift)
 					: xPos,
 				yPos - 14, 0xDDDDDD);
 		}
-		textRenderer.drawWithShadow(ms, title, xPos, yPos, 0xEEEEEE);
+		textRenderer.drawShadow(ms, title, xPos, yPos, 0xEEEEEE);
 
 		boolean hoveredHorizontally = x <= mouseX && mouseX <= x + menuWidth && focused;
 
 		yPos += 4;
 		for (String key : keybinds.getKeys()) {
 			if (key.isEmpty()) {
-				yPos += textRenderer.FONT_HEIGHT / 2;
+				yPos += textRenderer.lineHeight / 2;
 				continue;
 			}
 
-			yPos += textRenderer.FONT_HEIGHT;
+			yPos += textRenderer.lineHeight;
 			int color =
-				hoveredHorizontally && yPos < mouseY && mouseY <= yPos + textRenderer.FONT_HEIGHT ? 0xFFFFFF : 0xCCDDFF;
-			textRenderer.drawWithShadow(ms, "[" + key + "] " + keybinds.get(key), xPos, yPos, color);
-			textRenderer.drawWithShadow(ms, ">", xPos - 12, yPos, color);
+				hoveredHorizontally && yPos < mouseY && mouseY <= yPos + textRenderer.lineHeight ? 0xFFFFFF : 0xCCDDFF;
+			textRenderer.drawShadow(ms, "[" + key + "] " + keybinds.get(key), xPos, yPos, color);
+			textRenderer.drawShadow(ms, ">", xPos - 12, yPos, color);
 		}
 
 		yPos += 4;
-		yPos += textRenderer.FONT_HEIGHT;
+		yPos += textRenderer.lineHeight;
 		for (String text : tooltip) {
-			int height = Minecraft.getInstance().fontRenderer.getWordWrappedHeight(text, menuWidth - 8);
+			int height = Minecraft.getInstance().font.wordWrapHeight(text, menuWidth - 8);
 			int lineY = yPos;
-			for (IReorderingProcessor iro : textRenderer.wrapLines(new StringTextComponent(text), menuWidth - 8)) {
+			for (IReorderingProcessor iro : textRenderer.split(new StringTextComponent(text), menuWidth - 8)) {
 				textRenderer.draw(ms, iro, xPos, lineY, 0xEEEEEE);				
-				lineY += textRenderer.FONT_HEIGHT;
+				lineY += textRenderer.lineHeight;
 			}
 			yPos += height + 2;
 		}
@@ -231,11 +231,11 @@ public class ArchitectMenuScreen extends Screen {
 
 		MainWindow mainWindow = Minecraft.getInstance()
 			.getWindow();
-		int x = mainWindow.getScaledWidth() - menuWidth - 10;
-		int y = mainWindow.getScaledHeight() - menuHeight;
+		int x = mainWindow.getGuiScaledWidth() - menuWidth - 10;
+		int y = mainWindow.getGuiScaledHeight() - menuHeight;
 
 		boolean sideways = false;
-		if ((mainWindow.getScaledWidth() - 182) / 2 < menuWidth + 20) {
+		if ((mainWindow.getGuiScaledWidth() - 182) / 2 < menuWidth + 20) {
 			sideways = true;
 			mouseY += 24;
 		}
@@ -250,12 +250,12 @@ public class ArchitectMenuScreen extends Screen {
 		yPos += 4;
 		for (String key : keybinds.getKeys()) {
 			if (key.isEmpty()) {
-				yPos += textRenderer.FONT_HEIGHT / 2;
+				yPos += font.lineHeight / 2;
 				continue;
 			}
 
-			yPos += textRenderer.FONT_HEIGHT;
-			if (hoveredHorizontally && yPos < mouseY && mouseY <= yPos + textRenderer.FONT_HEIGHT) {
+			yPos += font.lineHeight;
+			if (hoveredHorizontally && yPos < mouseY && mouseY <= yPos + font.lineHeight) {
 				charTyped(key.toLowerCase()
 					.charAt(0), GLFW.GLFW_PRESS);
 			}

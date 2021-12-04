@@ -125,9 +125,9 @@ public class DesignHelper {
 				wallA = wallB;
 		}
 
-		BlockPos cornerZ = start.add(0, 0, length - 1);
-		BlockPos cornerXZ = start.add(width - 1, 0, length - 1);
-		BlockPos cornerX = start.add(width - 1, 0, 0);
+		BlockPos cornerZ = start.offset(0, 0, length - 1);
+		BlockPos cornerXZ = start.offset(width - 1, 0, length - 1);
+		BlockPos cornerX = start.offset(width - 1, 0, 0);
 
 		if (wallA != null && wallB != null && corner != null) {
 			designList.add(wall(wallA, cornerZ, cornerXZ, height));
@@ -177,7 +177,7 @@ public class DesignHelper {
 	public static void addTowerRoof(TemporaryDesignCache designProvider, List<DesignInstance> designList,
 			DesignTheme theme, DesignLayer layer, Stack stack, boolean flat) {
 		Room highest = stack.highest();
-		BlockPos start = highest.getOrigin().up(highest.height);
+		BlockPos start = highest.getOrigin().above(highest.height);
 		BlockPos size = highest.getSize();
 		int diameter = size.getX();
 		Design roof = null;
@@ -211,15 +211,15 @@ public class DesignHelper {
 	public static void addNormalRoof(TemporaryDesignCache designProvider, List<DesignInstance> designList,
 			DesignTheme theme, DesignLayer layer, Stack stack) {
 		Room highest = stack.highest();
-		BlockPos start = highest.getOrigin().up(highest.height);
+		BlockPos start = highest.getOrigin().above(highest.height);
 		BlockPos size = highest.getSize();
 		boolean south = size.getZ() < size.getX();
 		int depth = south ? size.getX() : size.getZ();
 		int width = south ? size.getZ() : size.getX();
 
-		BlockPos cornerZ = start.add(0, 0, size.getZ() - 1);
-		BlockPos cornerXZ = start.add(size.getX() - 1, 0, size.getZ() - 1);
-		BlockPos cornerX = start.add(size.getX() - 1, 0, 0);
+		BlockPos cornerZ = start.offset(0, 0, size.getZ() - 1);
+		BlockPos cornerXZ = start.offset(size.getX() - 1, 0, size.getZ() - 1);
+		BlockPos cornerX = start.offset(size.getX() - 1, 0, 0);
 		Design roof = null;
 
 		if (designProvider.hasCachedRoof(stack)) {
@@ -248,15 +248,15 @@ public class DesignHelper {
 	public static void addNormalCrossRoof(TemporaryDesignCache designProvider, List<DesignInstance> designList,
 			DesignTheme theme, DesignLayer layer, Stack stack) {
 		Room highest = stack.highest();
-		BlockPos start = highest.getOrigin().up(highest.height);
+		BlockPos start = highest.getOrigin().above(highest.height);
 		BlockPos size = highest.getSize();
 		boolean south = size.getZ() < size.getX();
 		int depth = south ? size.getX() : size.getZ();
 		int width = south ? size.getZ() : size.getX();
 
-		BlockPos cornerZ = start.add(0, 0, size.getZ() - 1);
-		BlockPos cornerXZ = start.add(size.getX() - 1, 0, size.getZ() - 1);
-		BlockPos cornerX = start.add(size.getX() - 1, 0, 0);
+		BlockPos cornerZ = start.offset(0, 0, size.getZ() - 1);
+		BlockPos cornerXZ = start.offset(size.getX() - 1, 0, size.getZ() - 1);
+		BlockPos cornerX = start.offset(size.getX() - 1, 0, 0);
 		Design roof = null;
 
 		if (designProvider.hasCachedRoof(stack)) {
@@ -287,15 +287,15 @@ public class DesignHelper {
 	public static void addFlatRoof(TemporaryDesignCache designProvider, List<DesignInstance> designList,
 			DesignTheme theme, DesignLayer layer, Stack stack) {
 		Room highest = stack.highest();
-		BlockPos start = highest.getOrigin().up(highest.height);
+		BlockPos start = highest.getOrigin().above(highest.height);
 		BlockPos size = highest.getSize();
 		boolean south = size.getZ() < size.getX();
 		int depth = south ? size.getX() : size.getZ();
 		int width = south ? size.getZ() : size.getX();
 
-		BlockPos cornerZ = start.add(0, 0, size.getZ() - 1);
-		BlockPos cornerXZ = start.add(size.getX() - 1, 0, size.getZ() - 1);
-		BlockPos cornerX = start.add(size.getX() - 1, 0, 0);
+		BlockPos cornerZ = start.offset(0, 0, size.getZ() - 1);
+		BlockPos cornerXZ = start.offset(size.getX() - 1, 0, size.getZ() - 1);
+		BlockPos cornerX = start.offset(size.getX() - 1, 0, 0);
 		Design flatroof = null;
 
 		if (designProvider.hasCachedRoof(stack)) {
@@ -328,7 +328,7 @@ public class DesignHelper {
 		int zDiff = corner2.getZ() - corner1.getZ();
 		int xStep = (int) Math.signum(xDiff);
 		int zStep = (int) Math.signum(zDiff);
-		corner1 = corner1.add(xStep, 0, zStep);
+		corner1 = corner1.offset(xStep, 0, zStep);
 		int width = Math.abs((xDiff == 0) ? zDiff : xDiff) - 1;
 		int rotation = ((xDiff == 0) ? ((zDiff > 0) ? 90 : -90) : ((xDiff > 0) ? 0 : 180));
 		return design.create(corner1, rotation, width, height);

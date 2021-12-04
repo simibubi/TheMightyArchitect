@@ -37,17 +37,17 @@ public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlig
 	public void whenEntered() {
 
 		Schematic model = getModel();
-		ClientWorld world = minecraft.world;
+		ClientWorld world = minecraft.level;
 		changed = new boolean[16];
 
 		palette = model.getCreatedPalette();
-		center = world.getHeight(Heightmap.Type.WORLD_SURFACE, minecraft.player.getBlockPos());
+		center = world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE, minecraft.player.blockPosition());
 		grid = new HashMap<>();
 
 		for (int i = 0; i < 16; i++) {
 			BlockPos pos = positionFromIndex(i);
 			grid.put(pos, Palette.values()[i]);
-			if (!world.isAirBlock(pos) && palette.get(Palette.values()[i]) != world.getBlockState(pos)) {
+			if (!world.isEmptyBlock(pos) && palette.get(Palette.values()[i]) != world.getBlockState(pos)) {
 				palette.put(Palette.values()[i], world.getBlockState(pos));
 				changed[i] = true;
 			}
@@ -63,7 +63,7 @@ public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlig
 			BlockPos pos = positionFromIndex(i);
 
 			// Handle changes
-			if (minecraft.world.isAirBlock(pos)) {
+			if (minecraft.level.isEmptyBlock(pos)) {
 				PaletteDefinition paletteDef =
 					getModel().isEditingPrimary() ? getModel().getPrimary() : getModel().getSecondary();
 				Palette key = grid.get(pos);
@@ -77,9 +77,9 @@ public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlig
 				continue;
 			}
 
-			BlockState state = minecraft.world.getBlockState(pos);
+			BlockState state = minecraft.level.getBlockState(pos);
 			if (state.getBlock() instanceof TrapDoorBlock)
-				state = state.with(TrapDoorBlock.OPEN, true);
+				state = state.setValue(TrapDoorBlock.OPEN, true);
 
 			if (palette.get(Palette.values()[i]) != state) {
 				palette.put(grid.get(pos), state);
@@ -100,14 +100,14 @@ public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlig
 			if (changed[i])
 				continue;
 
-			ms.push();
+			ms.pushPose();
 			BlockPos translate = positionFromIndex(i);
 			ms.translate(translate.getX(), translate.getY(), translate.getZ());
 			ms.translate(1 / 32f, 1 / 32f, 1 / 32f);
 			ms.scale(15 / 16f, 15 / 16f, 15 / 16f);
-			minecraft.getBlockRendererDispatcher()
-				.renderBlock(state, ms, buffer, 0xF000F0, OverlayTexture.DEFAULT_UV, EmptyModelData.INSTANCE);
-			ms.pop();
+			minecraft.getBlockRenderer()
+				.renderBlock(state, ms, buffer, 0xF000F0, OverlayTexture.NO_OVERLAY, EmptyModelData.INSTANCE);
+			ms.popPose();
 		}
 	}
 
@@ -119,7 +119,7 @@ public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlig
 
 	protected void notifyChange() {
 		getModel().updatePalettePreview();
-		minecraft.player.sendStatusMessage(new StringTextComponent("Updating Preview..."), true);
+		minecraft.player.displayClientMessage(new StringTextComponent("Updating Preview..."), true);
 		MightyClient.renderer.update();
 	}
 
@@ -129,10 +129,10 @@ public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlig
 	public void tickHighlightOutlines() {
 		BlockPos targetBlock = null;
 
-		RayTraceResult raytrace = RaycastHelper.rayTraceRange(minecraft.world, minecraft.player,
+		RayTraceResult raytrace = RaycastHelper.rayTraceRange(minecraft.level, minecraft.player,
 			minecraft.player.getAttributeValue(ForgeMod.REACH_DISTANCE.get()));
 		if (raytrace != null && raytrace.getType() == Type.BLOCK) {
-			targetBlock = new BlockPos(raytrace.getHitVec());
+			targetBlock = new BlockPos(raytrace.getLocation());
 			if (grid.containsKey(targetBlock))
 				sendStatusMessage(grid.get(targetBlock)
 					.getDisplayName());

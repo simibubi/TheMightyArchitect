@@ -47,16 +47,16 @@ public class SuperByteBuffer {
 	private float sheetSize;
 
 	public SuperByteBuffer(BufferBuilder buf) {
-		Pair<DrawState, ByteBuffer> state = buf.popData();
+		Pair<DrawState, ByteBuffer> state = buf.popNextBuffer();
 		ByteBuffer rendered = state.getSecond();
 		rendered.order(ByteOrder.nativeOrder()); // Vanilla bug, endianness does not carry over into sliced buffers
 
 		formatSize = buf.getVertexFormat()
-			.getSize();
+			.getVertexSize();
 		int size = state.getFirst()
-			.getCount() * formatSize;
+			.vertexCount() * formatSize;
 
-		template = GLAllocation.createDirectByteBuffer(size);
+		template = GLAllocation.createByteBuffer(size);
 		template.order(rendered.order());
 		template.limit(rendered.limit());
 		template.put(rendered);
@@ -66,13 +66,13 @@ public class SuperByteBuffer {
 	}
 
 	public static float getUnInterpolatedU(TextureAtlasSprite sprite, float u) {
-		float f = sprite.getMaxU() - sprite.getMinU();
-		return (u - sprite.getMinU()) / f * 16.0F;
+		float f = sprite.getU1() - sprite.getU0();
+		return (u - sprite.getU0()) / f * 16.0F;
 	}
 
 	public static float getUnInterpolatedV(TextureAtlasSprite sprite, float v) {
-		float f = sprite.getMaxV() - sprite.getMinV();
-		return (v - sprite.getMinV()) / f * 16.0F;
+		float f = sprite.getV1() - sprite.getV0();
+		return (v - sprite.getV0()) / f * 16.0F;
 	}
 
 	public void renderInto(MatrixStack input, IVertexBuilder builder) {
@@ -81,11 +81,11 @@ public class SuperByteBuffer {
 			return;
 		buffer.rewind();
 
-		Matrix4f t = input.peek()
-			.getModel()
+		Matrix4f t = input.last()
+			.pose()
 			.copy();
-		Matrix4f localTransforms = transforms.peek()
-			.getModel();
+		Matrix4f localTransforms = transforms.last()
+			.pose();
 		t.multiply(localTransforms);
 
 		for (int i = 0; i < vertexCount(buffer); i++) {
@@ -98,7 +98,7 @@ public class SuperByteBuffer {
 			pos.transform(t);
 			lightPos.transform(localTransforms);
 
-			builder.vertex(pos.getX(), pos.getY(), pos.getZ());
+			builder.vertex(pos.x(), pos.y(), pos.z());
 
 			byte r = getR(buffer, i);
 			byte g = getG(buffer, i);
@@ -116,22 +116,22 @@ public class SuperByteBuffer {
 
 			if (shouldShiftUV) {
 				float targetU = spriteShift.getTarget()
-					.getInterpolatedU((getUnInterpolatedU(spriteShift.getOriginal(), u) / sheetSize) + uTarget * 16);
+					.getU((getUnInterpolatedU(spriteShift.getOriginal(), u) / sheetSize) + uTarget * 16);
 				float targetV = spriteShift.getTarget()
-					.getInterpolatedV((getUnInterpolatedV(spriteShift.getOriginal(), v) / sheetSize) + vTarget * 16);
-				builder.texture(targetU, targetV);
+					.getV((getUnInterpolatedV(spriteShift.getOriginal(), v) / sheetSize) + vTarget * 16);
+				builder.uv(targetU, targetV);
 			} else
-				builder.texture(u, v);
+				builder.uv(u, v);
 
 			if (shouldLight) {
 				int light = packedLightCoords;
 				if (lightTransform != null) {
 					lightPos.transform(lightTransform);
-					light = getLight(Minecraft.getInstance().world, lightPos);
+					light = getLight(Minecraft.getInstance().level, lightPos);
 				}
-				builder.light(light);
+				builder.uv2(light);
 			} else
-				builder.light(getLight(buffer, i));
+				builder.uv2(getLight(buffer, i));
 
 			builder.normal(getNX(buffer, i), getNY(buffer, i), getNZ(buffer, i))
 				.endVertex();
@@ -155,8 +155,8 @@ public class SuperByteBuffer {
 	public SuperByteBuffer rotate(Direction axis, float radians) {
 		if (radians == 0)
 			return this;
-		transforms.multiply(axis.getUnitVector()
-			.getRadialQuaternion(radians));
+		transforms.mulPose(axis.step()
+			.rotation(radians));
 		return this;
 	}
 
@@ -272,9 +272,9 @@ public class SuperByteBuffer {
 		for (float zOffset = offset; zOffset >= -offset; zOffset -= 2 * offset)
 			for (float yOffset = offset; yOffset >= -offset; yOffset -= 2 * offset)
 				for (float xOffset = offset; xOffset >= -offset; xOffset -= 2 * offset) {
-					pos.setPos(lightPos.getX() + xOffset, lightPos.getY() + yOffset, lightPos.getZ() + zOffset);
-					sky += world.getLightLevel(LightType.SKY, pos) / 8f;
-					block += world.getLightLevel(LightType.BLOCK, pos) / 8f;
+					pos.set(lightPos.x() + xOffset, lightPos.y() + yOffset, lightPos.z() + zOffset);
+					sky += world.getBrightness(LightType.SKY, pos) / 8f;
+					block += world.getBrightness(LightType.BLOCK, pos) / 8f;
 				}
 
 		return ((int) sky) << 20 | ((int) block) << 4;

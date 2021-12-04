@@ -62,7 +62,7 @@ public class Cuboid {
 	}
 
 	public BlockPos getCenter() {
-		return getOrigin().add(width / 2, height / 2, length / 2);
+		return getOrigin().offset(width / 2, height / 2, length / 2);
 	}
 
 	public void moveToAttach(Room other, Direction side, int shift) {
@@ -110,11 +110,11 @@ public class Cuboid {
 	}
 	
 	public MutableBoundingBox toMBB() {
-		return new MutableBoundingBox(getOrigin(), getOrigin().add(getSize()));
+		return new MutableBoundingBox(getOrigin(), getOrigin().offset(getSize()));
 	}
 	
 	public AxisAlignedBB toAABB() {
-		return new AxisAlignedBB(getOrigin(), getOrigin().add(getSize()));
+		return new AxisAlignedBB(getOrigin(), getOrigin().offset(getSize()));
 	}
 
 }

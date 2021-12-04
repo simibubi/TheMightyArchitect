@@ -12,12 +12,12 @@ public class AngleHelper {
 	
 	@OnlyIn(Dist.CLIENT)
 	public static void applyRotation(Direction direction, MatrixStack ms) {
-		ms.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(AngleHelper.horizontalAngle(direction)));
-		ms.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(AngleHelper.verticalAngle(direction)));
+		ms.mulPose(Vector3f.YP.rotationDegrees(AngleHelper.horizontalAngle(direction)));
+		ms.mulPose(Vector3f.XP.rotationDegrees(AngleHelper.verticalAngle(direction)));
 	}
 
 	public static float horizontalAngle(Direction facing) {
-		float angle = facing.getHorizontalAngle();
+		float angle = facing.toYRot();
 		if (facing.getAxis() == Axis.X)
 			angle = -angle;
 		return angle;

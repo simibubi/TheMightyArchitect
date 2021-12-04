@@ -24,7 +24,7 @@ public class Keyboard {
 	public static final int G = 71;
 
 	public static boolean isKeyDown(int key) {
-		return InputMappings.isKeyDown(Minecraft.getInstance().getWindow().getHandle(), key);
+		return InputMappings.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), key);
 	}
 	
 }

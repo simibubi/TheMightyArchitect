@@ -42,7 +42,7 @@ public class MoveReshapeTool extends AbstractRoomFaceSelectionTool {
 				ThemeStatistics statistics = model.getTheme()
 					.getStatistics();
 				selectedStack.forRoomAndEachAbove(selectedRoom, room -> {
-					BlockPos diff = BlockPos.ZERO.offset(selectedFace, scroll);
+					BlockPos diff = BlockPos.ZERO.relative(selectedFace, scroll);
 
 					if (selectedStack instanceof CylinderStack) {
 						if (scroll < 0 && room.width < statistics.MaxTowerRadius * 2 + 1) {
@@ -62,7 +62,7 @@ public class MoveReshapeTool extends AbstractRoomFaceSelectionTool {
 					}
 
 					int faceDirection = selectedFace.getAxisDirection()
-						.getOffset();
+						.getStep();
 					int newWidth = room.width - 2 * diff.getX() * faceDirection;
 					int newLength = room.length - 2 * diff.getZ() * faceDirection;
 
@@ -83,7 +83,7 @@ public class MoveReshapeTool extends AbstractRoomFaceSelectionTool {
 			} else {
 				// Move
 				selectedStack.forRoomAndEachAbove(selectedRoom, room -> {
-					BlockPos diff = BlockPos.ZERO.offset(selectedFace, scroll);
+					BlockPos diff = BlockPos.ZERO.relative(selectedFace, scroll);
 					room.move(-diff.getX(), 0, -diff.getZ());
 				});
 				status("Position: " + TextFormatting.AQUA + selectedRoom.x + TextFormatting.WHITE + ", "

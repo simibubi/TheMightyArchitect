@@ -71,7 +71,7 @@ public class CopyDesignTool extends WallDecorationToolBase {
 		}
 
 		BlockPos origin = selectedRoom.getOrigin()
-			.add(model.getAnchor());
+			.offset(model.getAnchor());
 
 		// Outline corners
 		if (selectingCorners) {
@@ -93,7 +93,7 @@ public class CopyDesignTool extends WallDecorationToolBase {
 
 		// Outline Walls
 		BiConsumer<BlockPos, BlockPos> renderWall = (start, size) -> {
-			BlockPos end = start.add(size);
+			BlockPos end = start.offset(size);
 			MightyClient.outliner
 				.showAABB(start,
 					new AxisAlignedBB(start.getX() - 1 / 2d, start.getY(), start.getZ() - 1 / 2d, end.getX() - 1 / 2d,

@@ -15,7 +15,7 @@ public class ScreenHelper {
 	@SubscribeEvent
 	public static void onClientTick(ClientTickEvent event) {
 		if (openedGuiNextTick != null) {
-			Minecraft.getInstance().displayGuiScreen(openedGuiNextTick);
+			Minecraft.getInstance().setScreen(openedGuiNextTick);
 			openedGuiNextTick = null;
 		}
 	}

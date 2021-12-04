@@ -17,22 +17,22 @@ public class ShaderManager {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onClientTick(ClientTickEvent event) {
-		if (Minecraft.getInstance().world == null && activeShader != Shaders.None)
+		if (Minecraft.getInstance().level == null && activeShader != Shaders.None)
 			stopUsingShaders();
 		
 		ClientPlayerEntity player = Minecraft.getInstance().player;
 		if (player == null)
 			return;
-		EffectInstance activePotionEffect = player.getActivePotionEffect(Effects.NIGHT_VISION);
+		EffectInstance activePotionEffect = player.getEffect(Effects.NIGHT_VISION);
 
 		if (activeShader == Shaders.Blueprint) {
 			if (activePotionEffect == null || activePotionEffect.getDuration() < 999)
-				player.addPotionEffect(new NVEffectInstance());
+				player.addEffect(new NVEffectInstance());
 			return;
 		}
 		
 		if (activePotionEffect instanceof NVEffectInstance) 
-			player.removeActivePotionEffect(Effects.NIGHT_VISION);
+			player.removeEffectNoUpdate(Effects.NIGHT_VISION);
 	}
 
 	public static Shaders getActiveShader() {

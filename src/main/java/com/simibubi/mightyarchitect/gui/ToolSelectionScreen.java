@@ -27,7 +27,7 @@ public class ToolSelectionScreen extends Screen {
 
 	public ToolSelectionScreen(List<Tools> tools, Consumer<Tools> callback) {
 		super(new StringTextComponent("Tool Selection"));
-		this.client = Minecraft.getInstance();
+		this.minecraft = Minecraft.getInstance();
 		this.tools = tools;
 		this.callback = callback;
 		focused = false;
@@ -46,9 +46,9 @@ public class ToolSelectionScreen extends Screen {
 	private void draw(MatrixStack ms, float partialTicks) {
 		MainWindow mainWindow = Minecraft.getInstance()
 			.getWindow();
-		FontRenderer font = client.fontRenderer;
+		FontRenderer font = minecraft.font;
 
-		int x = (mainWindow.getScaledWidth() - w) / 2 + 15;
+		int x = (mainWindow.getGuiScaledWidth() - w) / 2 + 15;
 		int y = 15;
 
 		RenderSystem.pushMatrix();
@@ -60,11 +60,11 @@ public class ToolSelectionScreen extends Screen {
 		RenderSystem.color4f(1, 1, 1, focused ? 7 / 8f : 1 / 2f);
 		Minecraft.getInstance()
 			.getTextureManager()
-			.bindTexture(gray.location);
+			.bind(gray.location);
 		float toolTipAlpha = yOffset / 10;
 
 		// render main box
-		drawTexture(ms, x - 15, y, gray.startX, gray.startY, w, h, gray.width, gray.height);
+		blit(ms, x - 15, y, gray.startX, gray.startY, w, h, gray.width, gray.height);
 
 		// render tools
 		List<String> toolTip = tools.get(selection)
@@ -74,9 +74,9 @@ public class ToolSelectionScreen extends Screen {
 		if (toolTipAlpha > 0.25f) {
 			Minecraft.getInstance()
 				.getTextureManager()
-				.bindTexture(gray.location);
+				.bind(gray.location);
 			RenderSystem.color4f(.7f, .7f, .8f, toolTipAlpha);
-			drawTexture(ms, x - 15, y + 30, gray.startX, gray.startY, w, h + 22, gray.width, gray.height);
+			blit(ms, x - 15, y + 30, gray.startX, gray.startY, w, h + 22, gray.width, gray.height);
 			RenderSystem.color4f(1, 1, 1, 1);
 
 			if (toolTip.size() > 0)
@@ -90,16 +90,16 @@ public class ToolSelectionScreen extends Screen {
 		}
 
 		RenderSystem.color4f(1, 1, 1, 1);
-		String translationKey = MightyClient.TOOL_MENU.getBoundKeyLocalizedText()
+		String translationKey = MightyClient.TOOL_MENU.getTranslatedKeyMessage()
 			.getString()
 			.toUpperCase();
-		int width = client.getWindow()
-			.getScaledWidth();
+		int width = minecraft.getWindow()
+			.getGuiScaledWidth();
 		if (!focused)
-			drawCenteredString(ms, client.fontRenderer, "Hold [" + translationKey + "] to focus", width / 2, y - 10,
+			drawCenteredString(ms, minecraft.font, "Hold [" + translationKey + "] to focus", width / 2, y - 10,
 				0xCCDDFF);
 		else
-			drawCenteredString(ms, client.fontRenderer, "[SCROLL] to Cycle", width / 2, y - 10, 0xCCDDFF);
+			drawCenteredString(ms, minecraft.font, "[SCROLL] to Cycle", width / 2, y - 10, 0xCCDDFF);
 
 		for (int i = 0; i < tools.size(); i++) {
 			RenderSystem.pushMatrix();
@@ -107,7 +107,7 @@ public class ToolSelectionScreen extends Screen {
 			float alpha = focused ? 1 : .2f;
 			if (i == selection) {
 				RenderSystem.translatef(0, -10, 0);
-				drawCenteredString(ms, client.fontRenderer, tools.get(i)
+				drawCenteredString(ms, minecraft.font, tools.get(i)
 					.getDisplayName(), x + i * 50 + 24, y + 28, 0xCCDDFF);
 				alpha = 1;
 			}
@@ -134,7 +134,7 @@ public class ToolSelectionScreen extends Screen {
 	}
 
 	public void renderPassive(MatrixStack ms, float partialTicks) {
-		if (Minecraft.getInstance().currentScreen != null)
+		if (Minecraft.getInstance().screen != null)
 			return;
 		draw(ms, partialTicks);
 	}

@@ -189,7 +189,7 @@ public class Schematic {
 		}
 
 		BlockPos maxPos = bounds.getOrigin()
-			.add(bounds.getSize());
+			.offset(bounds.getSize());
 		if (x >= maxPos.getX())
 			bounds.width = x - bounds.x + 1;
 		if (y >= maxPos.getY())
@@ -204,7 +204,7 @@ public class Schematic {
 			.getString());
 
 		materializedSketch.localMode(true);
-		template.takeBlocksFromWorld(materializedSketch, materializedSketch.getBounds()
+		template.fillFromWorld(materializedSketch, materializedSketch.getBounds()
 			.getOrigin(),
 			materializedSketch.getBounds()
 				.getSize(),

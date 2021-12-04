@@ -87,11 +87,11 @@ public enum ScreenResources {
 	
 	public void draw(MatrixStack ms, AbstractGui screen, int i, int j) {
 		bind();
-		screen.drawTexture(ms, i, j, startX, startY, width, height);
+		screen.blit(ms, i, j, startX, startY, width, height);
 	}
 
 	public void bind() {
-		Minecraft.getInstance().getTextureManager().bindTexture(location);
+		Minecraft.getInstance().getTextureManager().bind(location);
 	}
 
 }

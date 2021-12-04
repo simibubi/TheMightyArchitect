@@ -40,14 +40,14 @@ public abstract class WallDecorationToolBase extends ComposerToolBase {
 		
 		if (highlightRoom && selectedRoom != null) {
 			BlockPos min = selectedRoom.getOrigin()
-				.add(model.getAnchor());
+				.offset(model.getAnchor());
 			BlockPos max = selectedRoom.getOrigin()
-				.add(selectedRoom.getSize())
-				.add(model.getAnchor());
+				.offset(selectedRoom.getSize())
+				.offset(model.getAnchor());
 
 			if (highlightRoof && selectedRoom == selectedStack.highest() && selectedFace == Direction.UP) {
-				min = min.add(0, selectedRoom.height, 0);
-				max = max.add(0, selectedRoom.height, 0);
+				min = min.offset(0, selectedRoom.height, 0);
+				max = max.offset(0, selectedRoom.height, 0);
 			}
 
 			MightyClient.outliner.chaseAABB(toolOutlineKey, new AxisAlignedBB(min.getX() - 1 / 2d,
@@ -80,10 +80,10 @@ public abstract class WallDecorationToolBase extends ComposerToolBase {
 		}
 
 		BlockPos min = stack.getOrigin()
-			.add(model.getAnchor());
+			.offset(model.getAnchor());
 		BlockPos max = stack.getOrigin()
-			.add(stack.getSize())
-			.add(model.getAnchor());
+			.offset(stack.getSize())
+			.offset(model.getAnchor());
 		MightyClient.outliner.chaseAABB(toolOutlineKey, new AxisAlignedBB(min.getX() - 1 / 2d, min.getY() + 1 / 4d,
 			min.getZ() - 1 / 2d, max.getX() + 1 / 2d, max.getY(), max.getZ() + 1 / 2d)).lineWidth(1/8f);
 	}

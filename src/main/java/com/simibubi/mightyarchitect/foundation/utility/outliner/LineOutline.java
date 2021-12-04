@@ -61,7 +61,7 @@ public class LineOutline extends Outline {
 		@Override
 		public void render(MatrixStack ms, IRenderTypeBuffer buffer) {
 			float pt = Minecraft.getInstance()
-				.getRenderPartialTicks();
+				.getFrameTime();
 			renderCuboidLine(ms, buffer, VecHelper.lerp(prevStart, start, pt), VecHelper.lerp(prevEnd, end, pt));
 		}
 
@@ -91,7 +91,7 @@ public class LineOutline extends Outline {
 		@Override
 		public void render(MatrixStack ms, IRenderTypeBuffer buffer) {
 			float pt = Minecraft.getInstance()
-				.getRenderPartialTicks();
+				.getFrameTime();
 			float distanceToTarget = 1 - MathHelper.lerp(pt, prevProgress, progress);
 			Vector3d start = end.add(this.start.subtract(end)
 				.scale(distanceToTarget));

@@ -160,8 +160,8 @@ public class DesignTheme {
 		ListNBT layers = new ListNBT();
 		ListNBT types = new ListNBT();
 
-		this.layers.forEach(layer -> layers.add(StringNBT.of(layer.name())));
-		this.types.forEach(type -> types.add(StringNBT.of(type.name())));
+		this.layers.forEach(layer -> layers.add(StringNBT.valueOf(layer.name())));
+		this.types.forEach(type -> types.add(StringNBT.valueOf(type.name())));
 
 		compound.put("Layers", layers);
 		compound.put("Types", types);
@@ -182,8 +182,8 @@ public class DesignTheme {
 		if (compound.contains("Maximum Room Height"))
 			theme.maxFloorHeight = compound.getInt("Maximum Room Height");
 
-		compound.getList("Layers", 8).forEach(s -> theme.layers.add(DesignLayer.valueOf(((StringNBT) s).getString())));
-		compound.getList("Types", 8).forEach(s -> theme.types.add(DesignType.valueOf(((StringNBT) s).getString())));
+		compound.getList("Layers", 8).forEach(s -> theme.layers.add(DesignLayer.valueOf(((StringNBT) s).getAsString())));
+		compound.getList("Types", 8).forEach(s -> theme.types.add(DesignType.valueOf(((StringNBT) s).getAsString())));
 
 		theme.updateRoomLayers();
 		return theme;

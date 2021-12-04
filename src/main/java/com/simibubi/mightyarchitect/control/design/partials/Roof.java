@@ -9,6 +9,8 @@ import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 
+import com.simibubi.mightyarchitect.control.design.partials.Design.DesignInstance;
+
 public class Roof extends Design {
 
 	private static final int CROSS_ROOF_DEPTH = -1;
@@ -62,7 +64,7 @@ public class Roof extends Design {
 						continue;
 
 					BlockPos pos = position
-							.add(rotateAroundZero(new BlockPos(x, y, z).add(totalShift), instance.rotationY));
+							.offset(rotateAroundZero(new BlockPos(x, y, z).offset(totalShift), instance.rotationY));
 					putBlock(blocks, pos, block);
 				}
 								
@@ -74,8 +76,8 @@ public class Roof extends Design {
 					if (crossRoof && depth - z + zShift > currentDepth)
 						continue;
 
-					BlockPos pos = rotateAroundZero(new BlockPos(x, y, z).add(totalShift), instance.rotationY)
-							.add(position);
+					BlockPos pos = rotateAroundZero(new BlockPos(x, y, z).offset(totalShift), instance.rotationY)
+							.offset(position);
 					putBlock(blocks, pos, block);
 				}
 			}

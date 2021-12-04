@@ -46,54 +46,54 @@ public class OutlinedText extends Outline {
 			return;
 		
 		Minecraft mc = Minecraft.getInstance();
-		float pt = mc.getRenderPartialTicks();
+		float pt = mc.getFrameTime();
 		Vector3d vec = VecHelper.lerp(prevLocation, location, pt);
-		EntityRendererManager renderManager = mc.getRenderManager();
-		FontRenderer fontrenderer = renderManager.getFontRenderer();
-		float stringLength = fontrenderer.getStringWidth(text);
+		EntityRendererManager renderManager = mc.getEntityRenderDispatcher();
+		FontRenderer fontrenderer = renderManager.getFont();
+		float stringLength = fontrenderer.width(text);
 
-		ms.push();
+		ms.pushPose();
 		ms.translate(vec.x, vec.y, vec.z);
-		ms.multiply(renderManager.getRotation());
+		ms.mulPose(renderManager.cameraOrientation());
 
 //		if (scalesUp) {
-		double distance = mc.player.getEyePosition(mc.getRenderPartialTicks())
-			.squareDistanceTo(vec);
+		double distance = mc.player.getEyePosition(mc.getFrameTime())
+			.distanceToSqr(vec);
 		float scale = (float) (distance / 512f);
 		ms.scale(2 + scale, 2 + scale, 2 + scale);
 //		}	
 
 		float scaleMod = 0.025F;
 		float f = -stringLength / 2;
-		float h = fontrenderer.FONT_HEIGHT;
+		float h = fontrenderer.lineHeight;
 
-		ms.push();
+		ms.pushPose();
 		Vector3d v1 = new Vector3d(-f + 2, -scaleMod * (h - 1), 0);
 		Vector3d v2 = new Vector3d(-f + 2, scaleMod, 0);
 		Vector3d v3 = new Vector3d(f - 2, scaleMod, 0);
 		Vector3d v4 = new Vector3d(f - 2, -scaleMod * (h - 1), 0);
 
-		ms.push();
+		ms.pushPose();
 		ms.scale(-scaleMod, 1, scaleMod);
 		ms.translate(0, 0, .5f);
 		if (params.faceRgb != null)
 			putQuadUVColor(ms, buffer.getBuffer(RenderTypes.getOutlineSolid()), v1, v2, v3, v4, params.faceRgb, 0, 0, 1,
 				1, null);
-		ms.pop();
+		ms.popPose();
 
 		ms.scale(scaleMod, 1, 1);
 		ms.translate(0, -2 * scaleMod, 0);
 		renderCuboidLine(ms, buffer, v4, v1);
-		ms.pop();
+		ms.popPose();
 
-		ms.push();
+		ms.pushPose();
 		ms.scale(-scaleMod, -scaleMod, scaleMod);
-		Matrix4f matrix4f = ms.peek()
-			.getModel();
-		fontrenderer.draw(text, f, 0, params.color, false, matrix4f, buffer, true, 0, 0xF000F0);
-		ms.pop();
+		Matrix4f matrix4f = ms.last()
+			.pose();
+		fontrenderer.drawInBatch(text, f, 0, params.color, false, matrix4f, buffer, true, 0, 0xF000F0);
+		ms.popPose();
 
-		ms.pop();
+		ms.popPose();
 	}
 
 	public String getText() {

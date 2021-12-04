@@ -62,14 +62,14 @@ public class MightyClient {
 	@SubscribeEvent
 	public static void onRenderWorld(RenderWorldLastEvent event) {
 		MatrixStack ms = event.getMatrixStack();
-		ActiveRenderInfo info = Minecraft.getInstance().gameRenderer.getActiveRenderInfo();
-		Vector3d view = info.getProjectedView();
+		ActiveRenderInfo info = Minecraft.getInstance().gameRenderer.getMainCamera();
+		Vector3d view = info.getPosition();
 
-		ms.push();
-		ms.translate(-view.getX(), -view.getY(), -view.getZ());
+		ms.pushPose();
+		ms.translate(-view.x(), -view.y(), -view.z());
 		IRenderTypeBuffer.Impl buffer = Minecraft.getInstance()
-			.getBufferBuilders()
-			.getEntityVertexConsumers();
+			.renderBuffers()
+			.bufferSource();
 
 		MightyClient.renderer.render(ms, buffer);
 		ArchitectManager.render(ms, buffer);
@@ -83,12 +83,12 @@ public class MightyClient {
 //				ms, buffer.getBuffer(RenderType.getSolid()), true, new Random(), EmptyModelData.INSTANCE);
 //		ms.pop();
 
-		buffer.draw();
-		ms.pop();
+		buffer.endBatch();
+		ms.popPose();
 	}
 
 	protected static boolean isGameActive() {
-		return !(Minecraft.getInstance().world == null || Minecraft.getInstance().player == null);
+		return !(Minecraft.getInstance().level == null || Minecraft.getInstance().player == null);
 	}
 
 }

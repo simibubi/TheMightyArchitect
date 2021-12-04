@@ -15,78 +15,78 @@ public class RenderTypes extends RenderState {
 
 	public static RenderType getOutlineTranslucent(ResourceLocation texture, boolean cull) {
 		RenderType.State rendertype$state = RenderType.State.builder()
-			.texture(new RenderState.TextureState(texture, false, false))
-			.transparency(TRANSLUCENT_TRANSPARENCY)
-			.diffuseLighting(ENABLE_DIFFUSE_LIGHTING)
-			.alpha(ONE_TENTH_ALPHA)
-			.cull(cull ? ENABLE_CULLING : DISABLE_CULLING)
-			.lightmap(ENABLE_LIGHTMAP)
-			.overlay(ENABLE_OVERLAY_COLOR)
-			.build(true);
-		return RenderType.of("outline_translucent" + (cull ? "_cull" : ""),
-			DefaultVertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL, 7, 256, true, true, rendertype$state);
+			.setTextureState(new RenderState.TextureState(texture, false, false))
+			.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+			.setDiffuseLightingState(DIFFUSE_LIGHTING)
+			.setAlphaState(DEFAULT_ALPHA)
+			.setCullState(cull ? CULL : DISABLE_CULLING)
+			.setLightmapState(LIGHTMAP)
+			.setOverlayState(OVERLAY)
+			.createCompositeState(true);
+		return RenderType.create("outline_translucent" + (cull ? "_cull" : ""),
+			DefaultVertexFormats.NEW_ENTITY, 7, 256, true, true, rendertype$state);
 	}
 
 	private static final RenderType OUTLINE_SOLID =
-		RenderType.of("outline_solid", DefaultVertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL, 7, 256, true,
+		RenderType.create("outline_solid", DefaultVertexFormats.NEW_ENTITY, 7, 256, true,
 			false, RenderType.State.builder()
-				.texture(new RenderState.TextureState(AllSpecialTextures.BLANK.getLocation(), false, false))
-				.transparency(NO_TRANSPARENCY)
-				.diffuseLighting(ENABLE_DIFFUSE_LIGHTING)
-				.lightmap(ENABLE_LIGHTMAP)
-				.overlay(ENABLE_OVERLAY_COLOR)
-				.build(true));
+				.setTextureState(new RenderState.TextureState(AllSpecialTextures.BLANK.getLocation(), false, false))
+				.setTransparencyState(NO_TRANSPARENCY)
+				.setDiffuseLightingState(DIFFUSE_LIGHTING)
+				.setLightmapState(LIGHTMAP)
+				.setOverlayState(OVERLAY)
+				.createCompositeState(true));
 
 	public static RenderType getGlowingSolid(ResourceLocation texture) {
 		RenderType.State rendertype$state = RenderType.State.builder()
-			.texture(new RenderState.TextureState(texture, false, false))
-			.transparency(NO_TRANSPARENCY)
-			.diffuseLighting(DISABLE_DIFFUSE_LIGHTING)
-			.lightmap(ENABLE_LIGHTMAP)
-			.overlay(ENABLE_OVERLAY_COLOR)
-			.build(true);
-		return RenderType.of("glowing_solid", DefaultVertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL, 7, 256,
+			.setTextureState(new RenderState.TextureState(texture, false, false))
+			.setTransparencyState(NO_TRANSPARENCY)
+			.setDiffuseLightingState(NO_DIFFUSE_LIGHTING)
+			.setLightmapState(LIGHTMAP)
+			.setOverlayState(OVERLAY)
+			.createCompositeState(true);
+		return RenderType.create("glowing_solid", DefaultVertexFormats.NEW_ENTITY, 7, 256,
 			true, false, rendertype$state);
 	}
 
 	public static RenderType getGlowingTranslucent(ResourceLocation texture) {
 		RenderType.State rendertype$state = RenderType.State.builder()
-			.texture(new RenderState.TextureState(texture, false, false))
-			.transparency(TRANSLUCENT_TRANSPARENCY)
-			.diffuseLighting(DISABLE_DIFFUSE_LIGHTING)
-			.alpha(ONE_TENTH_ALPHA)
-			.cull(DISABLE_CULLING)
-			.lightmap(ENABLE_LIGHTMAP)
-			.overlay(ENABLE_OVERLAY_COLOR)
-			.build(true);
-		return RenderType.of("glowing_translucent", DefaultVertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL, 7,
+			.setTextureState(new RenderState.TextureState(texture, false, false))
+			.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+			.setDiffuseLightingState(NO_DIFFUSE_LIGHTING)
+			.setAlphaState(DEFAULT_ALPHA)
+			.setCullState(DISABLE_CULLING)
+			.setLightmapState(LIGHTMAP)
+			.setOverlayState(OVERLAY)
+			.createCompositeState(true);
+		return RenderType.create("glowing_translucent", DefaultVertexFormats.NEW_ENTITY, 7,
 			256, true, true, rendertype$state);
 	}
 
-	private static final RenderType GLOWING_SOLID = RenderTypes.getGlowingSolid(PlayerContainer.BLOCK_ATLAS_TEXTURE);
+	private static final RenderType GLOWING_SOLID = RenderTypes.getGlowingSolid(PlayerContainer.BLOCK_ATLAS);
 	private static final RenderType GLOWING_TRANSLUCENT =
-		RenderTypes.getGlowingTranslucent(PlayerContainer.BLOCK_ATLAS_TEXTURE);
+		RenderTypes.getGlowingTranslucent(PlayerContainer.BLOCK_ATLAS);
 
 	private static final RenderType ITEM_PARTIAL_SOLID =
-		RenderType.of("item_solid", DefaultVertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL, 7, 256, true,
+		RenderType.create("item_solid", DefaultVertexFormats.NEW_ENTITY, 7, 256, true,
 			false, RenderType.State.builder()
-				.texture(new RenderState.TextureState(PlayerContainer.BLOCK_ATLAS_TEXTURE, false, false))
-				.transparency(NO_TRANSPARENCY)
-				.diffuseLighting(ENABLE_DIFFUSE_LIGHTING)
-				.lightmap(ENABLE_LIGHTMAP)
-				.overlay(ENABLE_OVERLAY_COLOR)
-				.build(true));
+				.setTextureState(new RenderState.TextureState(PlayerContainer.BLOCK_ATLAS, false, false))
+				.setTransparencyState(NO_TRANSPARENCY)
+				.setDiffuseLightingState(DIFFUSE_LIGHTING)
+				.setLightmapState(LIGHTMAP)
+				.setOverlayState(OVERLAY)
+				.createCompositeState(true));
 
-	private static final RenderType ITEM_PARTIAL_TRANSLUCENT = RenderType.of("entity_translucent",
-		DefaultVertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL, 7, 256, true, true, RenderType.State.builder()
-			.texture(new RenderState.TextureState(PlayerContainer.BLOCK_ATLAS_TEXTURE, false, false))
-			.transparency(TRANSLUCENT_TRANSPARENCY)
-			.diffuseLighting(ENABLE_DIFFUSE_LIGHTING)
-			.alpha(ONE_TENTH_ALPHA)
-			.cull(DISABLE_CULLING)
-			.lightmap(ENABLE_LIGHTMAP)
-			.overlay(ENABLE_OVERLAY_COLOR)
-			.build(true));
+	private static final RenderType ITEM_PARTIAL_TRANSLUCENT = RenderType.create("entity_translucent",
+		DefaultVertexFormats.NEW_ENTITY, 7, 256, true, true, RenderType.State.builder()
+			.setTextureState(new RenderState.TextureState(PlayerContainer.BLOCK_ATLAS, false, false))
+			.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+			.setDiffuseLightingState(DIFFUSE_LIGHTING)
+			.setAlphaState(DEFAULT_ALPHA)
+			.setCullState(DISABLE_CULLING)
+			.setLightmapState(LIGHTMAP)
+			.setOverlayState(OVERLAY)
+			.createCompositeState(true));
 
 	public static RenderType getItemPartialSolid() {
 		return ITEM_PARTIAL_SOLID;
@@ -114,7 +114,7 @@ public class RenderTypes extends RenderState {
 		}
 
 		@Override
-		public void startDrawing() {
+		public void setupRenderState() {
 			RenderSystem.disableCull();
 		}
 	}

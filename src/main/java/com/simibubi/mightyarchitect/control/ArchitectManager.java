@@ -139,7 +139,7 @@ public class ArchitectManager {
 
 		Minecraft mc = Minecraft.getInstance();
 
-		if (mc.isSingleplayer()) {
+		if (mc.hasSingleplayerServer()) {
 			for (InstantPrintPacket packet : getModel().getPackets())
 				AllPackets.channel.sendToServer(packet);
 			MightyClient.renderer.setActive(false);
@@ -168,7 +168,7 @@ public class ArchitectManager {
 		try {
 			outputStream = Files.newOutputStream(Paths.get(filepath), StandardOpenOption.CREATE);
 			CompoundNBT nbttagcompound = getModel().writeToTemplate()
-				.writeToNBT(new CompoundNBT());
+				.save(new CompoundNBT());
 			CompressedStreamTools.writeCompressed(nbttagcompound, outputStream);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -179,16 +179,16 @@ public class ArchitectManager {
 		status("Saved as " + filepath);
 
 		BlockPos pos = model.getAnchor()
-			.add(((TemplateBlockAccess) model.getMaterializedSketch()).getBounds()
+			.offset(((TemplateBlockAccess) model.getMaterializedSketch()).getBounds()
 				.getOrigin());
 		StringTextComponent component = new StringTextComponent("Deploy Schematic at: " + TextFormatting.BLUE + "["
 			+ pos.getX() + "," + pos.getY() + "," + pos.getZ() + "]");
-		Minecraft.getInstance().player.sendStatusMessage(component, false);
+		Minecraft.getInstance().player.displayClientMessage(component, false);
 		unload();
 	}
 
 	public static void status(String message) {
-		Minecraft.getInstance().player.sendStatusMessage(new StringTextComponent(message), true);
+		Minecraft.getInstance().player.displayClientMessage(new StringTextComponent(message), true);
 	}
 
 	public static void pickPalette() {
@@ -260,7 +260,7 @@ public class ArchitectManager {
 
 	@SubscribeEvent
 	public static void onClientTick(ClientTickEvent event) {
-		if (Minecraft.getInstance().world == null) {
+		if (Minecraft.getInstance().level == null) {
 			if (!inPhase(ArchitectPhases.Paused) && !model.isEmpty())
 				enterPhase(ArchitectPhases.Paused);
 			return;
@@ -274,7 +274,7 @@ public class ArchitectManager {
 
 	@SubscribeEvent
 	public static void onMouseScrolled(MouseScrollEvent event) {
-		if (Minecraft.getInstance().currentScreen != null)
+		if (Minecraft.getInstance().screen != null)
 			return;
 		if (phase.getPhaseHandler()
 			.onScroll((int) Math.signum(event.getScrollDelta())))
@@ -282,14 +282,14 @@ public class ArchitectManager {
 	}
 
 	public static void render(MatrixStack ms, IRenderTypeBuffer buffer) {
-		if (Minecraft.getInstance().world != null)
+		if (Minecraft.getInstance().level != null)
 			phase.getPhaseHandler()
 				.render(ms, buffer);
 	}
 
 	@SubscribeEvent
 	public static void onClick(MouseInputEvent event) {
-		if (Minecraft.getInstance().currentScreen != null)
+		if (Minecraft.getInstance().screen != null)
 			return;
 		if (event.getAction() != Keyboard.PRESS)
 			return;
@@ -306,9 +306,9 @@ public class ArchitectManager {
 			}
 			return;
 		}
-		if (Minecraft.getInstance().currentScreen != null)
+		if (Minecraft.getInstance().screen != null)
 			return;
-		if (MightyClient.COMPOSE.isPressed()) {
+		if (MightyClient.COMPOSE.consumeClick()) {
 			if (!menu.isFocused())
 				openMenu();
 			return;

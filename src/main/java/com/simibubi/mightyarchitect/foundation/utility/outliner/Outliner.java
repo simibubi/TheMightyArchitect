@@ -168,7 +168,7 @@ public class Outliner {
 				float lastAlpha = prevTicks >= 0 ? 1 : 1 + (prevTicks / fadeticks);
 				float currentAlpha = 1 + (entry.ticksTillRemoval / fadeticks);
 				float alpha = MathHelper.lerp(Minecraft.getInstance()
-					.getRenderPartialTicks(), lastAlpha, currentAlpha);
+					.getFrameTime(), lastAlpha, currentAlpha);
 
 				outline.params.alpha = alpha * alpha * alpha;
 				if (outline.params.alpha < 1 / 8f)

@@ -58,13 +58,13 @@ public class VecHelper {
 	}
 
 	public static boolean isVecPointingTowards(Vector3d vec, Direction direction) {
-		return Vector3d.of(direction.getDirectionVec()).distanceTo(vec.normalize()) < .75;
+		return Vector3d.atLowerCornerOf(direction.getNormal()).distanceTo(vec.normalize()) < .75;
 	}
 
 	public static Vector3d getCenterOf(Vector3i pos) {
-		if (pos.equals(Vector3i.NULL_VECTOR))
+		if (pos.equals(Vector3i.ZERO))
 			return CENTER_OF_ORIGIN;
-		return Vector3d.of(pos).add(.5f, .5f, .5f);
+		return Vector3d.atLowerCornerOf(pos).add(.5f, .5f, .5f);
 	}
 
 	public static Vector3d offsetRandomly(Vector3d vec, Random r, float radius) {
@@ -78,14 +78,14 @@ public class VecHelper {
 	}
 	
 	public static Vector3d axisAlingedPlaneOf(Direction face) {
-		return axisAlingedPlaneOf(Vector3d.of(face.getDirectionVec()));
+		return axisAlingedPlaneOf(Vector3d.atLowerCornerOf(face.getNormal()));
 	}
 
 	public static ListNBT writeNBT(Vector3d vec) {
 		ListNBT listnbt = new ListNBT();
-		listnbt.add(DoubleNBT.of(vec.x));
-		listnbt.add(DoubleNBT.of(vec.y));
-		listnbt.add(DoubleNBT.of(vec.z));
+		listnbt.add(DoubleNBT.valueOf(vec.x));
+		listnbt.add(DoubleNBT.valueOf(vec.y));
+		listnbt.add(DoubleNBT.valueOf(vec.z));
 		return listnbt;
 	}
 
@@ -100,11 +100,11 @@ public class VecHelper {
 	}
 
 	public static int getCoordinate(Vector3i pos, Axis axis) {
-		return axis.getCoordinate(pos.getX(), pos.getY(), pos.getZ());
+		return axis.choose(pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	public static float getCoordinate(Vector3d vec, Axis axis) {
-		return (float) axis.getCoordinate(vec.x, vec.y, vec.z);
+		return (float) axis.choose(vec.x, vec.y, vec.z);
 	}
 
 	public static boolean onSameAxis(BlockPos pos1, BlockPos pos2, Axis axis) {
@@ -130,7 +130,7 @@ public class VecHelper {
 	public static Vector3d project(Vector3d vec, Vector3d ontoVec) {
 		if (ontoVec.equals(Vector3d.ZERO))
 			return Vector3d.ZERO;
-		return ontoVec.scale(vec.dotProduct(ontoVec) / ontoVec.lengthSquared());
+		return ontoVec.scale(vec.dot(ontoVec) / ontoVec.lengthSqr());
 	}
 
 	@Nullable
@@ -141,8 +141,8 @@ public class VecHelper {
 			lineDirection = lineDirection.normalize();
 
 		Vector3d diff = origin.subtract(sphereCenter);
-		double lineDotDiff = lineDirection.dotProduct(diff);
-		double delta = lineDotDiff * lineDotDiff - (diff.lengthSquared() - radius * radius);
+		double lineDotDiff = lineDirection.dot(diff);
+		double delta = lineDotDiff * lineDotDiff - (diff.lengthSqr() - radius * radius);
 		if (delta < 0)
 			return null;
 		double t = -lineDotDiff + MathHelper.sqrt(delta);

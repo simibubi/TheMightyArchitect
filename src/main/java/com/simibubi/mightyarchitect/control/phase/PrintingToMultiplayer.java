@@ -34,7 +34,7 @@ public class PrintingToMultiplayer extends PhaseBase {
 	public void whenEntered() {
 		remaining = new LinkedList<>(((TemplateBlockAccess) getModel().getMaterializedSketch()).getAllPositions());
 		remaining.sort((o1, o2) -> Integer.compare(o1.getY(), o2.getY()));
-		Minecraft.getInstance().player.sendChatMessage("/setblock checking permission for 'The Mighty Architect'.");
+		Minecraft.getInstance().player.chat("/setblock checking permission for 'The Mighty Architect'.");
 		cooldown = 500;
 		approved = false;
 	}
@@ -54,17 +54,17 @@ public class PrintingToMultiplayer extends PhaseBase {
 			if (!remaining.isEmpty()) {
 				BlockPos pos = remaining.get(0);
 				remaining.remove(0);
-				pos = pos.add(getModel().getAnchor());
+				pos = pos.offset(getModel().getAnchor());
 				BlockState state = getModel().getMaterializedSketch().getBlockState(pos);
 
-				if (minecraft.world.getBlockState(pos) == state)
+				if (minecraft.level.getBlockState(pos) == state)
 					continue;
-				if (!minecraft.world.canPlace(state, pos, ISelectionContext.forEntity(minecraft.player)))
+				if (!minecraft.level.isUnobstructed(state, pos, ISelectionContext.of(minecraft.player)))
 					continue;
 
 				String blockstring = state.toString().replaceFirst("Block\\{", "").replaceFirst("\\}", "");
 				
-				Minecraft.getInstance().player.sendChatMessage("/setblock " + pos.getX() + " " + pos.getY() + " "
+				Minecraft.getInstance().player.chat("/setblock " + pos.getX() + " " + pos.getY() + " "
 						+ pos.getZ() + " " + blockstring);
 			} else {
 				ArchitectManager.unload();
@@ -98,9 +98,9 @@ public class PrintingToMultiplayer extends PhaseBase {
 					if (test.equals("parsing.int.expected")) {
 						approved = true;
 						Minecraft.getInstance().player
-								.sendChatMessage("/me is printing a structure created by the Mighty Architect.");
-						Minecraft.getInstance().player.sendChatMessage("/gamerule sendCommandFeedback false");
-						Minecraft.getInstance().player.sendChatMessage("/gamerule logAdminCommands false");
+								.chat("/me is printing a structure created by the Mighty Architect.");
+						Minecraft.getInstance().player.chat("/gamerule sendCommandFeedback false");
+						Minecraft.getInstance().player.chat("/gamerule logAdminCommands false");
 						event.setCanceled(true);
 						return;
 					}
@@ -119,10 +119,10 @@ public class PrintingToMultiplayer extends PhaseBase {
 	@Override
 	public void whenExited() {
 		if (approved) {
-			Minecraft.getInstance().player.sendStatusMessage(new StringTextComponent(TextFormatting.GREEN + "Finished Printing, enjoy!"),
+			Minecraft.getInstance().player.displayClientMessage(new StringTextComponent(TextFormatting.GREEN + "Finished Printing, enjoy!"),
 					false);
-			Minecraft.getInstance().player.sendChatMessage("/gamerule logAdminCommands true");
-			Minecraft.getInstance().player.sendChatMessage("/gamerule sendCommandFeedback true");
+			Minecraft.getInstance().player.chat("/gamerule logAdminCommands true");
+			Minecraft.getInstance().player.chat("/gamerule sendCommandFeedback true");
 		}
 		cooldown = 0;
 	}

@@ -53,7 +53,7 @@ public abstract class Design {
 	
 	protected void getBlocksShifted(DesignInstance instance, Map<BlockPos, PaletteBlockInfo> blocks, BlockPos localShift) {
 		BlockPos position = instance.localAnchor;
-		BlockPos totalShift = localShift.add(0, yShift, 0);
+		BlockPos totalShift = localShift.offset(0, yShift, 0);
 		List<DesignSlice> toPrint = selectPrintedLayers(instance.height);
 
 		for (int y = 0; y < toPrint.size(); y++) {
@@ -63,8 +63,8 @@ public abstract class Design {
 					PaletteBlockInfo block = layer.getBlockAt(x, z, instance.rotationY);
 					if (block == null)
 						continue;
-					BlockPos pos = rotateAroundZero(new BlockPos(x, y, z).add(totalShift), instance.rotationY)
-							.add(position);
+					BlockPos pos = rotateAroundZero(new BlockPos(x, y, z).offset(totalShift), instance.rotationY)
+							.offset(position);
 					putBlock(blocks, pos, block);
 				}
 			}
@@ -112,7 +112,7 @@ public abstract class Design {
 		int z = (rotation == 180) ? -local.getZ()
 				: (rotation == 90) ? local.getX() : (rotation == -90) ? -local.getX() : local.getZ();
 		BlockPos rotated = new BlockPos(x, local.getY(), z);
-		return rotated.add(origin);
+		return rotated.offset(origin);
 	}
 
 	public DesignInstance create(BlockPos anchor, int rotation, int height) {

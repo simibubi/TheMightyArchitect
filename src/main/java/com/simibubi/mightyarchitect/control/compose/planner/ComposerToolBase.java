@@ -93,22 +93,22 @@ public abstract class ComposerToolBase implements IComposerTool {
 		RenderSystem.pushMatrix();
 		Minecraft mc = Minecraft.getInstance();
 		MainWindow mainWindow = mc.getWindow();
-		RenderSystem.translated(mainWindow.getScaledWidth() / 2, mainWindow.getScaledHeight() / 2 - 3, 0);
+		RenderSystem.translated(mainWindow.getGuiScaledWidth() / 2, mainWindow.getGuiScaledHeight() / 2 - 3, 0);
 		RenderSystem.translated(25,
-				-MathHelper.lerp(mc.getRenderPartialTicks(), lastToolModeYOffset, toolModeYOffset),
+				-MathHelper.lerp(mc.getFrameTime(), lastToolModeYOffset, toolModeYOffset),
 				0);
 
 		if (toolModeNoCtrl != null) {
 			int color = 0xFFFFFFFF;
 			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL))
 				color = 0x66AACCFF;
-			mc.fontRenderer.drawWithShadow(ms, toolModeNoCtrl, 0, 0, color);
+			mc.font.drawShadow(ms, toolModeNoCtrl, 0, 0, color);
 		}
 		if (toolModeCtrl != null) {
 			int color = 0xFFFFFFFF;
 			if (!Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL))
 				color = 0x66AACCFF;
-			mc.fontRenderer.drawWithShadow(ms, toolModeCtrl, 0, 12, color);
+			mc.font.drawShadow(ms, toolModeCtrl, 0, 12, color);
 		}
 
 		RenderSystem.color4f(1, 1, 1, 1);
@@ -116,7 +116,7 @@ public abstract class ComposerToolBase implements IComposerTool {
 	}
 	
 	protected void status(String message) {
-		Minecraft.getInstance().player.sendStatusMessage(new StringTextComponent(message), true);
+		Minecraft.getInstance().player.displayClientMessage(new StringTextComponent(message), true);
 	}
 	
 }

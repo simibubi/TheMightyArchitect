@@ -136,7 +136,7 @@ public class ArchitectMenu {
 				ArchitectManager.enterPhase(ArchitectPhases.ListForEdit);
 				return false;
 			case 'o':
-				Util.getOSType()
+				Util.getPlatform()
 					.openFile(Paths.get("themes/")
 						.toFile());
 				return false;

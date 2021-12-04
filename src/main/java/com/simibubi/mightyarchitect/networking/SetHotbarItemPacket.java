@@ -18,12 +18,12 @@ public class SetHotbarItemPacket {
 	}
 	
 	public SetHotbarItemPacket(PacketBuffer buffer) {
-		this(buffer.readInt(), buffer.readItemStack());
+		this(buffer.readInt(), buffer.readItem());
 	}
 
 	public void toBytes(PacketBuffer buffer) {
 		buffer.writeInt(slot);
-		buffer.writeItemStack(stack);
+		buffer.writeItem(stack);
 	}
 
 	public void handle(Supplier<Context> context) {
@@ -32,8 +32,8 @@ public class SetHotbarItemPacket {
 			if (!player.isCreative())
 				return;
 			
-			player.replaceItemInInventory(slot, stack);
-			player.container.detectAndSendChanges();
+			player.setSlot(slot, stack);
+			player.inventoryMenu.broadcastChanges();
 		});
 	}
 	

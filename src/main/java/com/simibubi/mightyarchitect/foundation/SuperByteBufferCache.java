@@ -69,8 +69,8 @@ public class SuperByteBufferCache {
 	}
 
 	private SuperByteBuffer standardBlockRender(BlockState renderedState) {
-		BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
-		return standardModelRender(dispatcher.getModelForState(renderedState), renderedState);
+		BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
+		return standardModelRender(dispatcher.getBlockModel(renderedState), renderedState);
 	}
 
 	private SuperByteBuffer standardModelRender(IBakedModel model, BlockState referenceState) {
@@ -78,14 +78,14 @@ public class SuperByteBufferCache {
 	}
 
 	private SuperByteBuffer standardModelRender(IBakedModel model, BlockState referenceState, MatrixStack ms) {
-		BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
-		BlockModelRenderer blockRenderer = dispatcher.getBlockModelRenderer();
+		BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
+		BlockModelRenderer blockRenderer = dispatcher.getModelRenderer();
 		BufferBuilder builder = new BufferBuilder(DefaultVertexFormats.BLOCK.getIntegerSize());
 		Random random = new Random();
 		builder.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-		blockRenderer.renderModelFlat(Minecraft.getInstance().world, model, referenceState, BlockPos.ZERO.up(255), ms,
-				builder, true, random, 42, OverlayTexture.DEFAULT_UV, EmptyModelData.INSTANCE);
-		builder.finishDrawing();
+		blockRenderer.renderModelFlat(Minecraft.getInstance().level, model, referenceState, BlockPos.ZERO.above(255), ms,
+				builder, true, random, 42, OverlayTexture.NO_OVERLAY, EmptyModelData.INSTANCE);
+		builder.end();
 
 		return new SuperByteBuffer(builder);
 	}

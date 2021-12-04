@@ -109,7 +109,7 @@ public class Sketch {
 			for (int x = 0; x < cuboid.width; x++) {
 				for (int z = 0; z < cuboid.length; z++) {
 					boolean contained = false;
-					BlockPos pos = cuboid.getOrigin().add(x, y, z);
+					BlockPos pos = cuboid.getOrigin().offset(x, y, z);
 					
 					for (Room other : checked) {
 						if (other.contains(pos)) {

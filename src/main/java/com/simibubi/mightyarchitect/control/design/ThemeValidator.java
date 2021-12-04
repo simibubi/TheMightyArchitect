@@ -20,8 +20,8 @@ public class ThemeValidator {
 	public static void check(DesignTheme theme) {
 		ClientPlayerEntity player = Minecraft.getInstance().player;
 		for (int i = 0; i < 3; i++)
-			player.sendStatusMessage(new StringTextComponent(" "), false);
-		player.sendStatusMessage(new StringTextComponent(TextFormatting.AQUA + "--> Validation on "
+			player.displayClientMessage(new StringTextComponent(" "), false);
+		player.displayClientMessage(new StringTextComponent(TextFormatting.AQUA + "--> Validation on "
 			+ TextFormatting.BLUE + TextFormatting.BOLD + theme.getDisplayName() + TextFormatting.AQUA + " <--"),
 			false);
 		theme.clearDesigns();
@@ -143,18 +143,18 @@ public class ThemeValidator {
 		}
 
 		if (complaints.size() > 0) {
-			player.sendStatusMessage(
+			player.displayClientMessage(
 				new StringTextComponent(TextFormatting.GOLD + "The Following Designs are missing:"), false);
 			for (ITextComponent text : complaints) {
-				player.sendStatusMessage(text, false);
+				player.displayClientMessage(text, false);
 			}
-			player.sendStatusMessage(
+			player.displayClientMessage(
 				new StringTextComponent(
 					TextFormatting.GOLD + "Try and add these missing designs or exclude their type from your theme."),
 				false);
 
 		} else {
-			player.sendStatusMessage(
+			player.displayClientMessage(
 				new StringTextComponent(TextFormatting.GREEN + "For prior traits no missing designs have been found."),
 				false);
 		}

@@ -14,8 +14,8 @@ public class ChasingAABBOutline extends AABBOutline {
 
 	public ChasingAABBOutline(AxisAlignedBB bb) {
 		super(bb);
-		prevBB = bb.grow(0);
-		targetBB = bb.grow(0);
+		prevBB = bb.inflate(0);
+		targetBB = bb.inflate(0);
 	}
 
 	public void target(AxisAlignedBB target) {
@@ -31,7 +31,7 @@ public class ChasingAABBOutline extends AABBOutline {
 	@Override
 	public void render(MatrixStack ms, IRenderTypeBuffer buffer) {
 		renderBB(ms, buffer, interpolateBBs(prevBB, bb, Minecraft.getInstance()
-			.getRenderPartialTicks()));
+			.getFrameTime()));
 	}
 
 	private static AxisAlignedBB interpolateBBs(AxisAlignedBB current, AxisAlignedBB target, float pt) {

@@ -40,7 +40,7 @@ public class TemplateBlockAccess extends WrappedWorld {
 	private boolean localMode;
 
 	public TemplateBlockAccess(Map<BlockPos, BlockState> blocks, Cuboid bounds, BlockPos anchor) {
-		super(Minecraft.getInstance().world);
+		super(Minecraft.getInstance().level);
 		this.blocks = blocks;
 		this.bounds = bounds;
 		this.anchor = anchor;
@@ -57,7 +57,7 @@ public class TemplateBlockAccess extends WrappedWorld {
 			BlockState blockState = blocks.get(pos);
 			if (blockState == null)
 				return;
-			blockState.updateNeighbors(this, pos.add(anchor), 16);
+			blockState.updateNeighbourShapes(this, pos.offset(anchor), 16);
 		});
 	}
 
@@ -66,7 +66,7 @@ public class TemplateBlockAccess extends WrappedWorld {
 	}
 
 	@Override
-	public TileEntity getTileEntity(BlockPos pos) {
+	public TileEntity getBlockEntity(BlockPos pos) {
 		return null;
 	}
 
@@ -76,7 +76,7 @@ public class TemplateBlockAccess extends WrappedWorld {
 		if (getBounds().contains(pos) && blocks.containsKey(pos)) {
 			return blocks.get(pos);
 		} else {
-			return Blocks.AIR.getDefaultState();
+			return Blocks.AIR.defaultBlockState();
 		}
 	}
 
@@ -86,43 +86,43 @@ public class TemplateBlockAccess extends WrappedWorld {
 
 	@Override
 	public Biome getBiome(BlockPos pos) {
-		return getRegistryManager().get(Registry.BIOME_KEY)
+		return registryAccess().registryOrThrow(Registry.BIOME_REGISTRY)
 			.get(Biomes.THE_VOID);
 	}
 
 	@Override
-	public int getLight(BlockPos p_201696_1_) {
+	public int getMaxLocalRawBrightness(BlockPos p_201696_1_) {
 		return 0xF;
 	}
 
 	@Override
-	public List<Entity> getEntitiesInAABBexcluding(Entity arg0, AxisAlignedBB arg1, Predicate<? super Entity> arg2) {
+	public List<Entity> getEntities(Entity arg0, AxisAlignedBB arg1, Predicate<? super Entity> arg2) {
 		return Collections.emptyList();
 	}
 
 	@Override
-	public <T extends Entity> List<T> getEntitiesWithinAABB(Class<? extends T> arg0, AxisAlignedBB arg1,
+	public <T extends Entity> List<T> getEntitiesOfClass(Class<? extends T> arg0, AxisAlignedBB arg1,
 		Predicate<? super T> arg2) {
 		return Collections.emptyList();
 	}
 
 	@Override
-	public List<? extends PlayerEntity> getPlayers() {
+	public List<? extends PlayerEntity> players() {
 		return Collections.emptyList();
 	}
 
 	@Override
-	public int getLightLevel(LightType lt, BlockPos p_226658_2_) {
+	public int getBrightness(LightType lt, BlockPos p_226658_2_) {
 		return lt == LightType.BLOCK ? 12 : 14;
 	}
 
 	@Override
-	public int getLightValue(BlockPos pos) {
-		return super.getLightValue(pos);
+	public int getLightEmission(BlockPos pos) {
+		return super.getLightEmission(pos);
 	}
 
 	@Override
-	public BlockPos getHeight(Type heightmapType, BlockPos pos) {
+	public BlockPos getHeightmapPos(Type heightmapType, BlockPos pos) {
 		return BlockPos.ZERO;
 	}
 
@@ -132,34 +132,34 @@ public class TemplateBlockAccess extends WrappedWorld {
 	}
 
 	@Override
-	public boolean hasBlockState(BlockPos pos, Predicate<BlockState> predicate) {
+	public boolean isStateAtPosition(BlockPos pos, Predicate<BlockState> predicate) {
 		return predicate.test(getBlockState(pos));
 	}
 
 	@Override
 	public boolean destroyBlock(BlockPos arg0, boolean arg1) {
-		return setBlockState(arg0, Blocks.AIR.getDefaultState(), 3);
+		return setBlock(arg0, Blocks.AIR.defaultBlockState(), 3);
 	}
 
 	@Override
 	public boolean removeBlock(BlockPos arg0, boolean arg1) {
-		return setBlockState(arg0, Blocks.AIR.getDefaultState(), 3);
+		return setBlock(arg0, Blocks.AIR.defaultBlockState(), 3);
 	}
 
 	@Override
-	public boolean setBlockState(BlockPos pos, BlockState state, int p_241211_3_, int p_241211_4_) {
+	public boolean setBlock(BlockPos pos, BlockState state, int p_241211_3_, int p_241211_4_) {
 		blocks.put(localMode ? pos : pos.subtract(anchor), state);
 		return true;
 	}
 
 	@Override
-	public ITickList<Block> getPendingBlockTicks() {
-		return EmptyTickList.get();
+	public ITickList<Block> getBlockTicks() {
+		return EmptyTickList.empty();
 	}
 
 	@Override
-	public ITickList<Fluid> getPendingFluidTicks() {
-		return EmptyTickList.get();
+	public ITickList<Fluid> getLiquidTicks() {
+		return EmptyTickList.empty();
 	}
 
 	@Override
@@ -168,10 +168,10 @@ public class TemplateBlockAccess extends WrappedWorld {
 	}
 
 	@Override
-	public void notifyNeighborsOfStateChange(BlockPos p_195593_1_, Block p_195593_2_) {}
+	public void updateNeighborsAt(BlockPos p_195593_1_, Block p_195593_2_) {}
 
 	@Override
-	public void notifyBlockUpdate(BlockPos pos, BlockState oldState, BlockState newState, int flags) {}
+	public void sendBlockUpdated(BlockPos pos, BlockState oldState, BlockState newState, int flags) {}
 
 	@Override
 	public void playSound(PlayerEntity player, BlockPos pos, SoundEvent soundIn, SoundCategory category, float volume,
@@ -182,7 +182,7 @@ public class TemplateBlockAccess extends WrappedWorld {
 		double zSpeed) {}
 
 	@Override
-	public void playEvent(PlayerEntity player, int type, BlockPos pos, int data) {}
+	public void levelEvent(PlayerEntity player, int type, BlockPos pos, int data) {}
 
 	public Cuboid getBounds() {
 		return bounds;

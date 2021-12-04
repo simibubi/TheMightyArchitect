@@ -19,12 +19,12 @@ public class Iterate {
 	private static Direction[] getHorizontals() {
 		Direction[] directions = new Direction[4];
 		for (int i = 0; i < 4; i++)
-			directions[i] = Direction.byHorizontalIndex(i);
+			directions[i] = Direction.from2DDataValue(i);
 		return directions;
 	}
 	
 	public static List<BlockPos> hereAndBelow(BlockPos pos) {
-		return Arrays.asList(pos, pos.down());
+		return Arrays.asList(pos, pos.below());
 	}
 	                                                    
 	

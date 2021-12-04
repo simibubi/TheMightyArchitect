@@ -24,15 +24,15 @@ public class MatrixStacker {
 	}
 
 	public MatrixStacker rotateX(double angle) {
-		return multiply(Vector3f.POSITIVE_X, angle);
+		return multiply(Vector3f.XP, angle);
 	}
 
 	public MatrixStacker rotateY(double angle) {
-		return multiply(Vector3f.POSITIVE_Y, angle);
+		return multiply(Vector3f.YP, angle);
 	}
 
 	public MatrixStacker rotateZ(double angle) {
-		return multiply(Vector3f.POSITIVE_Z, angle);
+		return multiply(Vector3f.ZP, angle);
 	}
 
 	public MatrixStacker rotateRadians(double angleRoll, double angleYaw, double anglePitch) {
@@ -76,7 +76,7 @@ public class MatrixStacker {
 	}
 
 	private MatrixStacker multiply(Vector3f axis, double angle) {
-		ms.multiply(axis.getDegreesQuaternion((float) angle));
+		ms.mulPose(axis.rotationDegrees((float) angle));
 		return this;
 	}
 

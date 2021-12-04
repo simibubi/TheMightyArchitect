@@ -9,6 +9,8 @@ import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 
+import com.simibubi.mightyarchitect.control.design.partials.Design.DesignInstance;
+
 public class FlatRoof extends Design {
 
 	protected int margin;
@@ -53,7 +55,7 @@ public class FlatRoof extends Design {
 				for (int z = size.getZ() - 1; z < instance.depth - size.getZ() + 2 * margin; z++) {
 					PaletteBlockInfo block = printedSlices.get(y).getBlockAt(x, 0, instance.rotationY);
 					if (block == null) continue;
-					BlockPos pos = position.add(rotateAroundZero(new BlockPos(x - xShift, y + yShift, -z + zShift), instance.rotationY));
+					BlockPos pos = position.offset(rotateAroundZero(new BlockPos(x - xShift, y + yShift, -z + zShift), instance.rotationY));
 					putBlock(blocks, pos, block); 
 				}
 			}
@@ -65,7 +67,7 @@ public class FlatRoof extends Design {
 				for (int z = -(instance.depth - 2 * size.getZ() + zShift + 1); z < size.getZ(); z++) {
 					PaletteBlockInfo block = printedSlices.get(y).getBlockAt(size.getX() - 1, Math.max(z, 0), instance.rotationY);
 					if (block == null) continue;
-					BlockPos pos = position.add(rotateAroundZero(new BlockPos(x - xShift, y + yShift, z + zShift - size.getZ() + 1), instance.rotationY));
+					BlockPos pos = position.offset(rotateAroundZero(new BlockPos(x - xShift, y + yShift, z + zShift - size.getZ() + 1), instance.rotationY));
 					putBlock(blocks, pos, block); 
 				}
 			}
@@ -82,10 +84,10 @@ public class FlatRoof extends Design {
 					PaletteBlockInfo blockMirrored = layer.getBlockAt(x, z, instance.rotationY, true);
 					if (block == null)
 						continue;
-					BlockPos pos = rotateAroundZero(new BlockPos(x, y, z).add(totalShift), instance.rotationY)
-							.add(position);
-					BlockPos posMirrored = rotateAroundZero(new BlockPos(instance.width - x - 1, y, z).add(mirrorShift), instance.rotationY)
-							.add(position);
+					BlockPos pos = rotateAroundZero(new BlockPos(x, y, z).offset(totalShift), instance.rotationY)
+							.offset(position);
+					BlockPos posMirrored = rotateAroundZero(new BlockPos(instance.width - x - 1, y, z).offset(mirrorShift), instance.rotationY)
+							.offset(position);
 					putBlock(blocks, pos, block);
 					putBlock(blocks, posMirrored, blockMirrored);
 				}

@@ -35,16 +35,16 @@ public class CylinderRoomTool extends RoomTool {
 		ClientPlayerEntity player = Minecraft.getInstance().player;
 		transparentStacks.clear();
 
-		BlockRayTraceResult trace = RaycastHelper.rayTraceRange(player.world, player, 75);
+		BlockRayTraceResult trace = RaycastHelper.rayTraceRange(player.level, player, 75);
 		if (trace != null && trace.getType() == Type.BLOCK) {
 
-			BlockPos hit = trace.getPos();
+			BlockPos hit = trace.getBlockPos();
 			makeStacksTransparent(player, hit);
 
-			if (trace.getFace()
+			if (trace.getDirection()
 				.getAxis()
 				.isVertical())
-				hit = hit.offset(trace.getFace());
+				hit = hit.relative(trace.getDirection());
 
 			if (model.getAnchor() == null)
 				selectedPosition = hit;
@@ -65,7 +65,7 @@ public class CylinderRoomTool extends RoomTool {
 
 	@Override
 	protected String createRoom(GroundPlan groundPlan) {
-		int distance = (int) Math.sqrt(firstPosition.distanceSq(selectedPosition));
+		int distance = (int) Math.sqrt(firstPosition.distSqr(selectedPosition));
 		DesignTheme theme = groundPlan.theme;
 		distance = Math.max(distance, theme.getStatistics().MinTowerRadius);
 		distance = Math.min(distance, theme.getStatistics().MaxTowerRadius);
@@ -120,8 +120,8 @@ public class CylinderRoomTool extends RoomTool {
 
 		BlockPos anchor = ArchitectManager.getModel()
 			.getAnchor();
-		BlockPos cursorPos = (anchor != null) ? selectedPosition.add(anchor) : selectedPosition;
-		BlockPos previouslySelectedPos = (firstPosition != null) ? firstPosition.add(anchor) : cursorPos;
+		BlockPos cursorPos = (anchor != null) ? selectedPosition.offset(anchor) : selectedPosition;
+		BlockPos previouslySelectedPos = (firstPosition != null) ? firstPosition.offset(anchor) : cursorPos;
 
 		if (firstPosition == null) {
 			MightyClient.outliner.chaseAABB(outlineKey, new AxisAlignedBB(cursorPos))
@@ -129,7 +129,7 @@ public class CylinderRoomTool extends RoomTool {
 			return;
 		}
 
-		int distance = (int) Math.sqrt(firstPosition.distanceSq(selectedPosition));
+		int distance = (int) Math.sqrt(firstPosition.distSqr(selectedPosition));
 		DesignTheme theme = ArchitectManager.getModel()
 			.getGroundPlan().theme;
 		distance = Math.max(distance, theme.getStatistics().MinTowerRadius);

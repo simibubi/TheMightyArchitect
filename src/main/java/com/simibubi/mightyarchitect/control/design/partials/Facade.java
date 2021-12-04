@@ -2,6 +2,8 @@ package com.simibubi.mightyarchitect.control.design.partials;
 
 import net.minecraft.nbt.CompoundNBT;
 
+import com.simibubi.mightyarchitect.control.design.partials.Wall.ExpandBehaviour;
+
 public class Facade extends Wall {
 
 	@Override

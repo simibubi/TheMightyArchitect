@@ -57,21 +57,21 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 		int y = topLeftY + 14;
 		int id = 0;
 
-		inputName = new TextFieldWidget(textRenderer, x, y, 104, 8, new StringTextComponent(""));
-		inputName.setText(theme.getDisplayName());
+		inputName = new TextFieldWidget(font, x, y, 104, 8, new StringTextComponent(""));
+		inputName.setValue(theme.getDisplayName());
 		inputName.changeFocus(false);
 		inputs.add(inputName);
 
-		inputAuthor = new TextFieldWidget(textRenderer, x, y + 20, 104, 8, new StringTextComponent(""));
-		inputAuthor.setText(theme.getDesigner());
+		inputAuthor = new TextFieldWidget(font, x, y + 20, 104, 8, new StringTextComponent(""));
+		inputAuthor.setValue(theme.getDesigner());
 		inputAuthor.changeFocus(false);
 		inputs.add(inputAuthor);
 
 		inputs.forEach(input -> {
 			input.setTextColor(-1);
-			input.setDisabledTextColour(-1);
-			input.setEnableBackgroundDrawing(false);
-			input.setMaxStringLength(35);
+			input.setTextColorUneditable(-1);
+			input.setBordered(false);
+			input.setMaxLength(35);
 			input.changeFocus(false);
 		});
 
@@ -221,7 +221,7 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 
 	protected void buttonClicked(IconButton button) {
 		if (button == confirm) {
-			client.displayGuiScreen(null);
+			minecraft.setScreen(null);
 			return;
 		}
 
@@ -274,25 +274,25 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 		int x = topLeftX + 10;
 		int y = topLeftY + 14;
 
-		textRenderer.draw(ms, "Theme name", x, y, ScreenResources.FONT_COLOR);
-		textRenderer.draw(ms, "Designer", x, y + 20, ScreenResources.FONT_COLOR);
+		font.draw(ms, "Theme name", x, y, ScreenResources.FONT_COLOR);
+		font.draw(ms, "Designer", x, y + 20, ScreenResources.FONT_COLOR);
 
 		y = topLeftY + 75;
 
-		textRenderer.draw(ms, "Styles included", x, y - 17, ScreenResources.FONT_COLOR);
-		textRenderer.draw(ms, "Shapes and Roof Types included", x, y + 32, ScreenResources.FONT_COLOR);
-		textRenderer.draw(ms, "Max. Room Height", x, y + 87, ScreenResources.FONT_COLOR);
+		font.draw(ms, "Styles included", x, y - 17, ScreenResources.FONT_COLOR);
+		font.draw(ms, "Shapes and Roof Types included", x, y + 32, ScreenResources.FONT_COLOR);
+		font.draw(ms, "Max. Room Height", x, y + 87, ScreenResources.FONT_COLOR);
 	}
 
 	@Override
 	public void removed() {
 		super.removed();
-		if (!inputName.getText()
+		if (!inputName.getValue()
 			.isEmpty())
-			theme.setDisplayName(inputName.getText());
-		if (!inputAuthor.getText()
+			theme.setDisplayName(inputName.getValue());
+		if (!inputAuthor.getValue()
 			.isEmpty())
-			theme.setDesigner(inputAuthor.getText());
+			theme.setDesigner(inputAuthor.getValue());
 
 		theme.setMaxFloorHeight(areaRoomHeight.getState());
 
@@ -332,7 +332,7 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 		ThemeStorage.exportTheme(theme);
 		ThemeStorage.reloadExternal();
 		ArchitectManager.editTheme(theme);
-		client.player.sendStatusMessage(new StringTextComponent("Theme settings have been updated."), true);
+		minecraft.player.displayClientMessage(new StringTextComponent("Theme settings have been updated."), true);
 	}
 
 	private boolean roofLayerExists() {

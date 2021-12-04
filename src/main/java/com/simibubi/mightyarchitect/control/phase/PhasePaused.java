@@ -19,10 +19,10 @@ public class PhasePaused extends PhaseBase {
 		ClientPlayerEntity player = Minecraft.getInstance().player;
 		if (player == null)
 			return;
-		player.sendStatusMessage(new StringTextComponent(
+		player.displayClientMessage(new StringTextComponent(
 			"The Mighty Architect was " + TextFormatting.BOLD + "Paused" + TextFormatting.RESET + "."), false);
-		player.sendStatusMessage(new StringTextComponent("You can continue composing with [" + TextFormatting.AQUA
-			+ MightyClient.COMPOSE.getBoundKeyLocalizedText()
+		player.displayClientMessage(new StringTextComponent("You can continue composing with [" + TextFormatting.AQUA
+			+ MightyClient.COMPOSE.getTranslatedKeyMessage()
 				.getString()
 				.toUpperCase()
 			+ TextFormatting.WHITE + "]"), false);

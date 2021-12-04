@@ -26,22 +26,22 @@ public class PlaceSignPacket {
 	}
 	
 	public PlaceSignPacket(PacketBuffer buffer) {
-		this(buffer.readString(128), buffer.readString(128), buffer.readBlockPos());
+		this(buffer.readUtf(128), buffer.readUtf(128), buffer.readBlockPos());
 	}
 
 	public void toBytes(PacketBuffer buffer) {
-		buffer.writeString(text1);
-		buffer.writeString(text2);
+		buffer.writeUtf(text1);
+		buffer.writeUtf(text2);
 		buffer.writeBlockPos(position);
 	}
 	
 	public void handle(Supplier<Context> context) {
 		context.get().enqueueWork(() -> {
-			World entityWorld = context.get().getSender().getEntityWorld();
-			entityWorld.setBlockState(position, Blocks.SPRUCE_SIGN.getDefaultState());
-			SignTileEntity sign = (SignTileEntity) entityWorld.getTileEntity(position);
-			sign.setText(0, new StringTextComponent(text1));
-			sign.setText(1, new StringTextComponent(text2));
+			World entityWorld = context.get().getSender().getCommandSenderWorld();
+			entityWorld.setBlockAndUpdate(position, Blocks.SPRUCE_SIGN.defaultBlockState());
+			SignTileEntity sign = (SignTileEntity) entityWorld.getBlockEntity(position);
+			sign.setMessage(0, new StringTextComponent(text1));
+			sign.setMessage(1, new StringTextComponent(text2));
 		});
 	}
 	
