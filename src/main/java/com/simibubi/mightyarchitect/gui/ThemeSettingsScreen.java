@@ -3,7 +3,7 @@ package com.simibubi.mightyarchitect.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
@@ -16,18 +16,18 @@ import com.simibubi.mightyarchitect.gui.widgets.Indicator.State;
 import com.simibubi.mightyarchitect.gui.widgets.Label;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollInput;
 
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.network.chat.TextComponent;
 
 public class ThemeSettingsScreen extends AbstractSimiScreen {
 
 	private DesignTheme theme;
 
-	private TextFieldWidget inputName;
-	private TextFieldWidget inputAuthor;
+	private EditBox inputName;
+	private EditBox inputAuthor;
 
 	private List<Indicator> indicators;
-	private List<TextFieldWidget> inputs;
+	private List<EditBox> inputs;
 	private List<IconButton> toggleButtons;
 
 	private IconButton confirm;
@@ -57,12 +57,12 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 		int y = topLeftY + 14;
 		int id = 0;
 
-		inputName = new TextFieldWidget(font, x, y, 104, 8, new StringTextComponent(""));
+		inputName = new EditBox(font, x, y, 104, 8, new TextComponent(""));
 		inputName.setValue(theme.getDisplayName());
 		inputName.changeFocus(false);
 		inputs.add(inputName);
 
-		inputAuthor = new TextFieldWidget(font, x, y + 20, 104, 8, new StringTextComponent(""));
+		inputAuthor = new EditBox(font, x, y + 20, 104, 8, new TextComponent(""));
 		inputAuthor.setValue(theme.getDesigner());
 		inputAuthor.changeFocus(false);
 		inputs.add(inputAuthor);
@@ -268,7 +268,7 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 	}
 
 	@Override
-	public void renderWindow(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
+	public void renderWindow(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
 		ScreenResources.THEME_EDITOR.draw(ms, this, topLeftX, topLeftY);
 
 		int x = topLeftX + 10;
@@ -332,7 +332,7 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 		ThemeStorage.exportTheme(theme);
 		ThemeStorage.reloadExternal();
 		ArchitectManager.editTheme(theme);
-		minecraft.player.displayClientMessage(new StringTextComponent("Theme settings have been updated."), true);
+		minecraft.player.displayClientMessage(new TextComponent("Theme settings have been updated."), true);
 	}
 
 	private boolean roofLayerExists() {

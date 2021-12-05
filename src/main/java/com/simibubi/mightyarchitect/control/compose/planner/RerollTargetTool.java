@@ -5,7 +5,7 @@ import org.lwjgl.glfw.GLFW;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
 
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 
 public class RerollTargetTool extends WallDecorationToolBase {
 

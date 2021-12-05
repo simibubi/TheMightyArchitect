@@ -3,23 +3,23 @@ package com.simibubi.mightyarchitect.block;
 import com.simibubi.mightyarchitect.AllItems;
 import com.simibubi.mightyarchitect.control.design.DesignSlice.DesignSliceTrait;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.StateContainer.Builder;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction.Axis;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.StateDefinition.Builder;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.Direction.Axis;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.Level;
 
-import net.minecraft.block.AbstractBlock.Properties;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class SliceMarkerBlock extends Block {
 
@@ -39,28 +39,28 @@ public class SliceMarkerBlock extends Block {
 	}
 
 	@Override
-	public BlockState getStateForPlacement(BlockItemUseContext context) {
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		if (context.getLevel().getBlockState(context.getClickedPos().below()).getBlock() == this)
 			return defaultBlockState().setValue(compass, false);
 		return defaultBlockState().setValue(compass, true);
 	}
 
 	@Override
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn,
-			BlockRayTraceResult hit) {
+	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn,
+			BlockHitResult hit) {
 		if (hit.getDirection().getAxis() == Axis.Y)
-			return ActionResultType.PASS;
+			return InteractionResult.PASS;
 		if (AllItems.ARCHITECT_WAND.typeOf(player.getItemInHand(handIn)))
-			return ActionResultType.PASS;
+			return InteractionResult.PASS;
 		if (worldIn.isClientSide)
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 
 		DesignSliceTrait currentTrait = state.getValue(VARIANT);
 		DesignSliceTrait newTrait = currentTrait.cycle(player.isShiftKeyDown() ? -1 : 1);
 		worldIn.setBlockAndUpdate(pos, state.setValue(VARIANT, newTrait));
-		player.displayClientMessage(new StringTextComponent(newTrait.getDescription()), true);
+		player.displayClientMessage(new TextComponent(newTrait.getDescription()), true);
 
-		return ActionResultType.SUCCESS;
+		return InteractionResult.SUCCESS;
 	}
 
 }

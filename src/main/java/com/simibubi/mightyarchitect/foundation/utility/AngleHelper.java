@@ -1,17 +1,17 @@
 package com.simibubi.mightyarchitect.foundation.utility;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.util.Direction;
-import net.minecraft.util.Direction.Axis;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
+import com.mojang.math.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class AngleHelper {
 	
 	@OnlyIn(Dist.CLIENT)
-	public static void applyRotation(Direction direction, MatrixStack ms) {
+	public static void applyRotation(Direction direction, PoseStack ms) {
 		ms.mulPose(Vector3f.YP.rotationDegrees(AngleHelper.horizontalAngle(direction)));
 		ms.mulPose(Vector3f.XP.rotationDegrees(AngleHelper.verticalAngle(direction)));
 	}

@@ -2,13 +2,13 @@ package com.simibubi.mightyarchitect.networking;
 
 import java.util.function.Supplier;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.SignTileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 public class PlaceSignPacket {
 	
@@ -25,23 +25,23 @@ public class PlaceSignPacket {
 		this.position = position;
 	}
 	
-	public PlaceSignPacket(PacketBuffer buffer) {
+	public PlaceSignPacket(FriendlyByteBuf buffer) {
 		this(buffer.readUtf(128), buffer.readUtf(128), buffer.readBlockPos());
 	}
 
-	public void toBytes(PacketBuffer buffer) {
+	public void toBytes(FriendlyByteBuf buffer) {
 		buffer.writeUtf(text1);
 		buffer.writeUtf(text2);
 		buffer.writeBlockPos(position);
 	}
 	
-	public void handle(Supplier<Context> context) {
+	public void handle(Supplier<NetworkEvent.Context> context) {
 		context.get().enqueueWork(() -> {
-			World entityWorld = context.get().getSender().getCommandSenderWorld();
+			Level entityWorld = context.get().getSender().getCommandSenderWorld();
 			entityWorld.setBlockAndUpdate(position, Blocks.SPRUCE_SIGN.defaultBlockState());
-			SignTileEntity sign = (SignTileEntity) entityWorld.getBlockEntity(position);
-			sign.setMessage(0, new StringTextComponent(text1));
-			sign.setMessage(1, new StringTextComponent(text2));
+			SignBlockEntity sign = (SignBlockEntity) entityWorld.getBlockEntity(position);
+			sign.setMessage(0, new TextComponent(text1));
+			sign.setMessage(1, new TextComponent(text2));
 		});
 	}
 	

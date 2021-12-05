@@ -2,8 +2,9 @@ package com.simibubi.mightyarchitect.gui;
 
 import java.nio.file.Paths;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.math.Vector3f;
 import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
@@ -14,12 +15,12 @@ import com.simibubi.mightyarchitect.foundation.utility.FilesHelper;
 import com.simibubi.mightyarchitect.gui.widgets.IconButton;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.Widget;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
 
 public class PalettePickerScreen extends AbstractSimiScreen {
 
@@ -72,22 +73,22 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 		// create
 		if (!scanPicker) {
 			buttonAddPalette = new IconButton(x + (i % 5) * 23, y + (i / 5) * 23, ScreenResources.ICON_ADD);
-			buttonAddPalette.setToolTip(new StringTextComponent("Create Palette"));
+			buttonAddPalette.setToolTip(new TextComponent("Create Palette"));
 			buttonAddPalette.getToolTip()
-				.add(new StringTextComponent("Will use currently selected").withStyle(TextFormatting.GRAY));
+				.add(new TextComponent("Will use currently selected").withStyle(ChatFormatting.GRAY));
 			buttonAddPalette.getToolTip()
-				.add(new StringTextComponent("Palette as the template.").withStyle(TextFormatting.GRAY));
+				.add(new TextComponent("Palette as the template.").withStyle(ChatFormatting.GRAY));
 			i++;
 			widgets.add(buttonAddPalette);
 		}
 
 		buttonOpenFolder = new IconButton(x + (i % 5) * 23, y + (i / 5) * 23, ScreenResources.ICON_FOLDER);
-		buttonOpenFolder.setToolTip(new StringTextComponent("Open Palette Folder"));
+		buttonOpenFolder.setToolTip(new TextComponent("Open Palette Folder"));
 		widgets.add(buttonOpenFolder);
 		i++;
 
 		buttonRefresh = new IconButton(x + (i % 5) * 23, y + (i / 5) * 23, ScreenResources.ICON_REFRESH);
-		buttonRefresh.setToolTip(new StringTextComponent("Refresh Imported Palettes"));
+		buttonRefresh.setToolTip(new TextComponent("Refresh Imported Palettes"));
 		widgets.add(buttonRefresh);
 		i++;
 
@@ -100,11 +101,11 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 		if (scanPicker) {
 			if (primary.palette.hasDuplicates())
 				minecraft.player.displayClientMessage(
-					new StringTextComponent(TextFormatting.RED + "Warning: Ambiguous Scanner Palette "
-						+ TextFormatting.WHITE + "( " + primary.palette.getDuplicates() + " )"),
+					new TextComponent(ChatFormatting.RED + "Warning: Ambiguous Scanner Palette "
+						+ ChatFormatting.WHITE + "( " + primary.palette.getDuplicates() + " )"),
 					false);
 
-			minecraft.player.displayClientMessage(new StringTextComponent("Updated Default Palette"), true);
+			minecraft.player.displayClientMessage(new TextComponent("Updated Default Palette"), true);
 			DesignExporter.theme.setDefaultPalette(primary.palette);
 			DesignExporter.theme.setDefaultSecondaryPalette(secondary.palette);
 		}
@@ -138,7 +139,7 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 	}
 
 	@Override
-	public void renderWindow(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
+	public void renderWindow(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
 		ScreenResources.PALETTES.draw(ms, this, topLeftX, topLeftY);
 
 		int color = ScreenResources.FONT_COLOR;
@@ -161,7 +162,7 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 		for (int i = 0; i < this.widgets.size(); ++i) {
-			Widget guibutton = this.widgets.get(i);
+			AbstractWidget guibutton = this.widgets.get(i);
 
 			if (guibutton.isMouseOver(mouseX, mouseY)) {
 				guibutton.playDownSound(this.minecraft.getSoundManager());
@@ -175,7 +176,7 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 		return super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
-	protected void buttonClicked(Widget button) {
+	protected void buttonClicked(AbstractWidget button) {
 		if (button == buttonOpenFolder) {
 			FilesHelper.createFolderIfMissing("palettes");
 			Util.getPlatform()
@@ -208,7 +209,7 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 		}
 	}
 
-	protected void buttonRightClicked(Widget button) {
+	protected void buttonRightClicked(AbstractWidget button) {
 		if (scanPicker) {
 			if (button instanceof PaletteButton)
 				DesignExporter.theme.setDefaultSecondaryPalette(((PaletteButton) button).palette);
@@ -239,38 +240,40 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 			active = true;
 		}
 
-		private void preview(MatrixStack ms, Minecraft mc) {
-			RenderSystem.pushMatrix();
-			RenderSystem.translatef(x + 5, y + 9, 100);
-			RenderSystem.rotatef(-35, 0, 1, 0);
+		private void preview(PoseStack ms, Minecraft mc) {
+			ms.pushPose();
+			ms.translate(x + 5, y + 9, 100);
+			//RenderSystem.rotatef(-35, 0, 1, 0);
+			ms.mulPose(Vector3f.YP.rotationDegrees(-35));
 			renderBlock(ms, mc, new BlockPos(0, 1, 0), Palette.INNER_PRIMARY);
 			renderBlock(ms, mc, new BlockPos(1, 1, 0), Palette.INNER_DETAIL);
 			renderBlock(ms, mc, new BlockPos(0, 0, 0), Palette.HEAVY_PRIMARY);
 			renderBlock(ms, mc, new BlockPos(1, 0, 0), Palette.ROOF_PRIMARY);
-			RenderSystem.popMatrix();
+			ms.popPose();
 		}
 
-		protected void renderBlock(MatrixStack ms, Minecraft mc, BlockPos pos, Palette key) {
-			RenderSystem.pushMatrix();
+		protected void renderBlock(PoseStack ms, Minecraft mc, BlockPos pos, Palette key) {
+			ms.pushPose();
 
 			GuiGameElement.of(palette.get(key))
 				.atLocal(pos.getX(), pos.getY(), pos.getZ())
 				.scale(7.9f)
 				.render(ms);
-			RenderSystem.popMatrix();
+
+			ms.popPose();
 		}
 
 		@Override
-		public void renderButton(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
+		public void renderButton(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
 			super.renderButton(ms, mouseX, mouseY, partialTicks);
 			preview(ms, minecraft);
 		}
 
 		@Override
-		public void renderToolTip(MatrixStack ms, int mouseX, int mouseY) {
+		public void renderToolTip(PoseStack ms, int mouseX, int mouseY) {
 			if (isHovered) {
-				renderTooltip(ms, new StringTextComponent(palette.getName()), mouseX, mouseY);
-				RenderSystem.color4f(1, 1, 1, 1);
+				renderTooltip(ms, new TextComponent(palette.getName()), mouseX, mouseY);
+				RenderSystem.setShaderColor(1, 1, 1, 1);
 			}
 		}
 

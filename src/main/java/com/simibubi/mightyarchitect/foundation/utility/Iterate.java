@@ -3,9 +3,9 @@ package com.simibubi.mightyarchitect.foundation.utility;
 import java.util.Arrays;
 import java.util.List;
 
-import net.minecraft.util.Direction;
-import net.minecraft.util.Direction.Axis;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
+import net.minecraft.core.BlockPos;
 
 public class Iterate {
 

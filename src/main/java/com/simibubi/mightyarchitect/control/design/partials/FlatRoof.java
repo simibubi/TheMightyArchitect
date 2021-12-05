@@ -6,8 +6,8 @@ import java.util.Map;
 import com.simibubi.mightyarchitect.control.design.DesignSlice;
 import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
 
 import com.simibubi.mightyarchitect.control.design.partials.Design.DesignInstance;
 
@@ -16,7 +16,7 @@ public class FlatRoof extends Design {
 	protected int margin;
 	
 	@Override
-	public Design fromNBT(CompoundNBT compound) {
+	public Design fromNBT(CompoundTag compound) {
 		FlatRoof flatRoof = new FlatRoof();
 		flatRoof.applyNBT(compound);
 		

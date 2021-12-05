@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.AllSpecialTextures;
 import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.compose.Cuboid;
@@ -17,9 +17,9 @@ import com.simibubi.mightyarchitect.foundation.utility.outliner.AABBOutline;
 import com.simibubi.mightyarchitect.foundation.utility.outliner.BlockClusterOutline;
 import com.simibubi.mightyarchitect.foundation.utility.outliner.Outline;
 
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 
 public class PhaseEditTheme extends PhaseBase {
 
@@ -119,7 +119,7 @@ public class PhaseEditTheme extends PhaseBase {
 	}
 
 	private void chaseText(Object key, float x, float y, float z, String text) {
-		MightyClient.outliner.chaseText(key, new Vector3d(x, y, z), text)
+		MightyClient.outliner.chaseText(key, new Vec3(x, y, z), text)
 		.disableNormals()
 			.colored(0xffffff);
 	}
@@ -197,6 +197,6 @@ public class PhaseEditTheme extends PhaseBase {
 	}
 
 	@Override
-	public void render(MatrixStack ms, IRenderTypeBuffer buffer) {}
+	public void render(PoseStack ms, MultiBufferSource buffer) {}
 
 }

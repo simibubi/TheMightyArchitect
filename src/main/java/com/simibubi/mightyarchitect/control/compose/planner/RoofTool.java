@@ -4,7 +4,7 @@ import com.simibubi.mightyarchitect.control.compose.CylinderStack;
 import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.control.design.DesignType;
 
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
 
 public class RoofTool extends AbstractRoomFaceSelectionTool {
 
@@ -51,9 +51,9 @@ public class RoofTool extends AbstractRoomFaceSelectionTool {
 		if (selectedStack == null)
 			return;
 		if (selectedStack.highest().quadFacadeRoof)
-			status("Roof Type: " + TextFormatting.AQUA + "4-Facade Gable Roof");
+			status("Roof Type: " + ChatFormatting.AQUA + "4-Facade Gable Roof");
 		else
-			status("Roof Type: " + TextFormatting.AQUA + selectedStack.highest().roofType.getDisplayName());
+			status("Roof Type: " + ChatFormatting.AQUA + selectedStack.highest().roofType.getDisplayName());
 	}
 
 

@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
@@ -13,12 +13,12 @@ import com.simibubi.mightyarchitect.control.ArchitectMenu;
 import com.simibubi.mightyarchitect.control.ArchitectMenu.KeyBindList;
 import com.simibubi.mightyarchitect.control.phase.ArchitectPhases;
 
-import net.minecraft.client.MainWindow;
+import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.IReorderingProcessor;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.network.chat.TextComponent;
 
 public class ArchitectMenuScreen extends Screen {
 
@@ -35,7 +35,7 @@ public class ArchitectMenuScreen extends Screen {
 	private float movingY;
 
 	public ArchitectMenuScreen() {
-		super(new StringTextComponent("Architect Menu"));
+		super(new TextComponent("Architect Menu"));
 		keybinds = new KeyBindList();
 		tooltip = new ArrayList<>();
 		title = "";
@@ -71,7 +71,7 @@ public class ArchitectMenuScreen extends Screen {
 	}
 
 	@Override
-	public void render(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
 		// FOCUSED
 		super.render(ms, mouseX, mouseY, partialTicks);
 		draw(ms, partialTicks);
@@ -82,7 +82,7 @@ public class ArchitectMenuScreen extends Screen {
 			return;
 
 		// NOT FOCUSED
-		draw(new MatrixStack(), Minecraft.getInstance()
+		draw(new PoseStack(), Minecraft.getInstance()
 			.getFrameTime());
 	}
 
@@ -129,8 +129,8 @@ public class ArchitectMenuScreen extends Screen {
 		return super.charTyped(p_charTyped_1_, p_charTyped_2_);
 	}
 
-	private void draw(MatrixStack ms, float partialTicks) {
-		MainWindow mainWindow = Minecraft.getInstance()
+	private void draw(PoseStack ms, float partialTicks) {
+		Window mainWindow = Minecraft.getInstance()
 			.getWindow();
 		int x = mainWindow.getGuiScaledWidth() - menuWidth - 10;
 		int y = mainWindow.getGuiScaledHeight() - menuHeight;
@@ -144,29 +144,27 @@ public class ArchitectMenuScreen extends Screen {
 			y -= 24;
 		}
 
-		RenderSystem.pushMatrix();
+		ms.pushPose();
 		float shift = yShift(partialTicks);
 		float sidewaysShift =
 			shift * ((float) menuWidth / (float) menuHeight) + (!focused ? 40 + menuHeight / 4f : 0) + 8;
-		RenderSystem.translatef(sideways ? sidewaysShift : 0, sideways ? 0 : shift, 0);
+		ms.translate(sideways ? sidewaysShift : 0, sideways ? 0 : shift, 0);
 		mouseX -= sideways ? sidewaysShift : 0;
 		mouseY -= sideways ? 0 : shift;
 
 		ScreenResources gray = ScreenResources.GRAY;
 		RenderSystem.enableBlend();
-		RenderSystem.color4f(1, 1, 1, 3 / 4f);
+		RenderSystem.setShaderColor(1, 1, 1, 3 / 4f);
 
-		Minecraft.getInstance()
-			.getTextureManager()
-			.bind(gray.location);
+		RenderSystem.setShaderTexture(0, gray.location);
 		RenderSystem.enableTexture();
 		blit(ms, x, y, gray.startX, gray.startY, menuWidth, menuHeight, gray.width, gray.height);
-		RenderSystem.color4f(1, 1, 1, 1);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
 
 		int yPos = y + 4;
 		int xPos = x + 4;
 
-		FontRenderer textRenderer = Minecraft.getInstance().font;
+		Font textRenderer = Minecraft.getInstance().font;
 		String compose = MightyClient.COMPOSE.getTranslatedKeyMessage()
 			.getString()
 			.toUpperCase();
@@ -214,14 +212,14 @@ public class ArchitectMenuScreen extends Screen {
 		for (String text : tooltip) {
 			int height = Minecraft.getInstance().font.wordWrapHeight(text, menuWidth - 8);
 			int lineY = yPos;
-			for (IReorderingProcessor iro : textRenderer.split(new StringTextComponent(text), menuWidth - 8)) {
+			for (FormattedCharSequence iro : textRenderer.split(new TextComponent(text), menuWidth - 8)) {
 				textRenderer.draw(ms, iro, xPos, lineY, 0xEEEEEE);				
 				lineY += textRenderer.lineHeight;
 			}
 			yPos += height + 2;
 		}
 
-		RenderSystem.popMatrix();
+		ms.popPose();
 	}
 
 	@Override
@@ -229,7 +227,7 @@ public class ArchitectMenuScreen extends Screen {
 		if (button != 0 || !visible || !focused)
 			return super.mouseClicked(mouseX, mouseY, button);
 
-		MainWindow mainWindow = Minecraft.getInstance()
+		Window mainWindow = Minecraft.getInstance()
 			.getWindow();
 		int x = mainWindow.getGuiScaledWidth() - menuWidth - 10;
 		int y = mainWindow.getGuiScaledHeight() - menuHeight;

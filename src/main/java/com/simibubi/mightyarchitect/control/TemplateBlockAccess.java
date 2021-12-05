@@ -11,26 +11,26 @@ import java.util.function.Predicate;
 import com.simibubi.mightyarchitect.control.compose.Cuboid;
 import com.simibubi.mightyarchitect.foundation.WrappedWorld;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.EmptyTickList;
-import net.minecraft.world.ITickList;
-import net.minecraft.world.LightType;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
-import net.minecraft.world.gen.Heightmap.Type;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.EmptyTickList;
+import net.minecraft.world.level.TickList;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.levelgen.Heightmap.Types;
 
 public class TemplateBlockAccess extends WrappedWorld {
 
@@ -66,7 +66,7 @@ public class TemplateBlockAccess extends WrappedWorld {
 	}
 
 	@Override
-	public TileEntity getBlockEntity(BlockPos pos) {
+	public BlockEntity getBlockEntity(BlockPos pos) {
 		return null;
 	}
 
@@ -96,24 +96,24 @@ public class TemplateBlockAccess extends WrappedWorld {
 	}
 
 	@Override
-	public List<Entity> getEntities(Entity arg0, AxisAlignedBB arg1, Predicate<? super Entity> arg2) {
+	public List<Entity> getEntities(Entity arg0, AABB arg1, Predicate<? super Entity> arg2) {
 		return Collections.emptyList();
 	}
 
 	@Override
-	public <T extends Entity> List<T> getEntitiesOfClass(Class<? extends T> arg0, AxisAlignedBB arg1,
+	public <T extends Entity> List<T> getEntitiesOfClass(Class<T> arg0, AABB arg1,
 		Predicate<? super T> arg2) {
 		return Collections.emptyList();
 	}
 
 	@Override
-	public List<? extends PlayerEntity> players() {
+	public List<? extends Player> players() {
 		return Collections.emptyList();
 	}
 
 	@Override
-	public int getBrightness(LightType lt, BlockPos p_226658_2_) {
-		return lt == LightType.BLOCK ? 12 : 14;
+	public int getBrightness(LightLayer lt, BlockPos p_226658_2_) {
+		return lt == LightLayer.BLOCK ? 12 : 14;
 	}
 
 	@Override
@@ -122,12 +122,12 @@ public class TemplateBlockAccess extends WrappedWorld {
 	}
 
 	@Override
-	public BlockPos getHeightmapPos(Type heightmapType, BlockPos pos) {
+	public BlockPos getHeightmapPos(Types heightmapType, BlockPos pos) {
 		return BlockPos.ZERO;
 	}
 
 	@Override
-	public int getHeight(Type heightmapType, int x, int z) {
+	public int getHeight(Types heightmapType, int x, int z) {
 		return 256;
 	}
 
@@ -153,12 +153,12 @@ public class TemplateBlockAccess extends WrappedWorld {
 	}
 
 	@Override
-	public ITickList<Block> getBlockTicks() {
+	public TickList<Block> getBlockTicks() {
 		return EmptyTickList.empty();
 	}
 
 	@Override
-	public ITickList<Fluid> getLiquidTicks() {
+	public TickList<Fluid> getLiquidTicks() {
 		return EmptyTickList.empty();
 	}
 
@@ -174,15 +174,15 @@ public class TemplateBlockAccess extends WrappedWorld {
 	public void sendBlockUpdated(BlockPos pos, BlockState oldState, BlockState newState, int flags) {}
 
 	@Override
-	public void playSound(PlayerEntity player, BlockPos pos, SoundEvent soundIn, SoundCategory category, float volume,
+	public void playSound(Player player, BlockPos pos, SoundEvent soundIn, SoundSource category, float volume,
 		float pitch) {}
 
 	@Override
-	public void addParticle(IParticleData particleData, double x, double y, double z, double xSpeed, double ySpeed,
+	public void addParticle(ParticleOptions particleData, double x, double y, double z, double xSpeed, double ySpeed,
 		double zSpeed) {}
 
 	@Override
-	public void levelEvent(PlayerEntity player, int type, BlockPos pos, int data) {}
+	public void levelEvent(Player player, int type, BlockPos pos, int data) {}
 
 	public Cuboid getBounds() {
 		return bounds;

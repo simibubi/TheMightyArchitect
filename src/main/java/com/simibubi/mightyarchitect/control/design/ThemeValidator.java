@@ -8,21 +8,21 @@ import java.util.Random;
 import com.simibubi.mightyarchitect.foundation.utility.DesignHelper;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
 
 public class ThemeValidator {
 
-	static List<StringTextComponent> complaints;
+	static List<TextComponent> complaints;
 
 	public static void check(DesignTheme theme) {
-		ClientPlayerEntity player = Minecraft.getInstance().player;
+		LocalPlayer player = Minecraft.getInstance().player;
 		for (int i = 0; i < 3; i++)
-			player.displayClientMessage(new StringTextComponent(" "), false);
-		player.displayClientMessage(new StringTextComponent(TextFormatting.AQUA + "--> Validation on "
-			+ TextFormatting.BLUE + TextFormatting.BOLD + theme.getDisplayName() + TextFormatting.AQUA + " <--"),
+			player.displayClientMessage(new TextComponent(" "), false);
+		player.displayClientMessage(new TextComponent(ChatFormatting.AQUA + "--> Validation on "
+			+ ChatFormatting.BLUE + ChatFormatting.BOLD + theme.getDisplayName() + ChatFormatting.AQUA + " <--"),
 			false);
 		theme.clearDesigns();
 		ThemeStatistics stats = theme.getStatistics();
@@ -144,18 +144,18 @@ public class ThemeValidator {
 
 		if (complaints.size() > 0) {
 			player.displayClientMessage(
-				new StringTextComponent(TextFormatting.GOLD + "The Following Designs are missing:"), false);
-			for (ITextComponent text : complaints) {
+				new TextComponent(ChatFormatting.GOLD + "The Following Designs are missing:"), false);
+			for (Component text : complaints) {
 				player.displayClientMessage(text, false);
 			}
 			player.displayClientMessage(
-				new StringTextComponent(
-					TextFormatting.GOLD + "Try and add these missing designs or exclude their type from your theme."),
+				new TextComponent(
+					ChatFormatting.GOLD + "Try and add these missing designs or exclude their type from your theme."),
 				false);
 
 		} else {
 			player.displayClientMessage(
-				new StringTextComponent(TextFormatting.GREEN + "For prior traits no missing designs have been found."),
+				new TextComponent(ChatFormatting.GREEN + "For prior traits no missing designs have been found."),
 				false);
 		}
 
@@ -166,7 +166,7 @@ public class ThemeValidator {
 	}
 
 	private static void alert(String message) {
-		complaints.add(new StringTextComponent("-> " + TextFormatting.RED + message));
+		complaints.add(new TextComponent("-> " + ChatFormatting.RED + message));
 	}
 
 	private static String glue(List<Integer> heights) {

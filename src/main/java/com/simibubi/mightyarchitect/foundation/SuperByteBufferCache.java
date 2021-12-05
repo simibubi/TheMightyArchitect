@@ -11,17 +11,19 @@ import org.lwjgl.opengl.GL11;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockModelRenderer;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.block.ModelBlockRenderer;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.math.BlockPos;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
+
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.client.model.data.EmptyModelData;
 
 public class SuperByteBufferCache {
@@ -69,21 +71,21 @@ public class SuperByteBufferCache {
 	}
 
 	private SuperByteBuffer standardBlockRender(BlockState renderedState) {
-		BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
+		BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
 		return standardModelRender(dispatcher.getBlockModel(renderedState), renderedState);
 	}
 
-	private SuperByteBuffer standardModelRender(IBakedModel model, BlockState referenceState) {
-		return standardModelRender(model, referenceState, new MatrixStack());
+	private SuperByteBuffer standardModelRender(BakedModel model, BlockState referenceState) {
+		return standardModelRender(model, referenceState, new PoseStack());
 	}
 
-	private SuperByteBuffer standardModelRender(IBakedModel model, BlockState referenceState, MatrixStack ms) {
-		BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
-		BlockModelRenderer blockRenderer = dispatcher.getModelRenderer();
-		BufferBuilder builder = new BufferBuilder(DefaultVertexFormats.BLOCK.getIntegerSize());
+	private SuperByteBuffer standardModelRender(BakedModel model, BlockState referenceState, PoseStack ms) {
+		BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
+		ModelBlockRenderer blockRenderer = dispatcher.getModelRenderer();
+		BufferBuilder builder = new BufferBuilder(DefaultVertexFormat.BLOCK.getIntegerSize());
 		Random random = new Random();
-		builder.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-		blockRenderer.renderModelFlat(Minecraft.getInstance().level, model, referenceState, BlockPos.ZERO.above(255), ms,
+		builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
+		blockRenderer.tesselateBlock(Minecraft.getInstance().level, model, referenceState, BlockPos.ZERO.above(255), ms,
 				builder, true, random, 42, OverlayTexture.NO_OVERLAY, EmptyModelData.INSTANCE);
 		builder.end();
 

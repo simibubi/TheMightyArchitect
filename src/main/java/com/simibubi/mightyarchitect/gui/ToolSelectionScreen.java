@@ -3,16 +3,16 @@ package com.simibubi.mightyarchitect.gui;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.compose.planner.Tools;
 
-import net.minecraft.client.MainWindow;
+import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.TextComponent;
 
 public class ToolSelectionScreen extends Screen {
 
@@ -26,7 +26,7 @@ public class ToolSelectionScreen extends Screen {
 	protected int h;
 
 	public ToolSelectionScreen(List<Tools> tools, Consumer<Tools> callback) {
-		super(new StringTextComponent("Tool Selection"));
+		super(new TextComponent("Tool Selection"));
 		this.minecraft = Minecraft.getInstance();
 		this.tools = tools;
 		this.callback = callback;
@@ -43,24 +43,23 @@ public class ToolSelectionScreen extends Screen {
 		selection = (selection + tools.size()) % tools.size();
 	}
 
-	private void draw(MatrixStack ms, float partialTicks) {
-		MainWindow mainWindow = Minecraft.getInstance()
+	private void draw(PoseStack ms, float partialTicks) {
+		Window mainWindow = Minecraft.getInstance()
 			.getWindow();
-		FontRenderer font = minecraft.font;
+		Font font = minecraft.font;
 
 		int x = (mainWindow.getGuiScaledWidth() - w) / 2 + 15;
 		int y = 15;
 
-		RenderSystem.pushMatrix();
-		RenderSystem.translatef(0, 0, focused ? 100 : 0);
+		ms.pushPose();
+		ms.translate(0, 0, focused ? 100 : 0);
 
 		ScreenResources gray = ScreenResources.GRAY;
 		RenderSystem.enableBlend();
+		RenderSystem.defaultBlendFunc();
 		RenderSystem.enableTexture();
-		RenderSystem.color4f(1, 1, 1, focused ? 7 / 8f : 1 / 2f);
-		Minecraft.getInstance()
-			.getTextureManager()
-			.bind(gray.location);
+		RenderSystem.setShaderColor(1, 1, 1, focused ? 7 / 8f : 1 / 2f);
+		RenderSystem.setShaderTexture(0, gray.location);
 		float toolTipAlpha = yOffset / 10;
 
 		// render main box
@@ -72,12 +71,10 @@ public class ToolSelectionScreen extends Screen {
 		int stringAlphaComponent = ((int) (toolTipAlpha * 0xFF)) << 24;
 
 		if (toolTipAlpha > 0.25f) {
-			Minecraft.getInstance()
-				.getTextureManager()
-				.bind(gray.location);
-			RenderSystem.color4f(.7f, .7f, .8f, toolTipAlpha);
+			RenderSystem.setShaderTexture(0, gray.location);
+			RenderSystem.setShaderColor(.7f, .7f, .8f, toolTipAlpha);
 			blit(ms, x - 15, y + 30, gray.startX, gray.startY, w, h + 22, gray.width, gray.height);
-			RenderSystem.color4f(1, 1, 1, 1);
+			RenderSystem.setShaderColor(1, 1, 1, 1);
 
 			if (toolTip.size() > 0)
 				font.draw(ms, toolTip.get(0), x - 10, y + 35, 0xEEEEEE + stringAlphaComponent);
@@ -89,7 +86,7 @@ public class ToolSelectionScreen extends Screen {
 				font.draw(ms, toolTip.get(3), x - 10, y + 69, 0xCCCCDD + stringAlphaComponent);
 		}
 
-		RenderSystem.color4f(1, 1, 1, 1);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
 		String translationKey = MightyClient.TOOL_MENU.getTranslatedKeyMessage()
 			.getString()
 			.toUpperCase();
@@ -102,28 +99,28 @@ public class ToolSelectionScreen extends Screen {
 			drawCenteredString(ms, minecraft.font, "[SCROLL] to Cycle", width / 2, y - 10, 0xCCDDFF);
 
 		for (int i = 0; i < tools.size(); i++) {
-			RenderSystem.pushMatrix();
+			ms.pushPose();
 
 			float alpha = focused ? 1 : .2f;
 			if (i == selection) {
-				RenderSystem.translatef(0, -10, 0);
+				ms.translate(0, -10, 0);
 				drawCenteredString(ms, minecraft.font, tools.get(i)
 					.getDisplayName(), x + i * 50 + 24, y + 28, 0xCCDDFF);
 				alpha = 1;
 			}
-			RenderSystem.color4f(0, 0, 0, alpha);
+			RenderSystem.setShaderColor(0, 0, 0, alpha);
 			tools.get(i)
 				.getIcon()
 				.draw(ms, this, x + i * 50 + 16, y + 12);
-			RenderSystem.color4f(1, 1, 1, alpha);
+			RenderSystem.setShaderColor(1, 1, 1, alpha);
 			tools.get(i)
 				.getIcon()
 				.draw(ms, this, x + i * 50 + 16, y + 11);
 
-			RenderSystem.popMatrix();
+			ms.popPose();
 		}
 
-		RenderSystem.popMatrix();
+		ms.popPose();
 	}
 
 	public void update() {
@@ -133,7 +130,7 @@ public class ToolSelectionScreen extends Screen {
 			yOffset *= .9f;
 	}
 
-	public void renderPassive(MatrixStack ms, float partialTicks) {
+	public void renderPassive(PoseStack ms, float partialTicks) {
 		if (Minecraft.getInstance().screen != null)
 			return;
 		draw(ms, partialTicks);

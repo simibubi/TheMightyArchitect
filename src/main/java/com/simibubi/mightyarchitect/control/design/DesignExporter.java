@@ -18,16 +18,16 @@ import com.simibubi.mightyarchitect.control.phase.export.PhaseEditTheme;
 import com.simibubi.mightyarchitect.foundation.utility.FilesHelper;
 import com.simibubi.mightyarchitect.networking.PlaceSignPacket;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.tileentity.SignTileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.Level;
 
 public class DesignExporter {
 
@@ -41,7 +41,7 @@ public class DesignExporter {
 
 	public static boolean changed = true;
 
-	public static String exportDesign(World worldIn, BlockPos anchor) {
+	public static String exportDesign(Level worldIn, BlockPos anchor) {
 		BlockPos layerDefAnchor = anchor;
 		boolean found = false;
 		for (int range = 1; range < 100 && !found; range++) {
@@ -94,13 +94,13 @@ public class DesignExporter {
 		PhaseEditTheme.resetVisualization();
 
 		// Assemble nbt
-		CompoundNBT compound = new CompoundNBT();
-		compound.put("Size", NBTUtil.writeBlockPos(size));
+		CompoundTag compound = new CompoundTag();
+		compound.put("Size", NbtUtils.writeBlockPos(size));
 
-		ListNBT layers = new ListNBT();
+		ListTag layers = new ListTag();
 
 		for (int y = 0; y < size.getY(); y++) {
-			CompoundNBT layerTag = new CompoundNBT();
+			CompoundTag layerTag = new CompoundTag();
 			DesignSliceTrait trait = DesignSliceTrait.values()[markerValueAt(worldIn, layerDefAnchor.above(y))];
 			layerTag.putString("Trait", trait.name());
 
@@ -114,7 +114,7 @@ public class DesignExporter {
 
 					if (block == null && blockState.getBlock() != Blocks.AIR) {
 						Minecraft.getInstance().player.displayClientMessage(
-							new StringTextComponent(blockState.getBlock()
+							new TextComponent(blockState.getBlock()
 							.getDescriptionId() + " @" + pos.getX() + "," + pos.getY() + "," + pos.getZ()
 							+ " does not belong to the Scanner Palette"), false);
 						return "Export failed";
@@ -187,8 +187,8 @@ public class DesignExporter {
 		BlockPos signPos = anchor.above();
 		if (worldIn.getBlockState(signPos)
 			.getBlock() == Blocks.SPRUCE_SIGN) {
-			SignTileEntity sign = (SignTileEntity) worldIn.getBlockEntity(signPos);
-			filename = sign.getMessage(1)
+			SignBlockEntity sign = (SignBlockEntity) worldIn.getBlockEntity(signPos);
+			filename = sign.getMessage(1, false)
 				.getString();
 			designPath = typePath + "/" + filename;
 
@@ -228,11 +228,11 @@ public class DesignExporter {
 		return theme;
 	}
 
-	private static boolean isMarker(World worldIn, BlockPos pos) {
+	private static boolean isMarker(Level worldIn, BlockPos pos) {
 		return AllBlocks.SLICE_MARKER.typeOf(worldIn.getBlockState(pos));
 	}
 
-	private static int markerValueAt(World worldIn, BlockPos pos) {
+	private static int markerValueAt(Level worldIn, BlockPos pos) {
 		return worldIn.getBlockState(pos)
 			.getValue(SliceMarkerBlock.VARIANT)
 			.ordinal();

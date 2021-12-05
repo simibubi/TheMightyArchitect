@@ -1,35 +1,35 @@
 package com.simibubi.mightyarchitect.foundation.utility.outliner;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.foundation.RenderTypes;
 import com.simibubi.mightyarchitect.foundation.utility.VecHelper;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import com.mojang.math.Matrix4f;
+import net.minecraft.world.phys.Vec3;
 
 public class OutlinedText extends Outline {
 
 	private String text;
-	Vector3d targetLocation;
-	Vector3d location;
-	Vector3d prevLocation;
+	Vec3 targetLocation;
+	Vec3 location;
+	Vec3 prevLocation;
 
 	public OutlinedText() {
 		setText("");
-		targetLocation = Vector3d.ZERO;
-		location = Vector3d.ZERO;
-		prevLocation = Vector3d.ZERO;
+		targetLocation = Vec3.ZERO;
+		location = Vec3.ZERO;
+		prevLocation = Vec3.ZERO;
 	}
 
-	public void set(Vector3d location) {
+	public void set(Vec3 location) {
 		prevLocation = this.location = location;
 	}
 
-	public void target(Vector3d location) {
+	public void target(Vec3 location) {
 		targetLocation = location;
 	}
 
@@ -41,16 +41,15 @@ public class OutlinedText extends Outline {
 	}
 
 	@Override
-	public void render(MatrixStack ms, IRenderTypeBuffer buffer) {
+	public void render(PoseStack ms, MultiBufferSource buffer) {
 		if (text == null)
 			return;
 		
 		Minecraft mc = Minecraft.getInstance();
 		float pt = mc.getFrameTime();
-		Vector3d vec = VecHelper.lerp(prevLocation, location, pt);
-		EntityRendererManager renderManager = mc.getEntityRenderDispatcher();
-		FontRenderer fontrenderer = renderManager.getFont();
-		float stringLength = fontrenderer.width(text);
+		Vec3 vec = VecHelper.lerp(prevLocation, location, pt);
+		EntityRenderDispatcher renderManager = mc.getEntityRenderDispatcher();
+		float stringLength = mc.font.width(text);
 
 		ms.pushPose();
 		ms.translate(vec.x, vec.y, vec.z);
@@ -65,20 +64,23 @@ public class OutlinedText extends Outline {
 
 		float scaleMod = 0.025F;
 		float f = -stringLength / 2;
-		float h = fontrenderer.lineHeight;
+		float h = mc.font.lineHeight;
 
 		ms.pushPose();
-		Vector3d v1 = new Vector3d(-f + 2, -scaleMod * (h - 1), 0);
-		Vector3d v2 = new Vector3d(-f + 2, scaleMod, 0);
-		Vector3d v3 = new Vector3d(f - 2, scaleMod, 0);
-		Vector3d v4 = new Vector3d(f - 2, -scaleMod * (h - 1), 0);
+		Vec3 v1 = new Vec3(-f + 2, -scaleMod * (h - 1), 0);
+		Vec3 v2 = new Vec3(-f + 2, scaleMod, 0);
+		Vec3 v3 = new Vec3(f - 2, scaleMod, 0);
+		Vec3 v4 = new Vec3(f - 2, -scaleMod * (h - 1), 0);
 
 		ms.pushPose();
 		ms.scale(-scaleMod, 1, scaleMod);
 		ms.translate(0, 0, .5f);
-		if (params.faceRgb != null)
-			putQuadUVColor(ms, buffer.getBuffer(RenderTypes.getOutlineSolid()), v1, v2, v3, v4, params.faceRgb, 0, 0, 1,
-				1, null);
+		if (params.faceRgb != null) {
+			Vec3 tmp = params.rgb;
+			params.rgb = params.faceRgb;
+			putQuadUV(ms, buffer.getBuffer(RenderTypes.getOutlineSolid()), v1, v2, v3, v4,0, 0, 1, 1, null);
+			params.rgb = tmp;
+		}
 		ms.popPose();
 
 		ms.scale(scaleMod, 1, 1);
@@ -88,9 +90,8 @@ public class OutlinedText extends Outline {
 
 		ms.pushPose();
 		ms.scale(-scaleMod, -scaleMod, scaleMod);
-		Matrix4f matrix4f = ms.last()
-			.pose();
-		fontrenderer.drawInBatch(text, f, 0, params.color, false, matrix4f, buffer, true, 0, 0xF000F0);
+		//mc.font.drawInBatch(text, f, 0, params.color, false, matrix4f, buffer, true, 0, 0xF000F0);
+		mc.font.draw(ms, text, f, 0, params.color);
 		ms.popPose();
 
 		ms.popPose();

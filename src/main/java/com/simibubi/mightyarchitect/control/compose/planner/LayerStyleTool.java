@@ -5,7 +5,7 @@ import java.util.List;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
 
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
 
 public class LayerStyleTool extends WallDecorationToolBase {
 
@@ -29,7 +29,7 @@ public class LayerStyleTool extends WallDecorationToolBase {
 		selectedRoom.designLayer = newLayer;
 		model.getTheme().getDesignPicker().rerollRoom(selectedRoom);
 		ArchitectManager.reAssemble();
-		status("Style: " + TextFormatting.AQUA + newLayer.getDisplayName());
+		status("Style: " + ChatFormatting.AQUA + newLayer.getDisplayName());
 
 		return true;
 	}

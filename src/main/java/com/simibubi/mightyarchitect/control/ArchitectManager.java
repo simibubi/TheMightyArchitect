@@ -9,7 +9,7 @@ import java.nio.file.StandardOpenOption;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.glfw.GLFW;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.simibubi.mightyarchitect.AllPackets;
 import com.simibubi.mightyarchitect.MightyClient;
@@ -34,12 +34,12 @@ import com.simibubi.mightyarchitect.gui.ThemeSettingsScreen;
 import com.simibubi.mightyarchitect.networking.InstantPrintPacket;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.client.event.InputEvent.MouseInputEvent;
@@ -167,9 +167,9 @@ public class ArchitectManager {
 		OutputStream outputStream = null;
 		try {
 			outputStream = Files.newOutputStream(Paths.get(filepath), StandardOpenOption.CREATE);
-			CompoundNBT nbttagcompound = getModel().writeToTemplate()
-				.save(new CompoundNBT());
-			CompressedStreamTools.writeCompressed(nbttagcompound, outputStream);
+			CompoundTag nbttagcompound = getModel().writeToTemplate()
+				.save(new CompoundTag());
+			NbtIo.writeCompressed(nbttagcompound, outputStream);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -181,14 +181,14 @@ public class ArchitectManager {
 		BlockPos pos = model.getAnchor()
 			.offset(((TemplateBlockAccess) model.getMaterializedSketch()).getBounds()
 				.getOrigin());
-		StringTextComponent component = new StringTextComponent("Deploy Schematic at: " + TextFormatting.BLUE + "["
+		TextComponent component = new TextComponent("Deploy Schematic at: " + ChatFormatting.BLUE + "["
 			+ pos.getX() + "," + pos.getY() + "," + pos.getZ() + "]");
 		Minecraft.getInstance().player.displayClientMessage(component, false);
 		unload();
 	}
 
 	public static void status(String message) {
-		Minecraft.getInstance().player.displayClientMessage(new StringTextComponent(message), true);
+		Minecraft.getInstance().player.displayClientMessage(new TextComponent(message), true);
 	}
 
 	public static void pickPalette() {
@@ -281,7 +281,7 @@ public class ArchitectManager {
 			event.setCanceled(true);
 	}
 
-	public static void render(MatrixStack ms, IRenderTypeBuffer buffer) {
+	public static void render(PoseStack ms, MultiBufferSource buffer) {
 		if (Minecraft.getInstance().level != null)
 			phase.getPhaseHandler()
 				.render(ms, buffer);
@@ -335,7 +335,7 @@ public class ArchitectManager {
 
 	@SubscribeEvent
 	public static void onDrawGameOverlay(RenderGameOverlayEvent.Pre event) {
-		if (event.getType() != ElementType.HOTBAR)
+		if (event.getType() != ElementType.ALL)
 			return;
 
 		IArchitectPhase phaseHandler = phase.getPhaseHandler();

@@ -3,8 +3,8 @@ package com.simibubi.mightyarchitect.foundation.utility;
 import com.simibubi.mightyarchitect.TheMightyArchitect;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.shader.ShaderGroup;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.PostChain;
+import net.minecraft.resources.ResourceLocation;
 
 public enum Shaders {
 
@@ -18,7 +18,7 @@ public enum Shaders {
 
 	public boolean isActive() {
 		Minecraft mc = Minecraft.getInstance();
-		ShaderGroup shaderGroup = mc.gameRenderer.currentEffect();
+		PostChain shaderGroup = mc.gameRenderer.currentEffect();
 		return shaderGroup != null && shaderGroup.getName()
 			.equals(location.toString());
 	}

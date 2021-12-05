@@ -5,7 +5,7 @@ import org.lwjgl.glfw.GLFW;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
 
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
 
 public class PalettePainterTool extends WallDecorationToolBase {
 
@@ -25,7 +25,7 @@ public class PalettePainterTool extends WallDecorationToolBase {
 	public boolean handleMouseWheel(int amount) {
 
 		if (model.getPrimary().getName().equals(model.getSecondary().getName())) {
-			status(TextFormatting.RED + "Choose a secondary Palette first [ G -> C ]");
+			status(ChatFormatting.RED + "Choose a secondary Palette first [ G -> C ]");
 			return true;
 		}
 

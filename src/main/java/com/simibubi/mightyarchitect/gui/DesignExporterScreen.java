@@ -3,8 +3,9 @@ package com.simibubi.mightyarchitect.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.math.Vector3f;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
@@ -232,17 +233,20 @@ public class DesignExporterScreen extends AbstractSimiScreen {
 	}
 
 	@Override
-	protected void renderWindow(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
+	protected void renderWindow(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
 		ScreenResources.EXPORTER.draw(ms, this, topLeftX, topLeftY);
 
-		RenderSystem.pushMatrix();
-		RenderSystem.translatef((this.width - this.sWidth) / 2 + 250, 220, 100);
-		RenderSystem.rotatef(-30, .4f, 0, -.2f);
-		RenderSystem.rotatef(90 + 0.2f * animationProgress, 0, 1, 0);
-		RenderSystem.scalef(100, -100, 100);
+		ms.pushPose();
+		ms.translate((this.width - this.sWidth) / 2 + 250, 220, 100);
+		//RenderSystem.rotatef(-30, .4f, 0, -.2f);
+		ms.mulPose(Vector3f.XP.rotationDegrees(-30 * 0.4f));
+		ms.mulPose(Vector3f.ZN.rotationDegrees(-30 * 0.2f));
+		//RenderSystem.rotatef(90 + 0.2f * animationProgress, 0, 1, 0);
+		ms.mulPose(Vector3f.YP.rotationDegrees(90 + 0.2f * animationProgress));
+		ms.scale(100, -100, 100);
 		GuiGameElement.of(minecraft.player.getMainHandItem())
 			.render(ms);
-		RenderSystem.popMatrix();
+		ms.popPose();
 
 		int color = ScreenResources.FONT_COLOR;
 		font.draw(ms, "Export custom Designs", topLeftX + 10, topLeftY + 10, color);

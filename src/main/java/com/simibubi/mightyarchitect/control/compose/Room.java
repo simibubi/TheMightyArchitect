@@ -3,8 +3,8 @@ package com.simibubi.mightyarchitect.control.compose;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
 import com.simibubi.mightyarchitect.control.design.DesignType;
 
-import net.minecraft.util.Direction.Axis;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.Direction.Axis;
+import net.minecraft.core.BlockPos;
 
 public class Room extends Cuboid {
 

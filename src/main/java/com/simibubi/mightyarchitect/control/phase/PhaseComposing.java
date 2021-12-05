@@ -3,7 +3,7 @@ package com.simibubi.mightyarchitect.control.phase;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.compose.planner.Tools;
 import com.simibubi.mightyarchitect.foundation.utility.ShaderManager;
@@ -11,7 +11,7 @@ import com.simibubi.mightyarchitect.foundation.utility.Shaders;
 import com.simibubi.mightyarchitect.gui.ToolSelectionScreen;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 
 public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
@@ -90,7 +90,7 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 	}
 
 	@Override
-	public void render(MatrixStack ms, IRenderTypeBuffer buffer) {}
+	public void render(PoseStack ms, MultiBufferSource buffer) {}
 
 	@Override
 	public void whenExited() {
@@ -102,7 +102,7 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 		if (Minecraft.getInstance().screen != null)
 			return;
 
-		MatrixStack ms = event.getMatrixStack();
+		PoseStack ms = event.getMatrixStack();
 		toolSelection.renderPassive(ms, event.getPartialTicks());
 		activeTool.getTool()
 			.renderOverlay(ms);

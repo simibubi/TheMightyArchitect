@@ -1,6 +1,6 @@
 package com.simibubi.mightyarchitect.control.compose.planner;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 public interface IComposerTool {
 	
@@ -13,6 +13,6 @@ public interface IComposerTool {
 	public void tickGroundPlanOutlines();
 	
 	public void updateSelection();
-	public void renderOverlay(MatrixStack ms);
+	public void renderOverlay(PoseStack ms);
 	public void init();
 }

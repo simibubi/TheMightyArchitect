@@ -15,7 +15,7 @@ import com.simibubi.mightyarchitect.control.palette.BlockOrientation;
 import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 public class Sketch {
 

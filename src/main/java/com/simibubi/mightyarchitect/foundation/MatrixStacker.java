@@ -1,22 +1,22 @@
 package com.simibubi.mightyarchitect.foundation;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.foundation.utility.AngleHelper;
 import com.simibubi.mightyarchitect.foundation.utility.VecHelper;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import com.mojang.math.Vector3f;
+import net.minecraft.core.Vec3i;
 
 public class MatrixStacker {
 
-	static Vector3d center = VecHelper.getCenterOf(BlockPos.ZERO);
+	static Vec3 center = VecHelper.getCenterOf(BlockPos.ZERO);
 	static MatrixStacker instance;
 
-	MatrixStack ms;
+	PoseStack ms;
 
-	public static MatrixStacker of(MatrixStack ms) {
+	public static MatrixStacker of(PoseStack ms) {
 		if (instance == null)
 			instance = new MatrixStacker();
 		instance.ms = ms;
@@ -50,17 +50,17 @@ public class MatrixStacker {
 		return translateBack(center);
 	}
 
-	public MatrixStacker translate(Vector3i vec) {
+	public MatrixStacker translate(Vec3i vec) {
 		ms.translate(vec.getX(), vec.getY(), vec.getZ());
 		return this;
 	}
 
-	public MatrixStacker translate(Vector3d vec) {
+	public MatrixStacker translate(Vec3 vec) {
 		ms.translate(vec.x, vec.y, vec.z);
 		return this;
 	}
 
-	public MatrixStacker translateBack(Vector3d vec) {
+	public MatrixStacker translateBack(Vec3 vec) {
 		ms.translate(-vec.x, -vec.y, -vec.z);
 		return this;
 	}

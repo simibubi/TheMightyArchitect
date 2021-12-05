@@ -2,7 +2,7 @@ package com.simibubi.mightyarchitect.control.compose.planner;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.Schematic;
@@ -13,13 +13,13 @@ import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
 import com.simibubi.mightyarchitect.foundation.utility.RaycastHelper;
 import com.simibubi.mightyarchitect.foundation.utility.RaycastHelper.PredicateTraceResult;
 
-import net.minecraft.client.MainWindow;
+import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.TextComponent;
 
 public abstract class ComposerToolBase implements IComposerTool {
 
@@ -63,7 +63,7 @@ public abstract class ComposerToolBase implements IComposerTool {
 			return;
 		}
 
-		ClientPlayerEntity player = Minecraft.getInstance().player;
+		LocalPlayer player = Minecraft.getInstance().player;
 
 		PredicateTraceResult result = RaycastHelper.rayTraceUntil(player, 70, position -> {
 			return groundPlan.getRoomAtPos(position.subtract(anchor)) != null;
@@ -89,13 +89,13 @@ public abstract class ComposerToolBase implements IComposerTool {
 	}
 	
 	@Override
-	public void renderOverlay(MatrixStack ms) {
-		RenderSystem.pushMatrix();
+	public void renderOverlay(PoseStack ms) {
+		ms.pushPose();
 		Minecraft mc = Minecraft.getInstance();
-		MainWindow mainWindow = mc.getWindow();
-		RenderSystem.translated(mainWindow.getGuiScaledWidth() / 2, mainWindow.getGuiScaledHeight() / 2 - 3, 0);
-		RenderSystem.translated(25,
-				-MathHelper.lerp(mc.getFrameTime(), lastToolModeYOffset, toolModeYOffset),
+		Window mainWindow = mc.getWindow();
+		ms.translate(mainWindow.getGuiScaledWidth() / 2, mainWindow.getGuiScaledHeight() / 2 - 3, 0);
+		ms.translate(25,
+				-Mth.lerp(mc.getFrameTime(), lastToolModeYOffset, toolModeYOffset),
 				0);
 
 		if (toolModeNoCtrl != null) {
@@ -111,12 +111,12 @@ public abstract class ComposerToolBase implements IComposerTool {
 			mc.font.drawShadow(ms, toolModeCtrl, 0, 12, color);
 		}
 
-		RenderSystem.color4f(1, 1, 1, 1);
-		RenderSystem.popMatrix();
+		//RenderSystem.color4f(1, 1, 1, 1);
+		ms.popPose();
 	}
 	
 	protected void status(String message) {
-		Minecraft.getInstance().player.displayClientMessage(new StringTextComponent(message), true);
+		Minecraft.getInstance().player.displayClientMessage(new TextComponent(message), true);
 	}
 	
 }

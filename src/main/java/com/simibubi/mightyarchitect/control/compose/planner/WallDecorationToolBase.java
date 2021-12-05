@@ -4,9 +4,9 @@ import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.compose.Cuboid;
 import com.simibubi.mightyarchitect.control.compose.Room;
 
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
 
 public abstract class WallDecorationToolBase extends ComposerToolBase {
 
@@ -50,7 +50,7 @@ public abstract class WallDecorationToolBase extends ComposerToolBase {
 				max = max.offset(0, selectedRoom.height, 0);
 			}
 
-			MightyClient.outliner.chaseAABB(toolOutlineKey, new AxisAlignedBB(min.getX() - 1 / 2d,
+			MightyClient.outliner.chaseAABB(toolOutlineKey, new AABB(min.getX() - 1 / 2d,
 				min.getY() + 1 / 4d, min.getZ() - 1 / 2d, max.getX() + 1 / 2d, max.getY(), max.getZ() + 1 / 2d)).lineWidth(1/8f);
 			return;
 		}
@@ -84,7 +84,7 @@ public abstract class WallDecorationToolBase extends ComposerToolBase {
 		BlockPos max = stack.getOrigin()
 			.offset(stack.getSize())
 			.offset(model.getAnchor());
-		MightyClient.outliner.chaseAABB(toolOutlineKey, new AxisAlignedBB(min.getX() - 1 / 2d, min.getY() + 1 / 4d,
+		MightyClient.outliner.chaseAABB(toolOutlineKey, new AABB(min.getX() - 1 / 2d, min.getY() + 1 / 4d,
 			min.getZ() - 1 / 2d, max.getX() + 1 / 2d, max.getY(), max.getZ() + 1 / 2d)).lineWidth(1/8f);
 	}
 

@@ -16,9 +16,9 @@ import com.simibubi.mightyarchitect.TheMightyArchitect;
 import com.simibubi.mightyarchitect.control.design.partials.Design;
 import com.simibubi.mightyarchitect.foundation.utility.FilesHelper;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.ListTag;
 
 public class DesignResourceLoader {
 
@@ -51,7 +51,7 @@ public class DesignResourceLoader {
 	public static Map<DesignLayer, Map<DesignType, Set<Design>>> loadExternalDesignsForTheme(DesignTheme theme) {
 		final Map<DesignLayer, Map<DesignType, Set<Design>>> designMap = new HashMap<>();
 		boolean isFile = theme.getFilePath().endsWith(".theme") || theme.getFilePath().endsWith(".json");
-		final Map<DesignLayer, Map<DesignType, Set<CompoundNBT>>> compoundMap = isFile ? loadThemeFromThemeFile(theme) : loadThemeFromFolder(theme);
+		final Map<DesignLayer, Map<DesignType, Set<CompoundTag>>> compoundMap = isFile ? loadThemeFromThemeFile(theme) : loadThemeFromFolder(theme);
 
 		theme.getLayers().forEach(layer -> {
 			if (!compoundMap.containsKey(layer))
@@ -71,16 +71,16 @@ public class DesignResourceLoader {
 		return designMap;
 	}
 
-	private static Map<DesignLayer, Map<DesignType, Set<CompoundNBT>>> loadThemeFromThemeFile(DesignTheme theme) {
-		final Map<DesignLayer, Map<DesignType, Set<CompoundNBT>>> compoundMap = new HashMap<>();
+	private static Map<DesignLayer, Map<DesignType, Set<CompoundTag>>> loadThemeFromThemeFile(DesignTheme theme) {
+		final Map<DesignLayer, Map<DesignType, Set<CompoundTag>>> compoundMap = new HashMap<>();
 
-		CompoundNBT importedThemeFile = new CompoundNBT();
+		CompoundTag importedThemeFile = new CompoundTag();
 		
 		if (theme.getFilePath().endsWith(".theme")) {
 			try {
 				InputStream inputStream = Files.newInputStream(Paths.get("themes/" + theme.getFilePath()),
 						StandardOpenOption.READ);
-				importedThemeFile = CompressedStreamTools.readCompressed(inputStream);
+				importedThemeFile = NbtIo.readCompressed(inputStream);
 				inputStream.close();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -89,21 +89,21 @@ public class DesignResourceLoader {
 			importedThemeFile = FilesHelper.loadJsonAsNBT("themes/" + theme.getFilePath());
 		}
 		
-		final CompoundNBT themeFile = importedThemeFile;
+		final CompoundTag themeFile = importedThemeFile;
 
 		if (themeFile.contains("Designs")) {
 			theme.getLayers().forEach(layer -> {
 
-				final HashMap<DesignType, Set<CompoundNBT>> typeMap = new HashMap<>();
+				final HashMap<DesignType, Set<CompoundTag>> typeMap = new HashMap<>();
 				theme.getTypes().forEach(type -> {
 
-					Set<CompoundNBT> designs = new HashSet<>();
-					CompoundNBT tagLayers = themeFile.getCompound("Designs");
+					Set<CompoundTag> designs = new HashSet<>();
+					CompoundTag tagLayers = themeFile.getCompound("Designs");
 					if (tagLayers.contains(layer.name())) {
-						CompoundNBT tagTypes = tagLayers.getCompound(layer.name());
+						CompoundTag tagTypes = tagLayers.getCompound(layer.name());
 						if (tagTypes.contains(type.name())) {
-							ListNBT tagDesigns = tagTypes.getList(type.name(), 10);
-							tagDesigns.forEach(tag -> designs.add((CompoundNBT) tag));
+							ListTag tagDesigns = tagTypes.getList(type.name(), 10);
+							tagDesigns.forEach(tag -> designs.add((CompoundTag) tag));
 						}
 					}
 					typeMap.put(type, designs);
@@ -116,8 +116,8 @@ public class DesignResourceLoader {
 		return compoundMap;
 	}
 
-	public static Map<DesignLayer, Map<DesignType, Set<CompoundNBT>>> loadThemeFromFolder(DesignTheme theme) {
-		final Map<DesignLayer, Map<DesignType, Set<CompoundNBT>>> compoundMap = new HashMap<>();
+	public static Map<DesignLayer, Map<DesignType, Set<CompoundTag>>> loadThemeFromFolder(DesignTheme theme) {
+		final Map<DesignLayer, Map<DesignType, Set<CompoundTag>>> compoundMap = new HashMap<>();
 
 		String folderPath = "themes";
 		String themePath = folderPath + "/" + theme.getFilePath();
@@ -127,7 +127,7 @@ public class DesignResourceLoader {
 
 		theme.getLayers().forEach(layer -> {
 
-			final HashMap<DesignType, Set<CompoundNBT>> typeMap = new HashMap<>();
+			final HashMap<DesignType, Set<CompoundTag>> typeMap = new HashMap<>();
 			theme.getTypes().forEach(type -> {
 
 				String path = folderPath + "/" + theme.getFilePath() + "/" + layer.getFilePath() + "/"
@@ -150,7 +150,7 @@ public class DesignResourceLoader {
 			final String path = folderPath + "/design" + ((index == 0) ? "" : "_" + index) + ".json";
 			if (TheMightyArchitect.class.getClassLoader().getResource(path) == null)
 				break;
-			final CompoundNBT designTag = FilesHelper.loadJsonResourceAsNBT(path);
+			final CompoundTag designTag = FilesHelper.loadJsonResourceAsNBT(path);
 			designs.add(type.getDesign().fromNBT(designTag));
 			index++;
 		}
@@ -158,9 +158,9 @@ public class DesignResourceLoader {
 		return designs;
 	}
 
-	private static Set<CompoundNBT> importExternalDesigns(DesignTheme theme, DesignLayer layer, DesignType type,
+	private static Set<CompoundTag> importExternalDesigns(DesignTheme theme, DesignLayer layer, DesignType type,
 			String folderPath) {
-		final Set<CompoundNBT> designs = new HashSet<>();
+		final Set<CompoundTag> designs = new HashSet<>();
 
 		if (!Files.exists(Paths.get(folderPath)))
 			return designs;
@@ -168,7 +168,7 @@ public class DesignResourceLoader {
 		try {
 			DirectoryStream<Path> newDirectoryStream = Files.newDirectoryStream(Paths.get(folderPath));
 			for (Path path : newDirectoryStream) {
-				final CompoundNBT designTag = FilesHelper.loadJsonAsNBT(path.toString());
+				final CompoundTag designTag = FilesHelper.loadJsonAsNBT(path.toString());
 				designs.add(designTag);
 			}
 			newDirectoryStream.close();

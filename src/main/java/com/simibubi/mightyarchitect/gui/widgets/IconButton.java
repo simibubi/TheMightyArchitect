@@ -1,11 +1,11 @@
 package com.simibubi.mightyarchitect.gui.widgets;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.simibubi.mightyarchitect.gui.ScreenResources;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 public class IconButton extends AbstractSimiWidget {
 
@@ -18,7 +18,7 @@ public class IconButton extends AbstractSimiWidget {
 	}
 
 	@Override
-	public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		if (this.visible) {
 			this.isHovered =
 				mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
@@ -26,7 +26,7 @@ public class IconButton extends AbstractSimiWidget {
 			ScreenResources button = (pressed || !active) ? button = ScreenResources.BUTTON_DOWN
 				: (isHovered) ? ScreenResources.BUTTON_HOVER : ScreenResources.BUTTON;
 
-			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 			ScreenResources.BUTTON.bind();
 			blit(matrixStack, x, y, button.startX, button.startY, button.width, button.height);
 			icon.draw(matrixStack, this, x + 1, y + 1);
@@ -46,10 +46,10 @@ public class IconButton extends AbstractSimiWidget {
 	}
 
 	public void setToolTip(String text) {
-		setToolTip(new StringTextComponent(text));
+		setToolTip(new TextComponent(text));
 	}
 
-	public void setToolTip(ITextComponent text) {
+	public void setToolTip(Component text) {
 		toolTip.clear();
 		toolTip.add(text);
 	}

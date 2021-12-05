@@ -15,10 +15,10 @@ import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 import com.simibubi.mightyarchitect.networking.InstantPrintPacket;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.gen.feature.template.Template;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 public class Schematic {
 
@@ -198,8 +198,8 @@ public class Schematic {
 			bounds.length = z - bounds.z + 1;
 	}
 
-	public Template writeToTemplate() {
-		final Template template = new Template();
+	public StructureTemplate writeToTemplate() {
+		final StructureTemplate template = new StructureTemplate();
 		template.setAuthor(Minecraft.getInstance().player.getName()
 			.getString());
 

@@ -3,14 +3,14 @@ package com.simibubi.mightyarchitect.gui.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
 
 public class SelectionScrollInput extends ScrollInput {
 
 	protected List<String> options;
-	protected ITextComponent scrollToSelect = new StringTextComponent("Scroll to Select");
+	protected Component scrollToSelect = new TextComponent("Scroll to Select");
 
 	public SelectionScrollInput(int xIn, int yIn, int widthIn, int heightIn) {
 		super(xIn, yIn, widthIn, heightIn);
@@ -26,7 +26,7 @@ public class SelectionScrollInput extends ScrollInput {
 
 	@Override
 	protected void writeToLabel() {
-		displayLabel.text = new StringTextComponent(options.get(state));
+		displayLabel.text = new TextComponent(options.get(state));
 	}
 
 	@Override
@@ -38,22 +38,22 @@ public class SelectionScrollInput extends ScrollInput {
 	protected void updateTooltip() {
 		toolTip.clear();
 		toolTip.add(title.plainCopy()
-			.withStyle(TextFormatting.BLUE));
+			.withStyle(ChatFormatting.BLUE));
 		for (int i = min; i < max; i++) {
 			if (i == state)
-				toolTip.add(StringTextComponent.EMPTY.plainCopy()
+				toolTip.add(TextComponent.EMPTY.plainCopy()
 					.append("-> ")
 					.append(options.get(i))
-					.withStyle(TextFormatting.WHITE));
+					.withStyle(ChatFormatting.WHITE));
 			else
-				toolTip.add(StringTextComponent.EMPTY.plainCopy()
+				toolTip.add(TextComponent.EMPTY.plainCopy()
 					.append("> ")
 					.append(options.get(i))
-					.withStyle(TextFormatting.GRAY));
+					.withStyle(ChatFormatting.GRAY));
 		}
-		toolTip.add(StringTextComponent.EMPTY.plainCopy()
+		toolTip.add(TextComponent.EMPTY.plainCopy()
 			.append(scrollToSelect)
-			.withStyle(TextFormatting.ITALIC, TextFormatting.DARK_GRAY));
+			.withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY));
 	}
 
 }

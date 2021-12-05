@@ -16,14 +16,14 @@ import com.simibubi.mightyarchitect.foundation.utility.RaycastHelper;
 import com.simibubi.mightyarchitect.foundation.utility.outliner.Outline.OutlineParams;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult.Type;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult.Type;
+import net.minecraft.world.phys.Vec3;
 
 public abstract class GroundPlanningToolBase extends ComposerToolBase {
 
@@ -40,17 +40,17 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 	public void updateSelection() {
 		super.updateSelection();
 
-		ClientPlayerEntity player = Minecraft.getInstance().player;
+		LocalPlayer player = Minecraft.getInstance().player;
 		transparentStacks.clear();
 
-		BlockRayTraceResult trace = RaycastHelper.rayTraceRange(player.level, player, 75);
+		BlockHitResult trace = RaycastHelper.rayTraceRange(player.level, player, 75);
 		if (trace != null && trace.getType() == Type.BLOCK) {
 
 			BlockPos hit = new BlockPos(trace.getLocation());
 			makeStacksTransparent(player, hit);
 
 			boolean replaceable = player.level.getBlockState(hit)
-				.canBeReplaced(new BlockItemUseContext(new ItemUseContext(player, Hand.MAIN_HAND, trace)));
+				.canBeReplaced(new BlockPlaceContext(new UseOnContext(player, InteractionHand.MAIN_HAND, trace)));
 			if (trace.getDirection()
 				.getAxis()
 				.isVertical() && !replaceable)
@@ -67,7 +67,7 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 
 	}
 
-	protected void makeStacksTransparent(ClientPlayerEntity player, BlockPos hit) {
+	protected void makeStacksTransparent(LocalPlayer player, BlockPos hit) {
 		if (!model.getGroundPlan()
 			.isEmpty()) {
 			final BlockPos target = hit;
@@ -236,7 +236,7 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 
 	}
 
-	private Vector3d prevVertex;
+	private Vec3 prevVertex;
 	private int vertexCounter;
 	private String key;
 
@@ -246,8 +246,8 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 	}
 
 	GroundPlanningToolBase vertex(double x, double y, double z, List<OutlineParams> lines) {
-		Vector3d previousVec = prevVertex;
-		prevVertex = new Vector3d(x, y, z);
+		Vec3 previousVec = prevVertex;
+		prevVertex = new Vec3(x, y, z);
 		if (previousVec == null)
 			return this;
 		lines.add(MightyClient.outliner.chaseLine(key + vertexCounter, previousVec, prevVertex));

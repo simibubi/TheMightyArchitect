@@ -3,21 +3,21 @@ package com.simibubi.mightyarchitect.foundation;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.BufferBuilder.DrawState;
-import net.minecraft.client.renderer.GLAllocation;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferBuilder.DrawState;
+import com.mojang.blaze3d.platform.MemoryTracker;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector4f;
-import net.minecraft.world.LightType;
-import net.minecraft.world.World;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector4f;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.Level;
 
 public class SuperByteBuffer {
 
@@ -29,7 +29,7 @@ public class SuperByteBuffer {
 	protected int formatSize;
 
 	// Vertex Position
-	private MatrixStack transforms;
+	private PoseStack transforms;
 
 	// Vertex Texture Coords
 	private boolean shouldShiftUV;
@@ -56,13 +56,13 @@ public class SuperByteBuffer {
 		int size = state.getFirst()
 			.vertexCount() * formatSize;
 
-		template = GLAllocation.createByteBuffer(size);
+		template = ByteBuffer.allocateDirect(size).order(ByteOrder.nativeOrder());
 		template.order(rendered.order());
 		template.limit(rendered.limit());
 		template.put(rendered);
 		template.rewind();
 
-		transforms = new MatrixStack();
+		transforms = new PoseStack();
 	}
 
 	public static float getUnInterpolatedU(TextureAtlasSprite sprite, float u) {
@@ -75,7 +75,7 @@ public class SuperByteBuffer {
 		return (v - sprite.getV0()) / f * 16.0F;
 	}
 
-	public void renderInto(MatrixStack input, IVertexBuilder builder) {
+	public void renderInto(PoseStack input, VertexConsumer builder) {
 		ByteBuffer buffer = template;
 		if (buffer.limit() == 0)
 			return;
@@ -137,7 +137,7 @@ public class SuperByteBuffer {
 				.endVertex();
 		}
 
-		transforms = new MatrixStack();
+		transforms = new PoseStack();
 		shouldShiftUV = false;
 		shouldColor = false;
 		shouldLight = false;
@@ -265,16 +265,16 @@ public class SuperByteBuffer {
 		return buffer.get(getBufferPosition(index) + 30);
 	}
 
-	private static int getLight(World world, Vector4f lightPos) {
-		BlockPos.Mutable pos = new BlockPos.Mutable();
+	private static int getLight(Level world, Vector4f lightPos) {
+		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		float sky = 0, block = 0;
 		float offset = 1 / 8f;
 		for (float zOffset = offset; zOffset >= -offset; zOffset -= 2 * offset)
 			for (float yOffset = offset; yOffset >= -offset; yOffset -= 2 * offset)
 				for (float xOffset = offset; xOffset >= -offset; xOffset -= 2 * offset) {
 					pos.set(lightPos.x() + xOffset, lightPos.y() + yOffset, lightPos.z() + zOffset);
-					sky += world.getBrightness(LightType.SKY, pos) / 8f;
-					block += world.getBrightness(LightType.BLOCK, pos) / 8f;
+					sky += world.getBrightness(LightLayer.SKY, pos) / 8f;
+					block += world.getBrightness(LightLayer.BLOCK, pos) / 8f;
 				}
 
 		return ((int) sky) << 20 | ((int) block) << 4;

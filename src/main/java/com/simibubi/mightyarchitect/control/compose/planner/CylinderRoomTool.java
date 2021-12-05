@@ -14,11 +14,11 @@ import com.simibubi.mightyarchitect.control.design.ThemeStatistics;
 import com.simibubi.mightyarchitect.foundation.utility.RaycastHelper;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult.Type;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult.Type;
 
 public class CylinderRoomTool extends RoomTool {
 
@@ -32,10 +32,10 @@ public class CylinderRoomTool extends RoomTool {
 
 	@Override
 	public void updateSelection() {
-		ClientPlayerEntity player = Minecraft.getInstance().player;
+		LocalPlayer player = Minecraft.getInstance().player;
 		transparentStacks.clear();
 
-		BlockRayTraceResult trace = RaycastHelper.rayTraceRange(player.level, player, 75);
+		BlockHitResult trace = RaycastHelper.rayTraceRange(player.level, player, 75);
 		if (trace != null && trace.getType() == Type.BLOCK) {
 
 			BlockPos hit = trace.getBlockPos();
@@ -124,7 +124,7 @@ public class CylinderRoomTool extends RoomTool {
 		BlockPos previouslySelectedPos = (firstPosition != null) ? firstPosition.offset(anchor) : cursorPos;
 
 		if (firstPosition == null) {
-			MightyClient.outliner.chaseAABB(outlineKey, new AxisAlignedBB(cursorPos))
+			MightyClient.outliner.chaseAABB(outlineKey, new AABB(cursorPos))
 				.withFaceTexture(AllSpecialTextures.CHECKERED);
 			return;
 		}

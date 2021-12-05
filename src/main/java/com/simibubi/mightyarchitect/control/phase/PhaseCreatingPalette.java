@@ -5,24 +5,24 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.Schematic;
 import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 import com.simibubi.mightyarchitect.foundation.utility.RaycastHelper;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.TrapDoorBlock;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.RayTraceResult.Type;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.gen.Heightmap;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.HitResult.Type;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.common.ForgeMod;
 
@@ -37,11 +37,11 @@ public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlig
 	public void whenEntered() {
 
 		Schematic model = getModel();
-		ClientWorld world = minecraft.level;
+		ClientLevel world = minecraft.level;
 		changed = new boolean[16];
 
 		palette = model.getCreatedPalette();
-		center = world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE, minecraft.player.blockPosition());
+		center = world.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, minecraft.player.blockPosition());
 		grid = new HashMap<>();
 
 		for (int i = 0; i < 16; i++) {
@@ -90,7 +90,7 @@ public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlig
 	}
 
 	@Override
-	public void render(MatrixStack ms, IRenderTypeBuffer buffer) {
+	public void render(PoseStack ms, MultiBufferSource buffer) {
 		// Blocks
 		for (int i = 0; i < 16; i++) {
 			BlockState state = palette.get(Palette.values()[i]);
@@ -106,7 +106,7 @@ public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlig
 			ms.translate(1 / 32f, 1 / 32f, 1 / 32f);
 			ms.scale(15 / 16f, 15 / 16f, 15 / 16f);
 			minecraft.getBlockRenderer()
-				.renderBlock(state, ms, buffer, 0xF000F0, OverlayTexture.NO_OVERLAY, EmptyModelData.INSTANCE);
+				.renderSingleBlock(state, ms, buffer, 0xF000F0, OverlayTexture.NO_OVERLAY, EmptyModelData.INSTANCE);
 			ms.popPose();
 		}
 	}
@@ -119,7 +119,7 @@ public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlig
 
 	protected void notifyChange() {
 		getModel().updatePalettePreview();
-		minecraft.player.displayClientMessage(new StringTextComponent("Updating Preview..."), true);
+		minecraft.player.displayClientMessage(new TextComponent("Updating Preview..."), true);
 		MightyClient.renderer.update();
 	}
 
@@ -129,7 +129,7 @@ public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlig
 	public void tickHighlightOutlines() {
 		BlockPos targetBlock = null;
 
-		RayTraceResult raytrace = RaycastHelper.rayTraceRange(minecraft.level, minecraft.player,
+		HitResult raytrace = RaycastHelper.rayTraceRange(minecraft.level, minecraft.player,
 			minecraft.player.getAttributeValue(ForgeMod.REACH_DISTANCE.get()));
 		if (raytrace != null && raytrace.getType() == Type.BLOCK) {
 			targetBlock = new BlockPos(raytrace.getLocation());
@@ -144,7 +144,7 @@ public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlig
 			// Render Outline
 			boolean s = targetBlock != null && pos.equals(targetBlock);
 			boolean b = changed[i];
-			MightyClient.outliner.showAABB("pallete" + i, new AxisAlignedBB(pos))
+			MightyClient.outliner.showAABB("pallete" + i, new AABB(pos))
 				.lineWidth(b || s ? 1 / 16f : 1 / 32f)
 				.colored(s ? 0x8888ff : b ? 0x6666ff : 0xbbbbbb);
 		}

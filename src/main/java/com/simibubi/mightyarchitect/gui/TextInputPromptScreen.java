@@ -4,25 +4,25 @@ import java.util.function.Consumer;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 public class TextInputPromptScreen extends AbstractSimiScreen {
 
 	private Consumer<String> callback;
 	private Consumer<String> abortCallback;
 
-	private TextFieldWidget nameField;
+	private EditBox nameField;
 	private Button confirm;
 	private Button abort;
 
-	private ITextComponent buttonTextConfirm;
-	private ITextComponent buttonTextAbort;
-	private ITextComponent title;
+	private Component buttonTextConfirm;
+	private Component buttonTextAbort;
+	private Component title;
 
 	private boolean confirmed;
 
@@ -31,8 +31,8 @@ public class TextInputPromptScreen extends AbstractSimiScreen {
 		this.callback = callBack;
 		this.abortCallback = abortCallback;
 
-		buttonTextConfirm = new StringTextComponent("Confirm");
-		buttonTextAbort = new StringTextComponent("Abort");
+		buttonTextConfirm = new TextComponent("Confirm");
+		buttonTextAbort = new TextComponent("Abort");
 		confirmed = false;
 	}
 
@@ -42,7 +42,7 @@ public class TextInputPromptScreen extends AbstractSimiScreen {
 		setWindowSize(ScreenResources.TEXT_INPUT.width, ScreenResources.TEXT_INPUT.height + 30);
 
 		this.nameField =
-			new TextFieldWidget(font, topLeftX + 33, topLeftY + 26, 128, 8, new StringTextComponent(""));
+			new EditBox(font, topLeftX + 33, topLeftY + 26, 128, 8, new TextComponent(""));
 		this.nameField.setTextColor(-1);
 		this.nameField.setTextColorUneditable(-1);
 		this.nameField.setBordered(false);
@@ -65,7 +65,7 @@ public class TextInputPromptScreen extends AbstractSimiScreen {
 	}
 
 	@Override
-	public void renderWindow(MatrixStack ms, int mouseX, int mouseY, float partialTicks) {
+	public void renderWindow(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
 		ScreenResources.TEXT_INPUT.draw(ms, this, topLeftX, topLeftY);
 		font.draw(ms, title, topLeftX + (sWidth / 2) - (font.width(title) / 2), topLeftY + 11,
 			ScreenResources.FONT_COLOR);
@@ -79,15 +79,15 @@ public class TextInputPromptScreen extends AbstractSimiScreen {
 	}
 
 	public void setButtonTextConfirm(String buttonTextConfirm) {
-		this.buttonTextConfirm = new StringTextComponent(buttonTextConfirm);
+		this.buttonTextConfirm = new TextComponent(buttonTextConfirm);
 	}
 
 	public void setButtonTextAbort(String buttonTextAbort) {
-		this.buttonTextAbort = new StringTextComponent(buttonTextAbort);
+		this.buttonTextAbort = new TextComponent(buttonTextAbort);
 	}
 
 	public void setTitle(String title) {
-		this.title = new StringTextComponent(title);
+		this.title = new TextComponent(title);
 	}
 
 	@Override

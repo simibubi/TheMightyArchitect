@@ -4,8 +4,8 @@ import java.util.Map;
 
 import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
 
 import com.simibubi.mightyarchitect.control.design.partials.Design.DesignInstance;
 
@@ -18,7 +18,7 @@ public class Wall extends Design {
 	public ExpandBehaviour expandBehaviour;
 
 	@Override
-	public Design fromNBT(CompoundNBT compound) {
+	public Design fromNBT(CompoundTag compound) {
 		Wall wall = new Wall();
 		wall.applyNBT(compound);
 		wall.expandBehaviour = ExpandBehaviour.valueOf(compound.getString("ExpandBehaviour"));
