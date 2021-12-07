@@ -9,10 +9,13 @@ import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.compose.planner.Tools;
 
 import com.mojang.blaze3d.platform.Window;
+
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.util.Mth;
 
 public class ToolSelectionScreen extends Screen {
 
@@ -41,6 +44,10 @@ public class ToolSelectionScreen extends Screen {
 	public void cycle(int direction) {
 		selection += (direction < 0) ? 1 : -1;
 		selection = (selection + tools.size()) % tools.size();
+	}
+
+	public void select(int index) {
+		selection = Mth.clamp(index, 0, tools.size() - 1);
 	}
 
 	private void draw(PoseStack ms, float partialTicks) {
@@ -116,6 +123,11 @@ public class ToolSelectionScreen extends Screen {
 			tools.get(i)
 				.getIcon()
 				.draw(ms, this, x + i * 50 + 16, y + 11);
+
+			if (focused && i != selection) {
+				KeyMapping keyMapping = minecraft.options.keyHotbarSlots[i];
+				drawCenteredString(ms, minecraft.font, "[" + keyMapping.getTranslatedKeyMessage().getString() + "]", x + i * 50 + 24, y + 3, 0xCCDDFF);
+			}
 
 			ms.popPose();
 		}

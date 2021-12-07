@@ -95,4 +95,8 @@ public class MoveReshapeTool extends AbstractRoomFaceSelectionTool {
 		return super.handleMouseWheel(scroll);
 	}
 
+	@Override
+	public boolean numberInputSimulatesScrolls() {
+		return true;
+	}
 }

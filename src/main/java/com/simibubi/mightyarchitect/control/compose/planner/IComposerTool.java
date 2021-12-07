@@ -1,18 +1,48 @@
 package com.simibubi.mightyarchitect.control.compose.planner;
 
+import java.util.Arrays;
+import java.util.Optional;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.lwjgl.glfw.GLFW;
+
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
+
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
 
 public interface IComposerTool {
 	
-	static Object toolOutlineKey = new Object();
+	Object toolOutlineKey = new Object();
 
-	public String handleRightClick();
-	public boolean handleMouseWheel(int scroll);
+	String handleRightClick();
+	boolean handleMouseWheel(int scroll);
+
+	default void handleKeyInput(int key) {
+		if (!numberInputSimulatesScrolls())
+			return;
+
+		Optional<KeyMapping> mapping = Arrays.stream(Minecraft.getInstance().options.keyHotbarSlots).filter(keyMapping -> keyMapping.getKey().getValue() == key).findFirst();
+		if (mapping.isEmpty())
+			return;
+
+		int number = ArrayUtils.indexOf(Minecraft.getInstance().options.keyHotbarSlots, mapping.get()) + 1;
+		if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT) || Keyboard.isKeyDown(GLFW.GLFW_KEY_RIGHT_SHIFT)) {
+			number = number * -1;
+		}
+
+		handleMouseWheel(number);
+
+	}
+	default boolean numberInputSimulatesScrolls() {
+		return false;
+	}
+
+	void tickToolOutlines();
+	void tickGroundPlanOutlines();
 	
-	public void tickToolOutlines();
-	public void tickGroundPlanOutlines();
-	
-	public void updateSelection();
-	public void renderOverlay(PoseStack ms);
-	public void init();
+	void updateSelection();
+	void renderOverlay(PoseStack ms);
+	void init();
 }

@@ -65,4 +65,8 @@ public class HeightTool extends AbstractRoomFaceSelectionTool {
 		highlightRoom = Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL);
 	}
 
+	@Override
+	public boolean numberInputSimulatesScrolls() {
+		return true;
+	}
 }
