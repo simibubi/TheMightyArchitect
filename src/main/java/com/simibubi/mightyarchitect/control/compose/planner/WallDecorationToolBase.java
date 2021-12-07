@@ -50,8 +50,12 @@ public abstract class WallDecorationToolBase extends ComposerToolBase {
 				max = max.offset(0, selectedRoom.height, 0);
 			}
 
+			//highlight room
 			MightyClient.outliner.chaseAABB(toolOutlineKey, new AABB(min.getX() - 1 / 2d,
-				min.getY() + 1 / 4d, min.getZ() - 1 / 2d, max.getX() + 1 / 2d, max.getY(), max.getZ() + 1 / 2d)).lineWidth(1/8f);
+				min.getY() + 1 / 4d, min.getZ() - 1 / 2d, max.getX() + 1 / 2d, max.getY(), max.getZ() + 1 / 2d))
+					.lineWidth(1/8f)
+					.colored(0xffffff)
+					.withAlpha(1);
 			return;
 		}
 		
@@ -84,8 +88,13 @@ public abstract class WallDecorationToolBase extends ComposerToolBase {
 		BlockPos max = stack.getOrigin()
 			.offset(stack.getSize())
 			.offset(model.getAnchor());
+
+		//highlight stack
 		MightyClient.outliner.chaseAABB(toolOutlineKey, new AABB(min.getX() - 1 / 2d, min.getY() + 1 / 4d,
-			min.getZ() - 1 / 2d, max.getX() + 1 / 2d, max.getY(), max.getZ() + 1 / 2d)).lineWidth(1/8f);
+			min.getZ() - 1 / 2d, max.getX() + 1 / 2d, max.getY(), max.getZ() + 1 / 2d))
+				.lineWidth(1/8f)
+				.colored(0xffffff)
+				.withAlpha(1);
 	}
 
 }

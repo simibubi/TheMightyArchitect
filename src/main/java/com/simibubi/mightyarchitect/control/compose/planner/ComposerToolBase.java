@@ -111,7 +111,7 @@ public abstract class ComposerToolBase implements IComposerTool {
 			mc.font.drawShadow(ms, toolModeCtrl, 0, 12, color);
 		}
 
-		//RenderSystem.color4f(1, 1, 1, 1);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
 		ms.popPose();
 	}
 	

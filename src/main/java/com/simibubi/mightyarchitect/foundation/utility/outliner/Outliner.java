@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.foundation.utility.outliner.LineOutline.ChasingLineOutline;
 import com.simibubi.mightyarchitect.foundation.utility.outliner.LineOutline.EndChasingLineOutline;
@@ -160,7 +161,7 @@ public class Outliner {
 	public void renderOutlines(PoseStack ms, MultiBufferSource buffer) {
 		outlines.forEach((key, entry) -> {
 			Outline outline = entry.getOutline();
-			outline.params.alpha = 1;
+			//outline.params.alpha = 1;
 			if (entry.ticksTillRemoval < 0) {
 
 				int prevTicks = entry.ticksTillRemoval + 1;

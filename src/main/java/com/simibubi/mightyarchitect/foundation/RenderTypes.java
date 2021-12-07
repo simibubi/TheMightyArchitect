@@ -16,17 +16,21 @@ public class RenderTypes extends RenderStateShard {
 
 	protected static final RenderStateShard.CullStateShard DISABLE_CULLING = new NoCullState();
 
-	private static final RenderType OUTLINE_SOLID =
-			RenderType.create(createLayerName("outline_solid"), DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true,
-					false, RenderType.CompositeState.builder()
-							.setShaderState(RENDERTYPE_ENTITY_SOLID_SHADER)
-							.setTextureState(new RenderStateShard.TextureStateShard(AllSpecialTextures.BLANK.getLocation(), false, false))
-							.setLightmapState(LIGHTMAP)
-							.setOverlayState(OVERLAY)
-							.createCompositeState(true));
+	public static RenderType getOutlineSolid(ResourceLocation texture) {
+		return RenderType.create(createLayerName("outline_solid"), DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true,
+				false, RenderType.CompositeState.builder()
+						.setShaderState(RenderStateShard.RENDERTYPE_ENTITY_CUTOUT_SHADER)
+						.setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
+						.setLightmapState(LIGHTMAP)
+						.setOverlayState(OVERLAY)
+						.createCompositeState(true));
+	}
+
+	private static final RenderType DEFAULT_OUTLINE_SOLID =
+			getOutlineSolid(AllSpecialTextures.BLANK.getLocation());
 
 	public static RenderType getOutlineSolid() {
-		return OUTLINE_SOLID;
+		return DEFAULT_OUTLINE_SOLID;
 	}
 
 	public static RenderType getOutlineTranslucent(ResourceLocation texture, boolean cull) {
@@ -38,7 +42,7 @@ public class RenderTypes extends RenderStateShard {
 						.setCullState(cull ? CULL : NO_CULL)
 						.setLightmapState(LIGHTMAP)
 						.setOverlayState(OVERLAY)
-						.setWriteMaskState(COLOR_WRITE)
+						.setWriteMaskState(RenderStateShard.COLOR_WRITE)
 						.createCompositeState(true));
 	}
 

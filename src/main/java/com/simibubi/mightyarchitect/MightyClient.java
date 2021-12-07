@@ -68,11 +68,11 @@ public class MightyClient {
 			.renderBuffers()
 			.bufferSource();
 
-		//SuperRenderTypeBuffer b = SuperRenderTypeBuffer.getInstance();
+		SuperRenderTypeBuffer b = SuperRenderTypeBuffer.getInstance();
 
-		MightyClient.renderer.render(ms, buffer);
-		ArchitectManager.render(ms, buffer);
-		MightyClient.outliner.renderOutlines(ms, buffer);
+		MightyClient.renderer.render(ms, b);
+		ArchitectManager.render(ms, b);
+		MightyClient.outliner.renderOutlines(ms, b);
 
 //		ms.push();
 //		ms.translate(5, 10, 4);
@@ -82,7 +82,7 @@ public class MightyClient {
 //				ms, buffer.getBuffer(RenderType.getSolid()), true, new Random(), EmptyModelData.INSTANCE);
 //		ms.pop();
 
-		//b.draw();
+		b.draw();
 		buffer.endBatch();
 		ms.popPose();
 	}

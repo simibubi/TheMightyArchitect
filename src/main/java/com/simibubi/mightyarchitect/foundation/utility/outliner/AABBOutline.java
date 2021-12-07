@@ -2,16 +2,12 @@ package com.simibubi.mightyarchitect.foundation.utility.outliner;
 
 import org.apache.logging.log4j.LogManager;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.foundation.RenderTypes;
-import com.simibubi.mightyarchitect.foundation.SuperRenderTypeBuffer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.resources.ResourceLocation;
@@ -32,8 +28,7 @@ public class AABBOutline extends Outline {
 	}
 
 	public void renderBB(PoseStack ms, MultiBufferSource buffer, AABB bb) {
-		Vec3 projectedView = Minecraft.getInstance().gameRenderer.getMainCamera()
-			.getPosition();
+		Vec3 projectedView = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
 		boolean noCull = bb.contains(projectedView);
 		bb = bb.inflate(noCull ? -1 / 128d : 1 / 128d);
 		noCull |= params.disableCull;
@@ -77,24 +72,25 @@ public class AABBOutline extends Outline {
 	}
 
 	protected void renderFace(PoseStack ms, MultiBufferSource buffer, Direction direction, Vec3 p1, Vec3 p2,
-		Vec3 p3, Vec3 p4, boolean noCull) {
+			Vec3 p3, Vec3 p4, boolean noCull) {
 		if (!params.faceTexture.isPresent())
 			return;
 		if (params.isFaceHidden(direction))
 			return;
 
-		if (noCull) {
-			LogManager.getLogger().info("noCulling!");
-		}
-
 		ResourceLocation faceTexture = params.faceTexture.get()
-			.getLocation();
+				.getLocation();
 		float alphaBefore = params.alpha;
-		params.alpha =
-			(direction == params.getHighlightedFace() && params.hightlightedFaceTexture.isPresent()) ? 1 : alphaBefore;
+		params.alpha = (direction == params.getHighlightedFace() && params.hightlightedFaceTexture.isPresent()) ? 1 : alphaBefore;
+		//0.5f;
 
-		RenderType translucentType = RenderTypes.getOutlineTranslucent(faceTexture, !noCull);
-		VertexConsumer builder = buffer.getBuffer(translucentType);
+		//LogManager.getLogger().info(faceTexture.getPath() + "  " + params.alpha + "  " + alphaBefore);
+
+		VertexConsumer builder = buffer.getBuffer(
+				params.alpha == 1 ?
+						RenderTypes.getOutlineSolid(faceTexture) :
+						RenderTypes.getOutlineTranslucent(faceTexture, !noCull)
+		);
 
 		Axis axis = direction.getAxis();
 		Vec3 uDiff = p2.subtract(p1);
@@ -102,14 +98,8 @@ public class AABBOutline extends Outline {
 		float maxU = (float) Math.abs(axis == Axis.X ? uDiff.z : uDiff.x);
 		float maxV = (float) Math.abs(axis == Axis.Y ? vDiff.z : vDiff.y);
 
-		Vec3 tmp = params.rgb;
-		if (params.faceRgb != null) {
-			params.rgb = params.faceRgb;
-			putQuadUV(ms, builder, p1, p2, p3, p4, 0, 0, maxU, maxV, Direction.UP);
-			params.rgb = tmp;
-		} else {
-			putQuadUV(ms, builder, p1, p2, p3, p4, 0, 0, maxU, maxV, Direction.UP);
-		}
+		putQuadUV(ms, builder, p1, p2, p3, p4, 0, 0, maxU, maxV, Direction.UP, true);
+
 		params.alpha = alphaBefore;
 	}
 

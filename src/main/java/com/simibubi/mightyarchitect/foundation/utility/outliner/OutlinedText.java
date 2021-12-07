@@ -75,12 +75,9 @@ public class OutlinedText extends Outline {
 		ms.pushPose();
 		ms.scale(-scaleMod, 1, scaleMod);
 		ms.translate(0, 0, .5f);
-		if (params.faceRgb != null) {
-			Vec3 tmp = params.rgb;
-			params.rgb = params.faceRgb;
-			putQuadUV(ms, buffer.getBuffer(RenderTypes.getOutlineSolid()), v1, v2, v3, v4,0, 0, 1, 1, null);
-			params.rgb = tmp;
-		}
+
+		putQuadUV(ms, buffer.getBuffer(RenderTypes.getOutlineSolid()), v1, v2, v3, v4,0, 0, 1, 1, null, true);
+
 		ms.popPose();
 
 		ms.scale(scaleMod, 1, 1);

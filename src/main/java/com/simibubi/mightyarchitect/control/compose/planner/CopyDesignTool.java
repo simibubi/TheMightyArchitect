@@ -80,7 +80,8 @@ public class CopyDesignTool extends WallDecorationToolBase {
 					.showAABB(pos,
 						new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1,
 							pos.getY() + selectedRoom.height, pos.getZ() + 1))
-					.lineWidth(1 / 8f);
+					.lineWidth(1 / 8f)
+					.withAlpha(1);
 			};
 
 			renderCorner.accept(origin);
@@ -98,7 +99,8 @@ public class CopyDesignTool extends WallDecorationToolBase {
 				.showAABB(start,
 					new AABB(start.getX() - 1 / 2d, start.getY(), start.getZ() - 1 / 2d, end.getX() - 1 / 2d,
 						end.getY(), end.getZ() - 1 / 2d))
-				.lineWidth(1 / 8f);
+				.lineWidth(1 / 8f)
+				.withAlpha(1);
 		};
 
 		if (selectedFace.getAxis() == Axis.X) {

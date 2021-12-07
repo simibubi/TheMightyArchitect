@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
+import org.apache.logging.log4j.LogManager;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.PoseStack.Pose;
@@ -51,7 +53,7 @@ public abstract class Outline {
 	}
 
 	public void renderAACuboidLine(PoseStack ms, MultiBufferSource buffer, Vec3 start, Vec3 end) {
-		VertexConsumer builder = buffer.getBuffer(RenderTypes.getOutlineSolid());
+		VertexConsumer builder = buffer.getBuffer(RenderTypes.getOutlineSolid(AllSpecialTextures.BLANK.getLocation()));//todo simplify
 
 		Vec3 diff = end.subtract(start);
 		if (diff.x + diff.y + diff.z < 0) {
@@ -113,18 +115,18 @@ public abstract class Outline {
 
 	public void putQuad(PoseStack ms, VertexConsumer builder, Vec3 v1, Vec3 v2, Vec3 v3, Vec3 v4,
 		Direction normal) {
-		putQuadUV(ms, builder, v1, v2, v3, v4,0, 0, 1, 1, normal);
+		putQuadUV(ms, builder, v1, v2, v3, v4,0, 0, 1, 1, normal, false);
 	}
 
 	public void putQuadUV(PoseStack ms, VertexConsumer builder, Vec3 v1, Vec3 v2, Vec3 v3, Vec3 v4, float minU,
-		float minV, float maxU, float maxV, Direction normal) {
-		putVertex(ms, builder, v1, minU, minV, normal);
-		putVertex(ms, builder, v2, maxU, minV, normal);
-		putVertex(ms, builder, v3, maxU, maxV, normal);
-		putVertex(ms, builder, v4, minU, maxV, normal);
+			float minV, float maxU, float maxV, Direction normal, boolean useFaceColors) {
+		putVertex(ms, builder, v1, minU, minV, normal, useFaceColors);
+		putVertex(ms, builder, v2, maxU, minV, normal, useFaceColors);
+		putVertex(ms, builder, v3, maxU, maxV, normal, useFaceColors);
+		putVertex(ms, builder, v4, minU, maxV, normal, useFaceColors);
 	}
 
-	protected void putVertex(PoseStack ms, VertexConsumer builder, Vec3 pos, float u, float v, Direction normal) {
+	protected void putVertex(PoseStack ms, VertexConsumer builder, Vec3 pos, float u, float v, Direction normal, boolean useFaceColor) {
 		Pose peek = ms.last();
 		if (transformNormals == null)
 			transformNormals = peek.normal();
@@ -139,11 +141,18 @@ public abstract class Outline {
 			zOffset = normal.getStepZ();
 		}
 
+		Vec3 color = params.rgb;
+		//LogManager.getLogger().info(color.toString());
+
+		if (useFaceColor && params.faceRgb != null)
+			color = params.faceRgb;
+
 		builder.vertex(peek.pose(), (float) pos.x, (float) pos.y, (float) pos.z)
-			.color((float) params.rgb.x, (float) params.rgb.y, (float) params.rgb.z, params.alpha)
+			.color((float) color.x, (float) color.y, (float) color.z, params.alpha)
 			.uv(u, v)
 			.overlayCoords(OverlayTexture.NO_OVERLAY)
 			.uv2(params.lightMap)
+			//.uv2(LightTexture.FULL_BRIGHT)
 			.normal(peek.normal(), xOffset, yOffset, zOffset)
 			.endVertex();
 
@@ -197,6 +206,11 @@ public abstract class Outline {
 		
 		public OutlineParams coloredFaces(int color) {
 			faceRgb = ColorHelper.getRGB(color);
+			return this;
+		}
+
+		public OutlineParams withAlpha(float alpha) {
+			this.alpha = alpha;
 			return this;
 		}
 
