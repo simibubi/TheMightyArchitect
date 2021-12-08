@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://maven.minecraftforge.net/' }
         jcenter()
         mavenCentral()
     }
@@ -12,14 +12,18 @@ apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
-apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
 
-version = 'mc1.16.5_v0.5'
+version = 'mc1.18_v0.6'
 group = 'com.simibubi.mightyarchitect' 
 archivesBaseName = 'mightyarchitect'
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '16'
+//sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '17'
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
 
 repositories {
     maven {
@@ -30,7 +34,7 @@ repositories {
 }
 
 minecraft {
-    mappings channel: 'official', version: '1.17.1'
+    mappings channel: 'official', version: '1.18'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     
     runs {
@@ -69,7 +73,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.1.0'
+    minecraft 'net.minecraftforge:forge:1.18-38.0.15'
 }
 
 jar {

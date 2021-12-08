@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 
 public class PlaceSignPacket {
 	

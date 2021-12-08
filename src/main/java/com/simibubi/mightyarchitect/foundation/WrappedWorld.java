@@ -26,12 +26,12 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.world.level.TickList;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.ChunkSource;
 import net.minecraft.world.level.storage.WritableLevelData;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
+import net.minecraft.world.ticks.LevelTickAccess;
 
 public class WrappedWorld extends Level {
 
@@ -108,13 +108,13 @@ public class WrappedWorld extends Level {
 	}
 
 	@Override
-	public TickList<Block> getBlockTicks() {
+	public LevelTickAccess<Block> getBlockTicks() {
 		return world.getBlockTicks();
 	}
 
 	@Override
-	public TickList<Fluid> getLiquidTicks() {
-		return world.getLiquidTicks();
+	public LevelTickAccess<Fluid> getFluidTicks() {
+		return world.getFluidTicks();
 	}
 
 	@Override

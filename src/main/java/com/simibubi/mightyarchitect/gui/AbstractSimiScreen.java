@@ -92,7 +92,7 @@ public abstract class AbstractSimiScreen extends Screen {
 
 	protected void renderWindowForeground(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
 		for (AbstractWidget widget : widgets) {
-			if (!widget.isHovered())
+			if (!widget.isHoveredOrFocused())
 				continue;
 			if (widget instanceof AbstractSimiWidget && !((AbstractSimiWidget) widget).getToolTip()
 				.isEmpty())

@@ -104,7 +104,7 @@ public class SchematicRenderer {
 				for (RenderType blockRenderLayer : RenderType.chunkBufferLayers()) {
 					if (!ItemBlockRenderTypes.canRenderInLayer(state, blockRenderLayer))
 						continue;
-					ForgeHooksClient.setRenderLayer(blockRenderLayer);
+					ForgeHooksClient.setRenderType(blockRenderLayer);
 					if (!buffers.containsKey(blockRenderLayer))
 						buffers.put(blockRenderLayer, new BufferBuilder(DefaultVertexFormat.BLOCK.getIntegerSize()));
 
@@ -117,7 +117,7 @@ public class SchematicRenderer {
 					}
 				}
 
-				ForgeHooksClient.setRenderLayer(null);
+				ForgeHooksClient.setRenderType(null);
 				ms.popPose();
 			});
 

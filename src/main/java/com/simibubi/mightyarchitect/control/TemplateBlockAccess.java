@@ -25,12 +25,12 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
-import net.minecraft.world.level.EmptyTickList;
-import net.minecraft.world.level.TickList;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.Heightmap.Types;
+import net.minecraft.world.ticks.BlackholeTickAccess;
+import net.minecraft.world.ticks.LevelTickAccess;
 
 public class TemplateBlockAccess extends WrappedWorld {
 
@@ -153,13 +153,13 @@ public class TemplateBlockAccess extends WrappedWorld {
 	}
 
 	@Override
-	public TickList<Block> getBlockTicks() {
-		return EmptyTickList.empty();
+	public LevelTickAccess<Block> getBlockTicks() {
+		return BlackholeTickAccess.emptyLevelList();
 	}
 
 	@Override
-	public TickList<Fluid> getLiquidTicks() {
-		return EmptyTickList.empty();
+	public LevelTickAccess<Fluid> getFluidTicks() {
+		return BlackholeTickAccess.emptyLevelList();
 	}
 
 	@Override

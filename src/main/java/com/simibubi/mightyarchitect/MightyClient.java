@@ -1,7 +1,5 @@
 package com.simibubi.mightyarchitect;
 
-import java.util.Random;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.SchematicRenderer;
@@ -16,12 +14,12 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.ClientRegistry;
+import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fmlclient.registry.ClientRegistry;
 
 @EventBusSubscriber(value = Dist.CLIENT)
 public class MightyClient {
@@ -57,8 +55,8 @@ public class MightyClient {
 	}
 
 	@SubscribeEvent
-	public static void onRenderWorld(RenderWorldLastEvent event) {
-		PoseStack ms = event.getMatrixStack();
+	public static void onRenderWorld(RenderLevelLastEvent event) {
+		PoseStack ms = event.getPoseStack();
 		Camera info = Minecraft.getInstance().gameRenderer.getMainCamera();
 		Vec3 view = info.getPosition();
 

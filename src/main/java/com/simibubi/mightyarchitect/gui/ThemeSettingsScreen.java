@@ -209,7 +209,7 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 
 		if (button == 0) {
 			for (IconButton button2 : toggleButtons) {
-				if (button2.isHovered()) {
+				if (button2.isHoveredOrFocused()) {
 					buttonClicked(button2);
 					return true;
 				}
