@@ -12,9 +12,8 @@ apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
-apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
 
-version = 'mc1.16.5_v0.5'
+version = 'mc1.17.1_v0.6'
 group = 'com.simibubi.mightyarchitect' 
 archivesBaseName = 'mightyarchitect'
 
