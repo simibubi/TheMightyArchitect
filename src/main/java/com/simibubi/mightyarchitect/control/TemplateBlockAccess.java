@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 import com.simibubi.mightyarchitect.control.compose.Cuboid;
 import com.simibubi.mightyarchitect.foundation.WrappedWorld;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
@@ -85,9 +86,8 @@ public class TemplateBlockAccess extends WrappedWorld {
 	}
 
 	@Override
-	public Biome getBiome(BlockPos pos) {
-		return registryAccess().registryOrThrow(Registry.BIOME_REGISTRY)
-			.get(Biomes.THE_VOID);
+	public Holder<Biome> getBiome(BlockPos pos) {
+		return Holder.direct(registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).get(Biomes.THE_VOID));
 	}
 
 	@Override
