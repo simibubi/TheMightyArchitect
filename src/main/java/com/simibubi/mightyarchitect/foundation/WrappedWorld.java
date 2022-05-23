@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.Entity;
@@ -19,7 +20,6 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.scores.Scoreboard;
-import net.minecraft.tags.TagContainer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
@@ -72,7 +72,7 @@ public class WrappedWorld extends Level {
 	};
 
 	public WrappedWorld(Level world) {
-		super((WritableLevelData) world.getLevelData(), world.dimension(), world.dimensionType(),
+		super((WritableLevelData) world.getLevelData(), world.dimension(), world.dimensionTypeRegistration(),
 			() -> world.getProfiler(), world.isClientSide, false, 0);
 		this.world = world;
 	}
@@ -181,7 +181,7 @@ public class WrappedWorld extends Level {
 	}
 
 	@Override
-	public Biome getUncachedNoiseBiome(int p_225604_1_, int p_225604_2_, int p_225604_3_) {
+	public Holder<Biome> getUncachedNoiseBiome(int p_225604_1_, int p_225604_2_, int p_225604_3_) {
 		return world.getUncachedNoiseBiome(p_225604_1_, p_225604_2_, p_225604_3_);
 	}
 
@@ -198,11 +198,6 @@ public class WrappedWorld extends Level {
 	@Override
 	public float getShade(Direction p_230487_1_, boolean p_230487_2_) {
 		return 1;
-	}
-
-	@Override
-	public TagContainer getTagManager() {
-		return world.getTagManager();
 	}
 
 	@Override

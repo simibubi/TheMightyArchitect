@@ -1,11 +1,11 @@
 modLoader="javafml" 
-loaderVersion="[36,)"
+loaderVersion="[40,)"
 #issueTrackerURL=""
 license="MIT"
 
 [[mods]] 
 modId="mightyarchitect"
-version="0.5"
+version="0.7"
 displayName="The Mighty Architect" 
 #updateJSONURL=""
 authors="simibubi" 
@@ -14,20 +14,20 @@ description='''Design elaborate buildings within a minute! [G] is the default ke
 [[dependencies.mightyarchitect]] 
     modId="forge"
     mandatory=true 
-    versionRange="[36,)"
+    versionRange="[40,)"
     ordering="NONE"
     side="CLIENT"
 	
 [[dependencies.mightyarchitect]] 
     modId="forge"
     mandatory=true 
-    versionRange="[36,)"
+    versionRange="[40,)"
     ordering="NONE"
     side="SERVER"
 
 [[dependencies.mightyarchitect]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.5,)"
+    versionRange="[1.18.2]"
     ordering="NONE"
     side="BOTH"
