@@ -3,8 +3,8 @@ package com.simibubi.mightyarchitect;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -23,7 +23,7 @@ public class TheMightyArchitect {
 
 	public static final String ID = "mightyarchitect";
 	public static final String NAME = "The Mighty Architect";
-	public static final String VERSION = "0.5";
+	public static final String VERSION = "0.6";
 
 	public static TheMightyArchitect instance;
 	public static Logger logger = LogManager.getLogger();
@@ -36,7 +36,7 @@ public class TheMightyArchitect {
 	}
 
 	private void clientInit(FMLClientSetupEvent event) {
-		DistExecutor.runWhenOn(Dist.CLIENT, () -> MightyClient::init);
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> MightyClient::init);
 	}
 
 	private void init(final FMLCommonSetupEvent event) {

@@ -18,9 +18,9 @@ import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 import com.simibubi.mightyarchitect.foundation.utility.FilesHelper;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtIo;
 
 public class ThemeStorage {
 
@@ -110,40 +110,40 @@ public class ThemeStorage {
 
 		String palettePath = folderPath + "/" + foldername + "/palette.json";
 		FilesHelper.saveTagCompoundAsJson(theme.getDefaultPalette()
-			.writeToNBT(new CompoundNBT()), palettePath);
+			.writeToNBT(new CompoundTag()), palettePath);
 
 		String palette2Path = folderPath + "/" + foldername + "/palette2.json";
 		FilesHelper.saveTagCompoundAsJson(theme.getDefaultSecondaryPalette()
-			.writeToNBT(new CompoundNBT()), palette2Path);
+			.writeToNBT(new CompoundTag()), palette2Path);
 	}
 
 	public static String exportThemeFullyAsFile(DesignTheme theme, boolean compressed) {
 		String folderPath = "themes/export";
 		FilesHelper.createFolderIfMissing(folderPath);
-		CompoundNBT massiveThemeTag = new CompoundNBT();
+		CompoundTag massiveThemeTag = new CompoundTag();
 
 		massiveThemeTag.put("Theme", theme.asTagCompound());
 		massiveThemeTag.put("Palette", theme.getDefaultPalette()
-			.writeToNBT(new CompoundNBT()));
+			.writeToNBT(new CompoundTag()));
 		massiveThemeTag.put("SecondaryPalette", theme.getDefaultSecondaryPalette()
-			.writeToNBT(new CompoundNBT()));
+			.writeToNBT(new CompoundTag()));
 
-		Map<DesignLayer, Map<DesignType, Set<CompoundNBT>>> designFiles =
+		Map<DesignLayer, Map<DesignType, Set<CompoundTag>>> designFiles =
 			DesignResourceLoader.loadThemeFromFolder(theme);
 
-		CompoundNBT layers = new CompoundNBT();
+		CompoundTag layers = new CompoundTag();
 		for (DesignLayer layer : theme.getLayers()) {
 			if (!designFiles.containsKey(layer))
 				continue;
 
-			CompoundNBT types = new CompoundNBT();
+			CompoundTag types = new CompoundTag();
 			for (DesignType type : theme.getTypes()) {
 				if (!designFiles.get(layer)
 					.containsKey(type))
 					continue;
 
-				ListNBT designs = new ListNBT();
-				for (CompoundNBT tag : designFiles.get(layer)
+				ListTag designs = new ListTag();
+				for (CompoundTag tag : designFiles.get(layer)
 					.get(type))
 					designs.add(tag);
 				types.put(type.name(), designs);
@@ -157,7 +157,7 @@ public class ThemeStorage {
 				Path path = Paths.get(folderPath + "/" + theme.getFilePath() + ".theme");
 				Files.deleteIfExists(path);
 				OutputStream outputStream = Files.newOutputStream(path, StandardOpenOption.CREATE);
-				CompressedStreamTools.writeCompressed(massiveThemeTag, outputStream);
+				NbtIo.writeCompressed(massiveThemeTag, outputStream);
 				outputStream.close();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -174,9 +174,9 @@ public class ThemeStorage {
 	}
 
 	private static DesignTheme loadInternalTheme(String themeFolder) {
-		CompoundNBT themeCompound = FilesHelper.loadJsonResourceAsNBT("themes/" + themeFolder + "/theme.json");
-		CompoundNBT paletteCompound = FilesHelper.loadJsonResourceAsNBT("themes/" + themeFolder + "/palette.json");
-		CompoundNBT palette2Compound = FilesHelper.loadJsonResourceAsNBT("themes/" + themeFolder + "/palette2.json");
+		CompoundTag themeCompound = FilesHelper.loadJsonResourceAsNBT("themes/" + themeFolder + "/theme.json");
+		CompoundTag paletteCompound = FilesHelper.loadJsonResourceAsNBT("themes/" + themeFolder + "/palette.json");
+		CompoundTag palette2Compound = FilesHelper.loadJsonResourceAsNBT("themes/" + themeFolder + "/palette2.json");
 		DesignTheme theme = DesignTheme.fromNBT(themeCompound);
 		theme.setFilePath(themeFolder);
 		theme.setImported(false);
@@ -199,21 +199,21 @@ public class ThemeStorage {
 				String themeFolder = path.getFileName()
 					.toString();
 
-				CompoundNBT themeCompound;
-				CompoundNBT paletteCompound;
-				CompoundNBT secondaryPaletteCompound = null;
+				CompoundTag themeCompound;
+				CompoundTag paletteCompound;
+				CompoundTag secondaryPaletteCompound = null;
 
 				if (themeFolder.equals("export"))
 					continue;
 
 				if (themeFolder.endsWith(".theme") || themeFolder.endsWith(".json")) {
-					CompoundNBT themeFile = new CompoundNBT();
+					CompoundTag themeFile = new CompoundTag();
 
 					if (themeFolder.endsWith(".theme")) {
 						try {
 							InputStream inputStream = Files.newInputStream(Paths.get(folderPath + "/" + themeFolder),
 								StandardOpenOption.READ);
-							themeFile = CompressedStreamTools.readCompressed(inputStream);
+							themeFile = NbtIo.readCompressed(inputStream);
 							inputStream.close();
 						} catch (IOException e) {
 							e.printStackTrace();

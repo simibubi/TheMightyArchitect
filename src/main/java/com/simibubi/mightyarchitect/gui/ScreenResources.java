@@ -1,11 +1,11 @@
 package com.simibubi.mightyarchitect.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.TheMightyArchitect;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.resources.ResourceLocation;
 
 public enum ScreenResources {
 	
@@ -69,7 +69,7 @@ public enum ScreenResources {
 	ICON_FOLDER("icons.png", 0, 96, 16, 16),
 	ICON_REFRESH("icons.png", 16, 96, 16, 16);
 	
-	public static final int FONT_COLOR = 0x575F7A;
+	public static final int FONT_COLOR = 0x373F5A;
 	
 	public final ResourceLocation location;
 	public int width, height;
@@ -85,13 +85,13 @@ public enum ScreenResources {
 		this.startX = startX; this.startY = startY;
 	}
 	
-	public void draw(MatrixStack ms, AbstractGui screen, int i, int j) {
+	public void draw(PoseStack ms, GuiComponent screen, int i, int j) {
 		bind();
 		screen.blit(ms, i, j, startX, startY, width, height);
 	}
 
 	public void bind() {
-		Minecraft.getInstance().getTextureManager().bind(location);
+		RenderSystem.setShaderTexture(0, location);
 	}
 
 }

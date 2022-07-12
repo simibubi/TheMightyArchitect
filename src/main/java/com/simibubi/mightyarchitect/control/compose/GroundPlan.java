@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 public class GroundPlan {
 

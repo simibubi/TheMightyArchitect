@@ -1,13 +1,11 @@
 package com.simibubi.mightyarchitect.control.design.partials;
 
-import net.minecraft.nbt.CompoundNBT;
-
-import com.simibubi.mightyarchitect.control.design.partials.Wall.ExpandBehaviour;
+import net.minecraft.nbt.CompoundTag;
 
 public class Facade extends Wall {
 
 	@Override
-	public Design fromNBT(CompoundNBT compound) {
+	public Design fromNBT(CompoundTag compound) {
 		Facade facade = new Facade();
 		facade.expandBehaviour = ExpandBehaviour.None;
 		facade.applyNBT(compound);

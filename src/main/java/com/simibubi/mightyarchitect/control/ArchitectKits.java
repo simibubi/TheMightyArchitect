@@ -7,12 +7,12 @@ import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.networking.SetHotbarItemPacket;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class ArchitectKits {
 
@@ -84,9 +84,9 @@ public class ArchitectKits {
 		BlockState state = DesignExporter.theme.getDefaultPalette().get(palette);
 		ItemStack stack = new ItemStack(state.getBlock().asItem());
 		setHotbarItem(slot,
-				stack.setHoverName(new StringTextComponent(TextFormatting.RESET + "" + TextFormatting.GOLD
-						+ palette.getDisplayName() + TextFormatting.WHITE + " (" + TextFormatting.GRAY
-						+ stack.getHoverName().getString() + TextFormatting.WHITE + ")")));
+				stack.setHoverName(new TextComponent(ChatFormatting.RESET + "" + ChatFormatting.GOLD
+						+ palette.getDisplayName() + ChatFormatting.WHITE + " (" + ChatFormatting.GRAY
+						+ stack.getHoverName().getString() + ChatFormatting.WHITE + ")")));
 	}
 
 }

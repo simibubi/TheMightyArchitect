@@ -9,8 +9,8 @@ import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.control.design.ThemeStatistics;
 import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 
 public class MoveReshapeTool extends AbstractRoomFaceSelectionTool {
 
@@ -78,16 +78,16 @@ public class MoveReshapeTool extends AbstractRoomFaceSelectionTool {
 				});
 				selectedStack.highest().roofType =
 					statistics.fallbackRoof(selectedStack.highest(), selectedStack instanceof CylinderStack);
-				status("Size: " + TextFormatting.AQUA + selectedRoom.width + TextFormatting.WHITE + "x"
-					+ TextFormatting.AQUA + selectedRoom.length);
+				status("Size: " + ChatFormatting.AQUA + selectedRoom.width + ChatFormatting.WHITE + "x"
+					+ ChatFormatting.AQUA + selectedRoom.length);
 			} else {
 				// Move
 				selectedStack.forRoomAndEachAbove(selectedRoom, room -> {
 					BlockPos diff = BlockPos.ZERO.relative(selectedFace, scroll);
 					room.move(-diff.getX(), 0, -diff.getZ());
 				});
-				status("Position: " + TextFormatting.AQUA + selectedRoom.x + TextFormatting.WHITE + ", "
-					+ TextFormatting.AQUA + selectedRoom.z);
+				status("Position: " + ChatFormatting.AQUA + selectedRoom.x + ChatFormatting.WHITE + ", "
+					+ ChatFormatting.AQUA + selectedRoom.z);
 			}
 			return true;
 		}
@@ -95,4 +95,8 @@ public class MoveReshapeTool extends AbstractRoomFaceSelectionTool {
 		return super.handleMouseWheel(scroll);
 	}
 
+	@Override
+	public boolean numberInputSimulatesScrolls() {
+		return true;
+	}
 }

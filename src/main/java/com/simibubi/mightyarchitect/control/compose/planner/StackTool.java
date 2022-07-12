@@ -9,7 +9,7 @@ import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.control.compose.Stack;
 import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
 
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
 
 public class StackTool extends AbstractRoomFaceSelectionTool {
 
@@ -68,7 +68,7 @@ public class StackTool extends AbstractRoomFaceSelectionTool {
 		highlightRoom = Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL);
 
 		if (selectedStack != null)
-			status("Floors: " + TextFormatting.AQUA + selectedStack.floors());
+			status("Floors: " + ChatFormatting.AQUA + selectedStack.floors());
 	}
 
 	public static void insertMatchingOthers(GroundPlan groundPlan, Stack stack, int index) {

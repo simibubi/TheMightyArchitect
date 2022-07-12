@@ -2,35 +2,77 @@ package com.simibubi.mightyarchitect.foundation;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.tags.ITagCollectionSupplier;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.DynamicRegistries;
-import net.minecraft.world.ITickList;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.AbstractChunkProvider;
-import net.minecraft.world.storage.ISpawnWorldInfo;
-import net.minecraft.world.storage.MapData;
+import javax.annotation.Nullable;
 
-public class WrappedWorld extends World {
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkSource;
+import net.minecraft.world.level.entity.EntityTypeTest;
+import net.minecraft.world.level.entity.LevelEntityGetter;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
+import net.minecraft.world.level.storage.WritableLevelData;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.scores.Scoreboard;
+import net.minecraft.world.ticks.LevelTickAccess;
 
-	protected World world;
+public class WrappedWorld extends Level {
 
-	public WrappedWorld(World world) {
-		super((ISpawnWorldInfo) world.getLevelData(), world.dimension(), world.dimensionType(),
+	protected Level world;
+
+	protected LevelEntityGetter<Entity> entityGetter = new LevelEntityGetter<Entity>() {
+		@Nullable
+		@Override
+		public Entity get(int p_156931_) {
+			return null;
+		}
+
+		@Nullable
+		@Override
+		public Entity get(UUID p_156939_) {
+			return null;
+		}
+
+		@Override
+		public Iterable<Entity> getAll() {
+			return Collections.emptyList();
+		}
+
+		@Override
+		public <U extends Entity> void get(EntityTypeTest<Entity, U> p_156935_, Consumer<U> p_156936_) {
+
+		}
+
+		@Override
+		public void get(AABB p_156937_, Consumer<Entity> p_156938_) {
+
+		}
+
+		@Override
+		public <U extends Entity> void get(EntityTypeTest<Entity, U> p_156932_, AABB p_156933_, Consumer<U> p_156934_) {
+
+		}
+	};
+
+	public WrappedWorld(Level world) {
+		super((WritableLevelData) world.getLevelData(), world.dimension(), world.dimensionTypeRegistration(),
 			() -> world.getProfiler(), world.isClientSide, false, 0);
 		this.world = world;
 	}
@@ -46,7 +88,7 @@ public class WrappedWorld extends World {
 	}
 
 	@Override
-	public TileEntity getBlockEntity(BlockPos pos) {
+	public BlockEntity getBlockEntity(BlockPos pos) {
 		return world.getBlockEntity(pos);
 	}
 
@@ -66,30 +108,40 @@ public class WrappedWorld extends World {
 	}
 
 	@Override
-	public ITickList<Block> getBlockTicks() {
+	public LevelTickAccess<Block> getBlockTicks() {
 		return world.getBlockTicks();
 	}
 
 	@Override
-	public ITickList<Fluid> getLiquidTicks() {
-		return world.getLiquidTicks();
+	public LevelTickAccess<Fluid> getFluidTicks() {
+		return world.getFluidTicks();
 	}
 
 	@Override
-	public void levelEvent(PlayerEntity player, int type, BlockPos pos, int data) {}
+	public void levelEvent(Player player, int type, BlockPos pos, int data) {}
 
 	@Override
-	public List<? extends PlayerEntity> players() {
+	public void gameEvent(@Nullable Entity p_151549_, GameEvent p_151550_, BlockPos p_151551_) {
+
+	}
+
+	@Override
+	public List<? extends Player> players() {
 		return Collections.emptyList();
 	}
 
 	@Override
-	public void playSound(PlayerEntity player, double x, double y, double z, SoundEvent soundIn, SoundCategory category,
+	public void playSound(Player player, double x, double y, double z, SoundEvent soundIn, SoundSource category,
 		float volume, float pitch) {}
 
 	@Override
-	public void playSound(PlayerEntity p_217384_1_, Entity p_217384_2_, SoundEvent p_217384_3_,
-		SoundCategory p_217384_4_, float p_217384_5_, float p_217384_6_) {}
+	public void playSound(Player p_217384_1_, Entity p_217384_2_, SoundEvent p_217384_3_,
+		SoundSource p_217384_4_, float p_217384_5_, float p_217384_6_) {}
+
+	@Override
+	public String gatherChunkSourceStats() {
+		return null;
+	}
 
 	@Override
 	public Entity getEntity(int id) {
@@ -97,18 +149,18 @@ public class WrappedWorld extends World {
 	}
 
 	@Override
-	public MapData getMapData(String mapName) {
+	public MapItemSavedData getMapData(String mapName) {
 		return null;
 	}
 
 	@Override
 	public boolean addFreshEntity(Entity entityIn) {
-		entityIn.setLevel(world);
+		entityIn.level = world;
 		return world.addFreshEntity(entityIn);
 	}
 
 	@Override
-	public void setMapData(MapData mapDataIn) {}
+	public void setMapData(String mapId, MapItemSavedData mapDataIn) {}
 
 	@Override
 	public int getFreeMapId() {
@@ -129,17 +181,17 @@ public class WrappedWorld extends World {
 	}
 
 	@Override
-	public Biome getUncachedNoiseBiome(int p_225604_1_, int p_225604_2_, int p_225604_3_) {
+	public Holder<Biome> getUncachedNoiseBiome(int p_225604_1_, int p_225604_2_, int p_225604_3_) {
 		return world.getUncachedNoiseBiome(p_225604_1_, p_225604_2_, p_225604_3_);
 	}
 
 	@Override
-	public AbstractChunkProvider getChunkSource() {
+	public ChunkSource getChunkSource() {
 		return world.getChunkSource();
 	}
 
 	@Override
-	public DynamicRegistries registryAccess() {
+	public RegistryAccess registryAccess() {
 		return world.registryAccess();
 	}
 
@@ -149,11 +201,11 @@ public class WrappedWorld extends World {
 	}
 
 	@Override
-	public ITagCollectionSupplier getTagManager() {
-		return world.getTagManager();
+	protected LevelEntityGetter<Entity> getEntities() {
+		return entityGetter;
 	}
 
-	public World getWorld() {
+	public Level getWorld() {
 		return world;
 	}
 

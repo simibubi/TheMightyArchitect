@@ -22,7 +22,7 @@ import com.simibubi.mightyarchitect.control.design.partials.Tower;
 import com.simibubi.mightyarchitect.control.design.partials.TowerFlatRoof;
 import com.simibubi.mightyarchitect.control.design.partials.TowerRoof;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 public class DesignHelper {
 

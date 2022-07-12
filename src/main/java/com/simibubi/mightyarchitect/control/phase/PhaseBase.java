@@ -4,7 +4,7 @@ import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.Schematic;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.chat.TextComponent;
 
 public abstract class PhaseBase implements IArchitectPhase {
 
@@ -35,7 +35,7 @@ public abstract class PhaseBase implements IArchitectPhase {
 		if (message == null) 
 			return;
 		
-		minecraft.player.displayClientMessage(new StringTextComponent(message), true);
+		minecraft.player.displayClientMessage(new TextComponent(message), true);
 	}
 
 	

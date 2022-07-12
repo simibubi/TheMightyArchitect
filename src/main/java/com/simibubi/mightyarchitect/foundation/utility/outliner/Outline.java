@@ -4,9 +4,10 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.matrix.MatrixStack.Entry;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.PoseStack.Pose;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix3f;
 import com.simibubi.mightyarchitect.AllSpecialTextures;
 import com.simibubi.mightyarchitect.foundation.MatrixStacker;
 import com.simibubi.mightyarchitect.foundation.RenderTypes;
@@ -14,13 +15,13 @@ import com.simibubi.mightyarchitect.foundation.utility.AngleHelper;
 import com.simibubi.mightyarchitect.foundation.utility.ColorHelper;
 import com.simibubi.mightyarchitect.foundation.utility.VecHelper;
 
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Direction.Axis;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Matrix3f;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 
 public abstract class Outline {
 
@@ -31,38 +32,38 @@ public abstract class Outline {
 		params = new OutlineParams();
 	}
 
-	public abstract void render(MatrixStack ms, IRenderTypeBuffer buffer);
+	public abstract void render(PoseStack ms, MultiBufferSource buffer);
 
-	public void renderCuboidLine(MatrixStack ms, IRenderTypeBuffer buffer, Vector3d start, Vector3d end) {
-		Vector3d diff = end.subtract(start);
-		float hAngle = AngleHelper.deg(MathHelper.atan2(diff.x, diff.z));
+	public void renderCuboidLine(PoseStack ms, MultiBufferSource buffer, Vec3 start, Vec3 end) {
+		Vec3 diff = end.subtract(start);
+		float hAngle = AngleHelper.deg(Mth.atan2(diff.x, diff.z));
 		float hDistance = (float) diff.multiply(1, 0, 1)
 			.length();
-		float vAngle = AngleHelper.deg(MathHelper.atan2(hDistance, diff.y)) - 90;
+		float vAngle = AngleHelper.deg(Mth.atan2(hDistance, diff.y)) - 90;
 		ms.pushPose();
 		MatrixStacker.of(ms)
 			.translate(start)
 			.rotateY(hAngle)
 			.rotateX(vAngle);
-		renderAACuboidLine(ms, buffer, Vector3d.ZERO, new Vector3d(0, 0, diff.length()));
+		renderAACuboidLine(ms, buffer, Vec3.ZERO, new Vec3(0, 0, diff.length()));
 		ms.popPose();
 	}
 
-	public void renderAACuboidLine(MatrixStack ms, IRenderTypeBuffer buffer, Vector3d start, Vector3d end) {
-		IVertexBuilder builder = buffer.getBuffer(RenderTypes.getOutlineSolid());
+	public void renderAACuboidLine(PoseStack ms, MultiBufferSource buffer, Vec3 start, Vec3 end) {
+		VertexConsumer builder = buffer.getBuffer(RenderTypes.getOutlineSolid(AllSpecialTextures.BLANK.getLocation()));//todo simplify
 
-		Vector3d diff = end.subtract(start);
+		Vec3 diff = end.subtract(start);
 		if (diff.x + diff.y + diff.z < 0) {
-			Vector3d temp = start;
+			Vec3 temp = start;
 			start = end;
 			end = temp;
 			diff = diff.scale(-1);
 		}
 
 		float lineWidth = params.getLineWidth();
-		Vector3d extension = diff.normalize()
+		Vec3 extension = diff.normalize()
 			.scale(lineWidth / 2);
-		Vector3d plane = VecHelper.axisAlingedPlaneOf(diff);
+		Vec3 plane = VecHelper.axisAlingedPlaneOf(diff);
 		Direction face = Direction.getNearest(diff.x, diff.y, diff.z);
 		Axis axis = face.getAxis();
 
@@ -70,17 +71,17 @@ public abstract class Outline {
 		end = end.add(extension);
 		plane = plane.scale(lineWidth / 2);
 
-		Vector3d a1 = plane.add(start);
-		Vector3d b1 = plane.add(end);
+		Vec3 a1 = plane.add(start);
+		Vec3 b1 = plane.add(end);
 		plane = VecHelper.rotate(plane, -90, axis);
-		Vector3d a2 = plane.add(start);
-		Vector3d b2 = plane.add(end);
+		Vec3 a2 = plane.add(start);
+		Vec3 b2 = plane.add(end);
 		plane = VecHelper.rotate(plane, -90, axis);
-		Vector3d a3 = plane.add(start);
-		Vector3d b3 = plane.add(end);
+		Vec3 a3 = plane.add(start);
+		Vec3 b3 = plane.add(end);
 		plane = VecHelper.rotate(plane, -90, axis);
-		Vector3d a4 = plane.add(start);
-		Vector3d b4 = plane.add(end);
+		Vec3 a4 = plane.add(start);
+		Vec3 b4 = plane.add(end);
 
 		if (params.disableNormals) {
 			face = Direction.UP;
@@ -95,7 +96,7 @@ public abstract class Outline {
 
 		putQuad(ms, builder, b4, b3, b2, b1, face);
 		putQuad(ms, builder, a1, a2, a3, a4, face.getOpposite());
-		Vector3d vec = a1.subtract(a4);
+		Vec3 vec = a1.subtract(a4);
 		face = Direction.getNearest(vec.x, vec.y, vec.z);
 		putQuad(ms, builder, a1, b1, b2, a2, face);
 		vec = VecHelper.rotate(vec, -90, axis);
@@ -109,24 +110,21 @@ public abstract class Outline {
 		putQuad(ms, builder, a4, b4, b1, a1, face);
 	}
 
-	public void putQuad(MatrixStack ms, IVertexBuilder builder, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4,
+	public void putQuad(PoseStack ms, VertexConsumer builder, Vec3 v1, Vec3 v2, Vec3 v3, Vec3 v4,
 		Direction normal) {
-		putQuadUVColor(ms, builder, v1, v2, v3, v4, params.rgb, 0, 0, 1, 1, normal);
+		putQuadUV(ms, builder, v1, v2, v3, v4,0, 0, 1, 1, normal, false);
 	}
 
-	public void putQuadUVColor(MatrixStack ms, IVertexBuilder builder, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, Vector3d rgb, float minU,
-		float minV, float maxU, float maxV, Direction normal) {
-		putVertex(ms, builder, v1, rgb, minU, minV, normal);
-		putVertex(ms, builder, v2, rgb, maxU, minV, normal);
-		putVertex(ms, builder, v3, rgb, maxU, maxV, normal);
-		putVertex(ms, builder, v4, rgb, minU, maxV, normal);
+	public void putQuadUV(PoseStack ms, VertexConsumer builder, Vec3 v1, Vec3 v2, Vec3 v3, Vec3 v4, float minU,
+			float minV, float maxU, float maxV, Direction normal, boolean useFaceColors) {
+		putVertex(ms, builder, v1, minU, minV, normal, useFaceColors);
+		putVertex(ms, builder, v2, maxU, minV, normal, useFaceColors);
+		putVertex(ms, builder, v3, maxU, maxV, normal, useFaceColors);
+		putVertex(ms, builder, v4, minU, maxV, normal, useFaceColors);
 	}
 
-	protected void putVertex(MatrixStack ms, IVertexBuilder builder, Vector3d pos, Vector3d rgb, float u, float v, Direction normal) {
-		int i = 15 << 20 | 15 << 4;
-		int j = i >> 16 & '\uffff';
-		int k = i & '\uffff';
-		Entry peek = ms.last();
+	protected void putVertex(PoseStack ms, VertexConsumer builder, Vec3 pos, float u, float v, Direction normal, boolean useFaceColor) {
+		Pose peek = ms.last();
 		if (transformNormals == null)
 			transformNormals = peek.normal();
 
@@ -140,11 +138,18 @@ public abstract class Outline {
 			zOffset = normal.getStepZ();
 		}
 
+		Vec3 color = params.rgb;
+		//LogManager.getLogger().info(color.toString());
+
+		if (useFaceColor && params.faceRgb != null)
+			color = params.faceRgb;
+
 		builder.vertex(peek.pose(), (float) pos.x, (float) pos.y, (float) pos.z)
-			.color((float) rgb.x, (float) rgb.y, (float) rgb.z, params.alpha)
+			.color((float) color.x, (float) color.y, (float) color.z, params.alpha)
 			.uv(u, v)
 			.overlayCoords(OverlayTexture.NO_OVERLAY)
-			.uv2(j, k)
+			.uv2(params.lightMap)
+			//.uv2(LightTexture.FULL_BRIGHT)
 			.normal(peek.normal(), xOffset, yOffset, zOffset)
 			.endVertex();
 
@@ -167,9 +172,9 @@ public abstract class Outline {
 		protected boolean disableCull;
 		protected boolean disableNormals;
 		protected float alpha;
-		protected int lightMapU, lightMapV;
-		protected Vector3d rgb;
-		protected Vector3d faceRgb;
+		protected int lightMap;
+		protected Vec3 rgb;
+		protected Vec3 faceRgb;
 		protected int color;
 		protected int fadeTicks;
 		private float lineWidth;
@@ -185,9 +190,7 @@ public abstract class Outline {
 			faceRgb = null;
 			fadeTicks = 8;
 
-			int i = 15 << 20 | 15 << 4;
-			lightMapU = i >> 16 & '\uffff';
-			lightMapV = i & '\uffff';
+			lightMap = LightTexture.FULL_BRIGHT;
 		}
 
 		// builder
@@ -200,6 +203,11 @@ public abstract class Outline {
 		
 		public OutlineParams coloredFaces(int color) {
 			faceRgb = ColorHelper.getRGB(color);
+			return this;
+		}
+
+		public OutlineParams withAlpha(float alpha) {
+			this.alpha = alpha;
 			return this;
 		}
 

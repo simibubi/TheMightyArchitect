@@ -10,9 +10,9 @@ import com.google.common.collect.ImmutableList;
 import com.simibubi.mightyarchitect.control.design.partials.Design;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
 
 public class DesignTheme {
 
@@ -151,17 +151,17 @@ public class DesignTheme {
 		this.types = types;
 	}
 
-	public CompoundNBT asTagCompound() {
-		CompoundNBT compound = new CompoundNBT();
+	public CompoundTag asTagCompound() {
+		CompoundTag compound = new CompoundTag();
 
 		compound.putString("Name", getDisplayName());
 		compound.putString("Designer", getDesigner());
 
-		ListNBT layers = new ListNBT();
-		ListNBT types = new ListNBT();
+		ListTag layers = new ListTag();
+		ListTag types = new ListTag();
 
-		this.layers.forEach(layer -> layers.add(StringNBT.valueOf(layer.name())));
-		this.types.forEach(type -> types.add(StringNBT.valueOf(type.name())));
+		this.layers.forEach(layer -> layers.add(StringTag.valueOf(layer.name())));
+		this.types.forEach(type -> types.add(StringTag.valueOf(type.name())));
 
 		compound.put("Layers", layers);
 		compound.put("Types", types);
@@ -170,7 +170,7 @@ public class DesignTheme {
 		return compound;
 	}
 
-	public static DesignTheme fromNBT(CompoundNBT compound) {
+	public static DesignTheme fromNBT(CompoundTag compound) {
 		if (compound == null)
 			return null;
 
@@ -182,8 +182,8 @@ public class DesignTheme {
 		if (compound.contains("Maximum Room Height"))
 			theme.maxFloorHeight = compound.getInt("Maximum Room Height");
 
-		compound.getList("Layers", 8).forEach(s -> theme.layers.add(DesignLayer.valueOf(((StringNBT) s).getAsString())));
-		compound.getList("Types", 8).forEach(s -> theme.types.add(DesignType.valueOf(((StringNBT) s).getAsString())));
+		compound.getList("Layers", 8).forEach(s -> theme.layers.add(DesignLayer.valueOf(((StringTag) s).getAsString())));
+		compound.getList("Types", 8).forEach(s -> theme.types.add(DesignType.valueOf(((StringTag) s).getAsString())));
 
 		theme.updateRoomLayers();
 		return theme;

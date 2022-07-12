@@ -2,18 +2,18 @@ package com.simibubi.mightyarchitect.gui.widgets;
 
 import java.util.function.Consumer;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 
 public class ScrollInput extends AbstractSimiWidget {
 
 	protected Consumer<Integer> onScroll;
 	protected int state;
 	protected Label displayLabel;
-	protected ITextComponent title = new StringTextComponent("Choose an Option");
-	protected ITextComponent scrollToModify = new StringTextComponent("Scroll to Modify");
+	protected Component title = new TextComponent("Choose an Option");
+	protected Component scrollToModify = new TextComponent("Scroll to Modify");
 	protected int min, max;
 	protected int shiftStep;
 
@@ -42,7 +42,7 @@ public class ScrollInput extends AbstractSimiWidget {
 	}
 
 	public ScrollInput titled(String title) {
-		this.title = new StringTextComponent(title);
+		this.title = new TextComponent(title);
 		updateTooltip();
 		return this;
 	}
@@ -108,15 +108,15 @@ public class ScrollInput extends AbstractSimiWidget {
 	}
 
 	protected void writeToLabel() {
-		displayLabel.text = new StringTextComponent(String.valueOf(state));
+		displayLabel.text = new TextComponent(String.valueOf(state));
 	}
 
 	protected void updateTooltip() {
 		toolTip.clear();
 		toolTip.add(title.plainCopy()
-			.withStyle(TextFormatting.BLUE));
+			.withStyle(ChatFormatting.BLUE));
 		toolTip.add(scrollToModify.plainCopy()
-			.withStyle(TextFormatting.ITALIC, TextFormatting.DARK_GRAY));
+			.withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY));
 	}
 
 }

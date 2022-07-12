@@ -6,17 +6,17 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.foundation.utility.outliner.LineOutline.ChasingLineOutline;
 import com.simibubi.mightyarchitect.foundation.utility.outliner.LineOutline.EndChasingLineOutline;
 import com.simibubi.mightyarchitect.foundation.utility.outliner.Outline.OutlineParams;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 public class Outliner {
 
@@ -24,7 +24,7 @@ public class Outliner {
 
 	// Facade
 
-	public OutlineParams showLine(Object slot, Vector3d start, Vector3d end) {
+	public OutlineParams showLine(Object slot, Vec3 start, Vec3 end) {
 		if (!outlines.containsKey(slot)) {
 			LineOutline outline = new LineOutline();
 			outlines.put(slot, new OutlineEntry(outline));
@@ -35,7 +35,7 @@ public class Outliner {
 		return entry.outline.getParams();
 	}
 	
-	public OutlineParams chaseLine(Object slot, Vector3d start, Vector3d end) {
+	public OutlineParams chaseLine(Object slot, Vec3 start, Vec3 end) {
 		if (!outlines.containsKey(slot)) {
 			ChasingLineOutline outline = new ChasingLineOutline();
 			outline.set(start, end);
@@ -47,7 +47,7 @@ public class Outliner {
 		return entry.outline.getParams();
 	}
 	
-	public OutlineParams chaseText(Object slot, Vector3d location, String text) {
+	public OutlineParams chaseText(Object slot, Vec3 location, String text) {
 		if (!outlines.containsKey(slot)) {
 			OutlinedText outline = new OutlinedText();
 			outline.set(location);
@@ -61,7 +61,7 @@ public class Outliner {
 		return entry.outline.getParams();
 	}
 
-	public OutlineParams endChasingLine(Object slot, Vector3d start, Vector3d end, float chasingProgress) {
+	public OutlineParams endChasingLine(Object slot, Vec3 start, Vec3 end, float chasingProgress) {
 		if (!outlines.containsKey(slot)) {
 			EndChasingLineOutline outline = new EndChasingLineOutline();
 			outlines.put(slot, new OutlineEntry(outline));
@@ -73,14 +73,14 @@ public class Outliner {
 		return entry.outline.getParams();
 	}
 
-	public OutlineParams showAABB(Object slot, AxisAlignedBB bb) {
+	public OutlineParams showAABB(Object slot, AABB bb) {
 		createAABBOutlineIfMissing(slot, bb);
 		ChasingAABBOutline outline = getAndRefreshAABB(slot);
 		outline.prevBB = outline.targetBB = bb;
 		return outline.getParams();
 	}
 
-	public OutlineParams chaseAABB(Object slot, AxisAlignedBB bb) {
+	public OutlineParams chaseAABB(Object slot, AABB bb) {
 		createAABBOutlineIfMissing(slot, bb);
 		ChasingAABBOutline outline = getAndRefreshAABB(slot);
 		outline.targetBB = bb;
@@ -123,7 +123,7 @@ public class Outliner {
 
 	// Utility
 
-	private void createAABBOutlineIfMissing(Object slot, AxisAlignedBB bb) {
+	private void createAABBOutlineIfMissing(Object slot, AABB bb) {
 		if (!outlines.containsKey(slot)) {
 			ChasingAABBOutline outline = new ChasingAABBOutline(bb);
 			outlines.put(slot, new OutlineEntry(outline));
@@ -157,17 +157,17 @@ public class Outliner {
 		toClear.forEach(outlines::remove);
 	}
 
-	public void renderOutlines(MatrixStack ms, IRenderTypeBuffer buffer) {
+	public void renderOutlines(PoseStack ms, MultiBufferSource buffer) {
 		outlines.forEach((key, entry) -> {
 			Outline outline = entry.getOutline();
-			outline.params.alpha = 1;
+			//outline.params.alpha = 1;
 			if (entry.ticksTillRemoval < 0) {
 
 				int prevTicks = entry.ticksTillRemoval + 1;
 				float fadeticks = (float) entry.outline.params.getFadeTicks();
 				float lastAlpha = prevTicks >= 0 ? 1 : 1 + (prevTicks / fadeticks);
 				float currentAlpha = 1 + (entry.ticksTillRemoval / fadeticks);
-				float alpha = MathHelper.lerp(Minecraft.getInstance()
+				float alpha = Mth.lerp(Minecraft.getInstance()
 					.getFrameTime(), lastAlpha, currentAlpha);
 
 				outline.params.alpha = alpha * alpha * alpha;

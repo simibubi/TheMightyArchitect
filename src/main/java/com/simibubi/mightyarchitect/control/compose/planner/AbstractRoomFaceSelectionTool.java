@@ -3,8 +3,8 @@ package com.simibubi.mightyarchitect.control.compose.planner;
 import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.control.compose.Stack;
 
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
 
 public abstract class AbstractRoomFaceSelectionTool extends GroundPlanningToolBase {
 
@@ -17,7 +17,7 @@ public abstract class AbstractRoomFaceSelectionTool extends GroundPlanningToolBa
 	}
 
 	@Override
-	protected void makeStacksTransparent(ClientPlayerEntity player, BlockPos hit) {}
+	protected void makeStacksTransparent(LocalPlayer player, BlockPos hit) {}
 
 	@Override
 	public void tickToolOutlines() {}

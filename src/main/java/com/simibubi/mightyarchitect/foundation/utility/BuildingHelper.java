@@ -3,7 +3,7 @@ package com.simibubi.mightyarchitect.foundation.utility;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 public class BuildingHelper {
 

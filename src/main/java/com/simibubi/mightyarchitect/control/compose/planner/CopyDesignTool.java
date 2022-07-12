@@ -14,11 +14,11 @@ import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.design.partials.Design;
 import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
 
-import net.minecraft.util.Direction;
-import net.minecraft.util.Direction.Axis;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
+import net.minecraft.world.phys.AABB;
 
 public class CopyDesignTool extends WallDecorationToolBase {
 
@@ -78,9 +78,10 @@ public class CopyDesignTool extends WallDecorationToolBase {
 			Consumer<BlockPos> renderCorner = pos -> {
 				MightyClient.outliner
 					.showAABB(pos,
-						new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1,
+						new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1,
 							pos.getY() + selectedRoom.height, pos.getZ() + 1))
-					.lineWidth(1 / 8f);
+					.lineWidth(1 / 8f)
+					.withAlpha(1);
 			};
 
 			renderCorner.accept(origin);
@@ -96,9 +97,10 @@ public class CopyDesignTool extends WallDecorationToolBase {
 			BlockPos end = start.offset(size);
 			MightyClient.outliner
 				.showAABB(start,
-					new AxisAlignedBB(start.getX() - 1 / 2d, start.getY(), start.getZ() - 1 / 2d, end.getX() - 1 / 2d,
+					new AABB(start.getX() - 1 / 2d, start.getY(), start.getZ() - 1 / 2d, end.getX() - 1 / 2d,
 						end.getY(), end.getZ() - 1 / 2d))
-				.lineWidth(1 / 8f);
+				.lineWidth(1 / 8f)
+				.withAlpha(1);
 		};
 
 		if (selectedFace.getAxis() == Axis.X) {
@@ -129,7 +131,7 @@ public class CopyDesignTool extends WallDecorationToolBase {
 		boolean keyDown = Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL);
 
 		if (copiedDesign == null && !keyDown)
-			return TextFormatting.RED + "Ctrl+Click to copy a Design";
+			return ChatFormatting.RED + "Ctrl+Click to copy a Design";
 
 		DesignPicker designPicker = model.getTheme()
 			.getDesignPicker();
@@ -153,7 +155,7 @@ public class CopyDesignTool extends WallDecorationToolBase {
 				copiedDesignType = DesignType.WALL;
 			}
 
-			return "Copied " + TextFormatting.GREEN + copiedDesignType.getDisplayName();
+			return "Copied " + ChatFormatting.GREEN + copiedDesignType.getDisplayName();
 		}
 
 		if (!keyDown && selectedRoom != null) {
@@ -161,10 +163,10 @@ public class CopyDesignTool extends WallDecorationToolBase {
 			if (DesignType.roofTypes()
 				.contains(copiedDesignType)) {
 				if (selectedStack.getRoofType() != copiedDesignType)
-					return TextFormatting.RED + "Roof types have to match.";
+					return ChatFormatting.RED + "Roof types have to match.";
 				int facadeWidth = Math.min(selectedStack.highest().width, selectedStack.highest().length);
 				if (!copiedDesign.fitsHorizontally(facadeWidth))
-					return TextFormatting.RED + "Roof does not fit.";
+					return ChatFormatting.RED + "Roof does not fit.";
 
 				designPicker.putRoof(selectedStack, copiedDesign);
 				return pasteSuccessful();
@@ -172,11 +174,11 @@ public class CopyDesignTool extends WallDecorationToolBase {
 
 			if (copiedDesignType == DesignType.TOWER) {
 				if (!(selectedStack instanceof CylinderStack))
-					return TextFormatting.RED + "Room shapes have to match.";
+					return ChatFormatting.RED + "Room shapes have to match.";
 				if (!copiedDesign.fitsHorizontally(selectedRoom.width))
-					return TextFormatting.RED + "Target needs to have the same diameter.";
+					return ChatFormatting.RED + "Target needs to have the same diameter.";
 				if (!copiedDesign.fitsVertically(selectedRoom.height))
-					return TextFormatting.RED + "Design does not fit the targets height.";
+					return ChatFormatting.RED + "Design does not fit the targets height.";
 
 				designPicker.putRoom(selectedRoom, new RoomDesignMapping(copiedDesign));
 				return pasteSuccessful();
@@ -184,9 +186,9 @@ public class CopyDesignTool extends WallDecorationToolBase {
 
 			if (copiedDesignType == DesignType.CORNER) {
 				if (selectedStack instanceof CylinderStack)
-					return TextFormatting.RED + "Cylinders cannot have corners.";
+					return ChatFormatting.RED + "Cylinders cannot have corners.";
 				if (!copiedDesign.fitsVertically(selectedRoom.height))
-					return TextFormatting.RED + "Corner Design cannot fit the required height.";
+					return ChatFormatting.RED + "Corner Design cannot fit the required height.";
 
 				RoomDesignMapping priorMapping = designPicker.getCachedRoom(selectedRoom);
 				priorMapping.corner = copiedDesign;
@@ -197,16 +199,16 @@ public class CopyDesignTool extends WallDecorationToolBase {
 
 			if (copiedDesignType == DesignType.WALL) {
 				if (selectedStack instanceof CylinderStack)
-					return TextFormatting.RED + "Room shapes have to match.";
+					return ChatFormatting.RED + "Room shapes have to match.";
 				if (selectedFace.getAxis()
 					.isVertical())
-					return TextFormatting.RED + "Cannot apply Wall vertically.";
+					return ChatFormatting.RED + "Cannot apply Wall vertically.";
 
 				int wallWidth = selectedFace.getAxis() == Axis.Z ? selectedRoom.width - 2 : selectedRoom.length - 2;
 				if (!copiedDesign.fitsHorizontally(wallWidth))
-					return TextFormatting.RED + "Wall Design cannot fit the required width.";
+					return ChatFormatting.RED + "Wall Design cannot fit the required width.";
 				if (!copiedDesign.fitsVertically(selectedRoom.height))
-					return TextFormatting.RED + "Wall Design cannot fit the required height.";
+					return ChatFormatting.RED + "Wall Design cannot fit the required height.";
 
 				RoomDesignMapping priorMapping = designPicker.getCachedRoom(selectedRoom);
 				if (selectedFace.getAxis() == Axis.Z)
@@ -218,7 +220,7 @@ public class CopyDesignTool extends WallDecorationToolBase {
 				return pasteSuccessful();
 			}
 
-			return TextFormatting.RED + "Couldn't apply " + copiedDesignType.getDisplayName() + " here.";
+			return ChatFormatting.RED + "Couldn't apply " + copiedDesignType.getDisplayName() + " here.";
 		}
 
 		return super.handleRightClick();
@@ -226,7 +228,7 @@ public class CopyDesignTool extends WallDecorationToolBase {
 
 	private String pasteSuccessful() {
 		ArchitectManager.reAssemble();
-		return "Applied " + TextFormatting.GREEN + copiedDesignType.getDisplayName();
+		return "Applied " + ChatFormatting.GREEN + copiedDesignType.getDisplayName();
 	}
 
 }

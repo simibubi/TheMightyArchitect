@@ -18,8 +18,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.simibubi.mightyarchitect.TheMightyArchitect;
 import com.simibubi.mightyarchitect.foundation.utility.FilesHelper;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
 
 public class PaletteStorage {
 
@@ -61,7 +61,7 @@ public class PaletteStorage {
 		FilesHelper.createFolderIfMissing(folderPath);
 		String filename = FilesHelper.findFirstValidFilename(palette.getName(), folderPath, "json");
 		String filepath = folderPath + "/" + filename;
-		FilesHelper.saveTagCompoundAsJson(palette.writeToNBT(new CompoundNBT()), filepath);
+		FilesHelper.saveTagCompoundAsJson(palette.writeToNBT(new CompoundTag()), filepath);
 	}
 
 	public static PaletteDefinition importPalette(Path path) {
@@ -69,7 +69,7 @@ public class PaletteStorage {
 			JsonReader reader = new JsonReader(Files.newBufferedReader(path));
 			reader.setLenient(true);
 			JsonElement element = Streams.parse(reader);
-			return PaletteDefinition.fromNBT(JsonToNBT.parseTag(element.toString()));
+			return PaletteDefinition.fromNBT(TagParser.parseTag(element.toString()));
 		} catch (IOException | CommandSyntaxException e) {
 			e.printStackTrace();
 		}
@@ -100,7 +100,7 @@ public class PaletteStorage {
 			String path = "palettes/p" + index + ".json";
 			if (TheMightyArchitect.class.getClassLoader().getResource(path) == null)
 				break;
-			CompoundNBT tag = FilesHelper.loadJsonResourceAsNBT(path);
+			CompoundTag tag = FilesHelper.loadJsonResourceAsNBT(path);
 			PaletteDefinition paletteDefinition = PaletteDefinition.fromNBT(tag);
 			resourcePalettes.put(paletteDefinition.getName(), paletteDefinition);			
 			index++;

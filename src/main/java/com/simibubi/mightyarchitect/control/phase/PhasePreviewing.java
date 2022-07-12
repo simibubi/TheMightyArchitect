@@ -1,16 +1,21 @@
 package com.simibubi.mightyarchitect.control.phase;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.compose.planner.Tools;
 import com.simibubi.mightyarchitect.gui.ToolSelectionScreen;
 
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 public class PhasePreviewing extends PhaseBase implements IRenderGameOverlay {
@@ -54,18 +59,32 @@ public class PhasePreviewing extends PhaseBase implements IRenderGameOverlay {
 
 	@Override
 	public void onKey(int key, boolean released) {
-		if (key != MightyClient.TOOL_MENU.getKey()
-			.getValue())
-			return;
+		if (key == MightyClient.TOOL_MENU.getKey().getValue()) {
+			if (released && toolSelection.focused) {
+				toolSelection.focused = false;
+				toolSelection.onClose();
+			}
 
-		if (released && toolSelection.focused) {
-			toolSelection.focused = false;
-			toolSelection.onClose();
+			if (!released && !toolSelection.focused)
+				toolSelection.focused = true;
+
+			return;
 		}
 
-		if (!released && !toolSelection.focused)
-			toolSelection.focused = true;
+		if (released)
+			return;
 
+		if (toolSelection.focused) {
+			Optional<KeyMapping> mapping = Arrays.stream(Minecraft.getInstance().options.keyHotbarSlots).filter(keyMapping -> keyMapping.getKey().getValue() == key).findFirst();
+			if (mapping.isEmpty())
+				return;
+
+			toolSelection.select(ArrayUtils.indexOf(Minecraft.getInstance().options.keyHotbarSlots, mapping.get()));
+
+			return;
+		}
+
+		activeTool.getTool().handleKeyInput(key);
 	}
 
 	@Override
@@ -91,7 +110,7 @@ public class PhasePreviewing extends PhaseBase implements IRenderGameOverlay {
 	}
 
 	@Override
-	public void render(MatrixStack ms, IRenderTypeBuffer buffer) {}
+	public void render(PoseStack ms, MultiBufferSource buffer) {}
 
 	@Override
 	public void whenExited() {
@@ -100,7 +119,7 @@ public class PhasePreviewing extends PhaseBase implements IRenderGameOverlay {
 
 	@Override
 	public void renderGameOverlay(RenderGameOverlayEvent.Pre event) {
-		MatrixStack ms = event.getMatrixStack();
+		PoseStack ms = event.getMatrixStack();
 		toolSelection.renderPassive(ms, event.getPartialTicks());
 		activeTool.getTool()
 			.renderOverlay(ms);

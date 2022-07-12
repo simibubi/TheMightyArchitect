@@ -4,20 +4,20 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.TheMightyArchitect;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.TemplateBlockAccess;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -59,7 +59,7 @@ public class PrintingToMultiplayer extends PhaseBase {
 
 				if (minecraft.level.getBlockState(pos) == state)
 					continue;
-				if (!minecraft.level.isUnobstructed(state, pos, ISelectionContext.of(minecraft.player)))
+				if (!minecraft.level.isUnobstructed(state, pos, CollisionContext.of(minecraft.player)))
 					continue;
 
 				String blockstring = state.toString().replaceFirst("Block\\{", "").replaceFirst("\\}", "");
@@ -79,20 +79,20 @@ public class PrintingToMultiplayer extends PhaseBase {
 			return;
 
 		if (cooldown > 0) {
-			List<ITextComponent> checking = new LinkedList<>();
+			List<Component> checking = new LinkedList<>();
 			checking.add(event.getMessage());
 
 			while (!checking.isEmpty()) {
-				ITextComponent iTextComponent = checking.get(0);
-				if (iTextComponent instanceof TranslationTextComponent) {
-					String test = ((TranslationTextComponent) iTextComponent).getKey();
+				Component iTextComponent = checking.get(0);
+				if (iTextComponent instanceof TranslatableComponent) {
+					String test = ((TranslatableComponent) iTextComponent).getKey();
 					
 				TheMightyArchitect.logger.info(test);
 					
 					if (test.equals("command.unknown.command")) {
 						cooldown = 0;
-						event.setMessage(new StringTextComponent(
-								TextFormatting.RED + "You do not have permission to print on this server."));
+						event.setMessage(new TextComponent(
+								ChatFormatting.RED + "You do not have permission to print on this server."));
 						return;
 					}
 					if (test.equals("parsing.int.expected")) {
@@ -113,13 +113,13 @@ public class PrintingToMultiplayer extends PhaseBase {
 	}
 
 	@Override
-	public void render(MatrixStack ms, IRenderTypeBuffer buffer) {
+	public void render(PoseStack ms, MultiBufferSource buffer) {
 	}
 
 	@Override
 	public void whenExited() {
 		if (approved) {
-			Minecraft.getInstance().player.displayClientMessage(new StringTextComponent(TextFormatting.GREEN + "Finished Printing, enjoy!"),
+			Minecraft.getInstance().player.displayClientMessage(new TextComponent(ChatFormatting.GREEN + "Finished Printing, enjoy!"),
 					false);
 			Minecraft.getInstance().player.chat("/gamerule logAdminCommands true");
 			Minecraft.getInstance().player.chat("/gamerule sendCommandFeedback true");

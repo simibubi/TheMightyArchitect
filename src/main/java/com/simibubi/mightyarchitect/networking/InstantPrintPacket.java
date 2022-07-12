@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.network.NetworkEvent;
 
 public class InstantPrintPacket {
 
@@ -25,30 +25,29 @@ public class InstantPrintPacket {
 		this.blocks = blocks;
 	}
 
-	public InstantPrintPacket(PacketBuffer buf) {
+	public InstantPrintPacket(FriendlyByteBuf buf) {
 		Map<BlockPos, BlockState> blocks = new HashMap<>();
 		int size = buf.readInt();
 		for (int i = 0; i < size; i++) {
-			CompoundNBT blockTag = buf.readNbt();
+			CompoundTag blockTag = buf.readNbt();
 			BlockPos pos = buf.readBlockPos();
-			blocks.put(pos, NBTUtil.readBlockState(blockTag));
+			blocks.put(pos, NbtUtils.readBlockState(blockTag));
 		}
 		this.blocks = new BunchOfBlocks(blocks);
 	}
 
-	public void toBytes(PacketBuffer buf) {
+	public void toBytes(FriendlyByteBuf buf) {
 		buf.writeInt(blocks.size);
 		blocks.blocks.forEach((pos, state) -> {
-			buf.writeNbt(NBTUtil.writeBlockState(state));
+			buf.writeNbt(NbtUtils.writeBlockState(state));
 			buf.writeBlockPos(pos);
 		});
 	}
 	
-	public void handle(Supplier<Context> context) {
-		Context ctx = context.get();
-		ctx.enqueueWork(() -> {
+	public void handle(Supplier<NetworkEvent.Context> context) {
+		context.get().enqueueWork(() -> {
 			blocks.blocks.forEach((pos, state) -> {
-				ctx.getSender().getCommandSenderWorld().setBlock(pos, state, 3);
+				context.get().getSender().getCommandSenderWorld().setBlock(pos, state, 3);
 			});
 		});
     }

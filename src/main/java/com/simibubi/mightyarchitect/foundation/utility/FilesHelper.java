@@ -16,8 +16,8 @@ import com.google.gson.stream.JsonWriter;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.simibubi.mightyarchitect.TheMightyArchitect;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
 
 public class FilesHelper {
 
@@ -44,15 +44,16 @@ public class FilesHelper {
 	}
 
 	public static String slug(String name) {
-		return name.toLowerCase().replace(' ', '_');
+		return name.toLowerCase()
+			.replace(' ', '_');
 	}
 
-	public static boolean saveTagCompoundAsJson(CompoundNBT compound, String path) {
+	public static boolean saveTagCompoundAsJson(CompoundTag compound, String path) {
 		try {
 			Files.deleteIfExists(Paths.get(path));
 			JsonWriter writer = new JsonWriter(Files.newBufferedWriter(Paths.get(path), StandardOpenOption.CREATE));
 			writer.setIndent("  ");
-			Streams.write(new JsonParser().parse(compound.toString()), writer);
+			Streams.write(JsonParser.parseString(compound.toString()), writer);
 			writer.close();
 			return true;
 		} catch (IOException e) {
@@ -60,30 +61,29 @@ public class FilesHelper {
 		}
 		return false;
 	}
-	
 
-	public static boolean saveTagCompoundAsJsonCompact(CompoundNBT compound, String path) {
+	public static boolean saveTagCompoundAsJsonCompact(CompoundTag compound, String path) {
 		try {
 			Files.deleteIfExists(Paths.get(path));
 			JsonWriter writer = new JsonWriter(Files.newBufferedWriter(Paths.get(path), StandardOpenOption.CREATE));
-			Streams.write(new JsonParser().parse(compound.toString()), writer);
+			Streams.write(JsonParser.parseString(compound.toString()), writer);
 			writer.close();
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return false;
-		
+
 	}
 
-	public static CompoundNBT loadJsonNBT(InputStream inputStream) {
+	public static CompoundTag loadJsonNBT(InputStream inputStream) {
 		try {
 			JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(inputStream)));
 			reader.setLenient(true);
 			JsonElement element = Streams.parse(reader);
 			reader.close();
 			inputStream.close();
-			return JsonToNBT.parseTag(element.toString());
+			return TagParser.parseTag(element.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (CommandSyntaxException e) {
@@ -92,11 +92,12 @@ public class FilesHelper {
 		return null;
 	}
 
-	public static CompoundNBT loadJsonResourceAsNBT(String filepath) {
-		return loadJsonNBT(TheMightyArchitect.class.getClassLoader().getResourceAsStream(filepath));
+	public static CompoundTag loadJsonResourceAsNBT(String filepath) {
+		return loadJsonNBT(TheMightyArchitect.class.getClassLoader()
+			.getResourceAsStream(filepath));
 	}
 
-	public static CompoundNBT loadJsonAsNBT(String filepath) {
+	public static CompoundTag loadJsonAsNBT(String filepath) {
 		try {
 			return loadJsonNBT(Files.newInputStream(Paths.get(filepath), StandardOpenOption.READ));
 		} catch (IOException e) {
@@ -104,6 +105,5 @@ public class FilesHelper {
 		}
 		return null;
 	}
-
 
 }

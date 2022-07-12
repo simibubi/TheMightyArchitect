@@ -1,37 +1,37 @@
 package com.simibubi.mightyarchitect.foundation.utility.outliner;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.foundation.utility.VecHelper;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 
 public class LineOutline extends Outline {
 
-	protected Vector3d start = Vector3d.ZERO;
-	protected Vector3d end = Vector3d.ZERO;
+	protected Vec3 start = Vec3.ZERO;
+	protected Vec3 end = Vec3.ZERO;
 
-	public LineOutline set(Vector3d start, Vector3d end) {
+	public LineOutline set(Vec3 start, Vec3 end) {
 		this.start = start;
 		this.end = end;
 		return this;
 	}
 
 	@Override
-	public void render(MatrixStack ms, IRenderTypeBuffer buffer) {
+	public void render(PoseStack ms, MultiBufferSource buffer) {
 		renderCuboidLine(ms, buffer, start, end);
 	}
 
 	public static class ChasingLineOutline extends LineOutline {
 
-		protected Vector3d prevStart = Vector3d.ZERO;
-		protected Vector3d prevEnd = Vector3d.ZERO;
-		protected Vector3d targetStart = Vector3d.ZERO;
-		protected Vector3d targetEnd = Vector3d.ZERO;
+		protected Vec3 prevStart = Vec3.ZERO;
+		protected Vec3 prevEnd = Vec3.ZERO;
+		protected Vec3 targetStart = Vec3.ZERO;
+		protected Vec3 targetEnd = Vec3.ZERO;
 
-		public ChasingLineOutline target(Vector3d start, Vector3d end) {
+		public ChasingLineOutline target(Vec3 start, Vec3 end) {
 			if (end.distanceTo(targetStart) + start.distanceTo(targetEnd) < end.distanceTo(targetEnd)
 				+ start.distanceTo(targetStart)) {
 				this.targetEnd = start;
@@ -44,7 +44,7 @@ public class LineOutline extends Outline {
 		}
 
 		@Override
-		public LineOutline set(Vector3d start, Vector3d end) {
+		public LineOutline set(Vec3 start, Vec3 end) {
 			prevEnd = end;
 			prevStart = start;
 			return super.set(start, end);
@@ -59,7 +59,7 @@ public class LineOutline extends Outline {
 		}
 
 		@Override
-		public void render(MatrixStack ms, IRenderTypeBuffer buffer) {
+		public void render(PoseStack ms, MultiBufferSource buffer) {
 			float pt = Minecraft.getInstance()
 				.getFrameTime();
 			renderCuboidLine(ms, buffer, VecHelper.lerp(prevStart, start, pt), VecHelper.lerp(prevEnd, end, pt));
@@ -82,18 +82,18 @@ public class LineOutline extends Outline {
 		}
 
 		@Override
-		public LineOutline set(Vector3d start, Vector3d end) {
+		public LineOutline set(Vec3 start, Vec3 end) {
 			if (!end.equals(this.end))
 				super.set(start, end);
 			return this;
 		}
 
 		@Override
-		public void render(MatrixStack ms, IRenderTypeBuffer buffer) {
+		public void render(PoseStack ms, MultiBufferSource buffer) {
 			float pt = Minecraft.getInstance()
 				.getFrameTime();
-			float distanceToTarget = 1 - MathHelper.lerp(pt, prevProgress, progress);
-			Vector3d start = end.add(this.start.subtract(end)
+			float distanceToTarget = 1 - Mth.lerp(pt, prevProgress, progress);
+			Vec3 start = end.add(this.start.subtract(end)
 				.scale(distanceToTarget));
 			renderCuboidLine(ms, buffer, start, end);
 		}

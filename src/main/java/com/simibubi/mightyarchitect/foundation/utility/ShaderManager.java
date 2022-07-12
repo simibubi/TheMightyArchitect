@@ -1,9 +1,9 @@
 package com.simibubi.mightyarchitect.foundation.utility;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -20,10 +20,10 @@ public class ShaderManager {
 		if (Minecraft.getInstance().level == null && activeShader != Shaders.None)
 			stopUsingShaders();
 		
-		ClientPlayerEntity player = Minecraft.getInstance().player;
+		LocalPlayer player = Minecraft.getInstance().player;
 		if (player == null)
 			return;
-		EffectInstance activePotionEffect = player.getEffect(Effects.NIGHT_VISION);
+		MobEffectInstance activePotionEffect = player.getEffect(MobEffects.NIGHT_VISION);
 
 		if (activeShader == Shaders.Blueprint) {
 			if (activePotionEffect == null || activePotionEffect.getDuration() < 999)
@@ -32,7 +32,7 @@ public class ShaderManager {
 		}
 		
 		if (activePotionEffect instanceof NVEffectInstance) 
-			player.removeEffectNoUpdate(Effects.NIGHT_VISION);
+			player.removeEffectNoUpdate(MobEffects.NIGHT_VISION);
 	}
 
 	public static Shaders getActiveShader() {
@@ -51,10 +51,10 @@ public class ShaderManager {
 		activeShader.setActive(true);
 	}
 
-	private static class NVEffectInstance extends EffectInstance {
+	private static class NVEffectInstance extends MobEffectInstance {
 
 		public NVEffectInstance() {
-			super(Effects.NIGHT_VISION, 1000, 0, false, false, false);
+			super(MobEffects.NIGHT_VISION, 1000, 0, false, false, false);
 		}
 
 	}

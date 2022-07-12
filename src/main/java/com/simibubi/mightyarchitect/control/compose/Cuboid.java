@@ -1,9 +1,9 @@
 package com.simibubi.mightyarchitect.control.compose;
 
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.phys.AABB;
 
 public class Cuboid {
 
@@ -109,12 +109,12 @@ public class Cuboid {
 				&& ((Cuboid) obj).getSize().equals(getSize());
 	}
 	
-	public MutableBoundingBox toMBB() {
-		return new MutableBoundingBox(getOrigin(), getOrigin().offset(getSize()));
+	public BoundingBox toMBB() {
+		return BoundingBox.fromCorners(getOrigin(), getOrigin().offset(getSize()));
 	}
 	
-	public AxisAlignedBB toAABB() {
-		return new AxisAlignedBB(getOrigin(), getOrigin().offset(getSize()));
+	public AABB toAABB() {
+		return new AABB(getOrigin(), getOrigin().offset(getSize()));
 	}
 
 }

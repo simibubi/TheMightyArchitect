@@ -9,14 +9,14 @@ import com.simibubi.mightyarchitect.control.palette.BlockOrientation;
 import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Direction.Axis;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.StringRepresentable;
 
 public class DesignSlice {
 
-	public enum DesignSliceTrait implements IStringSerializable {
+	public enum DesignSliceTrait implements StringRepresentable {
 		Standard("-> Use this slice once"), 
 		CloneOnce("-> Duplicate this slice if necessary"), 
 		CloneThrice("-> Duplicate up to 3 times"), 
@@ -49,7 +49,7 @@ public class DesignSlice {
 	private Palette[][] blocks;
 	private BlockOrientation[][] orientations;
 	
-	public static DesignSlice fromNBT(CompoundNBT sliceTag) {
+	public static DesignSlice fromNBT(CompoundTag sliceTag) {
 		DesignSlice slice = new DesignSlice();
 		slice.trait = DesignSliceTrait.valueOf(sliceTag.getString("Trait"));
 

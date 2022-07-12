@@ -16,8 +16,8 @@ import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.design.ThemeStatistics;
 import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 
 public class RoomTool extends GroundPlanningToolBase {
 
@@ -54,7 +54,7 @@ public class RoomTool extends GroundPlanningToolBase {
 
 		} else {
 			return createRoom(ArchitectManager.getModel()
-				.getGroundPlan());
+					.getGroundPlan());
 		}
 	}
 
@@ -66,7 +66,7 @@ public class RoomTool extends GroundPlanningToolBase {
 		DesignTheme theme = groundPlan.theme;
 		ThemeStatistics stats = theme.getStatistics();
 		boolean hasFoundation = theme.getLayers()
-			.contains(DesignLayer.Foundation);
+				.contains(DesignLayer.Foundation);
 		room.designLayer = hasFoundation ? DesignLayer.Foundation : DesignLayer.Regular;
 
 		int facadeWidth = Math.min(room.width, room.length);
@@ -106,7 +106,7 @@ public class RoomTool extends GroundPlanningToolBase {
 
 		groundPlan.forEachRoom(r -> {
 			if (r.intersects(room) && !(r.y + r.height <= room.y || room.y + room.height <= r.y)
-				&& (biggestRoom.getValue() == null
+					&& (biggestRoom.getValue() == null
 					|| biggestRoom.getValue().width * biggestRoom.getValue().length < r.width * r.length)) {
 				biggestRoom.setValue(r);
 			}
@@ -130,7 +130,7 @@ public class RoomTool extends GroundPlanningToolBase {
 			if (r == added)
 				return;
 			if (r.intersects(added) && r.y <= added.y && r.y + r.height > added.y && (biggestRoom.getValue() == null
-				|| biggestRoom.getValue().width * biggestRoom.getValue().length < r.width * r.length)) {
+					|| biggestRoom.getValue().width * biggestRoom.getValue().length < r.width * r.length)) {
 				biggestRoom.setValue(r);
 			}
 		});
@@ -146,13 +146,13 @@ public class RoomTool extends GroundPlanningToolBase {
 
 		if (scroll > 0) {
 			increaseMatchingOthers(ArchitectManager.getModel()
-				.getGroundPlan(), lastAddedStack);
+					.getGroundPlan(), lastAddedStack);
 		} else {
 			lastAddedStack.decrease();
 			if (lastAddedStack.floors() == 0) {
 				ArchitectManager.getModel()
-					.getGroundPlan()
-					.remove(lastAddedStack);
+						.getGroundPlan()
+						.remove(lastAddedStack);
 				lastAddedStack = null;
 			}
 		}
@@ -213,7 +213,7 @@ public class RoomTool extends GroundPlanningToolBase {
 			return;
 
 		BlockPos anchor = ArchitectManager.getModel()
-			.getAnchor();
+				.getAnchor();
 		BlockPos cursorPos = (anchor != null) ? selectedPosition.offset(anchor) : selectedPosition;
 		BlockPos previouslySelectedPos = (firstPosition != null) ? firstPosition.offset(anchor) : cursorPos;
 
@@ -223,8 +223,9 @@ public class RoomTool extends GroundPlanningToolBase {
 		selection.length += 1;
 
 		MightyClient.outliner.chaseAABB(outlineKey, selection.toAABB())
-			.withFaceTexture(AllSpecialTextures.CHECKERED)
-			.colored(0);
+				.withFaceTexture(AllSpecialTextures.CHECKERED)
+				.withAlpha(0.75f)
+				.colored(0x0);
 
 		if (firstPosition == null)
 			return;
@@ -242,11 +243,11 @@ public class RoomTool extends GroundPlanningToolBase {
 	}
 
 	private void chaseText(Object key, float x, float y, float z, String text) {
-		MightyClient.outliner.chaseText(key, new Vector3d(x, y, z), text)
-			.colored(0)
-			.coloredFaces(0xffffff)
-			.disableNormals()
-			.withFaceTexture(AllSpecialTextures.BLANK);
+		MightyClient.outliner.chaseText(key, new Vec3(x, y, z), text)
+				.colored(0)
+				.coloredFaces(0xffffff)
+				.disableNormals()
+				.withFaceTexture(AllSpecialTextures.BLANK);
 	}
 
 }

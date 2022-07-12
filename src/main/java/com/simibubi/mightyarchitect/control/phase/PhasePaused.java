@@ -3,29 +3,29 @@ package com.simibubi.mightyarchitect.control.phase;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.MightyClient;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.network.chat.TextComponent;
 
 public class PhasePaused extends PhaseBase {
 
 	@Override
 	public void whenEntered() {
-		ClientPlayerEntity player = Minecraft.getInstance().player;
+		LocalPlayer player = Minecraft.getInstance().player;
 		if (player == null)
 			return;
-		player.displayClientMessage(new StringTextComponent(
-			"The Mighty Architect was " + TextFormatting.BOLD + "Paused" + TextFormatting.RESET + "."), false);
-		player.displayClientMessage(new StringTextComponent("You can continue composing with [" + TextFormatting.AQUA
+		player.displayClientMessage(new TextComponent(
+			"The Mighty Architect was " + ChatFormatting.BOLD + "Paused" + ChatFormatting.RESET + "."), false);
+		player.displayClientMessage(new TextComponent("You can continue composing with [" + ChatFormatting.AQUA
 			+ MightyClient.COMPOSE.getTranslatedKeyMessage()
 				.getString()
 				.toUpperCase()
-			+ TextFormatting.WHITE + "]"), false);
+			+ ChatFormatting.WHITE + "]"), false);
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class PhasePaused extends PhaseBase {
 	}
 
 	@Override
-	public void render(MatrixStack ms, IRenderTypeBuffer buffer) {
+	public void render(PoseStack ms, MultiBufferSource buffer) {
 
 	}
 

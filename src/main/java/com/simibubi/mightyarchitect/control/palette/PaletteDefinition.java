@@ -4,18 +4,18 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.TrapDoorBlock;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.Property;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Direction.Axis;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.Property;
 
 public class PaletteDefinition {
 
@@ -103,14 +103,14 @@ public class PaletteDefinition {
 		return name;
 	}
 
-	public CompoundNBT writeToNBT(CompoundNBT compound) {
-		compound = (compound == null) ? new CompoundNBT() : compound;
-		CompoundNBT palette = new CompoundNBT();
+	public CompoundTag writeToNBT(CompoundTag compound) {
+		compound = (compound == null) ? new CompoundTag() : compound;
+		CompoundTag palette = new CompoundTag();
 		palette.putString("Name", getName());
 		Palette[] values = Palette.values();
 
 		for (int i = 0; i < values.length; i++) {
-			CompoundNBT state = NBTUtil.writeBlockState(get(values[i]));
+			CompoundTag state = NbtUtils.writeBlockState(get(values[i]));
 			palette.put(values[i].name(), state);
 		}
 
@@ -118,16 +118,16 @@ public class PaletteDefinition {
 		return compound;
 	}
 
-	public static PaletteDefinition fromNBT(CompoundNBT compound) {
+	public static PaletteDefinition fromNBT(CompoundTag compound) {
 		PaletteDefinition palette = defaultPalette().clone();
 
 		if (compound != null) {
 			if (compound.contains("Palette")) {
-				CompoundNBT paletteTag = compound.getCompound("Palette");
+				CompoundTag paletteTag = compound.getCompound("Palette");
 				palette.name = paletteTag.getString("Name");
 				for (Palette key : Palette.values()) {
 					if (paletteTag.contains(key.name())) {
-						palette.put(key, NBTUtil.readBlockState(paletteTag.getCompound(key.name())));
+						palette.put(key, NbtUtils.readBlockState(paletteTag.getCompound(key.name())));
 					}
 				}
 			}

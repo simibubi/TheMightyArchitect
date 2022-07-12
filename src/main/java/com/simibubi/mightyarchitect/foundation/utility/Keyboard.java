@@ -1,7 +1,8 @@
 package com.simibubi.mightyarchitect.foundation.utility;
 
+import com.mojang.blaze3d.platform.InputConstants;
+
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.util.InputMappings;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -24,7 +25,7 @@ public class Keyboard {
 	public static final int G = 71;
 
 	public static boolean isKeyDown(int key) {
-		return InputMappings.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), key);
+		return InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), key);
 	}
 	
 }
