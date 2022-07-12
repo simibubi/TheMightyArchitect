@@ -3,9 +3,9 @@ package com.simibubi.mightyarchitect.gui.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
 
 public class SelectionScrollInput extends ScrollInput {
 

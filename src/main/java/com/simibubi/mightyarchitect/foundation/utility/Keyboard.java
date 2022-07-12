@@ -1,7 +1,8 @@
 package com.simibubi.mightyarchitect.foundation.utility;
 
-import net.minecraft.client.Minecraft;
 import com.mojang.blaze3d.platform.InputConstants;
+
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

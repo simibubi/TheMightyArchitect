@@ -2,11 +2,10 @@ package com.simibubi.mightyarchitect.gui.widgets;
 
 import java.util.function.Consumer;
 
-import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
 
 public class ScrollInput extends AbstractSimiWidget {
 

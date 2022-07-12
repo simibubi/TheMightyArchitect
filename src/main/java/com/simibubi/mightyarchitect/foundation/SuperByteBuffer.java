@@ -3,21 +3,20 @@ package com.simibubi.mightyarchitect.foundation;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferBuilder.DrawState;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
-
-import net.minecraft.client.Minecraft;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.BufferBuilder.DrawState;
-import com.mojang.blaze3d.platform.MemoryTracker;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector4f;
-import net.minecraft.world.level.LightLayer;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
 
 public class SuperByteBuffer {
 

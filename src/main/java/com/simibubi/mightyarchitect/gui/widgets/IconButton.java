@@ -1,7 +1,7 @@
 package com.simibubi.mightyarchitect.gui.widgets;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.gui.ScreenResources;
 
 import net.minecraft.network.chat.Component;

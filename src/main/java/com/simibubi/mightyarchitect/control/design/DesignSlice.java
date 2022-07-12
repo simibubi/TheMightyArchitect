@@ -9,9 +9,9 @@ import com.simibubi.mightyarchitect.control.palette.BlockOrientation;
 import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.StringRepresentable;
 
 public class DesignSlice {

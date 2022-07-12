@@ -1,9 +1,9 @@
 package com.simibubi.mightyarchitect.control.compose;
 
-import net.minecraft.core.Direction;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.phys.AABB;
 
 public class Cuboid {
 

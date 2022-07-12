@@ -1,52 +1,42 @@
 package com.simibubi.mightyarchitect.gui;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.simibubi.mightyarchitect.foundation.WrappedWorld;
-import com.simibubi.mightyarchitect.foundation.utility.AngleHelper;
+import com.mojang.math.Vector3f;
 import com.simibubi.mightyarchitect.foundation.utility.ColorHelper;
-import com.simibubi.mightyarchitect.foundation.utility.Iterate;
 import com.simibubi.mightyarchitect.foundation.utility.VecHelper;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.ItemRenderer;
-import com.mojang.blaze3d.platform.Lighting;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Direction.AxisDirection;
-import net.minecraft.world.level.ItemLike;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
-import com.mojang.math.Vector3f;
-import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
-import net.minecraftforge.fluids.FluidStack;
 
 public class GuiGameElement {
 
@@ -204,10 +194,12 @@ public class GuiGameElement {
 		protected void renderModel(BlockRenderDispatcher blockRenderer, MultiBufferSource.BufferSource buffer,
 			RenderType renderType, VertexConsumer vb, PoseStack ms) {
 			Vec3 rgb = ColorHelper.getRGB(color);
+			Lighting.setupForFlatItems();
 			blockRenderer.getModelRenderer()
 				.renderModel(ms.last(), vb, blockState, blockmodel, (float) rgb.x, (float) rgb.y, (float) rgb.z,
 					0xF000F0, OverlayTexture.NO_OVERLAY, EmptyModelData.INSTANCE);
 			buffer.endBatch();
+			Lighting.setupFor3DItems();
 		}
 	}
 
@@ -292,27 +284,6 @@ public class GuiGameElement {
 			}
 
 			matrixStack.popPose();
-		}
-
-	}
-
-	private static FluidRenderWorld renderWorld;
-
-	private static class FluidRenderWorld extends WrappedWorld {
-
-		public FluidRenderWorld(Level world) {
-			super(world);
-		}
-
-		@Override
-		public int getBrightness(@Nullable LightLayer p_226658_1_, @Nullable BlockPos p_226658_2_) {
-			return 15;
-		}
-
-		@Override
-		@Nonnull
-		public BlockState getBlockState(BlockPos pos) {
-			return Blocks.AIR.defaultBlockState();
 		}
 
 	}

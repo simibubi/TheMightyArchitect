@@ -6,8 +6,8 @@ import java.util.List;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.gui.widgets.AbstractSimiWidget;
 
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TextComponent;
 
 public abstract class AbstractSimiScreen extends Screen {

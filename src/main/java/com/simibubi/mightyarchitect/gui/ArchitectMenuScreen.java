@@ -5,20 +5,22 @@ import java.util.List;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.ArchitectMenu;
 import com.simibubi.mightyarchitect.control.ArchitectMenu.KeyBindList;
 import com.simibubi.mightyarchitect.control.phase.ArchitectPhases;
+import com.simibubi.mightyarchitect.foundation.utility.LerpedFloat;
+import com.simibubi.mightyarchitect.foundation.utility.LerpedFloat.Chaser;
 
-import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.util.FormattedCharSequence;
 
 public class ArchitectMenuScreen extends Screen {
 
@@ -31,8 +33,7 @@ public class ArchitectMenuScreen extends Screen {
 	private int menuWidth;
 	private int menuHeight;
 
-	private int targetY;
-	private float movingY;
+	private LerpedFloat animation;
 
 	public ArchitectMenuScreen() {
 		super(new TextComponent("Architect Menu"));
@@ -41,8 +42,9 @@ public class ArchitectMenuScreen extends Screen {
 		title = "";
 		focused = false;
 		visible = false;
-		movingY = 0;
-		targetY = 0;
+		animation = LerpedFloat.linear()
+			.startWithValue(0)
+			.chase(0, 0.2f, Chaser.EXP);
 		adjustTarget();
 	}
 
@@ -130,13 +132,15 @@ public class ArchitectMenuScreen extends Screen {
 	}
 
 	private void draw(PoseStack ms, float partialTicks) {
-		Window mainWindow = Minecraft.getInstance()
-			.getWindow();
+		Minecraft mc = Minecraft.getInstance();
+		Window mainWindow = mc.getWindow();
+		partialTicks = mc.getFrameTime();
+
 		int x = mainWindow.getGuiScaledWidth() - menuWidth - 10;
 		int y = mainWindow.getGuiScaledHeight() - menuHeight;
 
-		int mouseX = (int) (Minecraft.getInstance().mouseHandler.xpos() / mainWindow.getGuiScale());
-		int mouseY = (int) (Minecraft.getInstance().mouseHandler.ypos() / mainWindow.getGuiScale());
+		int mouseX = (int) (mc.mouseHandler.xpos() / mainWindow.getGuiScale());
+		int mouseY = (int) (mc.mouseHandler.ypos() / mainWindow.getGuiScale());
 
 		boolean sideways = false;
 		if ((mainWindow.getGuiScaledWidth() - 182) / 2 < menuWidth + 20) {
@@ -145,7 +149,7 @@ public class ArchitectMenuScreen extends Screen {
 		}
 
 		ms.pushPose();
-		float shift = yShift(partialTicks);
+		float shift = animation.getValue(partialTicks);
 		float sidewaysShift =
 			shift * ((float) menuWidth / (float) menuHeight) + (!focused ? 40 + menuHeight / 4f : 0) + 8;
 		ms.translate(sideways ? sidewaysShift : 0, sideways ? 0 : shift, 0);
@@ -164,7 +168,7 @@ public class ArchitectMenuScreen extends Screen {
 		int yPos = y + 4;
 		int xPos = x + 4;
 
-		Font textRenderer = Minecraft.getInstance().font;
+		Font textRenderer = mc.font;
 		String compose = MightyClient.COMPOSE.getTranslatedKeyMessage()
 			.getString()
 			.toUpperCase();
@@ -173,19 +177,17 @@ public class ArchitectMenuScreen extends Screen {
 				if (visible) {
 					String string = "Press " + compose.toUpperCase() + " for Menu";
 					textRenderer.drawShadow(ms, string,
-						mainWindow.getGuiScaledWidth() - textRenderer.width(string) - 15 - sidewaysShift,
-						yPos - 14, 0xEEEEEE);
+						mainWindow.getGuiScaledWidth() - textRenderer.width(string) - 15 - sidewaysShift, yPos - 14,
+						0xEEEEEE);
 				}
 			} else {
-				textRenderer.drawShadow(ms, "Press " + compose.toUpperCase() + " to focus", xPos, yPos - 14,
-					0xEEEEEE);
+				textRenderer.drawShadow(ms, "Press " + compose.toUpperCase() + " to focus", xPos, yPos - 14, 0xEEEEEE);
 			}
 		} else {
 			String string = "Press " + compose + " to close";
 			textRenderer.drawShadow(ms, string,
 				sideways
-					? Math.min(xPos,
-						mainWindow.getGuiScaledWidth() - textRenderer.width(string) - 15 - sidewaysShift)
+					? Math.min(xPos, mainWindow.getGuiScaledWidth() - textRenderer.width(string) - 15 - sidewaysShift)
 					: xPos,
 				yPos - 14, 0xDDDDDD);
 		}
@@ -210,10 +212,10 @@ public class ArchitectMenuScreen extends Screen {
 		yPos += 4;
 		yPos += textRenderer.lineHeight;
 		for (String text : tooltip) {
-			int height = Minecraft.getInstance().font.wordWrapHeight(text, menuWidth - 8);
+			int height = mc.font.wordWrapHeight(text, menuWidth - 8);
 			int lineY = yPos;
 			for (FormattedCharSequence iro : textRenderer.split(new TextComponent(text), menuWidth - 8)) {
-				textRenderer.draw(ms, iro, xPos, lineY, 0xEEEEEE);				
+				textRenderer.draw(ms, iro, xPos, lineY, 0xEEEEEE);
 				lineY += textRenderer.lineHeight;
 			}
 			yPos += height + 2;
@@ -238,7 +240,7 @@ public class ArchitectMenuScreen extends Screen {
 			mouseY += 24;
 		}
 
-		float shift = yShift(0);
+		float shift = animation.getValue();
 		mouseX -= sideways ? shift * 2 : 0;
 		mouseY -= sideways ? 0 : shift;
 
@@ -277,7 +279,7 @@ public class ArchitectMenuScreen extends Screen {
 	}
 
 	protected void adjustTarget() {
-		targetY = visible ? (focused ? 0 : menuHeight - 14) : menuHeight + 20;
+		animation.updateChaseTarget(visible ? (focused ? 0 : menuHeight - 14) : menuHeight + 20);
 	}
 
 	public void setVisible(boolean visible) {
@@ -291,14 +293,8 @@ public class ArchitectMenuScreen extends Screen {
 		setFocused(false);
 	}
 
-	private float yShift(float partialTicks) {
-		return (movingY + (targetY - movingY) * 0.2f * partialTicks);
-	}
-
 	public void onClientTick() {
-		if (movingY != targetY) {
-			movingY += (targetY - movingY) * 0.2;
-		}
+		animation.tickChaser();
 	}
 
 }

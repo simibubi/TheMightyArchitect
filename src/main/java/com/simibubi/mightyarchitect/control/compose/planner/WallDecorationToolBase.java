@@ -4,9 +4,9 @@ import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.compose.Cuboid;
 import com.simibubi.mightyarchitect.control.compose.Room;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
 
 public abstract class WallDecorationToolBase extends ComposerToolBase {
 

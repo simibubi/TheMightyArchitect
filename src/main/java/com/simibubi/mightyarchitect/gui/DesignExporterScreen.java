@@ -3,8 +3,8 @@ package com.simibubi.mightyarchitect.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.math.Vector3f;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
@@ -237,14 +237,11 @@ public class DesignExporterScreen extends AbstractSimiScreen {
 		ScreenResources.EXPORTER.draw(ms, this, topLeftX, topLeftY);
 
 		ms.pushPose();
-		ms.translate((this.width - this.sWidth) / 2 + 250, 220, 100);
-		//RenderSystem.rotatef(-30, .4f, 0, -.2f);
-		ms.mulPose(Vector3f.XP.rotationDegrees(-30 * 0.4f));
-		ms.mulPose(Vector3f.ZN.rotationDegrees(-30 * 0.2f));
-		//RenderSystem.rotatef(90 + 0.2f * animationProgress, 0, 1, 0);
-		ms.mulPose(Vector3f.YP.rotationDegrees(90 + 0.2f * animationProgress));
-		ms.scale(100, -100, 100);
+		ms.translate(0, 0, -200);
+		ms.translate((this.width - this.sWidth) / 2 + 150, 120, 0);
+		ms.scale(10, 10, 10);
 		GuiGameElement.of(minecraft.player.getMainHandItem())
+			.rotate(-1, 0, 20)
 			.render(ms);
 		ms.popPose();
 

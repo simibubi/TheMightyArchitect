@@ -2,8 +2,6 @@ package com.simibubi.mightyarchitect.foundation.utility;
 
 import java.util.UUID;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraft.world.phys.Vec3;
 
 public class ColorHelper {
@@ -41,19 +39,6 @@ public class ColorHelper {
 		int color = ((int) (r1 + (r2 - r1) * w) << 16) + ((int) (g1 + (g2 - g1) * w) << 8) + (int) (b1 + (b2 - b1) * w);
 
 		return color;
-	}
-
-	public static void glColor(int color) {
-		color = mixColors(color, 0xFFFFFF, .5f);
-		int r = (color >> 16);
-		int g = (color >> 8) & 0xFF;
-		int b = color & 0xFF;
-
-		//RenderSystem.color4f(r / 256f, g / 256f, b / 256f, 1);
-	}
-
-	public static void glResetColor() {
-		//RenderSystem.color4f(1, 1, 1, 1);
 	}
 
 	public static Vec3 getRGB(int color) {

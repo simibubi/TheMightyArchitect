@@ -6,11 +6,11 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.MightyClient;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
 
 public class PhasePaused extends PhaseBase {
 

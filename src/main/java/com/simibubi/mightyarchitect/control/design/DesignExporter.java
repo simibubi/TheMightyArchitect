@@ -18,16 +18,16 @@ import com.simibubi.mightyarchitect.control.phase.export.PhaseEditTheme;
 import com.simibubi.mightyarchitect.foundation.utility.FilesHelper;
 import com.simibubi.mightyarchitect.networking.PlaceSignPacket;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.world.level.block.entity.SignBlockEntity;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class DesignExporter {
 

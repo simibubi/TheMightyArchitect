@@ -8,10 +8,10 @@ import com.simibubi.mightyarchitect.foundation.utility.AnimationTickHolder;
 import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
 import com.simibubi.mightyarchitect.foundation.utility.outliner.Outliner;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.Camera;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ClientRegistry;

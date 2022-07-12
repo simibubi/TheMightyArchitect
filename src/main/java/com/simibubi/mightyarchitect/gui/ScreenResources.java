@@ -4,7 +4,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.TheMightyArchitect;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.resources.ResourceLocation;
 
@@ -70,7 +69,7 @@ public enum ScreenResources {
 	ICON_FOLDER("icons.png", 0, 96, 16, 16),
 	ICON_REFRESH("icons.png", 16, 96, 16, 16);
 	
-	public static final int FONT_COLOR = 0x575F7A;
+	public static final int FONT_COLOR = 0x373F5A;
 	
 	public final ResourceLocation location;
 	public int width, height;

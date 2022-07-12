@@ -6,10 +6,8 @@ import java.util.Map;
 import com.simibubi.mightyarchitect.control.design.DesignSlice;
 import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.BlockPos;
-
-import com.simibubi.mightyarchitect.control.design.partials.Design.DesignInstance;
+import net.minecraft.nbt.CompoundTag;
 
 public class Roof extends Design {
 

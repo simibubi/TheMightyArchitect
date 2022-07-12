@@ -1,16 +1,15 @@
 package com.simibubi.mightyarchitect.foundation;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.simibubi.mightyarchitect.AllSpecialTextures;
+import com.simibubi.mightyarchitect.TheMightyArchitect;
 
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.simibubi.mightyarchitect.TheMightyArchitect;
-
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
 
 public class RenderTypes extends RenderStateShard {
 

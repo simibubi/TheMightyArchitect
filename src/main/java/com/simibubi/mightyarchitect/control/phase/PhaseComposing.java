@@ -16,7 +16,6 @@ import com.simibubi.mightyarchitect.gui.ToolSelectionScreen;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 
@@ -70,7 +69,8 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 
 	@Override
 	public void onKey(int key, boolean released) {
-		if (key == MightyClient.TOOL_MENU.getKey().getValue()) {
+		if (key == MightyClient.TOOL_MENU.getKey()
+			.getValue()) {
 			if (released && toolSelection.focused) {
 				toolSelection.focused = false;
 				toolSelection.onClose();
@@ -86,7 +86,10 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 			return;
 
 		if (toolSelection.focused) {
-			Optional<KeyMapping> mapping = Arrays.stream(Minecraft.getInstance().options.keyHotbarSlots).filter(keyMapping -> keyMapping.getKey().getValue() == key).findFirst();
+			Optional<KeyMapping> mapping = Arrays.stream(Minecraft.getInstance().options.keyHotbarSlots)
+				.filter(keyMapping -> keyMapping.getKey()
+					.getValue() == key)
+				.findFirst();
 			if (mapping.isEmpty())
 				return;
 
@@ -95,7 +98,8 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 			return;
 		}
 
-		activeTool.getTool().handleKeyInput(key);
+		activeTool.getTool()
+			.handleKeyInput(key);
 	}
 
 	@Override
@@ -123,7 +127,8 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 			return;
 
 		PoseStack ms = event.getMatrixStack();
-		toolSelection.renderPassive(ms, event.getPartialTicks());
+		toolSelection.renderPassive(ms, Minecraft.getInstance()
+			.getDeltaFrameTime());
 		activeTool.getTool()
 			.renderOverlay(ms);
 	}

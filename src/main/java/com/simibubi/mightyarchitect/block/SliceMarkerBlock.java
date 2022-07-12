@@ -3,23 +3,21 @@ package com.simibubi.mightyarchitect.block;
 import com.simibubi.mightyarchitect.AllItems;
 import com.simibubi.mightyarchitect.control.design.DesignSlice.DesignSliceTrait;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction.Axis;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.block.state.StateDefinition.Builder;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.core.Direction.Axis;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.world.level.Level;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class SliceMarkerBlock extends Block {
 

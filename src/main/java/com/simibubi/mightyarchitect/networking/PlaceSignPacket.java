@@ -2,12 +2,12 @@ package com.simibubi.mightyarchitect.networking;
 
 import java.util.function.Supplier;
 
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraftforge.network.NetworkEvent;
 
 public class PlaceSignPacket {

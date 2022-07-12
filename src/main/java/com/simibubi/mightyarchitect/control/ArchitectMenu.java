@@ -16,8 +16,8 @@ import com.simibubi.mightyarchitect.gui.ScreenHelper;
 import com.simibubi.mightyarchitect.gui.TextInputPromptScreen;
 import com.simibubi.mightyarchitect.gui.ThemeSettingsScreen;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
 
 public class ArchitectMenu {
 

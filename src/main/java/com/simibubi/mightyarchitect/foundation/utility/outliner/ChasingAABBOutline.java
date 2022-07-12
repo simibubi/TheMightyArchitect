@@ -4,8 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.util.Mth;
+import net.minecraft.world.phys.AABB;
 
 public class ChasingAABBOutline extends AABBOutline {
 

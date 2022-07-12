@@ -17,8 +17,8 @@ import com.simibubi.mightyarchitect.control.design.partials.Design;
 import com.simibubi.mightyarchitect.foundation.utility.FilesHelper;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtIo;
 
 public class DesignResourceLoader {
 

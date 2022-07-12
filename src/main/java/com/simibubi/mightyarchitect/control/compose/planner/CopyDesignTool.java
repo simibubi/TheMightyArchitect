@@ -14,11 +14,11 @@ import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.design.partials.Design;
 import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
-import net.minecraft.ChatFormatting;
 
 public class CopyDesignTool extends WallDecorationToolBase {
 

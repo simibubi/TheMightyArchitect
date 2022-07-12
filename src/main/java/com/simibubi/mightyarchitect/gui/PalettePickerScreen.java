@@ -2,8 +2,8 @@ package com.simibubi.mightyarchitect.gui;
 
 import java.nio.file.Paths;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
@@ -14,13 +14,13 @@ import com.simibubi.mightyarchitect.control.palette.PaletteStorage;
 import com.simibubi.mightyarchitect.foundation.utility.FilesHelper;
 import com.simibubi.mightyarchitect.gui.widgets.IconButton;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
 
 public class PalettePickerScreen extends AbstractSimiScreen {
 
@@ -242,9 +242,8 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 
 		private void preview(PoseStack ms, Minecraft mc) {
 			ms.pushPose();
-			ms.translate(x + 5, y + 9, 100);
-			//RenderSystem.rotatef(-35, 0, 1, 0);
-			ms.mulPose(Vector3f.YP.rotationDegrees(-35));
+			ms.translate(x + 1, y + 9, 100);
+			ms.scale(1 + 1/64f, 1 + 1/64f, 1);
 			renderBlock(ms, mc, new BlockPos(0, 1, 0), Palette.INNER_PRIMARY);
 			renderBlock(ms, mc, new BlockPos(1, 1, 0), Palette.INNER_DETAIL);
 			renderBlock(ms, mc, new BlockPos(0, 0, 0), Palette.HEAVY_PRIMARY);

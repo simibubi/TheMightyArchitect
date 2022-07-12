@@ -4,14 +4,14 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.nbt.DoubleTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
-import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.nbt.DoubleTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.core.Vec3i;
 
 public class VecHelper {
 

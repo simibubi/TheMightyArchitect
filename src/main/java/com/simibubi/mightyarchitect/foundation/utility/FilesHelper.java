@@ -44,7 +44,8 @@ public class FilesHelper {
 	}
 
 	public static String slug(String name) {
-		return name.toLowerCase().replace(' ', '_');
+		return name.toLowerCase()
+			.replace(' ', '_');
 	}
 
 	public static boolean saveTagCompoundAsJson(CompoundTag compound, String path) {
@@ -52,7 +53,7 @@ public class FilesHelper {
 			Files.deleteIfExists(Paths.get(path));
 			JsonWriter writer = new JsonWriter(Files.newBufferedWriter(Paths.get(path), StandardOpenOption.CREATE));
 			writer.setIndent("  ");
-			Streams.write(new JsonParser().parse(compound.toString()), writer);
+			Streams.write(JsonParser.parseString(compound.toString()), writer);
 			writer.close();
 			return true;
 		} catch (IOException e) {
@@ -60,20 +61,19 @@ public class FilesHelper {
 		}
 		return false;
 	}
-	
 
 	public static boolean saveTagCompoundAsJsonCompact(CompoundTag compound, String path) {
 		try {
 			Files.deleteIfExists(Paths.get(path));
 			JsonWriter writer = new JsonWriter(Files.newBufferedWriter(Paths.get(path), StandardOpenOption.CREATE));
-			Streams.write(new JsonParser().parse(compound.toString()), writer);
+			Streams.write(JsonParser.parseString(compound.toString()), writer);
 			writer.close();
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return false;
-		
+
 	}
 
 	public static CompoundTag loadJsonNBT(InputStream inputStream) {
@@ -93,7 +93,8 @@ public class FilesHelper {
 	}
 
 	public static CompoundTag loadJsonResourceAsNBT(String filepath) {
-		return loadJsonNBT(TheMightyArchitect.class.getClassLoader().getResourceAsStream(filepath));
+		return loadJsonNBT(TheMightyArchitect.class.getClassLoader()
+			.getResourceAsStream(filepath));
 	}
 
 	public static CompoundTag loadJsonAsNBT(String filepath) {
@@ -104,6 +105,5 @@ public class FilesHelper {
 		}
 		return null;
 	}
-
 
 }

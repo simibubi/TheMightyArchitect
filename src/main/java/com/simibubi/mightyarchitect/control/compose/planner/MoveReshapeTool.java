@@ -9,8 +9,8 @@ import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.control.design.ThemeStatistics;
 import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 
 public class MoveReshapeTool extends AbstractRoomFaceSelectionTool {
 

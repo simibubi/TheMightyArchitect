@@ -8,28 +8,27 @@ import com.simibubi.mightyarchitect.control.phase.export.PhaseEditTheme;
 import com.simibubi.mightyarchitect.gui.DesignExporterScreen;
 import com.simibubi.mightyarchitect.gui.ScreenHelper;
 
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 
-import net.minecraft.world.item.Item.Properties;
-
 public class ArchitectWandItem extends Item {
 
 	public ArchitectWandItem(Properties properties) {
-		super(properties.stacksTo(1).rarity(Rarity.RARE));
+		super(properties.stacksTo(1)
+			.rarity(Rarity.RARE));
 	}
 
 	@Override
@@ -41,20 +40,18 @@ public class ArchitectWandItem extends Item {
 			return InteractionResult.SUCCESS;
 
 		if (player.isShiftKeyDown()) {
-			DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
-				openGui();
-			});
+			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> openGui());
 			return InteractionResult.SUCCESS;
 		}
 
 		BlockPos anchor = context.getClickedPos();
 		BlockState blockState = world.getBlockState(anchor);
 
-		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
-			handleUseOnDesignAnchor(player, world, anchor, blockState);
-		});
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+			() -> () -> handleUseOnDesignAnchor(player, world, anchor, blockState));
 
-		player.getCooldowns().addCooldown(this, 5);
+		player.getCooldowns()
+			.addCooldown(this, 5);
 		return InteractionResult.SUCCESS;
 	}
 
@@ -77,17 +74,16 @@ public class ArchitectWandItem extends Item {
 		} else {
 			if (!ArchitectManager.inPhase(ArchitectPhases.EditingThemes))
 				return;
-			DistExecutor.runWhenOn(Dist.CLIENT, () -> this::resetVisualization);
+			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::resetVisualization);
 		}
 	}
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		if (worldIn.isClientSide) {
-			DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
-				handleRightClick(worldIn, playerIn, handIn);
-			});
-			playerIn.getCooldowns().addCooldown(this, 5);
+			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> handleRightClick(worldIn, playerIn, handIn));
+			playerIn.getCooldowns()
+				.addCooldown(this, 5);
 		}
 		return super.use(worldIn, playerIn, handIn);
 	}
@@ -104,7 +100,7 @@ public class ArchitectWandItem extends Item {
 			resetVisualization();
 		}
 	}
-	
+
 	@OnlyIn(value = Dist.CLIENT)
 	private void openGui() {
 		if (!ArchitectManager.inPhase(ArchitectPhases.EditingThemes))

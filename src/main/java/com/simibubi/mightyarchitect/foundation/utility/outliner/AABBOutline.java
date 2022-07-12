@@ -1,7 +1,5 @@
 package com.simibubi.mightyarchitect.foundation.utility.outliner;
 
-import org.apache.logging.log4j.LogManager;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.mightyarchitect.foundation.RenderTypes;
@@ -28,7 +26,8 @@ public class AABBOutline extends Outline {
 	}
 
 	public void renderBB(PoseStack ms, MultiBufferSource buffer, AABB bb) {
-		Vec3 projectedView = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+		Vec3 projectedView = Minecraft.getInstance().gameRenderer.getMainCamera()
+			.getPosition();
 		boolean noCull = bb.contains(projectedView);
 		bb = bb.inflate(noCull ? -1 / 128d : 1 / 128d);
 		noCull |= params.disableCull;
@@ -71,26 +70,23 @@ public class AABBOutline extends Outline {
 
 	}
 
-	protected void renderFace(PoseStack ms, MultiBufferSource buffer, Direction direction, Vec3 p1, Vec3 p2,
-			Vec3 p3, Vec3 p4, boolean noCull) {
+	protected void renderFace(PoseStack ms, MultiBufferSource buffer, Direction direction, Vec3 p1, Vec3 p2, Vec3 p3,
+		Vec3 p4, boolean noCull) {
 		if (!params.faceTexture.isPresent())
 			return;
 		if (params.isFaceHidden(direction))
 			return;
 
 		ResourceLocation faceTexture = params.faceTexture.get()
-				.getLocation();
+			.getLocation();
 		float alphaBefore = params.alpha;
-		params.alpha = (direction == params.getHighlightedFace() && params.hightlightedFaceTexture.isPresent()) ? 1 : alphaBefore;
-		//0.5f;
+		params.alpha =
+			(direction == params.getHighlightedFace() && params.hightlightedFaceTexture.isPresent()) ? 1 : alphaBefore;
 
-		//LogManager.getLogger().info(faceTexture.getPath() + "  " + params.alpha + "  " + alphaBefore);
+		// LogManager.getLogger().info(faceTexture.getPath() + " " + params.alpha + " "
+		// + alphaBefore);
 
-		VertexConsumer builder = buffer.getBuffer(
-				params.alpha == 1 ?
-						RenderTypes.getOutlineSolid(faceTexture) :
-						RenderTypes.getOutlineTranslucent(faceTexture, !noCull)
-		);
+		VertexConsumer builder = buffer.getBuffer(RenderTypes.getOutlineTranslucent(faceTexture, !noCull));
 
 		Axis axis = direction.getAxis();
 		Vec3 uDiff = p2.subtract(p1);

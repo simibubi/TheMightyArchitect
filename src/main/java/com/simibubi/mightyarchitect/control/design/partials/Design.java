@@ -10,10 +10,10 @@ import com.simibubi.mightyarchitect.control.design.DesignSlice;
 import com.simibubi.mightyarchitect.control.design.DesignSlice.DesignSliceTrait;
 import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.core.BlockPos;
 
 public abstract class Design {
 

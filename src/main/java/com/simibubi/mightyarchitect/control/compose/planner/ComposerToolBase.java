@@ -2,8 +2,9 @@ package com.simibubi.mightyarchitect.control.compose.planner;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.Schematic;
 import com.simibubi.mightyarchitect.control.compose.GroundPlan;
@@ -13,13 +14,12 @@ import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
 import com.simibubi.mightyarchitect.foundation.utility.RaycastHelper;
 import com.simibubi.mightyarchitect.foundation.utility.RaycastHelper.PredicateTraceResult;
 
-import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.util.Mth;
 
 public abstract class ComposerToolBase implements IComposerTool {
 

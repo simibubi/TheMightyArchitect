@@ -1,6 +1,5 @@
 package com.simibubi.mightyarchitect.foundation.utility.outliner;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.foundation.RenderTypes;
 import com.simibubi.mightyarchitect.foundation.utility.VecHelper;
@@ -8,7 +7,6 @@ import com.simibubi.mightyarchitect.foundation.utility.VecHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import com.mojang.math.Matrix4f;
 import net.minecraft.world.phys.Vec3;
 
 public class OutlinedText extends Outline {

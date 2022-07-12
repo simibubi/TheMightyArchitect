@@ -3,12 +3,13 @@ package com.simibubi.mightyarchitect.gui;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.compose.planner.Tools;
-
-import com.mojang.blaze3d.platform.Window;
+import com.simibubi.mightyarchitect.foundation.utility.LerpedFloat;
+import com.simibubi.mightyarchitect.foundation.utility.LerpedFloat.Chaser;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -22,7 +23,7 @@ public class ToolSelectionScreen extends Screen {
 	protected List<Tools> tools;
 	protected Consumer<Tools> callback;
 	public boolean focused;
-	private float yOffset;
+	private LerpedFloat yOffset;
 	protected int selection;
 
 	protected int w;
@@ -34,7 +35,9 @@ public class ToolSelectionScreen extends Screen {
 		this.tools = tools;
 		this.callback = callback;
 		focused = false;
-		yOffset = 0;
+		yOffset = LerpedFloat.linear()
+			.startWithValue(0)
+			.chase(0, .1f, Chaser.EXP);
 		selection = 0;
 
 		w = tools.size() * 50 + 30;
@@ -67,7 +70,7 @@ public class ToolSelectionScreen extends Screen {
 		RenderSystem.enableTexture();
 		RenderSystem.setShaderColor(1, 1, 1, focused ? 7 / 8f : 1 / 2f);
 		RenderSystem.setShaderTexture(0, gray.location);
-		float toolTipAlpha = yOffset / 10;
+		float toolTipAlpha = yOffset.getValue(partialTicks) / 10;
 
 		// render main box
 		blit(ms, x - 15, y, gray.startX, gray.startY, w, h, gray.width, gray.height);
@@ -126,7 +129,8 @@ public class ToolSelectionScreen extends Screen {
 
 			if (focused && i != selection) {
 				KeyMapping keyMapping = minecraft.options.keyHotbarSlots[i];
-				drawCenteredString(ms, minecraft.font, "[" + keyMapping.getTranslatedKeyMessage().getString() + "]", x + i * 50 + 24, y + 3, 0xCCDDFF);
+				drawCenteredString(ms, minecraft.font, "[" + keyMapping.getTranslatedKeyMessage()
+					.getString() + "]", x + i * 50 + 24, y + 3, 0xCCDDFF);
 			}
 
 			ms.popPose();
@@ -136,10 +140,8 @@ public class ToolSelectionScreen extends Screen {
 	}
 
 	public void update() {
-		if (focused)
-			yOffset += (10 - yOffset) * .1f;
-		else
-			yOffset *= .9f;
+		yOffset.updateChaseTarget(focused ? 10 : 0);
+		yOffset.tickChaser();
 	}
 
 	public void renderPassive(PoseStack ms, float partialTicks) {

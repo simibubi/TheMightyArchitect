@@ -15,9 +15,9 @@ import com.simibubi.mightyarchitect.control.palette.PaletteBlockInfo;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 import com.simibubi.mightyarchitect.networking.InstantPrintPacket;
 
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 public class Schematic {

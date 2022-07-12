@@ -1,13 +1,13 @@
 package com.simibubi.mightyarchitect.foundation;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import com.simibubi.mightyarchitect.foundation.utility.AngleHelper;
 import com.simibubi.mightyarchitect.foundation.utility.VecHelper;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
-import com.mojang.math.Vector3f;
 import net.minecraft.core.Vec3i;
+import net.minecraft.world.phys.Vec3;
 
 public class MatrixStacker {
 

@@ -4,10 +4,10 @@ import com.simibubi.mightyarchitect.block.DesignAnchorBlock;
 import com.simibubi.mightyarchitect.block.IJustForRendering;
 import com.simibubi.mightyarchitect.block.SliceMarkerBlock;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public enum AllBlocks {

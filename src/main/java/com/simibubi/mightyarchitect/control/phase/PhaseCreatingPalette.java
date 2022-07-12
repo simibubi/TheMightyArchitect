@@ -10,21 +10,18 @@ import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.Schematic;
 import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
-import com.simibubi.mightyarchitect.foundation.utility.RaycastHelper;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.common.ForgeMod;
 
 public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlights {
 
@@ -127,26 +124,27 @@ public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlig
 
 	@Override
 	public void tickHighlightOutlines() {
-		BlockPos targetBlock = null;
-
-		HitResult raytrace = RaycastHelper.rayTraceRange(minecraft.level, minecraft.player,
-			minecraft.player.getAttributeValue(ForgeMod.REACH_DISTANCE.get()));
-		if (raytrace != null && raytrace.getType() == Type.BLOCK) {
-			targetBlock = new BlockPos(raytrace.getLocation());
-			if (grid.containsKey(targetBlock))
-				sendStatusMessage(grid.get(targetBlock)
-					.getDisplayName());
-		}
+		Vec3 from = minecraft.player.getEyePosition();
+		Vec3 to = from.add(minecraft.player.getLookAngle()
+			.normalize()
+			.scale(10));
 
 		for (int i = 0; i < 16; i++) {
 			BlockPos pos = positionFromIndex(i);
+			AABB bb = new AABB(pos);
 
 			// Render Outline
-			boolean s = targetBlock != null && pos.equals(targetBlock);
 			boolean b = changed[i];
-			MightyClient.outliner.showAABB("pallete" + i, new AABB(pos))
-				.lineWidth(b || s ? 1 / 16f : 1 / 32f)
-				.colored(s ? 0x8888ff : b ? 0x6666ff : 0xbbbbbb);
+			boolean s = bb.clip(from, to)
+				.isPresent();
+
+			if (s)
+				sendStatusMessage(grid.get(pos)
+					.getDisplayName());
+
+			MightyClient.outliner.showAABB("pallete" + i, bb)
+				.lineWidth(b || s ? 1 / 16f : 1 / 24f)
+				.colored(s ? 0x6677ee : b ? 0xccccdd : 0x666677);
 		}
 
 	}

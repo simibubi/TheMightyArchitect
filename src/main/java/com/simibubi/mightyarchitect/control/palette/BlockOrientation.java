@@ -1,17 +1,17 @@
 package com.simibubi.mightyarchitect.control.palette;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.SlabBlock;
-import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.Half;
-import net.minecraft.world.level.block.state.properties.SlabType;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.world.level.block.Rotation;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraft.world.level.block.state.properties.SlabType;
 
 public enum BlockOrientation {
 
