@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        maven { url = 'https://maven.minecraftforge.net/' }
+        maven { url = 'https://maven.minecraftforge.net' }
         jcenter()
         mavenCentral()
     }
@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = 'mc1.18_v0.6'
+version = 'mc1.18.2_v0.6'
 group = 'com.simibubi.mightyarchitect' 
 archivesBaseName = 'mightyarchitect'
 
@@ -34,7 +34,7 @@ repositories {
 }
 
 minecraft {
-    mappings channel: 'official', version: '1.18'
+    mappings channel: 'official', version: '1.18.2'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     
     runs {
@@ -73,7 +73,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18-38.0.15'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.0.46'
 }
 
 jar {

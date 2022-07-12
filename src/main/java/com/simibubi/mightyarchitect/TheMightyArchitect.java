@@ -23,7 +23,7 @@ public class TheMightyArchitect {
 
 	public static final String ID = "mightyarchitect";
 	public static final String NAME = "The Mighty Architect";
-	public static final String VERSION = "0.5";
+	public static final String VERSION = "0.6";
 
 	public static TheMightyArchitect instance;
 	public static Logger logger = LogManager.getLogger();
