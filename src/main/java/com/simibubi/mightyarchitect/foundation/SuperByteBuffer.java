@@ -3,11 +3,10 @@ package com.simibubi.mightyarchitect.foundation;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.BufferBuilder.DrawState;
+import com.mojang.blaze3d.vertex.BufferBuilder.RenderedBuffer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector4f;
 
@@ -45,20 +44,20 @@ public class SuperByteBuffer {
 	private int r, g, b, a;
 	private float sheetSize;
 
-	public SuperByteBuffer(BufferBuilder buf) {
-		Pair<DrawState, ByteBuffer> state = buf.popNextBuffer();
-		ByteBuffer rendered = state.getSecond();
-		rendered.order(ByteOrder.nativeOrder()); // Vanilla bug, endianness does not carry over into sliced buffers
-
-		formatSize = buf.getVertexFormat()
+	public SuperByteBuffer(RenderedBuffer renderedBuffer) {
+		DrawState drawState = renderedBuffer.drawState();
+		
+		formatSize = drawState.format()
 			.getVertexSize();
-		int size = state.getFirst()
-			.vertexCount() * formatSize;
-
-		template = ByteBuffer.allocateDirect(size).order(ByteOrder.nativeOrder());
-		template.order(rendered.order());
-		template.limit(rendered.limit());
-		template.put(rendered);
+		int size = drawState.vertexCount() * formatSize;
+		
+		ByteBuffer byteBuffer = renderedBuffer.vertexBuffer();
+		byteBuffer.order(ByteOrder.nativeOrder()); // Vanilla bug, endianness does not carry over into sliced buffers
+		template = ByteBuffer.allocateDirect(size)
+			.order(ByteOrder.nativeOrder());
+		template.order(byteBuffer.order());
+		template.limit(byteBuffer.limit());
+		template.put(byteBuffer);
 		template.rewind();
 
 		transforms = new PoseStack();

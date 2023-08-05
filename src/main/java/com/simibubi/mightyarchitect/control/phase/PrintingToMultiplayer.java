@@ -4,18 +4,18 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.TheMightyArchitect;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.TemplateBlockAccess;
+import com.simibubi.mightyarchitect.foundation.utility.Lang;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraftforge.api.distmarker.Dist;
@@ -34,7 +34,8 @@ public class PrintingToMultiplayer extends PhaseBase {
 	public void whenEntered() {
 		remaining = new LinkedList<>(((TemplateBlockAccess) getModel().getMaterializedSketch()).getAllPositions());
 		remaining.sort((o1, o2) -> Integer.compare(o1.getY(), o2.getY()));
-		Minecraft.getInstance().player.chat("/setblock checking permission for 'The Mighty Architect'.");
+
+		minecraft.player.commandSigned("setblock checking permission for 'The Mighty Architect'.", null);
 		cooldown = 500;
 		approved = false;
 	}
@@ -55,17 +56,20 @@ public class PrintingToMultiplayer extends PhaseBase {
 				BlockPos pos = remaining.get(0);
 				remaining.remove(0);
 				pos = pos.offset(getModel().getAnchor());
-				BlockState state = getModel().getMaterializedSketch().getBlockState(pos);
+				BlockState state = getModel().getMaterializedSketch()
+					.getBlockState(pos);
 
 				if (minecraft.level.getBlockState(pos) == state)
 					continue;
 				if (!minecraft.level.isUnobstructed(state, pos, CollisionContext.of(minecraft.player)))
 					continue;
 
-				String blockstring = state.toString().replaceFirst("Block\\{", "").replaceFirst("\\}", "");
-				
-				Minecraft.getInstance().player.chat("/setblock " + pos.getX() + " " + pos.getY() + " "
-						+ pos.getZ() + " " + blockstring);
+				String blockstring = state.toString()
+					.replaceFirst("Block\\{", "")
+					.replaceFirst("\\}", "");
+
+				Minecraft.getInstance().player.commandSigned(
+					"setblock " + pos.getX() + " " + pos.getY() + " " + pos.getZ() + " " + blockstring, null);
 			} else {
 				ArchitectManager.unload();
 				break;
@@ -84,23 +88,22 @@ public class PrintingToMultiplayer extends PhaseBase {
 
 			while (!checking.isEmpty()) {
 				Component iTextComponent = checking.get(0);
-				if (iTextComponent instanceof TranslatableComponent) {
-					String test = ((TranslatableComponent) iTextComponent).getKey();
-					
-				TheMightyArchitect.logger.info(test);
-					
+				if (iTextComponent instanceof MutableComponent mc
+					&& mc.getContents() instanceof TranslatableContents tc) {
+					String test = tc.getKey();
+					TheMightyArchitect.logger.info(test);
+
 					if (test.equals("command.unknown.command")) {
 						cooldown = 0;
-						event.setMessage(new TextComponent(
-								ChatFormatting.RED + "You do not have permission to print on this server."));
+						event.setMessage(Component
+							.literal(ChatFormatting.RED + "You do not have permission to print on this server."));
 						return;
 					}
 					if (test.equals("parsing.int.expected")) {
 						approved = true;
-						Minecraft.getInstance().player
-								.chat("/me is printing a structure created by the Mighty Architect.");
-						Minecraft.getInstance().player.chat("/gamerule sendCommandFeedback false");
-						Minecraft.getInstance().player.chat("/gamerule logAdminCommands false");
+						LocalPlayer player = Minecraft.getInstance().player;
+						player.commandSigned("gamerule sendCommandFeedback false", null);
+						player.commandSigned("gamerule logAdminCommands false", null);
 						event.setCanceled(true);
 						return;
 					}
@@ -113,16 +116,13 @@ public class PrintingToMultiplayer extends PhaseBase {
 	}
 
 	@Override
-	public void render(PoseStack ms, MultiBufferSource buffer) {
-	}
-
-	@Override
 	public void whenExited() {
 		if (approved) {
-			Minecraft.getInstance().player.displayClientMessage(new TextComponent(ChatFormatting.GREEN + "Finished Printing, enjoy!"),
-					false);
-			Minecraft.getInstance().player.chat("/gamerule logAdminCommands true");
-			Minecraft.getInstance().player.chat("/gamerule sendCommandFeedback true");
+			LocalPlayer player = Minecraft.getInstance().player;
+			Lang.text(ChatFormatting.GREEN + "Finished Printing, enjoy!")
+				.sendChat(player);
+			player.commandSigned("gamerule logAdminCommands true", null);
+			player.commandSigned("gamerule sendCommandFeedback true", null);
 		}
 		cooldown = 0;
 	}

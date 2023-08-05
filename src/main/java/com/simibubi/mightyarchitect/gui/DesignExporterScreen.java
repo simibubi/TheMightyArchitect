@@ -3,9 +3,7 @@ package com.simibubi.mightyarchitect.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
@@ -31,12 +29,10 @@ public class DesignExporterScreen extends AbstractSimiScreen {
 
 	private String additionalDataKey;
 	private int additionalDataValue;
-	private float animationProgress;
 
 	@Override
 	public void init() {
 		super.init();
-		animationProgress = 0;
 		setWindowSize(ScreenResources.EXPORTER.width + 100, ScreenResources.EXPORTER.height + 50);
 
 		DesignTheme theme = DesignExporter.theme;
@@ -229,7 +225,6 @@ public class DesignExporterScreen extends AbstractSimiScreen {
 	@Override
 	public void tick() {
 		super.tick();
-		animationProgress++;
 	}
 
 	@Override

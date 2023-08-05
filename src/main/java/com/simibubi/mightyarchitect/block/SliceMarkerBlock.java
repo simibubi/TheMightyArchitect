@@ -2,10 +2,10 @@ package com.simibubi.mightyarchitect.block;
 
 import com.simibubi.mightyarchitect.AllItems;
 import com.simibubi.mightyarchitect.control.design.DesignSlice.DesignSliceTrait;
+import com.simibubi.mightyarchitect.foundation.utility.Lang;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -22,8 +22,8 @@ import net.minecraft.world.phys.BlockHitResult;
 public class SliceMarkerBlock extends Block {
 
 	public static final BooleanProperty compass = BooleanProperty.create("compass");
-	public static final EnumProperty<DesignSliceTrait> VARIANT = EnumProperty.<DesignSliceTrait>create("variant",
-			DesignSliceTrait.class);
+	public static final EnumProperty<DesignSliceTrait> VARIANT =
+		EnumProperty.<DesignSliceTrait>create("variant", DesignSliceTrait.class);
 
 	public SliceMarkerBlock() {
 		super(Properties.of(Material.STONE));
@@ -38,15 +38,19 @@ public class SliceMarkerBlock extends Block {
 
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		if (context.getLevel().getBlockState(context.getClickedPos().below()).getBlock() == this)
+		if (context.getLevel()
+			.getBlockState(context.getClickedPos()
+				.below())
+			.getBlock() == this)
 			return defaultBlockState().setValue(compass, false);
 		return defaultBlockState().setValue(compass, true);
 	}
 
 	@Override
 	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn,
-			BlockHitResult hit) {
-		if (hit.getDirection().getAxis() == Axis.Y)
+		BlockHitResult hit) {
+		if (hit.getDirection()
+			.getAxis() == Axis.Y)
 			return InteractionResult.PASS;
 		if (AllItems.ARCHITECT_WAND.typeOf(player.getItemInHand(handIn)))
 			return InteractionResult.PASS;
@@ -56,7 +60,8 @@ public class SliceMarkerBlock extends Block {
 		DesignSliceTrait currentTrait = state.getValue(VARIANT);
 		DesignSliceTrait newTrait = currentTrait.cycle(player.isShiftKeyDown() ? -1 : 1);
 		worldIn.setBlockAndUpdate(pos, state.setValue(VARIANT, newTrait));
-		player.displayClientMessage(new TextComponent(newTrait.getDescription()), true);
+		Lang.text(newTrait.getDescription())
+			.sendStatus(player);
 
 		return InteractionResult.SUCCESS;
 	}

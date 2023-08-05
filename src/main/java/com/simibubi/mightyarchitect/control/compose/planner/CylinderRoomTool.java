@@ -125,7 +125,9 @@ public class CylinderRoomTool extends RoomTool {
 
 		if (firstPosition == null) {
 			MightyClient.outliner.chaseAABB(outlineKey, new AABB(cursorPos))
-				.withFaceTexture(AllSpecialTextures.CHECKERED);
+				.withFaceTexture(AllSpecialTextures.CHECKERED)
+				.disableLineNormals()
+				.colored(0xaa000000);
 			return;
 		}
 
@@ -144,7 +146,9 @@ public class CylinderRoomTool extends RoomTool {
 
 		MightyClient.outliner.chaseAABB(outlineKey, selection.toAABB())
 			.withFaceTexture(AllSpecialTextures.CHECKERED)
-			.colored(0);
+			.disableLineNormals()
+			.colored(0xaa000000);
+
 		drawTextAroundBounds(selection);
 	}
 

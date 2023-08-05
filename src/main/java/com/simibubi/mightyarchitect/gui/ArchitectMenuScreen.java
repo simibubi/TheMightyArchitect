@@ -8,18 +8,18 @@ import org.lwjgl.glfw.GLFW;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.mightyarchitect.MightyClient;
+import com.simibubi.mightyarchitect.Keybinds;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.ArchitectMenu;
 import com.simibubi.mightyarchitect.control.ArchitectMenu.KeyBindList;
 import com.simibubi.mightyarchitect.control.phase.ArchitectPhases;
+import com.simibubi.mightyarchitect.foundation.utility.Lang;
 import com.simibubi.mightyarchitect.foundation.utility.LerpedFloat;
 import com.simibubi.mightyarchitect.foundation.utility.LerpedFloat.Chaser;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.FormattedCharSequence;
 
 public class ArchitectMenuScreen extends Screen {
@@ -36,7 +36,8 @@ public class ArchitectMenuScreen extends Screen {
 	private LerpedFloat animation;
 
 	public ArchitectMenuScreen() {
-		super(new TextComponent("Architect Menu"));
+		super(Lang.text("Architect Menu")
+			.component());
 		keybinds = new KeyBindList();
 		tooltip = new ArrayList<>();
 		title = "";
@@ -101,8 +102,7 @@ public class ArchitectMenuScreen extends Screen {
 			return true;
 		}
 
-		if (keyCode == MightyClient.COMPOSE.getKey()
-			.getValue()) {
+		if (Keybinds.ACTIVATE.matches(keyCode)) {
 			if (hideOnClose)
 				setVisible(false);
 			minecraft.setScreen(null);
@@ -169,9 +169,7 @@ public class ArchitectMenuScreen extends Screen {
 		int xPos = x + 4;
 
 		Font textRenderer = mc.font;
-		String compose = MightyClient.COMPOSE.getTranslatedKeyMessage()
-			.getString()
-			.toUpperCase();
+		String compose = Keybinds.ACTIVATE.getBoundKey();
 		if (!focused) {
 			if (sideways) {
 				if (visible) {
@@ -214,7 +212,8 @@ public class ArchitectMenuScreen extends Screen {
 		for (String text : tooltip) {
 			int height = mc.font.wordWrapHeight(text, menuWidth - 8);
 			int lineY = yPos;
-			for (FormattedCharSequence iro : textRenderer.split(new TextComponent(text), menuWidth - 8)) {
+			for (FormattedCharSequence iro : textRenderer.split(Lang.text(text)
+				.component(), menuWidth - 8)) {
 				textRenderer.draw(ms, iro, xPos, lineY, 0xEEEEEE);
 				lineY += textRenderer.lineHeight;
 			}

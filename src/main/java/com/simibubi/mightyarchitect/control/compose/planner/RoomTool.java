@@ -54,7 +54,7 @@ public class RoomTool extends GroundPlanningToolBase {
 
 		} else {
 			return createRoom(ArchitectManager.getModel()
-					.getGroundPlan());
+				.getGroundPlan());
 		}
 	}
 
@@ -66,7 +66,7 @@ public class RoomTool extends GroundPlanningToolBase {
 		DesignTheme theme = groundPlan.theme;
 		ThemeStatistics stats = theme.getStatistics();
 		boolean hasFoundation = theme.getLayers()
-				.contains(DesignLayer.Foundation);
+			.contains(DesignLayer.Foundation);
 		room.designLayer = hasFoundation ? DesignLayer.Foundation : DesignLayer.Regular;
 
 		int facadeWidth = Math.min(room.width, room.length);
@@ -106,7 +106,7 @@ public class RoomTool extends GroundPlanningToolBase {
 
 		groundPlan.forEachRoom(r -> {
 			if (r.intersects(room) && !(r.y + r.height <= room.y || room.y + room.height <= r.y)
-					&& (biggestRoom.getValue() == null
+				&& (biggestRoom.getValue() == null
 					|| biggestRoom.getValue().width * biggestRoom.getValue().length < r.width * r.length)) {
 				biggestRoom.setValue(r);
 			}
@@ -130,7 +130,7 @@ public class RoomTool extends GroundPlanningToolBase {
 			if (r == added)
 				return;
 			if (r.intersects(added) && r.y <= added.y && r.y + r.height > added.y && (biggestRoom.getValue() == null
-					|| biggestRoom.getValue().width * biggestRoom.getValue().length < r.width * r.length)) {
+				|| biggestRoom.getValue().width * biggestRoom.getValue().length < r.width * r.length)) {
 				biggestRoom.setValue(r);
 			}
 		});
@@ -146,13 +146,13 @@ public class RoomTool extends GroundPlanningToolBase {
 
 		if (scroll > 0) {
 			increaseMatchingOthers(ArchitectManager.getModel()
-					.getGroundPlan(), lastAddedStack);
+				.getGroundPlan(), lastAddedStack);
 		} else {
 			lastAddedStack.decrease();
 			if (lastAddedStack.floors() == 0) {
 				ArchitectManager.getModel()
-						.getGroundPlan()
-						.remove(lastAddedStack);
+					.getGroundPlan()
+					.remove(lastAddedStack);
 				lastAddedStack = null;
 			}
 		}
@@ -213,7 +213,7 @@ public class RoomTool extends GroundPlanningToolBase {
 			return;
 
 		BlockPos anchor = ArchitectManager.getModel()
-				.getAnchor();
+			.getAnchor();
 		BlockPos cursorPos = (anchor != null) ? selectedPosition.offset(anchor) : selectedPosition;
 		BlockPos previouslySelectedPos = (firstPosition != null) ? firstPosition.offset(anchor) : cursorPos;
 
@@ -223,9 +223,9 @@ public class RoomTool extends GroundPlanningToolBase {
 		selection.length += 1;
 
 		MightyClient.outliner.chaseAABB(outlineKey, selection.toAABB())
-				.withFaceTexture(AllSpecialTextures.CHECKERED)
-				.withAlpha(0.75f)
-				.colored(0x0);
+			.withFaceTexture(AllSpecialTextures.CHECKERED)
+			.disableLineNormals()
+			.colored(0xaa000000);
 
 		if (firstPosition == null)
 			return;
@@ -237,17 +237,18 @@ public class RoomTool extends GroundPlanningToolBase {
 		float hl = selection.length / 2f;
 
 		chaseText(textKey1, selection.x + hw, selection.y + .5f, selection.z - 1, "" + selection.width + "m");
-		chaseText(textKey2, selection.x + hw, selection.y + .5f, selection.z + selection.length + 1, "" + selection.width + "m");
-		chaseText(textKey3, selection.x + selection.width + 1, selection.y + .5f, selection.z + hl, "" + selection.length + "m");
+		chaseText(textKey2, selection.x + hw, selection.y + .5f, selection.z + selection.length + 1,
+			"" + selection.width + "m");
+		chaseText(textKey3, selection.x + selection.width + 1, selection.y + .5f, selection.z + hl,
+			"" + selection.length + "m");
 		chaseText(textKey4, selection.x - 1, selection.y + .5f, selection.z + hl, "" + selection.length + "m");
 	}
 
 	private void chaseText(Object key, float x, float y, float z, String text) {
 		MightyClient.outliner.chaseText(key, new Vec3(x, y, z), text)
-				.colored(0)
-				.coloredFaces(0xffffff)
-				.disableNormals()
-				.withFaceTexture(AllSpecialTextures.BLANK);
+			.colored(0)
+			.disableLineNormals()
+			.withFaceTexture(AllSpecialTextures.BLANK);
 	}
 
 }

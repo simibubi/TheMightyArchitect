@@ -1,17 +1,14 @@
 package com.simibubi.mightyarchitect.foundation.utility.outliner;
 
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.mightyarchitect.foundation.utility.outliner.LineOutline.ChasingLineOutline;
-import com.simibubi.mightyarchitect.foundation.utility.outliner.LineOutline.EndChasingLineOutline;
 import com.simibubi.mightyarchitect.foundation.utility.outliner.Outline.OutlineParams;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
@@ -20,21 +17,34 @@ import net.minecraft.world.phys.Vec3;
 
 public class Outliner {
 
-	Map<Object, OutlineEntry> outlines;
+	private final Map<Object, OutlineEntry> outlines = Collections.synchronizedMap(new HashMap<>());
+	private final Map<Object, OutlineEntry> outlinesView = Collections.unmodifiableMap(outlines);
 
 	// Facade
 
 	public OutlineParams showLine(Object slot, Vec3 start, Vec3 end) {
 		if (!outlines.containsKey(slot)) {
 			LineOutline outline = new LineOutline();
-			outlines.put(slot, new OutlineEntry(outline));
+			addOutline(slot, outline);
 		}
 		OutlineEntry entry = outlines.get(slot);
 		entry.ticksTillRemoval = 1;
 		((LineOutline) entry.outline).set(start, end);
 		return entry.outline.getParams();
 	}
-	
+
+	public OutlineParams endChasingLine(Object slot, Vec3 start, Vec3 end, float chasingProgress, boolean lockStart) {
+		if (!outlines.containsKey(slot)) {
+			EndChasingLineOutline outline = new EndChasingLineOutline(lockStart);
+			addOutline(slot, outline);
+		}
+		OutlineEntry entry = outlines.get(slot);
+		entry.ticksTillRemoval = 1;
+		((EndChasingLineOutline) entry.outline).setProgress(chasingProgress)
+			.set(start, end);
+		return entry.outline.getParams();
+	}
+
 	public OutlineParams chaseLine(Object slot, Vec3 start, Vec3 end) {
 		if (!outlines.containsKey(slot)) {
 			ChasingLineOutline outline = new ChasingLineOutline();
@@ -60,23 +70,18 @@ public class Outliner {
 		outlinedText.setText(text);
 		return entry.outline.getParams();
 	}
-
-	public OutlineParams endChasingLine(Object slot, Vec3 start, Vec3 end, float chasingProgress) {
-		if (!outlines.containsKey(slot)) {
-			EndChasingLineOutline outline = new EndChasingLineOutline();
-			outlines.put(slot, new OutlineEntry(outline));
-		}
-		OutlineEntry entry = outlines.get(slot);
-		entry.ticksTillRemoval = 1;
-		((EndChasingLineOutline) entry.outline).setProgress(chasingProgress)
-			.set(start, end);
-		return entry.outline.getParams();
+	
+	public OutlineParams showAABB(Object slot, AABB bb, int ttl) {
+		createAABBOutlineIfMissing(slot, bb);
+		ChasingAABBOutline outline = getAndRefreshAABB(slot, ttl);
+		outline.prevBB = outline.targetBB = outline.bb = bb;
+		return outline.getParams();
 	}
 
 	public OutlineParams showAABB(Object slot, AABB bb) {
 		createAABBOutlineIfMissing(slot, bb);
 		ChasingAABBOutline outline = getAndRefreshAABB(slot);
-		outline.prevBB = outline.targetBB = bb;
+		outline.prevBB = outline.targetBB = outline.bb = bb;
 		return outline.getParams();
 	}
 
@@ -103,6 +108,8 @@ public class Outliner {
 		return entry.outline.getParams();
 	}
 
+	//
+
 	public void keep(Object slot) {
 		if (outlines.containsKey(slot))
 			outlines.get(slot).ticksTillRemoval = 1;
@@ -121,81 +128,96 @@ public class Outliner {
 		return Optional.empty();
 	}
 
+	public Map<Object, OutlineEntry> getOutlines() {
+		return outlinesView;
+	}
+
 	// Utility
 
+	private void addOutline(Object slot, Outline outline) {
+		outlines.put(slot, new OutlineEntry(outline));
+	}
+
 	private void createAABBOutlineIfMissing(Object slot, AABB bb) {
-		if (!outlines.containsKey(slot)) {
+		if (!outlines.containsKey(slot) || !(outlines.get(slot).outline instanceof AABBOutline)) {
 			ChasingAABBOutline outline = new ChasingAABBOutline(bb);
-			outlines.put(slot, new OutlineEntry(outline));
+			addOutline(slot, outline);
 		}
 	}
 
 	private ChasingAABBOutline getAndRefreshAABB(Object slot) {
+		return getAndRefreshAABB(slot, 1);
+	}
+
+	private ChasingAABBOutline getAndRefreshAABB(Object slot, int ttl) {
 		OutlineEntry entry = outlines.get(slot);
-		entry.ticksTillRemoval = 1;
+		entry.ticksTillRemoval = ttl;
 		return (ChasingAABBOutline) entry.getOutline();
 	}
 
 	// Maintenance
 
-	public Outliner() {
-		outlines = new HashMap<>();
-	}
-
 	public void tickOutlines() {
-		Set<Object> toClear = new HashSet<>();
-
-		outlines.forEach((key, entry) -> {
-			entry.ticksTillRemoval--;
-			entry.getOutline()
-				.tick();
-			if (entry.isAlive())
-				return;
-			toClear.add(key);
-		});
-
-		toClear.forEach(outlines::remove);
+		Iterator<OutlineEntry> iterator = outlines.values()
+			.iterator();
+		while (iterator.hasNext()) {
+			OutlineEntry entry = iterator.next();
+			entry.tick();
+			if (!entry.isAlive())
+				iterator.remove();
+		}
 	}
 
-	public void renderOutlines(PoseStack ms, MultiBufferSource buffer) {
+	public void renderOutlines(PoseStack ms, MultiBufferSource buffer, Vec3 camera, float pt) {
 		outlines.forEach((key, entry) -> {
 			Outline outline = entry.getOutline();
-			//outline.params.alpha = 1;
-			if (entry.ticksTillRemoval < 0) {
-
+			OutlineParams params = outline.getParams();
+			params.alpha = 1;
+			if (entry.isFading()) {
 				int prevTicks = entry.ticksTillRemoval + 1;
-				float fadeticks = (float) entry.outline.params.getFadeTicks();
+				float fadeticks = OutlineEntry.FADE_TICKS;
 				float lastAlpha = prevTicks >= 0 ? 1 : 1 + (prevTicks / fadeticks);
 				float currentAlpha = 1 + (entry.ticksTillRemoval / fadeticks);
-				float alpha = Mth.lerp(Minecraft.getInstance()
-					.getFrameTime(), lastAlpha, currentAlpha);
+				float alpha = Mth.lerp(pt, lastAlpha, currentAlpha);
 
-				outline.params.alpha = alpha * alpha * alpha;
-				if (outline.params.alpha < 1 / 8f)
+				params.alpha = alpha * alpha * alpha;
+				if (params.alpha < 1 / 8f)
 					return;
 			}
-			outline.render(ms, buffer);
+			outline.render(ms, buffer, camera, pt);
 		});
 	}
 
-	private class OutlineEntry {
+	public static class OutlineEntry {
+		public static final int FADE_TICKS = 8;
 
-		private Outline outline;
-		private int ticksTillRemoval;
+		private final Outline outline;
+		private int ticksTillRemoval = 1;
 
 		public OutlineEntry(Outline outline) {
 			this.outline = outline;
-			ticksTillRemoval = 1;
-		}
-
-		public boolean isAlive() {
-			return ticksTillRemoval >= -outline.params.getFadeTicks();
 		}
 
 		public Outline getOutline() {
 			return outline;
 		}
 
+		public int getTicksTillRemoval() {
+			return ticksTillRemoval;
+		}
+
+		public boolean isAlive() {
+			return ticksTillRemoval >= -FADE_TICKS;
+		}
+
+		public boolean isFading() {
+			return ticksTillRemoval < 0;
+		}
+
+		public void tick() {
+			ticksTillRemoval--;
+			outline.tick();
+		}
 	}
 
 }

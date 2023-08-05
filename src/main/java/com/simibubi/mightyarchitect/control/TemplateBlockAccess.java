@@ -4,15 +4,16 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 import java.util.function.Predicate;
 
 import com.simibubi.mightyarchitect.control.compose.Cuboid;
 import com.simibubi.mightyarchitect.foundation.WrappedWorld;
+import com.simibubi.mightyarchitect.foundation.utility.Iterate;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
@@ -58,7 +59,14 @@ public class TemplateBlockAccess extends WrappedWorld {
 			BlockState blockState = blocks.get(pos);
 			if (blockState == null)
 				return;
-			blockState.updateNeighbourShapes(this, pos.offset(anchor), 16);
+			BlockPos targetPos = pos.offset(anchor);
+			BlockState newState = blockState;
+			for (Direction direction : Iterate.directions) {
+				BlockPos relative = targetPos.relative(direction);
+				newState = newState.updateShape(direction, getBlockState(relative), this, targetPos, relative);
+			}
+			if (newState != blockState)
+				setBlock(targetPos, newState, 0);
 		});
 	}
 
@@ -87,7 +95,8 @@ public class TemplateBlockAccess extends WrappedWorld {
 
 	@Override
 	public Holder<Biome> getBiome(BlockPos pos) {
-		return Holder.direct(registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).get(Biomes.THE_VOID));
+		return Holder.direct(registryAccess().registryOrThrow(Registry.BIOME_REGISTRY)
+			.get(Biomes.THE_VOID));
 	}
 
 	@Override
@@ -101,8 +110,7 @@ public class TemplateBlockAccess extends WrappedWorld {
 	}
 
 	@Override
-	public <T extends Entity> List<T> getEntitiesOfClass(Class<T> arg0, AABB arg1,
-		Predicate<? super T> arg2) {
+	public <T extends Entity> List<T> getEntitiesOfClass(Class<T> arg0, AABB arg1, Predicate<? super T> arg2) {
 		return Collections.emptyList();
 	}
 
@@ -153,6 +161,11 @@ public class TemplateBlockAccess extends WrappedWorld {
 	}
 
 	@Override
+	public boolean setBlock(BlockPos pos, BlockState newState, int flags) {
+		return setBlock(pos, newState, flags, 0);
+	}
+
+	@Override
 	public LevelTickAccess<Block> getBlockTicks() {
 		return BlackholeTickAccess.emptyLevelList();
 	}
@@ -160,11 +173,6 @@ public class TemplateBlockAccess extends WrappedWorld {
 	@Override
 	public LevelTickAccess<Fluid> getFluidTicks() {
 		return BlackholeTickAccess.emptyLevelList();
-	}
-
-	@Override
-	public Random getRandom() {
-		return new Random();
 	}
 
 	@Override

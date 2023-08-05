@@ -4,9 +4,9 @@ import java.util.Random;
 
 import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.foundation.utility.DesignHelper;
+import com.simibubi.mightyarchitect.foundation.utility.Lang;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.TextComponent;
 
 public class ThemeStatistics {
 
@@ -178,7 +178,8 @@ public class ThemeStatistics {
 	}
 
 	private void chat(String message) {
-		Minecraft.getInstance().player.displayClientMessage(new TextComponent(message), false);
+		Lang.text(message)
+			.sendChat(Minecraft.getInstance().player);
 	}
 
 	public DesignType fallbackRoof(Room room, boolean tower) {

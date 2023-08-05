@@ -12,6 +12,7 @@ import org.lwjgl.glfw.GLFW;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.AllPackets;
+import com.simibubi.mightyarchitect.Keybinds;
 import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.compose.GroundPlan;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
@@ -25,6 +26,7 @@ import com.simibubi.mightyarchitect.control.phase.IDrawBlockHighlights;
 import com.simibubi.mightyarchitect.control.phase.IRenderGameOverlay;
 import com.simibubi.mightyarchitect.foundation.utility.FilesHelper;
 import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
+import com.simibubi.mightyarchitect.foundation.utility.Lang;
 import com.simibubi.mightyarchitect.gui.ArchitectMenuScreen;
 import com.simibubi.mightyarchitect.gui.DesignExporterScreen;
 import com.simibubi.mightyarchitect.gui.PalettePickerScreen;
@@ -39,13 +41,10 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
-import net.minecraftforge.client.event.InputEvent.MouseInputEvent;
-import net.minecraftforge.client.event.InputEvent.MouseScrollEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -138,14 +137,15 @@ public class ArchitectManager {
 			return;
 
 		Minecraft mc = Minecraft.getInstance();
-
-		if (mc.hasSingleplayerServer()) {
+		if (AllPackets.channel.isRemotePresent(mc.getConnection()
+			.getConnection()) && mc.player.hasPermissions(2)) {
 			for (InstantPrintPacket packet : getModel().getPackets())
 				AllPackets.channel.sendToServer(packet);
 			MightyClient.renderer.setActive(false);
 			status("Printed result into world.");
 			unload();
 			return;
+
 		}
 
 		enterPhase(ArchitectPhases.PrintingToMultiplayer);
@@ -181,14 +181,15 @@ public class ArchitectManager {
 		BlockPos pos = model.getAnchor()
 			.offset(((TemplateBlockAccess) model.getMaterializedSketch()).getBounds()
 				.getOrigin());
-		TextComponent component = new TextComponent("Deploy Schematic at: " + ChatFormatting.BLUE + "["
-			+ pos.getX() + "," + pos.getY() + "," + pos.getZ() + "]");
-		Minecraft.getInstance().player.displayClientMessage(component, false);
+		Lang.text("Deploy Schematic at: " + ChatFormatting.BLUE + "[" + pos.getX() + "," + pos.getY() + "," + pos.getZ()
+			+ "]")
+			.sendChat(Minecraft.getInstance().player);
 		unload();
 	}
 
 	public static void status(String message) {
-		Minecraft.getInstance().player.displayClientMessage(new TextComponent(message), true);
+		Lang.text(message)
+			.sendStatus(Minecraft.getInstance().player);
 	}
 
 	public static void pickPalette() {
@@ -273,7 +274,7 @@ public class ArchitectManager {
 	}
 
 	@SubscribeEvent
-	public static void onMouseScrolled(MouseScrollEvent event) {
+	public static void onMouseScrolled(InputEvent.MouseScrollingEvent event) {
 		if (Minecraft.getInstance().screen != null)
 			return;
 		if (phase.getPhaseHandler()
@@ -281,14 +282,14 @@ public class ArchitectManager {
 			event.setCanceled(true);
 	}
 
-	public static void render(PoseStack ms, MultiBufferSource buffer) {
+	public static void render(PoseStack ms, MultiBufferSource buffer, Vec3 camera) {
 		if (Minecraft.getInstance().level != null)
 			phase.getPhaseHandler()
-				.render(ms, buffer);
+				.render(ms, buffer, camera);
 	}
 
 	@SubscribeEvent
-	public static void onClick(MouseInputEvent event) {
+	public static void onClick(InputEvent.MouseButton.Pre event) {
 		if (Minecraft.getInstance().screen != null)
 			return;
 		if (event.getAction() != Keyboard.PRESS)
@@ -298,23 +299,29 @@ public class ArchitectManager {
 	}
 
 	@SubscribeEvent
-	public static void onKeyTyped(KeyInputEvent event) {
-		if (event.getKey() == GLFW.GLFW_KEY_ESCAPE && event.getAction() == Keyboard.PRESS) {
+	public static void onKeyTyped(InputEvent.Key event) {
+		boolean pressed = event.getAction() == GLFW.GLFW_PRESS;
+		boolean released = event.getAction() == Keyboard.RELEASE;
+		if (!pressed && !released)
+			return;
+
+		if (event.getKey() == GLFW.GLFW_KEY_ESCAPE && pressed) {
 			if (inPhase(ArchitectPhases.Composing) || inPhase(ArchitectPhases.Previewing)) {
 				enterPhase(ArchitectPhases.Paused);
 				menu.setVisible(false);
 			}
 			return;
 		}
+
 		if (Minecraft.getInstance().screen != null)
 			return;
-		if (MightyClient.COMPOSE.consumeClick()) {
+
+		if (Keybinds.ACTIVATE.matches(event.getKey()) && pressed) {
 			if (!menu.isFocused())
 				openMenu();
 			return;
 		}
 
-		boolean released = event.getAction() == Keyboard.RELEASE;
 		phase.getPhaseHandler()
 			.onKey(event.getKey(), released);
 	}
@@ -333,14 +340,11 @@ public class ArchitectManager {
 			((IDrawBlockHighlights) phaseHandler).tickHighlightOutlines();
 	}
 
-	@SubscribeEvent
-	public static void onDrawGameOverlay(RenderGameOverlayEvent.Pre event) {
-		if (event.getType() != ElementType.ALL)
-			return;
-
+	public static void onDrawGameOverlay(ForgeGui gui, PoseStack poseStack, float partialTick, int screenWidth,
+		int screenHeight) {
 		IArchitectPhase phaseHandler = phase.getPhaseHandler();
 		if (phaseHandler instanceof IRenderGameOverlay) {
-			((IRenderGameOverlay) phaseHandler).renderGameOverlay(event);
+			((IRenderGameOverlay) phaseHandler).renderGameOverlay(poseStack);
 		}
 
 		menu.drawPassive();

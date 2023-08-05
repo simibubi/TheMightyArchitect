@@ -3,9 +3,6 @@ package com.simibubi.mightyarchitect.control.phase;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.vertex.PoseStack;
-
-import net.minecraft.client.renderer.MultiBufferSource;
 
 public class PhaseEmpty extends PhaseBase {
 
@@ -19,10 +16,6 @@ public class PhaseEmpty extends PhaseBase {
 
 	@Override
 	public void onClick(int button) {
-	}
-
-	@Override
-	public void render(PoseStack ms, MultiBufferSource buffer) {
 	}
 
 	@Override

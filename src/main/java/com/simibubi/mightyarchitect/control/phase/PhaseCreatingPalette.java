@@ -10,18 +10,20 @@ import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.Schematic;
 import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
+import com.simibubi.mightyarchitect.foundation.utility.Lang;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.client.model.data.ModelData;
 
 public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlights {
 
@@ -87,7 +89,7 @@ public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlig
 	}
 
 	@Override
-	public void render(PoseStack ms, MultiBufferSource buffer) {
+	public void render(PoseStack ms, MultiBufferSource buffer, Vec3 camera) {
 		// Blocks
 		for (int i = 0; i < 16; i++) {
 			BlockState state = palette.get(Palette.values()[i]);
@@ -96,14 +98,22 @@ public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlig
 				continue;
 			if (changed[i])
 				continue;
+			BlockRenderDispatcher blockRenderer = minecraft.getBlockRenderer();
+			BakedModel blockModel = blockRenderer.getBlockModel(state);
+			if (blockModel == null)
+				continue;
 
 			ms.pushPose();
 			BlockPos translate = positionFromIndex(i);
-			ms.translate(translate.getX(), translate.getY(), translate.getZ());
-			ms.translate(1 / 32f, 1 / 32f, 1 / 32f);
+			ms.translate(translate.getX() - camera.x, translate.getY() - camera.y, translate.getZ() - camera.z);
 			ms.scale(15 / 16f, 15 / 16f, 15 / 16f);
-			minecraft.getBlockRenderer()
-				.renderSingleBlock(state, ms, buffer, 0xF000F0, OverlayTexture.NO_OVERLAY, EmptyModelData.INSTANCE);
+			ms.translate(1 / 32f, 1 / 32f, 1 / 32f);
+
+			for (RenderType renderType : blockModel.getRenderTypes(state, minecraft.level.random, ModelData.EMPTY))
+				minecraft.getBlockRenderer()
+					.renderBatched(state, translate, minecraft.level, ms, buffer.getBuffer(renderType), false,
+						minecraft.level.random, ModelData.EMPTY, renderType);
+
 			ms.popPose();
 		}
 	}
@@ -116,7 +126,8 @@ public class PhaseCreatingPalette extends PhaseBase implements IDrawBlockHighlig
 
 	protected void notifyChange() {
 		getModel().updatePalettePreview();
-		minecraft.player.displayClientMessage(new TextComponent("Updating Preview..."), true);
+		Lang.text("Updating Preview...")
+			.sendStatus(minecraft.player);
 		MightyClient.renderer.update();
 	}
 

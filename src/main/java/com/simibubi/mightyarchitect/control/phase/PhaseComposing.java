@@ -8,7 +8,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.mightyarchitect.MightyClient;
+import com.simibubi.mightyarchitect.Keybinds;
 import com.simibubi.mightyarchitect.control.compose.planner.Tools;
 import com.simibubi.mightyarchitect.foundation.utility.ShaderManager;
 import com.simibubi.mightyarchitect.foundation.utility.Shaders;
@@ -16,8 +16,8 @@ import com.simibubi.mightyarchitect.gui.ToolSelectionScreen;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 
 public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 
@@ -56,6 +56,9 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 			.tickGroundPlanOutlines();
 		activeTool.getTool()
 			.tickToolOutlines();
+
+		Minecraft.getInstance().player
+			.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 1, 0, true, false, false));
 	}
 
 	@Override
@@ -69,8 +72,7 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 
 	@Override
 	public void onKey(int key, boolean released) {
-		if (key == MightyClient.TOOL_MENU.getKey()
-			.getValue()) {
+		if (Keybinds.FOCUL_TOOL_MENU.matches(key)) {
 			if (released && toolSelection.focused) {
 				toolSelection.focused = false;
 				toolSelection.onClose();
@@ -114,19 +116,15 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 	}
 
 	@Override
-	public void render(PoseStack ms, MultiBufferSource buffer) {}
-
-	@Override
 	public void whenExited() {
 		ShaderManager.stopUsingShaders();
 	}
 
 	@Override
-	public void renderGameOverlay(Pre event) {
+	public void renderGameOverlay(PoseStack ms) {
 		if (Minecraft.getInstance().screen != null)
 			return;
 
-		PoseStack ms = event.getMatrixStack();
 		toolSelection.renderPassive(ms, Minecraft.getInstance()
 			.getDeltaFrameTime());
 		activeTool.getTool()

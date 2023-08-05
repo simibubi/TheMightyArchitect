@@ -7,7 +7,6 @@ import java.util.Locale;
 import com.simibubi.mightyarchitect.TheMightyArchitect;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
@@ -31,7 +30,7 @@ public class Lang {
 	}
 
 	public static Component empty() {
-		return TextComponent.EMPTY;
+		return text("").component();
 	}
 
 	//
@@ -77,7 +76,7 @@ public class Lang {
 
 	public static Object[] resolveBuilders(Object[] args) {
 		for (int i = 0; i < args.length; i++)
-			if (args[i]instanceof LangBuilder cb)
+			if (args[i] instanceof LangBuilder cb)
 				args[i] = cb.component();
 		return args;
 	}

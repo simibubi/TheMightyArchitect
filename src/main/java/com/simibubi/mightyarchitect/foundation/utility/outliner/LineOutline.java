@@ -1,103 +1,48 @@
 package com.simibubi.mightyarchitect.foundation.utility.outliner;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.mightyarchitect.foundation.utility.VecHelper;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3d;
+import com.mojang.math.Vector4f;
+import com.simibubi.mightyarchitect.foundation.RenderTypes;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
 public class LineOutline extends Outline {
 
-	protected Vec3 start = Vec3.ZERO;
-	protected Vec3 end = Vec3.ZERO;
+	protected final Vector3d start = new Vector3d(0, 0, 0);
+	protected final Vector3d end = new Vector3d(0, 0, 0);
 
-	public LineOutline set(Vec3 start, Vec3 end) {
-		this.start = start;
-		this.end = end;
+	public LineOutline set(Vector3d start, Vector3d end) {
+		this.start.set(start.x, start.y, start.z);
+		this.end.set(end.x, end.y, end.z);
 		return this;
 	}
 
+	public LineOutline set(Vec3 start, Vec3 end) {
+		this.start.set(start.x, start.y, start.z);
+		this.end.set(end.x, end.y, end.z);
+		return this;
+	}
+
+	protected void renderInner(PoseStack ms, VertexConsumer consumer, Vec3 camera, float pt, float width,
+		Vector4f color, int lightmap, boolean disableNormals) {
+		bufferCuboidLine(ms, consumer, camera, start, end, width, color, lightmap, disableNormals);
+	}
+
 	@Override
-	public void render(PoseStack ms, MultiBufferSource buffer) {
-		renderCuboidLine(ms, buffer, start, end);
-	}
+	public void render(PoseStack ms, MultiBufferSource buffer, Vec3 camera, float pt) {
+		float width = params.getLineWidth();
+		if (width == 0)
+			return;
 
-	public static class ChasingLineOutline extends LineOutline {
-
-		protected Vec3 prevStart = Vec3.ZERO;
-		protected Vec3 prevEnd = Vec3.ZERO;
-		protected Vec3 targetStart = Vec3.ZERO;
-		protected Vec3 targetEnd = Vec3.ZERO;
-
-		public ChasingLineOutline target(Vec3 start, Vec3 end) {
-			if (end.distanceTo(targetStart) + start.distanceTo(targetEnd) < end.distanceTo(targetEnd)
-				+ start.distanceTo(targetStart)) {
-				this.targetEnd = start;
-				this.targetStart = end;
-				return this;
-			}
-			this.targetStart = start;
-			this.targetEnd = end;
-			return this;
-		}
-
-		@Override
-		public LineOutline set(Vec3 start, Vec3 end) {
-			prevEnd = end;
-			prevStart = start;
-			return super.set(start, end);
-		}
-		
-		@Override
-		public void tick() {
-			prevStart = start;
-			prevEnd = end;
-			start = VecHelper.lerp(start, targetStart, .5f);
-			end = VecHelper.lerp(end, targetEnd, .5f);
-		}
-
-		@Override
-		public void render(PoseStack ms, MultiBufferSource buffer) {
-			float pt = Minecraft.getInstance()
-				.getFrameTime();
-			renderCuboidLine(ms, buffer, VecHelper.lerp(prevStart, start, pt), VecHelper.lerp(prevEnd, end, pt));
-		}
-
-	}
-
-	public static class EndChasingLineOutline extends LineOutline {
-
-		float prevProgress = 0;
-		float progress = 0;
-
-		@Override
-		public void tick() {}
-
-		public EndChasingLineOutline setProgress(float progress) {
-			prevProgress = this.progress;
-			this.progress = progress;
-			return this;
-		}
-
-		@Override
-		public LineOutline set(Vec3 start, Vec3 end) {
-			if (!end.equals(this.end))
-				super.set(start, end);
-			return this;
-		}
-
-		@Override
-		public void render(PoseStack ms, MultiBufferSource buffer) {
-			float pt = Minecraft.getInstance()
-				.getFrameTime();
-			float distanceToTarget = 1 - Mth.lerp(pt, prevProgress, progress);
-			Vec3 start = end.add(this.start.subtract(end)
-				.scale(distanceToTarget));
-			renderCuboidLine(ms, buffer, start, end);
-		}
-
+		VertexConsumer consumer = buffer.getBuffer(RenderTypes.getOutlineSolid());
+		params.loadColor(colorTemp);
+		Vector4f color = colorTemp;
+		int lightmap = params.lightmap;
+		boolean disableLineNormals = params.disableLineNormals;
+		renderInner(ms, consumer, camera, pt, width, color, lightmap, disableLineNormals);
 	}
 
 }

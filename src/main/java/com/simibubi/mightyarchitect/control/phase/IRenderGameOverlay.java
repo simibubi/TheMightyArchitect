@@ -1,9 +1,9 @@
 package com.simibubi.mightyarchitect.control.phase;
 
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 public interface IRenderGameOverlay {
 
-	public void renderGameOverlay(RenderGameOverlayEvent.Pre event);
-	
+	public void renderGameOverlay(PoseStack poseStack);
+
 }

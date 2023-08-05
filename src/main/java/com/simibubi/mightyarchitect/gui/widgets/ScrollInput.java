@@ -2,18 +2,21 @@ package com.simibubi.mightyarchitect.gui.widgets;
 
 import java.util.function.Consumer;
 
+import com.simibubi.mightyarchitect.foundation.utility.Lang;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 
 public class ScrollInput extends AbstractSimiWidget {
 
 	protected Consumer<Integer> onScroll;
 	protected int state;
 	protected Label displayLabel;
-	protected Component title = new TextComponent("Choose an Option");
-	protected Component scrollToModify = new TextComponent("Scroll to Modify");
+	protected Component title = Lang.text("Choose an Option")
+		.component();
+	protected Component scrollToModify = Lang.text("Scroll to Modify")
+		.component();
 	protected int min, max;
 	protected int shiftStep;
 
@@ -42,7 +45,8 @@ public class ScrollInput extends AbstractSimiWidget {
 	}
 
 	public ScrollInput titled(String title) {
-		this.title = new TextComponent(title);
+		this.title = Lang.text(title)
+			.component();
 		updateTooltip();
 		return this;
 	}
@@ -108,7 +112,8 @@ public class ScrollInput extends AbstractSimiWidget {
 	}
 
 	protected void writeToLabel() {
-		displayLabel.text = new TextComponent(String.valueOf(state));
+		displayLabel.text = Lang.text(String.valueOf(state))
+			.component();
 	}
 
 	protected void updateTooltip() {

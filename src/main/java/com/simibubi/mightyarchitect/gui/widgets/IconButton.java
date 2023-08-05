@@ -2,10 +2,10 @@ package com.simibubi.mightyarchitect.gui.widgets;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.simibubi.mightyarchitect.foundation.utility.Lang;
 import com.simibubi.mightyarchitect.gui.ScreenResources;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 
 public class IconButton extends AbstractSimiWidget {
 
@@ -46,7 +46,8 @@ public class IconButton extends AbstractSimiWidget {
 	}
 
 	public void setToolTip(String text) {
-		setToolTip(new TextComponent(text));
+		setToolTip(Lang.text(text)
+			.component());
 	}
 
 	public void setToolTip(Component text) {

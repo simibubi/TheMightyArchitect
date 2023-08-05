@@ -10,6 +10,7 @@ import com.simibubi.mightyarchitect.control.design.DesignLayer;
 import com.simibubi.mightyarchitect.control.design.DesignTheme;
 import com.simibubi.mightyarchitect.control.design.DesignType;
 import com.simibubi.mightyarchitect.control.design.ThemeStorage;
+import com.simibubi.mightyarchitect.foundation.utility.Lang;
 import com.simibubi.mightyarchitect.gui.widgets.IconButton;
 import com.simibubi.mightyarchitect.gui.widgets.Indicator;
 import com.simibubi.mightyarchitect.gui.widgets.Indicator.State;
@@ -17,7 +18,6 @@ import com.simibubi.mightyarchitect.gui.widgets.Label;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollInput;
 
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.network.chat.TextComponent;
 
 public class ThemeSettingsScreen extends AbstractSimiScreen {
 
@@ -57,12 +57,12 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 		int y = topLeftY + 14;
 		int id = 0;
 
-		inputName = new EditBox(font, x, y, 104, 8, new TextComponent(""));
+		inputName = new EditBox(font, x, y, 104, 8, Lang.empty());
 		inputName.setValue(theme.getDisplayName());
 		inputName.changeFocus(false);
 		inputs.add(inputName);
 
-		inputAuthor = new EditBox(font, x, y + 20, 104, 8, new TextComponent(""));
+		inputAuthor = new EditBox(font, x, y + 20, 104, 8, Lang.empty());
 		inputAuthor.setValue(theme.getDesigner());
 		inputAuthor.changeFocus(false);
 		inputs.add(inputAuthor);
@@ -332,7 +332,8 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 		ThemeStorage.exportTheme(theme);
 		ThemeStorage.reloadExternal();
 		ArchitectManager.editTheme(theme);
-		minecraft.player.displayClientMessage(new TextComponent("Theme settings have been updated."), true);
+		Lang.text("Theme settings have been updated.")
+			.sendStatus(minecraft.player);
 	}
 
 	private boolean roofLayerExists() {

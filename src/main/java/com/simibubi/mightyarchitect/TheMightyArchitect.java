@@ -3,10 +3,8 @@ package com.simibubi.mightyarchitect;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -16,6 +14,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.RegisterEvent;
 
 @EventBusSubscriber(bus = Bus.FORGE)
 @Mod(TheMightyArchitect.ID)
@@ -42,20 +41,21 @@ public class TheMightyArchitect {
 	private void init(final FMLCommonSetupEvent event) {
 		AllPackets.registerPackets();
 	}
+	
+	public static ResourceLocation asResource(String path) {
+		return new ResourceLocation(ID, path);
+	}
 
 	@EventBusSubscriber(bus = Bus.MOD)
 	public static class RegistryListener {
 
 		@SubscribeEvent
-		public static void registerItems(RegistryEvent.Register<Item> event) {
-			AllItems.registerItems(event.getRegistry());
-			AllBlocks.registerItemBlocks(event.getRegistry());
+		public static void registerItems(RegisterEvent event) {
+			AllBlocks.registerBlocks(event);
+			AllItems.registerItems(event);
+			AllBlocks.registerItems(event);
 		}
 
-		@SubscribeEvent
-		public static void registerBlocks(RegistryEvent.Register<Block> event) {
-			AllBlocks.registerBlocks(event.getRegistry());
-		}
 	}
 
 }

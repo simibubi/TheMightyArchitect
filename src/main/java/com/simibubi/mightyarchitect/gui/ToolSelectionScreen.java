@@ -6,8 +6,9 @@ import java.util.function.Consumer;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.mightyarchitect.MightyClient;
+import com.simibubi.mightyarchitect.Keybinds;
 import com.simibubi.mightyarchitect.control.compose.planner.Tools;
+import com.simibubi.mightyarchitect.foundation.utility.Lang;
 import com.simibubi.mightyarchitect.foundation.utility.LerpedFloat;
 import com.simibubi.mightyarchitect.foundation.utility.LerpedFloat.Chaser;
 
@@ -15,7 +16,6 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.Mth;
 
 public class ToolSelectionScreen extends Screen {
@@ -30,7 +30,8 @@ public class ToolSelectionScreen extends Screen {
 	protected int h;
 
 	public ToolSelectionScreen(List<Tools> tools, Consumer<Tools> callback) {
-		super(new TextComponent("Tool Selection"));
+		super(Lang.text("Tool Selection")
+			.component());
 		this.minecraft = Minecraft.getInstance();
 		this.tools = tools;
 		this.callback = callback;
@@ -97,9 +98,7 @@ public class ToolSelectionScreen extends Screen {
 		}
 
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		String translationKey = MightyClient.TOOL_MENU.getTranslatedKeyMessage()
-			.getString()
-			.toUpperCase();
+		String translationKey = Keybinds.FOCUL_TOOL_MENU.getBoundKey();
 		int width = minecraft.getWindow()
 			.getGuiScaledWidth();
 		if (!focused)

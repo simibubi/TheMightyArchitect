@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.function.Function;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.AllSpecialTextures;
 import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.compose.Cuboid;
@@ -17,7 +16,6 @@ import com.simibubi.mightyarchitect.foundation.utility.outliner.AABBOutline;
 import com.simibubi.mightyarchitect.foundation.utility.outliner.BlockClusterOutline;
 import com.simibubi.mightyarchitect.foundation.utility.outliner.Outline;
 
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 
@@ -120,7 +118,7 @@ public class PhaseEditTheme extends PhaseBase {
 
 	private void chaseText(Object key, float x, float y, float z, String text) {
 		MightyClient.outliner.chaseText(key, new Vec3(x, y, z), text)
-		.disableNormals()
+			.disableLineNormals()
 			.colored(0xffffff);
 	}
 
@@ -195,8 +193,5 @@ public class PhaseEditTheme extends PhaseBase {
 		effectiveSelectedDesign = null;
 		effectiveHeight = 0;
 	}
-
-	@Override
-	public void render(PoseStack ms, MultiBufferSource buffer) {}
 
 }

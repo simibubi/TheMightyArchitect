@@ -5,10 +5,10 @@ import com.simibubi.mightyarchitect.AllItems;
 import com.simibubi.mightyarchitect.AllPackets;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.palette.Palette;
+import com.simibubi.mightyarchitect.foundation.utility.Lang;
 import com.simibubi.mightyarchitect.networking.SetHotbarItemPacket;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -81,12 +81,17 @@ public class ArchitectKits {
 	}
 
 	private static void setHotbarBlock(int slot, Palette palette) {
-		BlockState state = DesignExporter.theme.getDefaultPalette().get(palette);
-		ItemStack stack = new ItemStack(state.getBlock().asItem());
+		BlockState state = DesignExporter.theme.getDefaultPalette()
+			.get(palette);
+		ItemStack stack = new ItemStack(state.getBlock()
+			.asItem());
 		setHotbarItem(slot,
-				stack.setHoverName(new TextComponent(ChatFormatting.RESET + "" + ChatFormatting.GOLD
-						+ palette.getDisplayName() + ChatFormatting.WHITE + " (" + ChatFormatting.GRAY
-						+ stack.getHoverName().getString() + ChatFormatting.WHITE + ")")));
+			stack.setHoverName(Lang
+				.text(ChatFormatting.RESET + "" + ChatFormatting.GOLD + palette.getDisplayName() + ChatFormatting.WHITE
+					+ " (" + ChatFormatting.GRAY + stack.getHoverName()
+						.getString()
+					+ ChatFormatting.WHITE + ")")
+				.component()));
 	}
 
 }

@@ -4,10 +4,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.control.phase.PhaseBase;
-
-import net.minecraft.client.renderer.MultiBufferSource;
 
 public class PhaseManageThemes extends PhaseBase {
 
@@ -18,11 +15,6 @@ public class PhaseManageThemes extends PhaseBase {
 
 	@Override
 	public void update() {
-
-	}
-
-	@Override
-	public void render(PoseStack ms, MultiBufferSource buffer) {
 
 	}
 

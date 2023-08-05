@@ -4,7 +4,6 @@ import java.nio.file.Paths;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
@@ -12,6 +11,7 @@ import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 import com.simibubi.mightyarchitect.control.palette.PaletteStorage;
 import com.simibubi.mightyarchitect.foundation.utility.FilesHelper;
+import com.simibubi.mightyarchitect.foundation.utility.Lang;
 import com.simibubi.mightyarchitect.gui.widgets.IconButton;
 
 import net.minecraft.ChatFormatting;
@@ -20,7 +20,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextComponent;
 
 public class PalettePickerScreen extends AbstractSimiScreen {
 
@@ -73,22 +72,29 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 		// create
 		if (!scanPicker) {
 			buttonAddPalette = new IconButton(x + (i % 5) * 23, y + (i / 5) * 23, ScreenResources.ICON_ADD);
-			buttonAddPalette.setToolTip(new TextComponent("Create Palette"));
+			buttonAddPalette.setToolTip(Lang.text("Create Palette")
+				.component());
 			buttonAddPalette.getToolTip()
-				.add(new TextComponent("Will use currently selected").withStyle(ChatFormatting.GRAY));
+				.add(Lang.text("Will use currently selected")
+					.style(ChatFormatting.GRAY)
+					.component());
 			buttonAddPalette.getToolTip()
-				.add(new TextComponent("Palette as the template.").withStyle(ChatFormatting.GRAY));
+				.add(Lang.text("Palette as the template.")
+					.style(ChatFormatting.GRAY)
+					.component());
 			i++;
 			widgets.add(buttonAddPalette);
 		}
 
 		buttonOpenFolder = new IconButton(x + (i % 5) * 23, y + (i / 5) * 23, ScreenResources.ICON_FOLDER);
-		buttonOpenFolder.setToolTip(new TextComponent("Open Palette Folder"));
+		buttonOpenFolder.setToolTip(Lang.text("Open Palette Folder")
+			.component());
 		widgets.add(buttonOpenFolder);
 		i++;
 
 		buttonRefresh = new IconButton(x + (i % 5) * 23, y + (i / 5) * 23, ScreenResources.ICON_REFRESH);
-		buttonRefresh.setToolTip(new TextComponent("Refresh Imported Palettes"));
+		buttonRefresh.setToolTip(Lang.text("Refresh Imported Palettes")
+			.component());
 		widgets.add(buttonRefresh);
 		i++;
 
@@ -100,12 +106,12 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 
 		if (scanPicker) {
 			if (primary.palette.hasDuplicates())
-				minecraft.player.displayClientMessage(
-					new TextComponent(ChatFormatting.RED + "Warning: Ambiguous Scanner Palette "
-						+ ChatFormatting.WHITE + "( " + primary.palette.getDuplicates() + " )"),
-					false);
+				Lang.text(ChatFormatting.RED + "Warning: Ambiguous Scanner Palette " + ChatFormatting.WHITE + "( "
+					+ primary.palette.getDuplicates() + " )")
+					.sendChat(minecraft.player);
 
-			minecraft.player.displayClientMessage(new TextComponent("Updated Default Palette"), true);
+			Lang.text("Updated Default Palette")
+				.sendStatus(minecraft.player);
 			DesignExporter.theme.setDefaultPalette(primary.palette);
 			DesignExporter.theme.setDefaultSecondaryPalette(secondary.palette);
 		}
@@ -243,7 +249,7 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 		private void preview(PoseStack ms, Minecraft mc) {
 			ms.pushPose();
 			ms.translate(x + 1, y + 9, 100);
-			ms.scale(1 + 1/64f, 1 + 1/64f, 1);
+			ms.scale(1 + 1 / 64f, 1 + 1 / 64f, 1);
 			renderBlock(ms, mc, new BlockPos(0, 1, 0), Palette.INNER_PRIMARY);
 			renderBlock(ms, mc, new BlockPos(1, 1, 0), Palette.INNER_DETAIL);
 			renderBlock(ms, mc, new BlockPos(0, 0, 0), Palette.HEAVY_PRIMARY);
@@ -271,7 +277,8 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 		@Override
 		public void renderToolTip(PoseStack ms, int mouseX, int mouseY) {
 			if (isHovered) {
-				renderTooltip(ms, new TextComponent(palette.getName()), mouseX, mouseY);
+				renderTooltip(ms, Lang.text(palette.getName())
+					.component(), mouseX, mouseY);
 				RenderSystem.setShaderColor(1, 1, 1, 1);
 			}
 		}

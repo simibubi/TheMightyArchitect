@@ -121,12 +121,10 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 					.withFaceTexture(roomHighlighted ? AllSpecialTextures.SuperSelectedRoom
 						: stackTransparent ? AllSpecialTextures.SelectedRoom
 							: stackHighlighted ? AllSpecialTextures.SelectedRoom : stack.getTextureOf(room))
-					.colored(0x111111)
-					.coloredFaces(0x555555)
-					.lineWidth(1 / 8f)
-					.fadesAfter(2)
-					.hideBottom(room != stack.lowest() && !roomHighlighted)
-					.hideTop((room != stack.highest() || room.roofType == DesignType.NONE) && !roomHighlighted);
+					.colored(0xff111111)
+					.lineWidth(roomHighlighted ? 1 / 16f : 1 / 32f);
+//					.hideBottom(room != stack.lowest() && !roomHighlighted)
+//					.hideTop((room != stack.highest() || room.roofType == DesignType.NONE) && !roomHighlighted);
 			});
 		});
 		tickRoofOutlines();
@@ -163,15 +161,16 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 			boolean alongZ = w >= l;
 			switch (roofType) {
 			case TOWER_ROOF:
-				key(string + "A").vertex(x, y + h, z, lines)
+				y += .25;
+				key(string + "TA").vertex(x, y + h, z, lines)
 					.vertex(x + w / 2, y + h + w, z + l / 2, lines)
 					.vertex(x, y + h, z + l, lines)
 					.end();
-				key(string + "B").vertex(x + w, y + h, z + l, lines)
+				key(string + "TB").vertex(x + w, y + h, z + l, lines)
 					.vertex(x + w / 2, y + h + w, z + l / 2, lines)
 					.vertex(x + w, y + h, z, lines)
 					.end();
-				key(string).vertex(x, y + h, z, lines)
+				key(string + "T").vertex(x, y + h, z, lines)
 					.vertex(x, y + h, z + l, lines)
 					.vertex(x + w, y + h, z + l, lines)
 					.vertex(x + w, y + h, z, lines)
@@ -182,14 +181,14 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 			case FLAT_ROOF:
 			case TOWER_FLAT_ROOF:
 				y += .25;
-				key(string).vertex(x, y + h, z, lines)
+				key(string + "F").vertex(x, y + h, z, lines)
 					.vertex(x, y + h, z + l, lines)
 					.vertex(x + w, y + h, z + l, lines)
 					.vertex(x + w, y + h, z, lines)
 					.vertex(x, y + h, z, lines)
 					.end();
-				y += .5;
-				key(string + "A").vertex(x, y + h, z, lines)
+				y += .25;
+				key(string + "FA").vertex(x, y + h, z, lines)
 					.vertex(x, y + h, z + l, lines)
 					.vertex(x + w, y + h, z + l, lines)
 					.vertex(x + w, y + h, z, lines)
@@ -198,7 +197,10 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 
 				break;
 			case ROOF:
+				y += .25;
 				boolean q = room.quadFacadeRoof;
+				if (q)
+					string += "Q";
 
 				key(string).vertex(x, y + h, z, lines);
 				if (alongZ || q)
@@ -230,7 +232,7 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 				break;
 			}
 
-			lines.forEach(op -> op.lineWidth(1 / 4f)
+			lines.forEach(op -> op.lineWidth(1 / 8f)
 				.colored(0x222222));
 		});
 

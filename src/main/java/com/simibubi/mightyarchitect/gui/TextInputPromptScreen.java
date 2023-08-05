@@ -5,11 +5,11 @@ import java.util.function.Consumer;
 import org.lwjgl.glfw.GLFW;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.simibubi.mightyarchitect.foundation.utility.Lang;
 
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 
 public class TextInputPromptScreen extends AbstractSimiScreen {
 
@@ -31,8 +31,10 @@ public class TextInputPromptScreen extends AbstractSimiScreen {
 		this.callback = callBack;
 		this.abortCallback = abortCallback;
 
-		buttonTextConfirm = new TextComponent("Confirm");
-		buttonTextAbort = new TextComponent("Abort");
+		buttonTextConfirm = Lang.text("Confirm")
+			.component();
+		buttonTextAbort = Lang.text("Abort")
+			.component();
 		confirmed = false;
 	}
 
@@ -41,8 +43,7 @@ public class TextInputPromptScreen extends AbstractSimiScreen {
 		super.init();
 		setWindowSize(ScreenResources.TEXT_INPUT.width, ScreenResources.TEXT_INPUT.height + 30);
 
-		this.nameField =
-			new EditBox(font, topLeftX + 33, topLeftY + 26, 128, 8, new TextComponent(""));
+		this.nameField = new EditBox(font, topLeftX + 33, topLeftY + 26, 128, 8, Component.empty());
 		this.nameField.setTextColor(-1);
 		this.nameField.setTextColorUneditable(-1);
 		this.nameField.setBordered(false);
@@ -79,15 +80,18 @@ public class TextInputPromptScreen extends AbstractSimiScreen {
 	}
 
 	public void setButtonTextConfirm(String buttonTextConfirm) {
-		this.buttonTextConfirm = new TextComponent(buttonTextConfirm);
+		this.buttonTextConfirm = Lang.text(buttonTextConfirm)
+			.component();
 	}
 
 	public void setButtonTextAbort(String buttonTextAbort) {
-		this.buttonTextAbort = new TextComponent(buttonTextAbort);
+		this.buttonTextAbort = Lang.text(buttonTextAbort)
+			.component();
 	}
 
 	public void setTitle(String title) {
-		this.title = new TextComponent(title);
+		this.title = Lang.text(title)
+			.component();
 	}
 
 	@Override

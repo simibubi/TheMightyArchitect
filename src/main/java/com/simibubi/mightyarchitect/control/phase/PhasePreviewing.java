@@ -9,14 +9,13 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.simibubi.mightyarchitect.Keybinds;
 import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.compose.planner.Tools;
 import com.simibubi.mightyarchitect.gui.ToolSelectionScreen;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 public class PhasePreviewing extends PhaseBase implements IRenderGameOverlay {
 
@@ -59,7 +58,7 @@ public class PhasePreviewing extends PhaseBase implements IRenderGameOverlay {
 
 	@Override
 	public void onKey(int key, boolean released) {
-		if (key == MightyClient.TOOL_MENU.getKey().getValue()) {
+		if (Keybinds.FOCUL_TOOL_MENU.matches(key)) {
 			if (released && toolSelection.focused) {
 				toolSelection.focused = false;
 				toolSelection.onClose();
@@ -75,7 +74,10 @@ public class PhasePreviewing extends PhaseBase implements IRenderGameOverlay {
 			return;
 
 		if (toolSelection.focused) {
-			Optional<KeyMapping> mapping = Arrays.stream(Minecraft.getInstance().options.keyHotbarSlots).filter(keyMapping -> keyMapping.getKey().getValue() == key).findFirst();
+			Optional<KeyMapping> mapping = Arrays.stream(Minecraft.getInstance().options.keyHotbarSlots)
+				.filter(keyMapping -> keyMapping.getKey()
+					.getValue() == key)
+				.findFirst();
 			if (mapping.isEmpty())
 				return;
 
@@ -84,7 +86,8 @@ public class PhasePreviewing extends PhaseBase implements IRenderGameOverlay {
 			return;
 		}
 
-		activeTool.getTool().handleKeyInput(key);
+		activeTool.getTool()
+			.handleKeyInput(key);
 	}
 
 	@Override
@@ -110,17 +113,14 @@ public class PhasePreviewing extends PhaseBase implements IRenderGameOverlay {
 	}
 
 	@Override
-	public void render(PoseStack ms, MultiBufferSource buffer) {}
-
-	@Override
 	public void whenExited() {
 		MightyClient.renderer.setActive(false);
 	}
 
 	@Override
-	public void renderGameOverlay(RenderGameOverlayEvent.Pre event) {
-		PoseStack ms = event.getMatrixStack();
-		toolSelection.renderPassive(ms, event.getPartialTicks());
+	public void renderGameOverlay(PoseStack ms) {
+		toolSelection.renderPassive(ms, Minecraft.getInstance()
+			.getDeltaFrameTime());
 		activeTool.getTool()
 			.renderOverlay(ms);
 	}

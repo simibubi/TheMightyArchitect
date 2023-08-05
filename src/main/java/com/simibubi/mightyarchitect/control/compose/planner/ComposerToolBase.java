@@ -11,6 +11,7 @@ import com.simibubi.mightyarchitect.control.compose.GroundPlan;
 import com.simibubi.mightyarchitect.control.compose.Room;
 import com.simibubi.mightyarchitect.control.compose.Stack;
 import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
+import com.simibubi.mightyarchitect.foundation.utility.Lang;
 import com.simibubi.mightyarchitect.foundation.utility.RaycastHelper;
 import com.simibubi.mightyarchitect.foundation.utility.RaycastHelper.PredicateTraceResult;
 
@@ -18,7 +19,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.Mth;
 
 public abstract class ComposerToolBase implements IComposerTool {
@@ -27,17 +27,17 @@ public abstract class ComposerToolBase implements IComposerTool {
 	protected String toolModeCtrl = null;
 	protected float toolModeYOffset = 0;
 	protected float lastToolModeYOffset = 0;
-	
+
 	public static Stack selectedStack;
 	public static Room selectedRoom;
 	public static Direction selectedFace;
 	public static BlockPos selectedPos;
-	
+
 	protected Schematic model;
-	
+
 	@Override
 	public void init() {
-		model = ArchitectManager.getModel();	
+		model = ArchitectManager.getModel();
 		deselect();
 	}
 
@@ -47,16 +47,18 @@ public abstract class ComposerToolBase implements IComposerTool {
 		selectedRoom = null;
 		selectedPos = null;
 	}
-	
+
 	@Override
 	public void updateSelection() {
 		updateOverlay();
 		updateSelectedRooms();
 	}
-	
+
 	protected void updateSelectedRooms() {
-		final GroundPlan groundPlan = ArchitectManager.getModel().getGroundPlan();
-		final BlockPos anchor = ArchitectManager.getModel().getAnchor();
+		final GroundPlan groundPlan = ArchitectManager.getModel()
+			.getGroundPlan();
+		final BlockPos anchor = ArchitectManager.getModel()
+			.getAnchor();
 
 		if (groundPlan.isEmpty()) {
 			deselect();
@@ -74,12 +76,13 @@ public abstract class ComposerToolBase implements IComposerTool {
 			return;
 		}
 
-		selectedPos = result.getPos().subtract(anchor);
+		selectedPos = result.getPos()
+			.subtract(anchor);
 		selectedRoom = groundPlan.getRoomAtPos(selectedPos);
 		selectedStack = groundPlan.getStackAtPos(selectedPos);
 		selectedFace = result.getFacing();
 	}
-	
+
 	protected void updateOverlay() {
 		lastToolModeYOffset = toolModeYOffset;
 		if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL))
@@ -87,16 +90,14 @@ public abstract class ComposerToolBase implements IComposerTool {
 		else
 			toolModeYOffset *= .8f;
 	}
-	
+
 	@Override
 	public void renderOverlay(PoseStack ms) {
 		ms.pushPose();
 		Minecraft mc = Minecraft.getInstance();
 		Window mainWindow = mc.getWindow();
 		ms.translate(mainWindow.getGuiScaledWidth() / 2, mainWindow.getGuiScaledHeight() / 2 - 3, 0);
-		ms.translate(25,
-				-Mth.lerp(mc.getFrameTime(), lastToolModeYOffset, toolModeYOffset),
-				0);
+		ms.translate(25, -Mth.lerp(mc.getFrameTime(), lastToolModeYOffset, toolModeYOffset), 0);
 
 		if (toolModeNoCtrl != null) {
 			int color = 0xFFFFFFFF;
@@ -114,9 +115,10 @@ public abstract class ComposerToolBase implements IComposerTool {
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		ms.popPose();
 	}
-	
+
 	protected void status(String message) {
-		Minecraft.getInstance().player.displayClientMessage(new TextComponent(message), true);
+		Lang.text(message)
+			.sendStatus(Minecraft.getInstance().player);
 	}
-	
+
 }

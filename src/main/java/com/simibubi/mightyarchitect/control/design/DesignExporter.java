@@ -16,6 +16,7 @@ import com.simibubi.mightyarchitect.control.palette.Palette;
 import com.simibubi.mightyarchitect.control.palette.PaletteDefinition;
 import com.simibubi.mightyarchitect.control.phase.export.PhaseEditTheme;
 import com.simibubi.mightyarchitect.foundation.utility.FilesHelper;
+import com.simibubi.mightyarchitect.foundation.utility.Lang;
 import com.simibubi.mightyarchitect.networking.PlaceSignPacket;
 
 import net.minecraft.client.Minecraft;
@@ -23,7 +24,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
@@ -113,10 +113,11 @@ public class DesignExporter {
 					Palette block = scanningPalette.scan(blockState);
 
 					if (block == null && blockState.getBlock() != Blocks.AIR) {
-						Minecraft.getInstance().player.displayClientMessage(
-							new TextComponent(blockState.getBlock()
+						Lang.text(blockState.getBlock()
 							.getDescriptionId() + " @" + pos.getX() + "," + pos.getY() + "," + pos.getZ()
-							+ " does not belong to the Scanner Palette"), false);
+							+ " does not belong to the Scanner Palette")
+							.color(0xff6666)
+							.sendStatus(Minecraft.getInstance().player);
 						return "Export failed";
 					}
 

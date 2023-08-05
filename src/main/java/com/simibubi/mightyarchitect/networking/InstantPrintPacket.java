@@ -18,8 +18,7 @@ public class InstantPrintPacket {
 
 	private BunchOfBlocks blocks;
 
-	public InstantPrintPacket() {
-	}
+	public InstantPrintPacket() {}
 
 	public InstantPrintPacket(BunchOfBlocks blocks) {
 		this.blocks = blocks;
@@ -43,43 +42,52 @@ public class InstantPrintPacket {
 			buf.writeBlockPos(pos);
 		});
 	}
-	
+
 	public void handle(Supplier<NetworkEvent.Context> context) {
-		context.get().enqueueWork(() -> {
-			blocks.blocks.forEach((pos, state) -> {
-				context.get().getSender().getCommandSenderWorld().setBlock(pos, state, 3);
+		if (!context.get()
+			.getSender()
+			.hasPermissions(2))
+			return;
+		context.get()
+			.enqueueWork(() -> {
+				blocks.blocks.forEach((pos, state) -> {
+					context.get()
+						.getSender()
+						.getCommandSenderWorld()
+						.setBlock(pos, state, 3);
+				});
 			});
-		});
-    }
-	
+	}
+
 	public static List<InstantPrintPacket> sendSchematic(Map<BlockPos, BlockState> blockMap, BlockPos anchor) {
 		List<InstantPrintPacket> packets = new LinkedList<>();
-		
+
 		Map<BlockPos, BlockState> currentMap = new HashMap<>(BunchOfBlocks.MAX_SIZE);
 		List<BlockPos> posList = new ArrayList<>(blockMap.keySet());
-		
+
 		for (int i = 0; i < blockMap.size(); i++) {
 			if (currentMap.size() >= BunchOfBlocks.MAX_SIZE) {
 				packets.add(new InstantPrintPacket(new BunchOfBlocks(currentMap)));
 				currentMap = new HashMap<>(BunchOfBlocks.MAX_SIZE);
 			}
-			currentMap.put(posList.get(i).offset(anchor), blockMap.get(posList.get(i)));
+			currentMap.put(posList.get(i)
+				.offset(anchor), blockMap.get(posList.get(i)));
 		}
 		packets.add(new InstantPrintPacket(new BunchOfBlocks(currentMap)));
-		
+
 		return packets;
 	}
-	
+
 	static class BunchOfBlocks {
 		static final int MAX_SIZE = 32;
 		Map<BlockPos, BlockState> blocks;
 		int size;
-		
+
 		public BunchOfBlocks(Map<BlockPos, BlockState> blocks) {
 			this.blocks = blocks;
 			this.size = blocks.size();
 		}
-		
+
 	}
 
 }

@@ -5,11 +5,11 @@ import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.phase.ArchitectPhases;
 import com.simibubi.mightyarchitect.control.phase.export.PhaseEditTheme;
+import com.simibubi.mightyarchitect.foundation.utility.Lang;
 import com.simibubi.mightyarchitect.gui.DesignExporterScreen;
 import com.simibubi.mightyarchitect.gui.ScreenHelper;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -67,9 +67,9 @@ public class ArchitectWandItem extends Item {
 				return;
 
 			String name = DesignExporter.exportDesign(world, anchor);
-			if (!name.isEmpty()) {
-				player.displayClientMessage(new TextComponent(name), true);
-			}
+			if (!name.isEmpty())
+				Lang.text(name)
+					.sendStatus(player);
 
 		} else {
 			if (!ArchitectManager.inPhase(ArchitectPhases.EditingThemes))
@@ -109,7 +109,7 @@ public class ArchitectWandItem extends Item {
 	}
 
 	@Override
-	public int getItemStackLimit(ItemStack stack) {
+	public int getMaxStackSize(ItemStack stack) {
 		return 1;
 	}
 
