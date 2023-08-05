@@ -1,10 +1,10 @@
 package com.simibubi.mightyarchitect.gui.widgets;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.foundation.utility.Lang;
 import com.simibubi.mightyarchitect.gui.ScreenResources;
 
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
 public class IconButton extends AbstractSimiWidget {
@@ -18,18 +18,18 @@ public class IconButton extends AbstractSimiWidget {
 	}
 
 	@Override
-	public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
 		if (this.visible) {
-			this.isHovered =
-				mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+			int x = getX();
+			int y = getY();
+			this.isHovered = mouseX >= x && mouseY >= y && mouseX < x + this.width && mouseY < y + this.height;
 
 			ScreenResources button = (pressed || !active) ? button = ScreenResources.BUTTON_DOWN
 				: (isHovered) ? ScreenResources.BUTTON_HOVER : ScreenResources.BUTTON;
 
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-			ScreenResources.BUTTON.bind();
-			blit(matrixStack, x, y, button.startX, button.startY, button.width, button.height);
-			icon.draw(matrixStack, this, x + 1, y + 1);
+			button.draw(graphics, x, y);
+			icon.draw(graphics, x + 1, y + 1);
 		}
 	}
 

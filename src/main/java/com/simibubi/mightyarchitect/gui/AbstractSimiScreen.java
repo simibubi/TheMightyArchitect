@@ -3,12 +3,13 @@ package com.simibubi.mightyarchitect.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.foundation.utility.Lang;
 import com.simibubi.mightyarchitect.gui.widgets.AbstractSimiWidget;
 
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 
 public abstract class AbstractSimiScreen extends Screen {
 
@@ -29,22 +30,31 @@ public abstract class AbstractSimiScreen extends Screen {
 	}
 
 	@Override
-	public void render(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
-		renderBackground(ms);
-		renderWindow(ms, mouseX, mouseY, partialTicks);
+	public void render(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float partialTicks) {
+		renderBackground(pGuiGraphics);
+		renderWindow(pGuiGraphics, mouseX, mouseY, partialTicks);
 		for (AbstractWidget widget : widgets)
-			widget.render(ms, mouseX, mouseY, partialTicks);
-		renderWindowForeground(ms, mouseX, mouseY, partialTicks);
+			widget.render(pGuiGraphics, mouseX, mouseY, partialTicks);
+		renderWindowForeground(pGuiGraphics, mouseX, mouseY, partialTicks);
 		for (AbstractWidget widget : widgets)
-			widget.renderToolTip(ms, mouseX, mouseY);
+			if (widget instanceof AbstractSimiWidget asw && asw.isMouseOver(mouseX, mouseY)) {
+				List<Component> toolTip = asw.getToolTip();
+				if (toolTip.isEmpty())
+					continue;
+				pGuiGraphics.renderComponentTooltip(font, toolTip, mouseX, mouseY);
+			}
 	}
 
 	@Override
 	public boolean mouseClicked(double x, double y, int button) {
+		if (getFocused() != null && !getFocused().isMouseOver(x, y))
+			setFocused(null);
 		boolean result = false;
 		for (AbstractWidget widget : widgets) {
-			if (widget.mouseClicked(x, y, button))
+			if (widget.isMouseOver(x, y) && widget.mouseClicked(x, y, button)) {
+				setFocused(widget);
 				result = true;
+			}
 		}
 		return result;
 	}
@@ -88,15 +98,15 @@ public abstract class AbstractSimiScreen extends Screen {
 		return false;
 	}
 
-	protected abstract void renderWindow(PoseStack ms, int mouseX, int mouseY, float partialTicks);
+	protected abstract void renderWindow(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float partialTicks);
 
-	protected void renderWindowForeground(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
+	protected void renderWindowForeground(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float partialTicks) {
 		for (AbstractWidget widget : widgets) {
 			if (!widget.isHoveredOrFocused())
 				continue;
 			if (widget instanceof AbstractSimiWidget && !((AbstractSimiWidget) widget).getToolTip()
 				.isEmpty())
-				renderComponentTooltip(ms, ((AbstractSimiWidget) widget).getToolTip(), mouseX, mouseY);
+				pGuiGraphics.renderComponentTooltip(font, ((AbstractSimiWidget) widget).getToolTip(), mouseX, mouseY);
 		}
 	}
 

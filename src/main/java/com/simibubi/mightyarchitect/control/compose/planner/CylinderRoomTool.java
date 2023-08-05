@@ -35,7 +35,7 @@ public class CylinderRoomTool extends RoomTool {
 		LocalPlayer player = Minecraft.getInstance().player;
 		transparentStacks.clear();
 
-		BlockHitResult trace = RaycastHelper.rayTraceRange(player.level, player, 75);
+		BlockHitResult trace = RaycastHelper.rayTraceRange(player.level(), player, 75);
 		if (trace != null && trace.getType() == Type.BLOCK) {
 
 			BlockPos hit = trace.getBlockPos();

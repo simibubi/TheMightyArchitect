@@ -13,6 +13,8 @@ import com.simibubi.mightyarchitect.gui.widgets.Label;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollInput;
 import com.simibubi.mightyarchitect.gui.widgets.SelectionScrollInput;
 
+import net.minecraft.client.gui.GuiGraphics;
+
 public class DesignExporterScreen extends AbstractSimiScreen {
 
 	public DesignExporterScreen() {
@@ -228,8 +230,10 @@ public class DesignExporterScreen extends AbstractSimiScreen {
 	}
 
 	@Override
-	protected void renderWindow(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
-		ScreenResources.EXPORTER.draw(ms, this, topLeftX, topLeftY);
+	protected void renderWindow(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float partialTicks) {
+		ScreenResources.EXPORTER.draw(pGuiGraphics, topLeftX, topLeftY);
+		
+		PoseStack ms = pGuiGraphics.pose();
 
 		ms.pushPose();
 		ms.translate(0, 0, -200);
@@ -241,11 +245,11 @@ public class DesignExporterScreen extends AbstractSimiScreen {
 		ms.popPose();
 
 		int color = ScreenResources.FONT_COLOR;
-		font.draw(ms, "Export custom Designs", topLeftX + 10, topLeftY + 10, color);
-		font.draw(ms, "Theme", topLeftX + 10, topLeftY + 28, color);
-		font.draw(ms, "Building Layer", topLeftX + 10, topLeftY + 48, color);
-		font.draw(ms, "Design Type", topLeftX + 10, topLeftY + 68, color);
-		font.draw(ms, additionalDataKey, topLeftX + 10, topLeftY + 88, color);
+		pGuiGraphics.drawString(font, "Export custom Designs", topLeftX + 10, topLeftY + 10, color, false);
+		pGuiGraphics.drawString(font, "Theme", topLeftX + 10, topLeftY + 28, color, false);
+		pGuiGraphics.drawString(font, "Building Layer", topLeftX + 10, topLeftY + 48, color, false);
+		pGuiGraphics.drawString(font, "Design Type", topLeftX + 10, topLeftY + 68, color, false);
+		pGuiGraphics.drawString(font, additionalDataKey, topLeftX + 10, topLeftY + 88, color, false);
 	}
 
 	@Override

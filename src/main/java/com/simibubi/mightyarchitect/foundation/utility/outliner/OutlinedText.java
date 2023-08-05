@@ -1,13 +1,16 @@
 package com.simibubi.mightyarchitect.foundation.utility.outliner;
 
+import org.joml.Vector3d;
+import org.joml.Vector3f;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3d;
-import com.mojang.math.Vector3f;
 import com.simibubi.mightyarchitect.foundation.RenderTypes;
 import com.simibubi.mightyarchitect.foundation.utility.VecHelper;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.world.phys.Vec3;
@@ -82,7 +85,7 @@ public class OutlinedText extends Outline {
 			Vector3f v2 = new Vector3f(-f + 2, scaleMod, 0);
 			Vector3f v3 = new Vector3f(f - 2, scaleMod, 0);
 			Vector3f v4 = new Vector3f(f - 2, -scaleMod * (h - 1), 0);
-			bufferQuad(ms.last(), consumer, v1, v2, v3, v4, colorTemp, 0, 0, 1, 1, lightmap, Vector3f.YP);
+			bufferQuad(ms.last(), consumer, v1, v2, v3, v4, colorTemp, 0, 0, 1, 1, lightmap, new Vector3f(0, 1, 0));
 		}
 
 		ms.popPose();
@@ -101,10 +104,17 @@ public class OutlinedText extends Outline {
 
 		ms.pushPose();
 		ms.scale(-scaleMod, -scaleMod, scaleMod);
-		mc.font.draw(ms, text, f, 0, params.rgb.getRGB());
+		ms.translate(-f, 0, 0);
+		drawInWorldString(ms, buffer, text, params.rgb.getRGB());
 		ms.popPose();
 
 		ms.popPose();
+	}
+	
+	public static void drawInWorldString(PoseStack ms, MultiBufferSource buffer, String c, int color) {
+		Font fontRenderer = Minecraft.getInstance().font;
+		fontRenderer.drawInBatch(c, 0, 0, color, false, ms.last()
+			.pose(), buffer, Font.DisplayMode.NORMAL, 0, LightTexture.FULL_BRIGHT);
 	}
 
 	public String getText() {

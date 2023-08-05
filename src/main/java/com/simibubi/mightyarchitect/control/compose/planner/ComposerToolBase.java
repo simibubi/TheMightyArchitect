@@ -16,6 +16,7 @@ import com.simibubi.mightyarchitect.foundation.utility.RaycastHelper;
 import com.simibubi.mightyarchitect.foundation.utility.RaycastHelper.PredicateTraceResult;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -92,24 +93,26 @@ public abstract class ComposerToolBase implements IComposerTool {
 	}
 
 	@Override
-	public void renderOverlay(PoseStack ms) {
+	public void renderOverlay(GuiGraphics graphics) {
+		PoseStack ms = graphics.pose();
 		ms.pushPose();
 		Minecraft mc = Minecraft.getInstance();
 		Window mainWindow = mc.getWindow();
 		ms.translate(mainWindow.getGuiScaledWidth() / 2, mainWindow.getGuiScaledHeight() / 2 - 3, 0);
 		ms.translate(25, -Mth.lerp(mc.getFrameTime(), lastToolModeYOffset, toolModeYOffset), 0);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
 
 		if (toolModeNoCtrl != null) {
 			int color = 0xFFFFFFFF;
 			if (Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL))
 				color = 0x66AACCFF;
-			mc.font.drawShadow(ms, toolModeNoCtrl, 0, 0, color);
+			graphics.drawString(mc.font, toolModeNoCtrl, 0, 0, color);
 		}
 		if (toolModeCtrl != null) {
 			int color = 0xFFFFFFFF;
 			if (!Keyboard.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL))
 				color = 0x66AACCFF;
-			mc.font.drawShadow(ms, toolModeCtrl, 0, 12, color);
+			graphics.drawString(mc.font, toolModeCtrl, 0, 12, color);
 		}
 
 		RenderSystem.setShaderColor(1, 1, 1, 1);

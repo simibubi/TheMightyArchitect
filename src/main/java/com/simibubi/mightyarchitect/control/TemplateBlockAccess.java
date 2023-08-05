@@ -15,8 +15,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -95,10 +95,11 @@ public class TemplateBlockAccess extends WrappedWorld {
 
 	@Override
 	public Holder<Biome> getBiome(BlockPos pos) {
-		return Holder.direct(registryAccess().registryOrThrow(Registry.BIOME_REGISTRY)
-			.get(Biomes.THE_VOID));
+		return world.registryAccess()
+			.lookupOrThrow(Registries.BIOME)
+			.getOrThrow(Biomes.PLAINS);
 	}
-
+	
 	@Override
 	public int getMaxLocalRawBrightness(BlockPos p_201696_1_) {
 		return 0xF;

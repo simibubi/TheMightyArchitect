@@ -3,7 +3,6 @@ package com.simibubi.mightyarchitect.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
 import com.simibubi.mightyarchitect.control.design.DesignExporter;
 import com.simibubi.mightyarchitect.control.design.DesignLayer;
@@ -17,6 +16,7 @@ import com.simibubi.mightyarchitect.gui.widgets.Indicator.State;
 import com.simibubi.mightyarchitect.gui.widgets.Label;
 import com.simibubi.mightyarchitect.gui.widgets.ScrollInput;
 
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 
 public class ThemeSettingsScreen extends AbstractSimiScreen {
@@ -59,12 +59,10 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 
 		inputName = new EditBox(font, x, y, 104, 8, Lang.empty());
 		inputName.setValue(theme.getDisplayName());
-		inputName.changeFocus(false);
 		inputs.add(inputName);
 
 		inputAuthor = new EditBox(font, x, y + 20, 104, 8, Lang.empty());
 		inputAuthor.setValue(theme.getDesigner());
-		inputAuthor.changeFocus(false);
 		inputs.add(inputAuthor);
 
 		inputs.forEach(input -> {
@@ -72,7 +70,6 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 			input.setTextColorUneditable(-1);
 			input.setBordered(false);
 			input.setMaxLength(35);
-			input.changeFocus(false);
 		});
 
 		// init toggleButtons and indicators
@@ -191,7 +188,7 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 			.setState(theme.getMaxFloorHeight())
 			.calling(position -> {
 				labelRoomHeight.setText(position + "m");
-				labelRoomHeight.x = position > 9 ? topLeftX + 102 : topLeftX + 106;
+				labelRoomHeight.setX(position > 9 ? topLeftX + 102 : topLeftX + 106);
 			});
 		widgets.add(areaRoomHeight);
 		widgets.add(labelRoomHeight);
@@ -268,20 +265,20 @@ public class ThemeSettingsScreen extends AbstractSimiScreen {
 	}
 
 	@Override
-	public void renderWindow(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
-		ScreenResources.THEME_EDITOR.draw(ms, this, topLeftX, topLeftY);
+	protected void renderWindow(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+		ScreenResources.THEME_EDITOR.draw(graphics, topLeftX, topLeftY);
 
 		int x = topLeftX + 10;
 		int y = topLeftY + 14;
 
-		font.draw(ms, "Theme name", x, y, ScreenResources.FONT_COLOR);
-		font.draw(ms, "Designer", x, y + 20, ScreenResources.FONT_COLOR);
+		graphics.drawString(font, "Theme name", x, y, ScreenResources.FONT_COLOR, false);
+		graphics.drawString(font, "Designer", x, y + 20, ScreenResources.FONT_COLOR, false);
 
 		y = topLeftY + 75;
 
-		font.draw(ms, "Styles included", x, y - 17, ScreenResources.FONT_COLOR);
-		font.draw(ms, "Shapes and Roof Types included", x, y + 32, ScreenResources.FONT_COLOR);
-		font.draw(ms, "Max. Room Height", x, y + 87, ScreenResources.FONT_COLOR);
+		graphics.drawString(font, "Styles included", x, y - 17, ScreenResources.FONT_COLOR, false);
+		graphics.drawString(font, "Shapes and Roof Types included", x, y + 32, ScreenResources.FONT_COLOR, false);
+		graphics.drawString(font, "Max. Room Height", x, y + 87, ScreenResources.FONT_COLOR, false);
 	}
 
 	@Override

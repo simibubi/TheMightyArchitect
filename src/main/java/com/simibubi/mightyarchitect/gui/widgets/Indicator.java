@@ -1,10 +1,10 @@
 package com.simibubi.mightyarchitect.gui.widgets;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.foundation.utility.Lang;
 import com.simibubi.mightyarchitect.gui.ScreenResources;
 
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
 public class Indicator extends AbstractSimiWidget {
@@ -22,12 +22,12 @@ public class Indicator extends AbstractSimiWidget {
 
 	public Indicator(int x, int y, Component tooltip) {
 		super(x, y, ScreenResources.INDICATOR.width, ScreenResources.INDICATOR.height);
-		this.toolTip = ImmutableList.of(tooltip);
+		this.toolTip = toolTip.isEmpty() ? ImmutableList.of() : ImmutableList.of(tooltip);
 		this.state = State.OFF;
 	}
 
 	@Override
-	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
 		ScreenResources toDraw;
 		switch (state) {
 		case ON:
@@ -49,7 +49,7 @@ public class Indicator extends AbstractSimiWidget {
 			toDraw = ScreenResources.INDICATOR;
 			break;
 		}
-		toDraw.draw(matrixStack, this, x, y);
+		toDraw.draw(pGuiGraphics, getX(), getY());
 	}
 
 }

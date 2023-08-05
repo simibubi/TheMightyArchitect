@@ -43,13 +43,13 @@ public abstract class GroundPlanningToolBase extends ComposerToolBase {
 		LocalPlayer player = Minecraft.getInstance().player;
 		transparentStacks.clear();
 
-		BlockHitResult trace = RaycastHelper.rayTraceRange(player.level, player, 75);
+		BlockHitResult trace = RaycastHelper.rayTraceRange(player.level(), player, 75);
 		if (trace != null && trace.getType() == Type.BLOCK) {
 
-			BlockPos hit = new BlockPos(trace.getLocation());
+			BlockPos hit = BlockPos.containing(trace.getLocation());
 			makeStacksTransparent(player, hit);
 
-			boolean replaceable = player.level.getBlockState(hit)
+			boolean replaceable = player.level().getBlockState(hit)
 				.canBeReplaced(new BlockPlaceContext(new UseOnContext(player, InteractionHand.MAIN_HAND, trace)));
 			if (trace.getDirection()
 				.getAxis()

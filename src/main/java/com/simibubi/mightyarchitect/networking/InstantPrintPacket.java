@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import com.simibubi.mightyarchitect.foundation.utility.BlockHelper;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -30,7 +32,7 @@ public class InstantPrintPacket {
 		for (int i = 0; i < size; i++) {
 			CompoundTag blockTag = buf.readNbt();
 			BlockPos pos = buf.readBlockPos();
-			blocks.put(pos, NbtUtils.readBlockState(blockTag));
+			blocks.put(pos, NbtUtils.readBlockState(BlockHelper.lookup(), blockTag));
 		}
 		this.blocks = new BunchOfBlocks(blocks);
 	}

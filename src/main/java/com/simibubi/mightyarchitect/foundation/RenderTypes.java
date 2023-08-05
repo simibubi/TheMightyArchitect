@@ -9,12 +9,11 @@ import com.simibubi.mightyarchitect.TheMightyArchitect;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.InventoryMenu;
 
 public class RenderTypes extends RenderStateShard {
 
 	protected static final RenderStateShard.CullStateShard DISABLE_CULLING = new NoCullState();
-
+	
 	public static RenderType getOutlineSolid(ResourceLocation texture) {
 		return RenderType.create(createLayerName("outline_solid"), DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true,
 				false, RenderType.CompositeState.builder()
@@ -43,40 +42,6 @@ public class RenderTypes extends RenderStateShard {
 						.setOverlayState(OVERLAY)
 						.setWriteMaskState(RenderStateShard.COLOR_WRITE)
 						.createCompositeState(true));
-	}
-
-	public static RenderType getGlowingSolid(ResourceLocation texture) {
-		return RenderType.create(createLayerName("glowing_solid"), DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256,
-				true, false, RenderType.CompositeState.builder()
-						.setShaderState(NEW_ENTITY_SHADER)
-						.setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-						.setLightmapState(LIGHTMAP)
-						.setOverlayState(OVERLAY)
-						.createCompositeState(true));
-	}
-
-	private static final RenderType GLOWING_SOLID_DEFAULT = getGlowingSolid(InventoryMenu.BLOCK_ATLAS);
-
-	public static RenderType getGlowingSolid() {
-		return GLOWING_SOLID_DEFAULT;
-	}
-
-	public static RenderType getGlowingTranslucent(ResourceLocation texture) {
-		return RenderType.create(createLayerName("glowing_translucent"), DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS,
-				256, true, true, RenderType.CompositeState.builder()
-						.setShaderState(NEW_ENTITY_SHADER)
-						.setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
-						.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-						.setCullState(NO_CULL)
-						.setLightmapState(LIGHTMAP)
-						.setOverlayState(OVERLAY)
-						.createCompositeState(true));
-	}
-
-	private static final RenderType GLOWING_TRANSLUCENT_DEFAULT = getGlowingTranslucent(InventoryMenu.BLOCK_ATLAS);
-
-	public static RenderType getGlowingTranslucent() {
-		return GLOWING_TRANSLUCENT_DEFAULT;
 	}
 
 	private static final RenderType ITEM_PARTIAL_SOLID =
@@ -138,4 +103,5 @@ public class RenderTypes extends RenderStateShard {
 	public RenderTypes() {
 		super(null, null, null);
 	}
+
 }

@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.simibubi.mightyarchitect.foundation.utility.BlockHelper;
+
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.nbt.CompoundTag;
@@ -127,7 +129,8 @@ public class PaletteDefinition {
 				palette.name = paletteTag.getString("Name");
 				for (Palette key : Palette.values()) {
 					if (paletteTag.contains(key.name())) {
-						palette.put(key, NbtUtils.readBlockState(paletteTag.getCompound(key.name())));
+						palette.put(key,
+							NbtUtils.readBlockState(BlockHelper.lookup(), paletteTag.getCompound(key.name())));
 					}
 				}
 			}

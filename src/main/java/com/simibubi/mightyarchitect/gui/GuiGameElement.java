@@ -2,14 +2,15 @@ package com.simibubi.mightyarchitect.gui;
 
 import javax.annotation.Nullable;
 
+import org.joml.Matrix4f;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import com.simibubi.mightyarchitect.foundation.utility.Color;
 import com.simibubi.mightyarchitect.foundation.utility.VecHelper;
 
@@ -19,13 +20,13 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.BaseFireBlock;
@@ -111,11 +112,11 @@ public class GuiGameElement {
 //			matrixStack.translate(x, y, z);
 			matrixStack.scale((float) scale, (float) scale, (float) scale);
 			matrixStack.translate(xLocal, yLocal, zLocal);
-			matrixStack.mulPoseMatrix(Matrix4f.createScaleMatrix(1, -1, 1));
+			matrixStack.mulPoseMatrix(new Matrix4f().scaling(1, -1, 1));
 			matrixStack.translate(rotationOffset.x, rotationOffset.y, rotationOffset.z);
-			matrixStack.mulPose(Vector3f.ZP.rotationDegrees((float) zRot));
-			matrixStack.mulPose(Vector3f.XP.rotationDegrees((float) xRot));
-			matrixStack.mulPose(Vector3f.YP.rotationDegrees((float) yRot));
+			matrixStack.mulPose(Axis.ZP.rotationDegrees((float) zRot));
+			matrixStack.mulPose(Axis.XP.rotationDegrees((float) xRot));
+			matrixStack.mulPose(Axis.YP.rotationDegrees((float) yRot));
 			matrixStack.translate(-rotationOffset.x, -rotationOffset.y, -rotationOffset.z);
 		}
 
@@ -250,7 +251,7 @@ public class GuiGameElement {
 				GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 			matrixStack.pushPose();
-			matrixStack.translate(0, 0, 100.0F + renderer.blitOffset);
+			matrixStack.translate(0, 0, 100.0F);
 			matrixStack.translate(8.0F, -8.0F, 0.0F);
 			matrixStack.scale(16.0F, 16.0F, 16.0F);
 			MultiBufferSource.BufferSource buffer = Minecraft.getInstance()
@@ -261,7 +262,7 @@ public class GuiGameElement {
 				Lighting.setupForFlatItems();
 			}
 
-			renderer.render(stack, ItemTransforms.TransformType.GUI, false, matrixStack, buffer,
+			renderer.render(stack, ItemDisplayContext.GUI, false, matrixStack, buffer,
 				LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, bakedModel);
 			buffer.endBatch();
 			RenderSystem.enableDepthTest();

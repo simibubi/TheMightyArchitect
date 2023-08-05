@@ -1,11 +1,11 @@
 package com.simibubi.mightyarchitect.gui.widgets;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.foundation.utility.Lang;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
@@ -82,7 +82,7 @@ public class Label extends AbstractSimiWidget {
 	}
 
 	@Override
-	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
 		if (!visible)
 			return;
 		if (text == null || text.getString()
@@ -95,9 +95,9 @@ public class Label extends AbstractSimiWidget {
 			copy.append(suffix);
 
 		if (hasShadow)
-			font.drawShadow(matrixStack, copy, x, y, color);
+			pGuiGraphics.drawString(font, copy, getX(), getY(), color);
 		else
-			font.draw(matrixStack, copy, x, y, color);
+			pGuiGraphics.drawString(font, copy, getX(), getY(), color, false);
 	}
 
 }

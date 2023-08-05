@@ -1,7 +1,9 @@
 package com.simibubi.mightyarchitect.foundation;
 
+import org.joml.Quaternionf;
+
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import com.simibubi.mightyarchitect.foundation.utility.AngleHelper;
 import com.simibubi.mightyarchitect.foundation.utility.VecHelper;
 
@@ -24,15 +26,15 @@ public class MatrixStacker {
 	}
 
 	public MatrixStacker rotateX(double angle) {
-		return multiply(Vector3f.XP, angle);
+		return multiply(Axis.XP.rotationDegrees((float) angle));
 	}
 
 	public MatrixStacker rotateY(double angle) {
-		return multiply(Vector3f.YP, angle);
+		return multiply(Axis.YP.rotationDegrees((float) angle));
 	}
 
 	public MatrixStacker rotateZ(double angle) {
-		return multiply(Vector3f.ZP, angle);
+		return multiply(Axis.ZP.rotationDegrees((float) angle));
 	}
 
 	public MatrixStacker rotateRadians(double angleRoll, double angleYaw, double anglePitch) {
@@ -75,8 +77,8 @@ public class MatrixStacker {
 		return this;
 	}
 
-	private MatrixStacker multiply(Vector3f axis, double angle) {
-		ms.mulPose(axis.rotationDegrees((float) angle));
+	private MatrixStacker multiply(Quaternionf quat) {
+		ms.mulPose(quat);
 		return this;
 	}
 

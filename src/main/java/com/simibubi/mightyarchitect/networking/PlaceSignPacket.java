@@ -9,6 +9,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.world.level.block.entity.SignText;
 import net.minecraftforge.network.NetworkEvent;
 
 public class PlaceSignPacket {
@@ -43,10 +44,12 @@ public class PlaceSignPacket {
 					.getCommandSenderWorld();
 				entityWorld.setBlockAndUpdate(position, Blocks.SPRUCE_SIGN.defaultBlockState());
 				SignBlockEntity sign = (SignBlockEntity) entityWorld.getBlockEntity(position);
-				sign.setMessage(0, Lang.text(text1)
+				SignText pText = new SignText();
+				pText.setMessage(0, Lang.text(text1)
 					.component());
-				sign.setMessage(1, Lang.text(text2)
+				pText.setMessage(1, Lang.text(text2)
 					.component());
+				sign.setText(pText, true);
 			});
 	}
 

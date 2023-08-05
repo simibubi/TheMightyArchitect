@@ -37,6 +37,7 @@ import com.simibubi.mightyarchitect.networking.InstantPrintPacket;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -340,16 +341,14 @@ public class ArchitectManager {
 			((IDrawBlockHighlights) phaseHandler).tickHighlightOutlines();
 	}
 
-	public static void onDrawGameOverlay(ForgeGui gui, PoseStack poseStack, float partialTick, int screenWidth,
+	public static void onDrawGameOverlay(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth,
 		int screenHeight) {
 		IArchitectPhase phaseHandler = phase.getPhaseHandler();
-		if (phaseHandler instanceof IRenderGameOverlay) {
-			((IRenderGameOverlay) phaseHandler).renderGameOverlay(poseStack);
-		}
+		if (phaseHandler instanceof IRenderGameOverlay irgo)
+			irgo.renderGameOverlay(guiGraphics);
 
-		menu.drawPassive();
+		menu.drawPassive(guiGraphics);
 		RenderSystem.enableBlend();
-		RenderSystem.enableTexture();
 	}
 
 	@SubscribeEvent

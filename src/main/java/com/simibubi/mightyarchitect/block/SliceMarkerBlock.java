@@ -12,11 +12,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class SliceMarkerBlock extends Block {
@@ -26,7 +26,7 @@ public class SliceMarkerBlock extends Block {
 		EnumProperty.<DesignSliceTrait>create("variant", DesignSliceTrait.class);
 
 	public SliceMarkerBlock() {
-		super(Properties.of(Material.STONE));
+		super(Properties.copy(Blocks.STONE));
 		this.registerDefaultState(defaultBlockState().setValue(VARIANT, DesignSliceTrait.Standard));
 	}
 

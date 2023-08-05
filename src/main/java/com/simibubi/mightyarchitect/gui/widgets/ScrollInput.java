@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import com.simibubi.mightyarchitect.foundation.utility.Lang;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -123,5 +124,8 @@ public class ScrollInput extends AbstractSimiWidget {
 		toolTip.add(scrollToModify.plainCopy()
 			.withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY));
 	}
+
+	@Override
+	protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {}
 
 }

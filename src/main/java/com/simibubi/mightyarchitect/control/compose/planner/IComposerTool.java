@@ -6,11 +6,11 @@ import java.util.Optional;
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.glfw.GLFW;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.foundation.utility.Keyboard;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 
 public interface IComposerTool {
 	
@@ -43,6 +43,6 @@ public interface IComposerTool {
 	void tickGroundPlanOutlines();
 	
 	void updateSelection();
-	void renderOverlay(PoseStack ms);
+	void renderOverlay(GuiGraphics graphics);
 	void init();
 }

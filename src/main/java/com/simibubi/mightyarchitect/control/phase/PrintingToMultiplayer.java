@@ -35,7 +35,7 @@ public class PrintingToMultiplayer extends PhaseBase {
 		remaining = new LinkedList<>(((TemplateBlockAccess) getModel().getMaterializedSketch()).getAllPositions());
 		remaining.sort((o1, o2) -> Integer.compare(o1.getY(), o2.getY()));
 
-		minecraft.player.commandSigned("setblock checking permission for 'The Mighty Architect'.", null);
+		minecraft.player.connection.sendCommand("setblock checking permission for 'The Mighty Architect'.");
 		cooldown = 500;
 		approved = false;
 	}
@@ -68,8 +68,8 @@ public class PrintingToMultiplayer extends PhaseBase {
 					.replaceFirst("Block\\{", "")
 					.replaceFirst("\\}", "");
 
-				Minecraft.getInstance().player.commandSigned(
-					"setblock " + pos.getX() + " " + pos.getY() + " " + pos.getZ() + " " + blockstring, null);
+				Minecraft.getInstance().player.connection.sendCommand(
+					"setblock " + pos.getX() + " " + pos.getY() + " " + pos.getZ() + " " + blockstring);
 			} else {
 				ArchitectManager.unload();
 				break;
@@ -102,8 +102,8 @@ public class PrintingToMultiplayer extends PhaseBase {
 					if (test.equals("parsing.int.expected")) {
 						approved = true;
 						LocalPlayer player = Minecraft.getInstance().player;
-						player.commandSigned("gamerule sendCommandFeedback false", null);
-						player.commandSigned("gamerule logAdminCommands false", null);
+						player.connection.sendCommand("gamerule sendCommandFeedback false");
+						player.connection.sendCommand("gamerule logAdminCommands false");
 						event.setCanceled(true);
 						return;
 					}
@@ -121,8 +121,8 @@ public class PrintingToMultiplayer extends PhaseBase {
 			LocalPlayer player = Minecraft.getInstance().player;
 			Lang.text(ChatFormatting.GREEN + "Finished Printing, enjoy!")
 				.sendChat(player);
-			player.commandSigned("gamerule logAdminCommands true", null);
-			player.commandSigned("gamerule sendCommandFeedback true", null);
+			player.connection.sendCommand("gamerule logAdminCommands true");
+			player.connection.sendCommand("gamerule sendCommandFeedback true");
 		}
 		cooldown = 0;
 	}

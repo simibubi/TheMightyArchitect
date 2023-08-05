@@ -8,7 +8,6 @@ import java.util.function.Consumer;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.Keybinds;
 import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.compose.planner.Tools;
@@ -16,6 +15,7 @@ import com.simibubi.mightyarchitect.gui.ToolSelectionScreen;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 
 public class PhasePreviewing extends PhaseBase implements IRenderGameOverlay {
 
@@ -118,11 +118,11 @@ public class PhasePreviewing extends PhaseBase implements IRenderGameOverlay {
 	}
 
 	@Override
-	public void renderGameOverlay(PoseStack ms) {
-		toolSelection.renderPassive(ms, Minecraft.getInstance()
+	public void renderGameOverlay(GuiGraphics graphics) {
+		toolSelection.renderPassive(graphics, Minecraft.getInstance()
 			.getDeltaFrameTime());
 		activeTool.getTool()
-			.renderOverlay(ms);
+			.renderOverlay(graphics);
 	}
 
 	@Override

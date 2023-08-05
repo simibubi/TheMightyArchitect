@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.Keybinds;
 import com.simibubi.mightyarchitect.control.compose.planner.Tools;
 import com.simibubi.mightyarchitect.foundation.utility.ShaderManager;
@@ -16,6 +15,7 @@ import com.simibubi.mightyarchitect.gui.ToolSelectionScreen;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 
@@ -121,14 +121,14 @@ public class PhaseComposing extends PhaseBase implements IRenderGameOverlay {
 	}
 
 	@Override
-	public void renderGameOverlay(PoseStack ms) {
+	public void renderGameOverlay(GuiGraphics graphics) {
 		if (Minecraft.getInstance().screen != null)
 			return;
 
-		toolSelection.renderPassive(ms, Minecraft.getInstance()
+		toolSelection.renderPassive(graphics, Minecraft.getInstance()
 			.getDeltaFrameTime());
 		activeTool.getTool()
-			.renderOverlay(ms);
+			.renderOverlay(graphics);
 	}
 
 	@Override

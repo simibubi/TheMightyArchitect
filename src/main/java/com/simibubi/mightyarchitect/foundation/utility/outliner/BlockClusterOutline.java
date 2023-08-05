@@ -6,10 +6,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import org.joml.Vector3f;
+import org.joml.Vector4f;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
-import com.mojang.math.Vector4f;
 import com.simibubi.mightyarchitect.AllSpecialTextures;
 import com.simibubi.mightyarchitect.foundation.RenderTypes;
 import com.simibubi.mightyarchitect.foundation.utility.Iterate;

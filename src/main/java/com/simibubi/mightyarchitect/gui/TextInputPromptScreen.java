@@ -4,9 +4,9 @@ import java.util.function.Consumer;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.foundation.utility.Lang;
 
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
@@ -48,17 +48,23 @@ public class TextInputPromptScreen extends AbstractSimiScreen {
 		this.nameField.setTextColorUneditable(-1);
 		this.nameField.setBordered(false);
 		this.nameField.setMaxLength(35);
-		this.nameField.changeFocus(true);
+		this.nameField.setFocused(true);
+		setFocused(nameField);
+		addRenderableWidget(nameField);
 
-		confirm = new Button(topLeftX - 5, topLeftY + 50, 100, 20, buttonTextConfirm, button -> {
+		confirm = Button.builder(buttonTextConfirm, button -> {
 			callback.accept(nameField.getValue());
 			confirmed = true;
 			minecraft.setScreen(null);
-		});
+		})
+			.bounds(topLeftX - 5, topLeftY + 50, 100, 20)
+			.build();
 
-		abort = new Button(topLeftX + 100, topLeftY + 50, 100, 20, buttonTextAbort, button -> {
+		abort = Button.builder(buttonTextAbort, button -> {
 			minecraft.setScreen(null);
-		});
+		})
+			.bounds(topLeftX + 100, topLeftY + 50, 100, 20)
+			.build();
 
 		widgets.add(confirm);
 		widgets.add(abort);
@@ -66,10 +72,10 @@ public class TextInputPromptScreen extends AbstractSimiScreen {
 	}
 
 	@Override
-	public void renderWindow(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
-		ScreenResources.TEXT_INPUT.draw(ms, this, topLeftX, topLeftY);
-		font.draw(ms, title, topLeftX + (sWidth / 2) - (font.width(title) / 2), topLeftY + 11,
-			ScreenResources.FONT_COLOR);
+	protected void renderWindow(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float partialTicks) {
+		ScreenResources.TEXT_INPUT.draw(pGuiGraphics, topLeftX, topLeftY);
+		pGuiGraphics.drawString(font, title, topLeftX + (sWidth / 2) - (font.width(title) / 2), topLeftY + 11,
+			ScreenResources.FONT_COLOR, false);
 	}
 
 	@Override

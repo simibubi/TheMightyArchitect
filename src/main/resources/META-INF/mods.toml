@@ -1,33 +1,34 @@
 modLoader="javafml" 
-loaderVersion="[36,)"
+loaderVersion="[47,)"
 #issueTrackerURL=""
 license="MIT"
 
 [[mods]] 
 modId="mightyarchitect"
-version="0.5"
+version="0.7"
 displayName="The Mighty Architect" 
 #updateJSONURL=""
-authors="simibubi" 
+authors="simibubi"
+displayTest="IGNORE_ALL_VERSION"
 description='''Design elaborate buildings within a minute! [G] is the default keybind for getting started. Check out the wiki for more info.'''
 
 [[dependencies.mightyarchitect]] 
     modId="forge"
     mandatory=true 
-    versionRange="[36,)"
+    versionRange="[47,)"
     ordering="NONE"
     side="CLIENT"
 	
 [[dependencies.mightyarchitect]] 
     modId="forge"
     mandatory=true 
-    versionRange="[36,)"
+    versionRange="[47,)"
     ordering="NONE"
     side="SERVER"
 
 [[dependencies.mightyarchitect]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.5,)"
+    versionRange="[1.20.1,)"
     ordering="NONE"
     side="BOTH"

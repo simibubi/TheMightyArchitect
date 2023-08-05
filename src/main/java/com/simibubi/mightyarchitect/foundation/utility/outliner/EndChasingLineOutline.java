@@ -1,9 +1,10 @@
 package com.simibubi.mightyarchitect.foundation.utility.outliner;
 
+import org.joml.Vector3d;
+import org.joml.Vector4f;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3d;
-import com.mojang.math.Vector4f;
 
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;

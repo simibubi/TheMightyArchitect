@@ -1,8 +1,9 @@
 package com.simibubi.mightyarchitect.gui;
 
 import java.nio.file.Paths;
+import java.util.List;
 
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.mightyarchitect.MightyClient;
 import com.simibubi.mightyarchitect.control.ArchitectManager;
@@ -17,9 +18,11 @@ import com.simibubi.mightyarchitect.gui.widgets.IconButton;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 
 public class PalettePickerScreen extends AbstractSimiScreen {
 
@@ -143,26 +146,25 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 		widgets.add(primary);
 		widgets.add(secondary);
 	}
-
+	
 	@Override
-	public void renderWindow(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
-		ScreenResources.PALETTES.draw(ms, this, topLeftX, topLeftY);
+	protected void renderWindow(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float partialTicks) {
+		ScreenResources.PALETTES.draw(pGuiGraphics, topLeftX, topLeftY);
 
 		int color = ScreenResources.FONT_COLOR;
-
 		if (scanPicker) {
-			font.draw(ms, "Choose a palette for", topLeftX + 8, topLeftY + 10, color);
-			font.draw(ms, "your theme.", topLeftX + 8, topLeftY + 18, color);
+			pGuiGraphics.drawString(font, "Choose a palette for", topLeftX + 8, topLeftY + 10, color, false);
+			pGuiGraphics.drawString(font, "your theme.", topLeftX + 8, topLeftY + 18, color, false);
 
 		} else {
-			font.draw(ms, "Palette Picker", topLeftX + 8, topLeftY + 10, color);
-			font.draw(ms, "Primary", topLeftX + 134, topLeftY + 30, color);
-			font.draw(ms, "Secondary", topLeftX + 191, topLeftY + 30, color);
+			pGuiGraphics.drawString(font, "Palette Picker", topLeftX + 8, topLeftY + 10, color, false);
+			pGuiGraphics.drawString(font, "Primary", topLeftX + 134, topLeftY + 30, color, false);
+			pGuiGraphics.drawString(font, "Secondary", topLeftX + 191, topLeftY + 30, color, false);
 
 		}
 
-		font.draw(ms, "Included Palettes", topLeftX + 8, topLeftY + 53, color);
-		font.draw(ms, "My Palettes", topLeftX + 134, topLeftY + 53, color);
+		pGuiGraphics.drawString(font, "Included Palettes", topLeftX + 8, topLeftY + 53, color, false);
+		pGuiGraphics.drawString(font, "My Palettes", topLeftX + 134, topLeftY + 53, color, false);
 	}
 
 	@Override
@@ -245,10 +247,16 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 			visible = true;
 			active = true;
 		}
+		
+		@Override
+		public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+			super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+			preview(pGuiGraphics.pose(), minecraft);
+		}
 
 		private void preview(PoseStack ms, Minecraft mc) {
 			ms.pushPose();
-			ms.translate(x + 1, y + 9, 100);
+			ms.translate(getX() + 1, getY() + 9, 100);
 			ms.scale(1 + 1 / 64f, 1 + 1 / 64f, 1);
 			renderBlock(ms, mc, new BlockPos(0, 1, 0), Palette.INNER_PRIMARY);
 			renderBlock(ms, mc, new BlockPos(1, 1, 0), Palette.INNER_DETAIL);
@@ -267,20 +275,11 @@ public class PalettePickerScreen extends AbstractSimiScreen {
 
 			ms.popPose();
 		}
-
+		
 		@Override
-		public void renderButton(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
-			super.renderButton(ms, mouseX, mouseY, partialTicks);
-			preview(ms, minecraft);
-		}
-
-		@Override
-		public void renderToolTip(PoseStack ms, int mouseX, int mouseY) {
-			if (isHovered) {
-				renderTooltip(ms, Lang.text(palette.getName())
-					.component(), mouseX, mouseY);
-				RenderSystem.setShaderColor(1, 1, 1, 1);
-			}
+		public List<Component> getToolTip() {
+			return ImmutableList.of(Lang.text(palette.getName())
+				.component());
 		}
 
 	}
